@@ -1,5 +1,5 @@
 import requests
-from base_tool import BaseAPI
+from base_api import BaseAPI
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -9,42 +9,185 @@ class NaverSearchAPI(BaseAPI):
         )
         self.client_id = "nfe9e3rPKhRY5G3qwzuf"
         self.client_secret = "Il8nrlEM3r"
-        
-    def get_available_methods(self) -> list[str]:
-        return ["search_web", "search_blog", "search_news"]
     
-    def WebSearch_naver(self, query: str, display: int = 10, start: int = 1) -> dict:
-        """네이버 웹 검색 API 호출
+    # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
+    
+    def _search_web(self, query: str, display: int = 10, start: int = 1) -> dict:
+        """네이버 웹 검색 API 호출 (내부 구현)
         
         Args:
             query: 검색어
             display: 한 번에 표시할 검색 결과 개수 (기본값: 10, 최대값: 100)
             start: 검색 시작 위치 (기본값: 1, 최대값: 1000)
+            
+        Returns:
+            검색 결과를 포함한 딕셔너리
         """
-        
+        # TODO: 실제 API 호출 로직 구현
         pass
     
-    def BlogSearch_naver(self, query: str, display: int = 10, start: int = 1) -> dict:
-        """네이버 블로그 검색 API 호출
+    def _search_blog(self, query: str, display: int = 10, start: int = 1) -> dict:
+        """네이버 블로그 검색 API 호출 (내부 구현)
         
         Args:
             query: 검색어
             display: 한 번에 표시할 검색 결과 개수 (기본값: 10, 최대값: 100)
             start: 검색 시작 위치 (기본값: 1, 최대값: 1000)
+            
+        Returns:
+            검색 결과를 포함한 딕셔너리
         """
-
+        # TODO: 실제 API 호출 로직 구현
         pass
 
-    def NewsSearch_naver(self, query: str, display: int = 10, start: int = 1) -> dict:
-        """네이버 뉴스 검색 API 호출
+    def _search_news(self, query: str, display: int = 10, start: int = 1) -> dict:
+        """네이버 뉴스 검색 API 호출 (내부 구현)
         
         Args:
             query: 검색어
             display: 한 번에 표시할 검색 결과 개수 (기본값: 10, 최대값: 100)
             start: 검색 시작 위치 (기본값: 1, 최대값: 1000)
+            
+        Returns:
+            검색 결과를 포함한 딕셔너리
         """
-
+        # TODO: 실제 API 호출 로직 구현
         pass
+    
+    # ========== Tool Calling 스키마 메서드들 ==========
+    
+    def search_web_tool(self) -> dict:
+        """웹 검색 tool calling 스키마"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "search_web",
+                "description": "네이버 웹 검색 API 호출",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "검색어"
+                        },
+                        "display": {
+                            "type": "integer",
+                            "description": "한 번에 표시할 검색 결과 개수",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 10
+                        },
+                        "start": {
+                            "type": "integer",
+                            "description": "검색 시작 위치",
+                            "minimum": 1,
+                            "maximum": 1000,
+                            "default": 1
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    
+    def search_blog_tool(self) -> dict:
+        """블로그 검색 tool calling 스키마"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "search_blog", 
+                "description": "네이버 블로그 검색 API 호출",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "검색어"
+                        },
+                        "display": {
+                            "type": "integer",
+                            "description": "한 번에 표시할 검색 결과 개수",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 10
+                        },
+                        "start": {
+                            "type": "integer",
+                            "description": "검색 시작 위치",
+                            "minimum": 1,
+                            "maximum": 1000,
+                            "default": 1
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    
+    def search_news_tool(self) -> dict:
+        """뉴스 검색 tool calling 스키마"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "search_news",
+                "description": "네이버 뉴스 검색 API 호출", 
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "검색어"
+                        },
+                        "display": {
+                            "type": "integer",
+                            "description": "한 번에 표시할 검색 결과 개수",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 10
+                        },
+                        "start": {
+                            "type": "integer", 
+                            "description": "검색 시작 위치",
+                            "minimum": 1,
+                            "maximum": 1000,
+                            "default": 1
+                        }
+                    },
+                    "required": ["query"]
+                }
+            }
+        }
+    
+    # ========== Tool Call 실행기 ==========
+    
+    def execute_tool(self, tool_name: str, **kwargs) -> dict:
+        """Tool call 실행
+        
+        Args:
+            tool_name: 실행할 tool 이름 (search_web, search_blog, search_news)
+            **kwargs: tool별 매개변수
+            
+        Returns:
+            tool 실행 결과
+        """
+        tool_map = {
+            "search_web": self._search_web,
+            "search_blog": self._search_blog,
+            "search_news": self._search_news
+        }
+        
+        if tool_name not in tool_map:
+            raise ValueError(f"지원하지 않는 tool: {tool_name}")
+            
+        return tool_map[tool_name](**kwargs)
+    
+    def get_all_tool_schemas(self) -> list[dict]:
+        """모든 tool 스키마 반환"""
+        return [
+            self.search_web_tool(),
+            self.search_blog_tool(),
+            self.search_news_tool()
+        ]
 
     def test_connection(self) -> bool:
         """API 연결 테스트 메서드
