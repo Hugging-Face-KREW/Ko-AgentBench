@@ -1,63 +1,29 @@
-"""Base tool interface for Ko-AgentBench."""
+"""Base API interface for Ko-AgentBench."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List
 
 
-class BaseTool(ABC):
-    """Abstract base class for all tools."""
+class BaseAPI(ABC):
+    """Abstract base class for all APIs."""
     
     def __init__(self, name: str, description: str = ""):
-        """Initialize tool.
+        """Initialize API.
         
         Args:
-            name: Tool name
-            description: Tool description
+            name: API name
+            description: API description
         """
         self.name = name
         self.description = description
     
-    @abstractmethod
-    def execute(self, **kwargs) -> Any:
-        """Execute the tool with given parameters.
-        
-        Args:
-            **kwargs: Tool-specific parameters
-            
-        Returns:
-            Tool execution result
-        """
-        pass
-    
-    @abstractmethod
-    def validate_input(self, **kwargs) -> bool:
-        """Validate input parameters.
-        
-        Args:
-            **kwargs: Tool-specific parameters
-            
-        Returns:
-            True if input is valid, False otherwise
-        """
-        pass
-    
     def get_schema(self) -> Dict[str, Any]:
-        """Get tool schema for LLM function calling.
+        """Get API schema for LLM function calling.
         
         Returns:
-            Tool schema dictionary
+            API schema dictionary with all available methods
         """
         return {
             "name": self.name,
-            "description": self.description,
-            "parameters": self._get_parameters_schema()
+            "description": self.description
         }
-    
-    @abstractmethod
-    def _get_parameters_schema(self) -> Dict[str, Any]:
-        """Get parameters schema.
-        
-        Returns:
-            Parameters schema dictionary
-        """
-        pass

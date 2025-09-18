@@ -1,0 +1,11 @@
+[project]
+name = "ko-agentbench"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "litellm>=1.77.0",
+    "requests>=2.32.5",
+    "transformers>=4.56.1",
+]
