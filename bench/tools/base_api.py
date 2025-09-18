@@ -1,6 +1,6 @@
 """Base API interface for Ko-AgentBench."""
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Any, Dict, List
 
 
@@ -21,7 +21,7 @@ class BaseAPI(ABC):
         """Get API schema for LLM function calling.
         
         Returns:
-            API schema dictionary with all available methods
+            API schema dictionary with basic information
         """
         return {
             "name": self.name,
