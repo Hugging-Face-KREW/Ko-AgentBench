@@ -39,8 +39,8 @@ class LangfuseLogger:
             Trace ID for the task
         """
         trace_id = self.client.create_trace_id()
-        print(f"📊 Task started: {task_name} (ID: {trace_id})")
-        print(f"📥 Input: {input_data}")
+        print(f"Task started: {task_name} (ID: {trace_id})")
+        print(f"Input: {input_data}")
         return trace_id
         
     def log_llm_call(self, 
@@ -64,11 +64,11 @@ class LangfuseLogger:
             Generation ID
         """
         generation_id = f"gen_{int(time.time() * 1000)}"
-        print(f"🤖 LLM Call: {model} (latency: {latency_ms:.2f}ms)")
-        print(f"📤 Messages: {len(messages)} messages")
-        print(f"📥 Response: {response[:100]}...")
+        print(f"LLM Call: {model} (latency: {latency_ms:.2f}ms)")
+        print(f"Messages: {len(messages)} messages")
+        print(f"Response: {response[:100]}...")
         if tool_calls:
-            print(f"🔧 Tool calls: {len(tool_calls)} calls")
+            print(f"Tool calls: {len(tool_calls)} calls")
         return generation_id
         
     def log_tool_call(self,
@@ -90,9 +90,9 @@ class LangfuseLogger:
             Span ID
         """
         span_id = f"span_{int(time.time() * 1000)}"
-        print(f"🔧 Tool Call: {tool_name} (latency: {latency_ms:.2f}ms)")
-        print(f"📤 Input: {tool_input}")
-        print(f"📥 Output: {str(tool_output)[:100]}...")
+        print(f"Tool Call: {tool_name} (latency: {latency_ms:.2f}ms)")
+        print(f"Input: {tool_input}")
+        print(f"Output: {str(tool_output)[:100]}...")
         return span_id
         
     def log_task_end(self, trace_id: str, output_data: Dict[str, Any], success: bool = True):
@@ -103,8 +103,8 @@ class LangfuseLogger:
             output_data: Task output data
             success: Whether the task completed successfully
         """
-        print(f"✅ Task completed: {trace_id} (success: {success})")
-        print(f"📤 Output: {output_data}")
+        print(f"Task completed: {trace_id} (success: {success})")
+        print(f"Output: {output_data}")
         
     def flush(self):
         """Flush all pending logs to Langfuse."""
