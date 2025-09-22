@@ -24,7 +24,7 @@ class FestivalSearchAPI(BaseAPI):
 
     # ===== 실제 API 호출 메서드 (비즈니스 로직) =====
 
-    async def _search_festivals(self, eventStartDate: Optional[str] = None,
+    async def _search_festivals(self, eventStartDate: str = None,
                                  eventEndDate: Optional[str] = None,
                                  location: Optional[str] = None,
                                  num_of_rows: int = 10) -> Dict:
@@ -38,15 +38,20 @@ class FestivalSearchAPI(BaseAPI):
             "_type": "json"
         }
 
-        if eventStartDate:
-            params["eventStartDate"] = eventStartDate
+        if not eventStartDate:
+            return {"error": "eventStartDate는 필수입니다.", "status_code": 400}
+
+        params["eventStartDate"] = eventStartDate
+
         if eventEndDate:
             params["eventEndDate"] = eventEndDate
+
         if location:
             area_code = self._extract_area_code(location)
             if area_code:
                 params["areaCode"] = area_code
 
+        # 슈도 API 구현 시 고려사항 X
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, params=params, timeout=10) as response:
@@ -64,6 +69,7 @@ class FestivalSearchAPI(BaseAPI):
             return {"error": "API 호출 시간 초과", "status_code": 408}
         except Exception as e:
             return {"error": f"API 호출 중 오류 발생: {str(e)}", "status_code": 500}
+
 
     # area_code 매핑 함수 : 필요시 시군구코드(sigunguCode)매핑 로직 확장 예정
     def _extract_area_code(self, location: str) -> Optional[str]:
