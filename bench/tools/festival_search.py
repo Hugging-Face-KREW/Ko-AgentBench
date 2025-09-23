@@ -5,12 +5,10 @@ from base_api import BaseAPI
 from tools.secrets import KTO_SERVICE_KEY
 
 class FestivalSearchAPI(BaseAPI):
-    """한국관광공사 행사·축제 조건 검색 API"""
-
     def __init__(self, service_key: str):
         super().__init__(
             name="festival_search_api",
-            description="행사/축제 정보를 날짜와 지역으로 검색"
+            description="한국관광공사 API를 활용한 행사/축제 정보 검색 도구"
         )
         self.service_key = KTO_SERVICE_KEY
         self.base_url = "http://apis.data.go.kr/B551011/KorService2/searchFestival2"
@@ -51,7 +49,7 @@ class FestivalSearchAPI(BaseAPI):
             if area_code:
                 params["areaCode"] = area_code
 
-        # 슈도 API 구현 시 고려사항 X
+        # 슈도 API 구현 시 수정
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, params=params, timeout=10) as response:
@@ -79,7 +77,7 @@ class FestivalSearchAPI(BaseAPI):
                 return code
         return None
 
-    # 출력 템플릿
+    # response
     def _format_festival_response(self, raw_data: Dict) -> Dict:
         try:
             response_body = raw_data.get("response", {}).get("body", {})
@@ -118,7 +116,7 @@ class FestivalSearchAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "festival_search_api",
+                "name": "festival_search",
                 "description": "행사/축제 정보를 날짜와 지역으로 검색",
                 "parameters": {
                     "type": "object",
@@ -154,7 +152,7 @@ class FestivalSearchAPI(BaseAPI):
     # ======================= Tool Call 실행기 ========================
 
     async def execute_tool(self, tool_name: str, **kwargs) -> Dict:
-        if tool_name == "festival_search_api":
+        if tool_name == "festival_search":
             return await self._search_festivals(**kwargs)
         else:
             raise ValueError(f"지원하지 않는 tool: {tool_name}")
@@ -204,3 +202,9 @@ if __name__ == "__main__":
     # 연결 테스트
     success = api.test_connection()
     print("연결 성공!" if success else "❌ 연결 실패")
+
+
+# 테스트 결과
+"""[INFO] 전체 건수: 1029
+[INFO] 첫 축제 제목: 가락몰 빵축제 전국빵지자랑
+연결 성공! """
