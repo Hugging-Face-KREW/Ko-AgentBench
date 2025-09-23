@@ -20,10 +20,7 @@ class KISStock(BaseAPI):
         # TODO: 실제 API 호출 로직 구현
         pass
 
-    def _stock_search(self, keyword: str, market: str = "ALL") -> Dict[str, Any]:
-        """종목 검색 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+
 
     def _us_stock_price(self, symbol: str, exchange: str = "NASDAQ") -> Dict[str, Any]:
         """미국 주식 현재가 조회 (내부 구현)"""
@@ -65,6 +62,8 @@ class KISStock(BaseAPI):
             }
         }
 
+
+
     def us_stock_price_tool(self) -> Dict:
         """USStockPrice_kis tool schema"""
         return {
@@ -93,12 +92,12 @@ class KISStock(BaseAPI):
         }
 
     def stock_chart_tool(self) -> Dict:
-        """StockChart_kis tool schema"""
+        """StockChart_kis tool schema - 테스트 결과 반영"""
         return {
             "type": "function",
             "function": {
                 "name": "StockChart_kis",
-                "description": "한국 주식의 일봉, 주봉, 월봉 차트 데이터를 조회합니다.",
+                "description": "한국 주식의 일봉, 주봉, 월봉, 년봉 차트 데이터를 조회합니다. 과거 데이터만 조회 가능하며 미래 날짜는 오류가 발생합니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -109,9 +108,9 @@ class KISStock(BaseAPI):
                         },
                         "period": {
                             "type": "string",
-                            "enum": ["D", "W", "M"],
+                            "enum": ["D", "W", "M", "Y"],
                             "default": "D",
-                            "description": "조회 기간 (D=일봉, W=주봉, M=월봉)"
+                            "description": "조회 기간 (D=일봉, W=주봉, M=월봉, Y=년봉)"
                         },
                         "count": {
                             "type": "integer",
@@ -122,12 +121,12 @@ class KISStock(BaseAPI):
                         },
                         "start_date": {
                             "type": "string",
-                            "description": "시작일자 (YYYYMMDD)",
+                            "description": "시작일자 (YYYYMMDD) - 과거 날짜만 가능",
                             "pattern": "^[0-9]{8}$"
                         },
                         "end_date": {
                             "type": "string",
-                            "description": "종료일자 (YYYYMMDD)",
+                            "description": "종료일자 (YYYYMMDD) - 과거 날짜만 가능",
                             "pattern": "^[0-9]{8}$"
                         }
                     },
@@ -142,7 +141,6 @@ class KISStock(BaseAPI):
         """Tool call 실행"""
         tool_map = {
             "StockPrice_kis": self._stock_price,
-            "StockSearch_kis": self._stock_search,
             "USStockPrice_kis": self._us_stock_price,
             "StockChart_kis": self._stock_chart
         }
@@ -156,7 +154,6 @@ class KISStock(BaseAPI):
         """모든 tool 스키마 반환"""
         return [
             self.stock_price_tool(),
-            self.stock_search_tool(),
             self.us_stock_price_tool(),
             self.stock_chart_tool()
         ]
