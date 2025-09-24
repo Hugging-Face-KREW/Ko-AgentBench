@@ -56,12 +56,12 @@ class NaverSearchAPI(BaseAPI):
     
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def search_web_tool(self) -> dict:
+    def WebSearch_naver(self) -> dict:
         """웹 검색 tool calling 스키마"""
         return {
             "type": "function",
             "function": {
-                "name": "search_web",
+                "name": "WebSearch_naver",
                 "description": "네이버 웹 검색 API 호출",
                 "parameters": {
                     "type": "object",
@@ -73,9 +73,8 @@ class NaverSearchAPI(BaseAPI):
                         "display": {
                             "type": "integer",
                             "description": "한 번에 표시할 검색 결과 개수",
-                            "minimum": 1,
-                            "maximum": 100,
-                            "default": 10
+                            "minimum": 10,
+                            "maximum": 100
                         },
                         "start": {
                             "type": "integer",
@@ -90,12 +89,12 @@ class NaverSearchAPI(BaseAPI):
             }
         }
     
-    def search_blog_tool(self) -> dict:
+    def BlogSearch_naver(self) -> dict:
         """블로그 검색 tool calling 스키마"""
         return {
             "type": "function",
             "function": {
-                "name": "search_blog", 
+                "name": "BlogSearch_naver",
                 "description": "네이버 블로그 검색 API 호출",
                 "parameters": {
                     "type": "object",
@@ -117,7 +116,13 @@ class NaverSearchAPI(BaseAPI):
                             "minimum": 1,
                             "maximum": 1000,
                             "default": 1
-                        }
+                        },
+                        "sort": {
+                            "type": "string",
+                            "enum": ["sim", "date"],
+                            "description": "검색 결과 정렬 방법, sim: 정확도순으로 내림차순 정렬(기본값) date: 날짜순으로 내림차순 정렬",
+                            "default": "sim"
+                        },
                     },
                     "required": ["query"]
                 }
@@ -151,7 +156,13 @@ class NaverSearchAPI(BaseAPI):
                             "minimum": 1,
                             "maximum": 1000,
                             "default": 1
-                        }
+                        },
+                        "sort": {
+                            "type": "string",
+                            "enum": ["sim", "date"],
+                            "description": "검색 결과 정렬 방법, sim: 정확도순으로 내림차순 정렬(기본값) date: 날짜순으로 내림차순 정렬",
+                            "default": "sim"
+                        },
                     },
                     "required": ["query"]
                 }
