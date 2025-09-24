@@ -113,7 +113,7 @@ class AladinAPI(BaseAPI):
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def search_item_tool(self) -> dict:
+    def ItemSearch_aladin(self) -> dict:
         """상품 검색 tool calling 스키마"""
         return {
             "type": "function",
@@ -192,7 +192,7 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def get_item_list_tool(self) -> dict:
+    def ItemList_aladin(self) -> dict:
         """상품 리스트 조회 tool calling 스키마"""
         return {
             "type": "function",
@@ -273,7 +273,7 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def get_item_details_tool(self) -> dict:
+    def ItemLookup_aladin(self) -> dict:
         """상품 상세 정보 조회 tool calling 스키마"""
         return {
             "type": "function",
