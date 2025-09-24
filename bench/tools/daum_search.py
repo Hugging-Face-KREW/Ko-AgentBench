@@ -65,12 +65,12 @@ class DaumSearchAPI(BaseAPI):
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def web_search_daum_tool(self) -> dict:
+    def WebSearch_daum(self) -> dict:
         """웹 검색 tool calling 스키마"""
         return {
             "type": "function",
             "function": {
-                "name": "web_search_daum",
+                "name": "WebSearch_daum",
                 "description": "다음 검색 서비스에서 질의어로 웹 문서를 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -82,13 +82,13 @@ class DaumSearchAPI(BaseAPI):
                         "sort": {
                             "type": "string",
                             "enum": ["accuracy", "recency"],
-                            "description": "결과 문서 정렬 방식 (accuracy: 정확도순, recency: 최신순), 기본 값 accuracy",
+                            "description": "결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy",
                             "default": "accuracy"
                         },
                         "page": {
                             "type": "integer",
                             "minimum": 1,
-                            "description": "결과 페이지 번호",
+                            "description": "결과 페이지 번호, 1~50 사이의 값, 기본 값 1	",
                             "default": 1
                         },
                         "size": {
@@ -104,12 +104,12 @@ class DaumSearchAPI(BaseAPI):
             }
         }
     
-    def video_search_daum_tool(self) -> dict:
+    def VideoSearch_daum(self) -> dict:
         """비디오 검색 tool calling 스키마"""
         return {
             "type": "function",
             "function": {
-                "name": "search_video",
+                "name": "VideoSearch_daum",
                 "description": "카카오 TV, 유튜브 등 서비스에서 질의어로 동영상을 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -121,21 +121,21 @@ class DaumSearchAPI(BaseAPI):
                         "sort": {
                             "type": "string",
                             "enum": ["accuracy", "recency"],
-                            "description": "결과 문서 정렬 방식 (accuracy: 정확도순, recency: 최신순), 기본 값 accuracy",
+                            "description": "결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy",
                             "default": "accuracy"
                         },
                         "page": {
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 15,
-                            "description": "결과 페이지 번호 (1~15)",
+                            "description": "결과 페이지 번호, 1~15 사이의 값",
                             "default": 1
                         },
                         "size": {
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 30,
-                            "description": "한 페이지에 보여질 문서 수 (1~30), 기본 값 15",
+                            "description": "한 페이지에 보여질 문서 수, 1~30 사이의 값, 기본 값 15",
                             "default": 15
                         }
                     },
