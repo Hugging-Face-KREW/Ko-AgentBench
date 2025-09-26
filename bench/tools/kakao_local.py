@@ -54,29 +54,6 @@ class KakaoLocal(BaseAPI):
             }
         }
 
-    def coord_to_address_tool(self) -> Dict:
-        """CoordToAddress_kakao tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "CoordToAddress_kakao",
-                "description": "위경도 좌표를 지번/도로명 주소로 변환합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "latitude": {
-                            "type": "number",
-                            "description": "위도 (예: 37.4979)"
-                        },
-                        "longitude": {
-                            "type": "number",
-                            "description": "경도 (예: 127.0276)"
-                        }
-                    },
-                    "required": ["latitude", "longitude"]
-                }
-            }
-        }
 
     def place_search_tool(self) -> Dict:
         """PlaceSearch_kakao tool schema"""
@@ -186,7 +163,6 @@ class KakaoLocal(BaseAPI):
         """Tool call 실행"""
         tool_map = {
             "AddressToCoord_kakao": self._address_to_coord,
-            "CoordToAddress_kakao": self._coord_to_address,
             "PlaceSearch_kakao": self._place_search,
             "CategorySearch_kakao": self._category_search
         }
@@ -200,7 +176,6 @@ class KakaoLocal(BaseAPI):
         """모든 tool 스키마 반환"""
         return [
             self.address_to_coord_tool(),
-            self.coord_to_address_tool(),
             self.place_search_tool(),
             self.category_search_tool()
         ]
