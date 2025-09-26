@@ -19,11 +19,6 @@ class KakaoLocal(BaseAPI):
         # TODO: 실제 API 호출 로직 구현
         pass
 
-    def _coord_to_address(self, latitude: float, longitude: float) -> Dict[str, Any]:
-        """좌표-주소 변환 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
-
     def _place_search(self, keyword: str, x: float = None, y: float = None,
                       radius: int = None, sort: str = "accuracy",
                       page: int = 1, size: int = 15) -> Dict[str, Any]:
