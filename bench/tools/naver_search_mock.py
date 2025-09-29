@@ -1,12 +1,7 @@
-"""Mock Naver Search tools returning deterministic, realistic-looking data.
+"""Mock Naver Search API returning deterministic, realistic-looking data.
 
-Implements three separate tools (option A):
-- naver_web_search
-- naver_blog_search
-- naver_news_search
-
-Each tool validates input, clamps ranges, and returns results that mimic
-Naver Open API response structure without performing any network calls.
+This refactored module exposes a single API class with per-feature methods,
+so each method can be wrapped as a tool at runtime (via MethodToolWrapper).
 """
 
 from __future__ import annotations
@@ -19,24 +14,13 @@ from typing import Any, Dict, List
 from urllib.parse import quote_plus
 
 try:
-    # Prefer the project's BaseTool if available
-    from .base_tool import BaseTool  # type: ignore
-except Exception:
-    # Minimal fallback to allow standalone usage if BaseTool is missing
-    class BaseTool:  # type: ignore
-        name: str
-        description: str
-
+    # Optional base API for consistency; not strictly required by wrappers
+    from .base_tool import BaseAPI  # type: ignore
+except Exception:  # pragma: no cover - fallback for standalone usage
+    class BaseAPI:  # type: ignore
         def __init__(self, name: str, description: str = "") -> None:
             self.name = name
             self.description = description
-
-        def get_schema(self) -> Dict[str, Any]:
-            return {
-                "name": self.name,
-                "description": self.description,
-                "parameters": getattr(self, "_get_parameters_schema")(),
-            }
 
 
 KST = timezone(timedelta(hours=9))
@@ -120,17 +104,17 @@ class _CommonParams:
         return cls(query=query, display=display_int, start=start_int)
 
 
-class NaverWebSearchMock(BaseTool):
-    """Mock tool for Naver Web Search API."""
+class NaverSearchMockAPI(BaseAPI):
+    """Single mock API exposing web/blog/news search methods."""
 
     def __init__(self) -> None:
         super().__init__(
-            name="naver_web_search",
-            description="네이버 웹 검색 모의(Mock) 도구: 네트워크 호출 없이 유사 결과를 반환"
+            name="naver_search_mock_api",
+            description="네이버 검색 모의(Mock) API: 네트워크 호출 없음"
         )
 
-    def execute(self, **kwargs: Any) -> Dict[str, Any]:
-        params = _CommonParams.from_kwargs(**kwargs)
+    def WebSearch_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+        params = _CommonParams.from_kwargs(query=query, display=display, start=start)
         rng = _deterministic_random(["web", params.query, str(params.start), str(params.display)])
 
         now = datetime.now(KST)
@@ -167,36 +151,8 @@ class NaverWebSearchMock(BaseTool):
             "items": items
         }
 
-    def validate_input(self, **kwargs: Any) -> bool:
-        try:
-            _CommonParams.from_kwargs(**kwargs)
-            return True
-        except Exception:
-            return False
-
-    def _get_parameters_schema(self) -> Dict[str, Any]:
-        return {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "description": "표시 결과 수"},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "description": "시작 위치"}
-            },
-            "required": ["query"]
-        }
-
-
-class NaverBlogSearchMock(BaseTool):
-    """Mock tool for Naver Blog Search API."""
-
-    def __init__(self) -> None:
-        super().__init__(
-            name="naver_blog_search",
-            description="네이버 블로그 검색 모의(Mock) 도구: 네트워크 호출 없이 유사 결과를 반환"
-        )
-
-    def execute(self, **kwargs: Any) -> Dict[str, Any]:
-        params = _CommonParams.from_kwargs(**kwargs)
+    def BlogSearch_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+        params = _CommonParams.from_kwargs(query=query, display=display, start=start)
         rng = _deterministic_random(["blog", params.query, str(params.start), str(params.display)])
 
         now = datetime.now(KST)
@@ -221,12 +177,10 @@ class NaverBlogSearchMock(BaseTool):
             domain = _pick_one(rng, blog_domains)
             bloggername = _pick_one(rng, blogger_names)
 
-            # Simulate recent post date within 30 days
             days_ago = rng.randint(0, 30)
             post_dt = (now - timedelta(days=days_ago)).astimezone(KST)
             postdate = post_dt.strftime("%Y%m%d")
 
-            # Stabilize author handle for velog/medium style
             handle_seed = _seed_from(params.query, str(i), "blogger")
             handle_rng = random.Random(handle_seed)
             handle = f"user{handle_rng.randint(1000, 9999)}"
@@ -255,36 +209,8 @@ class NaverBlogSearchMock(BaseTool):
             "items": items
         }
 
-    def validate_input(self, **kwargs: Any) -> bool:
-        try:
-            _CommonParams.from_kwargs(**kwargs)
-            return True
-        except Exception:
-            return False
-
-    def _get_parameters_schema(self) -> Dict[str, Any]:
-        return {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "description": "표시 결과 수"},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "description": "시작 위치"}
-            },
-            "required": ["query"]
-        }
-
-
-class NaverNewsSearchMock(BaseTool):
-    """Mock tool for Naver News Search API."""
-
-    def __init__(self) -> None:
-        super().__init__(
-            name="naver_news_search",
-            description="네이버 뉴스 검색 모의(Mock) 도구: 네트워크 호출 없이 유사 결과를 반환"
-        )
-
-    def execute(self, **kwargs: Any) -> Dict[str, Any]:
-        params = _CommonParams.from_kwargs(**kwargs)
+    def NewsSearch_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+        params = _CommonParams.from_kwargs(query=query, display=display, start=start)
         rng = _deterministic_random(["news", params.query, str(params.start), str(params.display)])
 
         now = datetime.now(KST)
@@ -306,12 +232,10 @@ class NaverNewsSearchMock(BaseTool):
             summary = _pick_one(rng, _gen_summary_variants(params.query))
             origin = _pick_one(rng, news_domains)
 
-            # Simulate Naver news link style
             oid = f"{rng.randint(100, 999)}"
             aid = f"{rng.randint(1, 99999999):010d}"
             naver_link = f"https://n.news.naver.com/article/{oid}/{aid}"
 
-            # Pub date within the last 14 days
             days_ago = rng.randint(0, 14)
             hours_offset = rng.randint(0, 23)
             pub_dt = (now - timedelta(days=days_ago, hours=hours_offset)).astimezone(KST)
@@ -334,29 +258,9 @@ class NaverNewsSearchMock(BaseTool):
             "items": items
         }
 
-    def validate_input(self, **kwargs: Any) -> bool:
-        try:
-            _CommonParams.from_kwargs(**kwargs)
-            return True
-        except Exception:
-            return False
-
-    def _get_parameters_schema(self) -> Dict[str, Any]:
-        return {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "description": "표시 결과 수"},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "description": "시작 위치"}
-            },
-            "required": ["query"]
-        }
-
 
 __all__ = [
-    "NaverWebSearchMock",
-    "NaverBlogSearchMock",
-    "NaverNewsSearchMock",
+    "NaverSearchMockAPI",
 ]
 
 
