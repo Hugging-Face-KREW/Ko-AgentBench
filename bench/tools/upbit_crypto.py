@@ -14,128 +14,87 @@ class UpbitCrypto(BaseAPI):
     # ========== 실제 API 호출 메서드들 ==========
 
     def _crypto_price(self, symbol: str, quote: str = "KRW") -> Dict[str, Any]:
-        """암호화폐 현재가 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """암호화폐 현재가 조회"""
+        market = f"{quote}-{symbol}"
+        url = f"{self.base_url}/v1/ticker"
+        params = {"markets": market}
+
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()[0]
+        return {
+            "symbol": symbol,
+            "quote": quote,
+            "market": market,
+            "current_price": data.get("trade_price"),
+            "change_rate": data.get("change_rate") * 100,
+            "volume": data.get("acc_trade_volume_24h"),
+            "high_price": data.get("high_price"),
+            "low_price": data.get("low_price")
+        }
 
     def _market_list(self, quote: str = "KRW", include_event: bool = True) -> Dict[str, Any]:
-        """마켓 목록 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """마켓 목록 조회"""
+        url = f"{self.base_url}/v1/market/all"
+        params = {"isDetails": "true"}
+
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+
+        markets = []
+        for market in response.json():
+            if quote != "ALL" and not market["market"].startswith(quote):
+                continue
+            markets.append({
+                "market": market.get("market"),
+                "korean_name": market.get("korean_name"),
+                "english_name": market.get("english_name")
+            })
+
+        return {
+            "quote": quote,
+            "markets": markets,
+            "count": len(markets)
+        }
 
     def _crypto_candle(self, symbol: str, quote: str = "KRW",
                        candle_type: str = "days", unit: Optional[int] = None,
                        count: int = 30, to: Optional[str] = None) -> Dict[str, Any]:
-        """캔들 데이터 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """캔들 데이터 조회"""
+        market = f"{quote}-{symbol}"
+
+        if candle_type == "minutes":
+            url = f"{self.base_url}/v1/candles/minutes/{unit}"
+        else:
+            url = f"{self.base_url}/v1/candles/{candle_type}"
+
+        params = {"market": market, "count": min(count, 200)}
+        if to:
+            params["to"] = to
+
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+
+        candles = []
+        for candle in response.json():
+            candles.append({
+                "timestamp": candle.get("candle_date_time_kst"),
+                "open": candle.get("opening_price"),
+                "high": candle.get("high_price"),
+                "low": candle.get("low_price"),
+                "close": candle.get("trade_price"),
+                "volume": candle.get("candle_acc_trade_volume")
+            })
+
+        return {
+            "symbol": symbol,
+            "market": market,
+            "candle_type": candle_type,
+            "data": candles
+        }
 
     # ========== Tool Calling 스키마 메서드들 ==========
-
-    def crypto_price_tool(self) -> Dict:
-        """CryptoPrice_upbit tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "CryptoPrice_upbit",
-                "description": "업비트 거래소에서 암호화폐의 실시간 시세 정보를 조회합니다. (Rate Limit: 초당 10회, IP 기준)",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "symbol": {
-                            "type": "string",
-                            "description": "암호화폐 심볼 (예: BTC, ETH, XRP, ADA, SOL, DOGE, AVAX, DOT, LINK, UNI)",
-                            "pattern": "^[A-Z0-9]+$"
-                        },
-                        "quote": {
-                            "type": "string",
-                            "enum": ["KRW", "BTC", "USDT"],
-                            "default": "KRW",
-                            "description": "기준 통화"
-                        }
-                    },
-                    "required": ["symbol"]
-                }
-            }
-        }
-
-    def market_list_tool(self) -> Dict:
-        """MarketList_upbit tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "MarketList_upbit",
-                "description": "업비트에서 거래 가능한 암호화폐 마켓 목록을 조회합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "quote": {
-                            "type": "string",
-                            "enum": ["KRW", "BTC", "USDT", "ALL"],
-                            "default": "KRW",
-                            "description": "기준 통화 필터"
-                        },
-                        "include_event": {
-                            "type": "boolean",
-                            "default": True,
-                            "description": "시장 경고/주의 정보 포함 여부"
-                        }
-                    },
-                    "required": []
-                }
-            }
-        }
-
-    def crypto_candle_tool(self) -> Dict:
-        """CryptoCandle_upbit tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "CryptoCandle_upbit",
-                "description": "업비트에서 암호화폐의 캔들(OHLCV) 데이터를 조회합니다. 차트 분석과 기술적 분석에 활용됩니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "symbol": {
-                            "type": "string",
-                            "description": "암호화폐 심볼 (예: BTC, ETH)",
-                            "pattern": "^[A-Z0-9]+$"
-                        },
-                        "quote": {
-                            "type": "string",
-                            "enum": ["KRW", "BTC", "USDT"],
-                            "default": "KRW",
-                            "description": "기준 통화"
-                        },
-                        "candle_type": {
-                            "type": "string",
-                            "enum": ["minutes", "days", "weeks", "months"],
-                            "default": "days",
-                            "description": "캔들 타입"
-                        },
-                        "unit": {
-                            "type": "integer",
-                            "enum": [1, 3, 5, 10, 15, 30, 60, 240],
-                            "description": "candle_type이 minutes일 때만 필요한 분 단위"
-                        },
-                        "count": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 200,
-                            "default": 30,
-                            "description": "조회할 캔들 개수"
-                        },
-                        "to": {
-                            "type": "string",
-                            "description": "마지막 캔들 시점 (ISO8601 형식)"
-                        }
-                    },
-                    "required": ["symbol"]
-                }
-            }
-        }
-
-    # ========== Tool Call 실행기 ==========
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""

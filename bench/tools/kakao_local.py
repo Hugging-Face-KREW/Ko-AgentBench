@@ -15,149 +15,106 @@ class KakaoLocal(BaseAPI):
     # ========== 실제 API 호출 메서드들 ==========
 
     def _address_to_coord(self, address: str) -> Dict[str, Any]:
-        """주소-좌표 변환 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """주소-좌표 변환"""
+        endpoint = "/v2/local/search/address.json"
+        headers = {"Authorization": f"KakaoAK {self.rest_api_key}"}
+        params = {"query": address}
+
+        response = requests.get(f"{self.base_url}{endpoint}",
+                                headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        if not data.get("documents"):
+            raise ValueError(f"주소 '{address}'를 찾을 수 없습니다")
+
+        result = data["documents"][0]
+        return {
+            "address": address,
+            "latitude": float(result["y"]),
+            "longitude": float(result["x"]),
+            "address_name": result.get("address_name", "")
+        }
 
     def _place_search(self, keyword: str, x: float = None, y: float = None,
                       radius: int = None, sort: str = "accuracy",
                       page: int = 1, size: int = 15) -> Dict[str, Any]:
-        """키워드 장소 검색 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """키워드 장소 검색"""
+        endpoint = "/v2/local/search/keyword.json"
+        headers = {"Authorization": f"KakaoAK {self.rest_api_key}"}
+        params = {
+            "query": keyword,
+            "sort": sort,
+            "page": page,
+            "size": size
+        }
+        if x and y:
+            params["x"] = x
+            params["y"] = y
+        if radius:
+            params["radius"] = min(radius, 20000)
+
+        response = requests.get(f"{self.base_url}{endpoint}",
+                                headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        places = []
+        for place in data.get("documents", []):
+            places.append({
+                "name": place.get("place_name"),
+                "latitude": float(place.get("y")),
+                "longitude": float(place.get("x")),
+                "address": place.get("address_name"),
+                "road_address": place.get("road_address_name"),
+                "phone": place.get("phone"),
+                "category": place.get("category_name"),
+                "distance": place.get("distance", "")
+            })
+
+        return {
+            "keyword": keyword,
+            "total_count": data.get("meta", {}).get("total_count", 0),
+            "places": places
+        }
 
     def _category_search(self, category: str, x: float, y: float,
                          radius: int = 1000, page: int = 1, size: int = 15) -> Dict[str, Any]:
-        """카테고리 장소 검색 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """카테고리 장소 검색"""
+        endpoint = "/v2/local/search/category.json"
+        headers = {"Authorization": f"KakaoAK {self.rest_api_key}"}
+        params = {
+            "category_group_code": category,
+            "x": x,
+            "y": y,
+            "radius": min(radius, 20000),
+            "page": page,
+            "size": size
+        }
+
+        response = requests.get(f"{self.base_url}{endpoint}",
+                                headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        places = []
+        for place in data.get("documents", []):
+            places.append({
+                "name": place.get("place_name"),
+                "latitude": float(place.get("y")),
+                "longitude": float(place.get("x")),
+                "address": place.get("address_name"),
+                "phone": place.get("phone"),
+                "distance": place.get("distance", "")
+            })
+
+        return {
+            "category": category,
+            "total_count": data.get("meta", {}).get("total_count", 0),
+            "places": places
+        }
 
     # ========== Tool Calling 스키마 메서드들 ==========
-
-    def address_to_coord_tool(self) -> Dict:
-        """AddressToCoord_kakao tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "AddressToCoord_kakao",
-                "description": "지번 주소 또는 도로명 주소를 위경도 좌표로 변환합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "address": {
-                            "type": "string",
-                            "description": "변환할 주소 (예: 서울 강남구 테헤란로 231, 서울 강남구 삼성동 159)"
-                        }
-                    },
-                    "required": ["address"]
-                }
-            }
-        }
-
-
-    def place_search_tool(self) -> Dict:
-        """PlaceSearch_kakao tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "PlaceSearch_kakao",
-                "description": "키워드로 장소를 검색합니다. 장소명, 업종, 지역명 등으로 검색 가능합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "keyword": {
-                            "type": "string",
-                            "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 맛집, 이태원 카페)"
-                        },
-                        "x": {
-                            "type": "number",
-                            "description": "중심 좌표의 경도"
-                        },
-                        "y": {
-                            "type": "number",
-                            "description": "중심 좌표의 위도"
-                        },
-                        "radius": {
-                            "type": "integer",
-                            "description": "검색 반경(미터, 최대 20000m)",
-                            "maximum": 20000
-                        },
-                        "sort": {
-                            "type": "string",
-                            "enum": ["accuracy", "distance"],
-                            "description": "정렬 방식",
-                            "default": "accuracy"
-                        },
-                        "page": {
-                            "type": "integer",
-                            "description": "페이지 번호 (1~45)",
-                            "minimum": 1,
-                            "maximum": 45,
-                            "default": 1
-                        },
-                        "size": {
-                            "type": "integer",
-                            "description": "한 페이지 결과 수 (1~15)",
-                            "minimum": 1,
-                            "maximum": 15,
-                            "default": 15
-                        }
-                    },
-                    "required": ["keyword"]
-                }
-            }
-        }
-
-    def category_search_tool(self) -> Dict:
-        """CategorySearch_kakao tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "CategorySearch_kakao",
-                "description": "특정 카테고리의 장소를 좌표 기준 반경 내에서 검색합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "category": {
-                            "type": "string",
-                            "enum": ["MT1", "CS2", "PS3", "SC4", "AC5", "PK6", "OL7", "SW8", "BK9", "CT1", "AG2", "PO3", "AT4", "AD5", "FD6", "CE7", "HP8", "PM9"],
-                            "description": "카테고리 코드 (MT1:대형마트, CS2:편의점, FD6:음식점, CE7:카페, HP8:병원, PM9:약국, SW8:지하철역, BK9:은행 등)"
-                        },
-                        "x": {
-                            "type": "number",
-                            "description": "중심 좌표의 경도"
-                        },
-                        "y": {
-                            "type": "number",
-                            "description": "중심 좌표의 위도"
-                        },
-                        "radius": {
-                            "type": "integer",
-                            "description": "검색 반경(미터)",
-                            "default": 1000,
-                            "minimum": 0,
-                            "maximum": 20000
-                        },
-                        "page": {
-                            "type": "integer",
-                            "description": "페이지 번호",
-                            "minimum": 1,
-                            "default": 1
-                        },
-                        "size": {
-                            "type": "integer",
-                            "description": "한 페이지 결과 수 (1~15)",
-                            "minimum": 1,
-                            "maximum": 15,
-                            "default": 15
-                        }
-                    },
-                    "required": ["category"]
-                }
-            }
-        }
-
-    # ========== Tool Call 실행기 ==========
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""

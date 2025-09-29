@@ -12,130 +12,128 @@ class KISStock(BaseAPI):
         self.base_url = "https://openapi.koreainvestment.com:9443"
         self.app_key = os.getenv("KIS_APP_KEY")
         self.app_secret = os.getenv("KIS_APP_SECRET")
+        self._token = None
 
     # ========== 실제 API 호출 메서드들 ==========
 
+    def _get_access_token(self) -> str:
+        """OAuth 토큰 발급"""
+        if self._token:
+            return self._token
+
+        url = f"{self.base_url}/oauth2/tokenP"
+        headers = {"content-type": "application/json"}
+        data = {
+            "grant_type": "client_credentials",
+            "appkey": self.app_key,
+            "appsecret": self.app_secret
+        }
+
+        response = requests.post(url, headers=headers, json=data, timeout=10)
+        response.raise_for_status()
+        self._token = response.json()["access_token"]
+        return self._token
+
     def _stock_price(self, symbol: str, market: str = "KOSPI") -> Dict[str, Any]:
-        """국내 주식 현재가 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """국내 주식 현재가 조회"""
+        token = self._get_access_token()
+        url = f"{self.base_url}/uapi/domestic-stock/v1/quotations/inquire-price"
+        headers = {
+            "content-type": "application/json",
+            "authorization": f"Bearer {token}",
+            "appkey": self.app_key,
+            "appsecret": self.app_secret,
+            "tr_id": "FHKST01010100"
+        }
+        params = {
+            "FID_COND_MRKT_DIV_CODE": "J",
+            "FID_INPUT_ISCD": symbol
+        }
 
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
 
+        data = response.json()["output"]
+        return {
+            "symbol": symbol,
+            "market": market,
+            "name": data.get("prdt_name"),
+            "current_price": int(data.get("stck_prpr")),
+            "change_rate": float(data.get("prdy_ctrt")),
+            "volume": int(data.get("acml_vol"))
+        }
 
     def _us_stock_price(self, symbol: str, exchange: str = "NASDAQ") -> Dict[str, Any]:
-        """미국 주식 현재가 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """미국 주식 현재가 조회"""
+        token = self._get_access_token()
+        url = f"{self.base_url}/uapi/overseas-price/v1/quotations/price"
+        headers = {
+            "content-type": "application/json",
+            "authorization": f"Bearer {token}",
+            "appkey": self.app_key,
+            "appsecret": self.app_secret,
+            "tr_id": "HHDFS00000300"
+        }
+        params = {
+            "AUTH": "",
+            "EXCD": "NAS" if exchange == "NASDAQ" else "NYS",
+            "SYMB": symbol
+        }
+
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()["output"]
+        return {
+            "symbol": symbol,
+            "exchange": exchange,
+            "current_price": float(data.get("last")),
+            "change_rate": float(data.get("rate")),
+            "volume": int(data.get("tvol"))
+        }
 
     def _stock_chart(self, symbol: str, period: str = "D", count: int = 30,
                      start_date: str = None, end_date: str = None) -> Dict[str, Any]:
-        """주식 차트 데이터 조회 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        """주식 차트 데이터 조회"""
+        token = self._get_access_token()
+        url = f"{self.base_url}/uapi/domestic-stock/v1/quotations/inquire-daily-price"
+        headers = {
+            "content-type": "application/json",
+            "authorization": f"Bearer {token}",
+            "appkey": self.app_key,
+            "appsecret": self.app_secret,
+            "tr_id": "FHKST01010400"
+        }
+
+        period_code = {"D": "D", "W": "W", "M": "M", "Y": "Y"}
+        params = {
+            "FID_COND_MRKT_DIV_CODE": "J",
+            "FID_INPUT_ISCD": symbol,
+            "FID_PERIOD_DIV_CODE": period_code.get(period, "D"),
+            "FID_ORG_ADJ_PRC": "0"
+        }
+
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+
+        chart_data = []
+        for item in response.json()["output"][:count]:
+            chart_data.append({
+                "date": item.get("stck_bsop_date"),
+                "open": int(item.get("stck_oprc")),
+                "high": int(item.get("stck_hgpr")),
+                "low": int(item.get("stck_lwpr")),
+                "close": int(item.get("stck_clpr")),
+                "volume": int(item.get("acml_vol"))
+            })
+
+        return {
+            "symbol": symbol,
+            "period": period,
+            "data": chart_data
+        }
 
     # ========== Tool Calling 스키마 메서드들 ==========
-
-    def stock_price_tool(self) -> Dict:
-        """StockPrice_kis tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "StockPrice_kis",
-                "description": "한국 주식의 현재가, 등락률, 거래량 정보를 조회합니다. 한국투자증권 Open API를 활용합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "symbol": {
-                            "type": "string",
-                            "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)",
-                            "pattern": "^[0-9]{6}$"
-                        },
-                        "market": {
-                            "type": "string",
-                            "description": "시장구분",
-                            "enum": ["KOSPI", "KOSDAQ"],
-                            "default": "KOSPI"
-                        }
-                    },
-                    "required": ["symbol"]
-                }
-            }
-        }
-
-
-
-    def us_stock_price_tool(self) -> Dict:
-        """USStockPrice_kis tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "USStockPrice_kis",
-                "description": "미국 주식의 현재가와 기본 정보를 조회합니다. NASDAQ, NYSE 등 주요 거래소를 지원합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "symbol": {
-                            "type": "string",
-                            "description": "미국 주식 심볼 (예: AAPL, MSFT, TSLA, GOOGL, BRK.B)",
-                            "pattern": "^[A-Z.-]{1,10}$"
-                        },
-                        "exchange": {
-                            "type": "string",
-                            "description": "거래소",
-                            "enum": ["NASDAQ", "NYSE", "AMEX"],
-                            "default": "NASDAQ"
-                        }
-                    },
-                    "required": ["symbol"]
-                }
-            }
-        }
-
-    def stock_chart_tool(self) -> Dict:
-        """StockChart_kis tool schema - 테스트 결과 반영"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "StockChart_kis",
-                "description": "한국 주식의 일봉, 주봉, 월봉, 년봉 차트 데이터를 조회합니다. 과거 데이터만 조회 가능하며 미래 날짜는 오류가 발생합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "symbol": {
-                            "type": "string",
-                            "description": "주식 종목코드 (6자리)",
-                            "pattern": "^[0-9]{6}$"
-                        },
-                        "period": {
-                            "type": "string",
-                            "enum": ["D", "W", "M", "Y"],
-                            "default": "D",
-                            "description": "조회 기간 (D=일봉, W=주봉, M=월봉, Y=년봉)"
-                        },
-                        "count": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 100,
-                            "default": 30,
-                            "description": "조회할 데이터 개수"
-                        },
-                        "start_date": {
-                            "type": "string",
-                            "description": "시작일자 (YYYYMMDD) - 과거 날짜만 가능",
-                            "pattern": "^[0-9]{8}$"
-                        },
-                        "end_date": {
-                            "type": "string",
-                            "description": "종료일자 (YYYYMMDD) - 과거 날짜만 가능",
-                            "pattern": "^[0-9]{8}$"
-                        }
-                    },
-                    "required": ["symbol"]
-                }
-            }
-        }
-
-    # ========== Tool Call 실행기 ==========
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""
@@ -160,5 +158,8 @@ class KISStock(BaseAPI):
 
     def test_connection(self) -> bool:
         """API 연결 테스트"""
-        # TODO: OAuth 토큰 발급 테스트 구현
-        return True
+        try:
+            self._get_access_token()
+            return True
+        except:
+            return False
