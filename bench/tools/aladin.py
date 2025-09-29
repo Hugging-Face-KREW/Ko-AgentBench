@@ -1,3 +1,7 @@
+import os
+import time
+import uuid
+from typing import Any, Dict
 import requests
 from base_api import BaseAPI
 
@@ -7,113 +11,156 @@ class AladinAPI(BaseAPI):
             name="aladin_api",
             description="알라딘 도서 검색 및 정보 조회 API"
         )
-        self.api_key = "ttbbbangggo1231514001"  # 테스트용 API 키 (실제 키로 교체 필요)
+        # 환경변수 TTB API 키 우선. (환경변수: ALADIN_TTB_KEY)
+        self.api_key = os.getenv("ALADIN_TTB_KEY", "ttbbbangggo1231514001")
         self.base_url = "http://www.aladin.co.kr/ttb/api"
+        self.version = "20131101"
+        self.default_timeout = 10
+        self._last_call_ts = 0.0
+
+    # ========== 내부 공통 헬퍼 ==========
+    def _request(self, path: str, params: Dict[str, Any]) -> Dict[str, Any]:
+        """알라딘 TTB API 공통 호출 헬퍼.
+
+        Args:
+            path: 'ItemSearch.aspx' 등 endpoint 파일명
+            params: 쿼리 파라미터 (ttbkey 제외 상태로 전달 가능)
+        Returns:
+            표준화된 dict {error, status, result|message}
+        """
+        # 간단한 초당 호출 간격 완화
+        now = time.time()
+        if now - self._last_call_ts < 0.05:
+            time.sleep(0.05)
+        self._last_call_ts = time.time()
+
+        url = f"{self.base_url}/{path}"
+        merged = {
+            "ttbkey": self.api_key,
+            "Version": self.version,
+            **params
+        }
+        try:
+            resp = requests.get(url, params=merged, timeout=self.default_timeout)
+        except requests.exceptions.Timeout:
+            return {"error": True, "status": "timeout", "message": "요청 시간이 초과되었습니다."}
+        except requests.exceptions.RequestException as e:
+            return {"error": True, "status": "network_error", "message": str(e)}
+
+        if resp.status_code != 200:
+            return {"error": True, "status": resp.status_code, "message": resp.text[:500]}
+
+        # 알라딘은 XML 혹은 JS(JSONP 형태) 지원. 여기서는 raw text 반환 후 상위 소비자에서 파싱하도록 둠.
+        # output=JS 인 경우 JSON 처리를 시도.
+        content_type = resp.headers.get("Content-Type", "")
+        body_text = resp.text
+        parsed: Any = body_text
+        if "json" in content_type.lower() or merged.get("output", "").upper() == "JS":
+            try:
+                parsed = resp.json()
+            except Exception:
+                # JSON 파싱 실패 시 raw 유지
+                pass
+
+        return {"error": False, "status": 200, "result": parsed, "raw": body_text}
 
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
 
-    def _search_item(self, query: str, query_type: str = "Keyword", search_target: str = "Book", 
-                    start: int = 1, max_results: int = 10, sort: str = "Accuracy", 
-                    cover: str = "Mid", category_id: int = 0, output: str = "XML", 
-                    out_of_stock_filter: int = 0, opt_result: str = "") -> dict:
-        """알라딘 상품 검색 API 호출 (내부 구현)
-        
-        Args:
-            query: 검색어
-            query_type: 검색어 종류 (Keyword, Title, Author, Publisher)
-            search_target: 검색 대상 (Book, Foreign, Music, DVD, Used, eBook, All)
-            start: 검색 시작 페이지
-            max_results: 한 페이지에 보여질 상품 수 (1~100)
-            sort: 정렬 방식 (Accuracy, PublishTime, SalesPoint, CustomerRating, MyReviewCount)
-            cover: 표지 이미지 크기 (Big, MidBig, Mid, Small, Mini, None)
-            category_id: 분야의 고유 번호 (0: 전체)
-            output: 출력 형식 (XML, JS)
-            out_of_stock_filter: 품절/절판 상품 필터링 여부 (1: 제외)
-            opt_result: 부가 정보 요청
-            
-        Returns:
-            검색 결과를 포함한 딕셔너리
-        """
-        # TODO: 실제 API 호출 로직 구현
-        pass
+    def _search_item(self, query: str, query_type: str = "Keyword", search_target: str = "Book",
+                     start: int = 1, max_results: int = 10, sort: str = "Accuracy",
+                     cover: str = "Mid", category_id: int = 0, output: str = "XML",
+                     out_of_stock_filter: int = 0, opt_result: str = "") -> dict:
+        """알라딘 상품 검색 API 호출 (ItemSearch)"""
+        if not query:
+            return {"error": True, "status": "invalid_param", "message": "query는 필수입니다."}
+        max_results = max(1, min(max_results, 100))
+        start = max(1, start)
+        params = {
+            "Query": query,
+            "QueryType": query_type,
+            "SearchTarget": search_target,
+            "Start": start,
+            "MaxResults": max_results,
+            "Sort": sort,
+            "Cover": cover,
+            "CategoryId": category_id,
+            "output": output.lower(),  # xml/js
+            "outofStockFilter": out_of_stock_filter,
+        }
+        if opt_result:
+            params["OptResult"] = opt_result
+        return self._request("ItemSearch.aspx", params)
 
-    def _get_item_list(self, query_type: str, search_target: str = "Book", 
-                      sub_search_target: str = "", start: int = 1, max_results: int = 10,
-                      cover: str = "Mid", category_id: int = 0, year: int = None,
-                      month: int = None, week: int = None, output: str = "XML",
-                      out_of_stock_filter: int = 0) -> dict:
-        """알라딘 상품 리스트 조회 API 호출 (내부 구현)
-        
-        Args:
-            query_type: 조회할 리스트 종류 (ItemNewAll, ItemNewSpecial, ItemEditorChoice, Bestseller, BlogBest)
-            search_target: 조회 대상 Mall (Book, Foreign, Music, DVD, Used, eBook, All)
-            sub_search_target: SearchTarget이 Used일 경우 서브 Mall 지정
-            start: 시작 페이지
-            max_results: 한 페이지에 보여질 상품 수 (1~100)
-            cover: 표지 이미지 크기
-            category_id: 분야의 고유 번호
-            year: Bestseller 조회 시 기준 연도
-            month: Bestseller 조회 시 기준 월
-            week: Bestseller 조회 시 기준 주
-            output: 출력 형식
-            out_of_stock_filter: 품절/절판 상품 필터링 여부
-            
-        Returns:
-            상품 리스트를 포함한 딕셔너리
-        """
-        # TODO: 실제 API 호출 로직 구현
-        pass
+    def _get_item_list(self, query_type: str, search_target: str = "Book",
+                       sub_search_target: str = "", start: int = 1, max_results: int = 10,
+                       cover: str = "Mid", category_id: int = 0, year: int | None = None,
+                       month: int | None = None, week: int | None = None, output: str = "XML",
+                       out_of_stock_filter: int = 0) -> dict:
+        """알라딘 상품 리스트 조회 API 호출 (ItemList)"""
+        if not query_type:
+            return {"error": True, "status": "invalid_param", "message": "query_type은 필수입니다."}
+        max_results = max(1, min(max_results, 100))
+        start = max(1, start)
+        params: Dict[str, Any] = {
+            "QueryType": query_type,
+            "SearchTarget": search_target,
+            "Start": start,
+            "MaxResults": max_results,
+            "Cover": cover,
+            "CategoryId": category_id,
+            "output": output.lower(),
+            "outofStockFilter": out_of_stock_filter,
+        }
+        if sub_search_target:
+            params["SubSearchTarget"] = sub_search_target
+        if year:
+            params["Year"] = year
+        if month:
+            params["Month"] = month
+        if week:
+            params["Week"] = week
+        return self._request("ItemList.aspx", params)
 
-    def _get_item_details(self, item_id: str, item_id_type: str = "ISBN", 
-                         cover: str = "Mid", output: str = "XML", opt_result: str = "") -> dict:
-        """알라딘 상품 상세 정보 조회 API 호출 (내부 구현)
-        
-        Args:
-            item_id: 상품의 고유 ID (ISBN, ISBN13, 또는 알라딘 ItemId)
-            item_id_type: ItemId의 종류 (ISBN, ISBN13, ItemId)
-            cover: 표지 이미지 크기
-            output: 출력 형식
-            opt_result: 부가 정보 요청 (Toc, authors, reviewList, usedList, ebookList, fulldescription, ratingInfo 등)
-            
-        Returns:
-            상품 상세 정보를 포함한 딕셔너리
-        """
-        # TODO: 실제 API 호출 로직 구현
-        pass
+    def _get_item_details(self, item_id: str, item_id_type: str = "ISBN",
+                          cover: str = "Mid", output: str = "XML", opt_result: str = "") -> dict:
+        """알라딘 상품 상세 정보 조회 API 호출 (ItemLookUp)"""
+        if not item_id:
+            return {"error": True, "status": "invalid_param", "message": "item_id는 필수입니다."}
+        params: Dict[str, Any] = {
+            "ItemId": item_id,
+            "ItemIdType": item_id_type,
+            "Cover": cover,
+            "output": output.lower(),
+        }
+        if opt_result:
+            params["OptResult"] = opt_result
+        return self._request("ItemLookUp.aspx", params)
 
-    def _login_aladin(self, username: str, password: str) -> dict:
-        """알라딘 로그인 API 호출 (내부 구현)
-        
-        Args:
-            username: 알라딘 계정 아이디
-            password: 알라딘 계정 비밀번호
-            
-        Returns:
-            로그인 결과 및 세션 토큰을 포함한 딕셔너리
-        """
-        # TODO: 실제 API 호출 로직 구현
-        pass
 
-    def _purchase_item(self, session_token: str, item_id: str, quantity: int = 1, 
-                      delivery_address: str = "", payment_method: str = "card") -> dict:
-        """알라딘 상품구매 API 호출 (내부 구현)
-        
-        Args:
-            session_token: 로그인 시 발급받은 1회용 세션 토큰
-            item_id: 구매할 상품의 고유 ID (알라딘 ItemId 또는 ISBN13)
-            quantity: 구매 수량
-            delivery_address: 배송 주소
-            payment_method: 결제 방법 (card, bank, point)
-            
-        Returns:
-            구매 결과를 포함한 딕셔너리
+    def _purchase_item(self, item_id: str, quantity: int = 1,
+                       delivery_address: str = "", payment_method: str = "card") -> dict:
+        """실제 구매 API가 없으므로 모의 구현.
+
+        간단히 item_id와 수량만 검증 후 주문 ID 생성.
         """
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        if not item_id:
+            return {"error": True, "status": "invalid_param", "message": "item_id 필수"}
+        quantity = max(1, min(quantity, 99))
+        order_id = f"mock-order-{uuid.uuid4().hex[:12]}"
+        return {
+            "error": False,
+            "status": 200,
+            "order_id": order_id,
+            "item_id": item_id,
+            "quantity": quantity,
+            "payment_method": payment_method,
+            "delivery_address": delivery_address or "DEFAULT",
+            "message": "모의 구매 성공 (실제 결제 아님)"
+        }
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def search_item_tool(self) -> dict:
+    def ItemSearch_aladin(self) -> dict:
         """상품 검색 tool calling 스키마"""
         return {
             "type": "function",
@@ -192,7 +239,7 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def get_item_list_tool(self) -> dict:
+    def ItemList_aladin(self) -> dict:
         """상품 리스트 조회 tool calling 스키마"""
         return {
             "type": "function",
@@ -273,7 +320,7 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def get_item_details_tool(self) -> dict:
+    def ItemLookup_aladin(self) -> dict:
         """상품 상세 정보 조회 tool calling 스키마"""
         return {
             "type": "function",
@@ -316,44 +363,16 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def login_aladin_tool(self) -> dict:
-        """알라딘 로그인 tool calling 스키마"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "Login_aladin",
-                "description": "알라딘 계정으로 로그인하여 1회용 세션 토큰을 발급받습니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "username": {
-                            "type": "string",
-                            "description": "알라딘 계정 아이디"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "알라딘 계정 비밀번호"
-                        }
-                    },
-                    "required": ["username", "password"]
-                }
-            }
-        }
-    
-    def purchase_item_tool(self) -> dict:
-        """알라딘 상품구매 tool calling 스키마"""
+    def Purchase_aladin(self) -> dict:
+        """알라딘 상품구매 tool calling 스키마 (모의)"""
         return {
             "type": "function",
             "function": {
                 "name": "Purchase_aladin",
-                "description": "세션 토큰을 사용하여 알라딘에서 상품을 구매합니다.",
+                "description": "모의 상품 구매를 수행합니다. (로그인/결제 실제 수행 안 함)",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "session_token": {
-                            "type": "string",
-                            "description": "로그인 시 발급받은 1회용 세션 토큰"
-                        },
                         "item_id": {
                             "type": "string",
                             "description": "구매할 상품의 고유 ID (알라딘 ItemId 또는 ISBN13)"
@@ -377,7 +396,7 @@ class AladinAPI(BaseAPI):
                             "default": "card"
                         }
                     },
-                    "required": ["session_token", "item_id"]
+                    "required": ["item_id"]
                 }
             }
         }
@@ -398,7 +417,6 @@ class AladinAPI(BaseAPI):
             "ItemSearch_aladin": self._search_item,
             "ItemList_aladin": self._get_item_list,
             "ItemLookup_aladin": self._get_item_details,
-            "Login_aladin": self._login_aladin,
             "Purchase_aladin": self._purchase_item
         }
         
@@ -410,11 +428,10 @@ class AladinAPI(BaseAPI):
     def get_all_tool_schemas(self) -> list[dict]:
         """모든 tool 스키마 반환"""
         return [
-            self.search_item_tool(),
-            self.get_item_list_tool(),
-            self.get_item_details_tool(),
-            self.login_aladin_tool(),
-            self.purchase_item_tool()
+            self.ItemSearch_aladin(),
+            self.ItemList_aladin(),
+            self.ItemLookup_aladin(),
+            self.Purchase_aladin()
         ]
 
     def test_connection(self) -> bool:
@@ -474,8 +491,39 @@ class AladinAPI(BaseAPI):
 
 if __name__ == "__main__":
     api = AladinAPI()
-    if api.test_connection():
-        print("알라딘 API 연결 성공")
+    print("[알라딘 API 연결 테스트]")
+    if not api.test_connection():
+        print("❌ 알라딘 API 연결 실패 - 데모 중단")
+        raise SystemExit(1)
+    print("✅ 알라딘 API 연결 성공\n")
+
+    # 1. 검색 데모
+    print("[ItemSearch 데모] '파이썬' 관련 검색 (상위 3개) ...")
+    search_res = api._search_item("파이썬", max_results=3, output="JS")
+    if search_res.get("error"):
+        print("검색 오류:", search_res)
     else:
-        print("알라딘 API 연결 실패")
+        print(str(search_res.get("result"))[:500], "...\n")
+
+    # 2. 리스트 데모 (신간)
+    print("[ItemList 데모] 신간 전체 (ItemNewAll) 상위 3개 ...")
+    list_res = api._get_item_list("ItemNewAll", max_results=3, output="JS")
+    if list_res.get("error"):
+        print("리스트 오류:", list_res)
+    else:
+        print(list_res.get("raw", "")[:500], "...\n")
+
+    # 3. 상세조회 (ISBN13 예시 하나 사용)
+    sample_isbn13 = "9788932473901"
+    print(f"[ItemLookUp 데모] ISBN13={sample_isbn13} ...")
+    detail_res = api._get_item_details(sample_isbn13, item_id_type="ISBN13", output="JS")
+    if detail_res.get("error"):
+        print("상세 오류:", detail_res)
+    else:
+        print(detail_res.get("raw", "")[:400], "...\n")
+
+    # 4. 구매 (모의)
+    print("[Purchase 모의 데모] quantity=2")
+    purchase_res = api._purchase_item(sample_isbn13, quantity=2)
+    print(purchase_res)
 
