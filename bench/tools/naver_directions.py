@@ -1,4 +1,3 @@
-import aiohttp
 import requests
 from typing import Dict, List, Optional
 from base_api import BaseAPI
