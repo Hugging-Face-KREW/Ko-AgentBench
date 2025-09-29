@@ -3,8 +3,7 @@
 import json
 import time
 import logging
-from typing import Any, Dict, List, Optional
-from pathlib import Path
+from typing import Any, Dict, List
 
 from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
@@ -47,7 +46,7 @@ class BenchmarkRunner:
             task: Task definition dictionary
             
         Returns:
-            Task execution result
+            Task execution result including tool invocation summary
         """
         start_time = time.time()
         task_id = task.get('id', 'unknown')
@@ -72,6 +71,20 @@ class BenchmarkRunner:
             # Execute LLM-tool loop
             result = self._execute_loop(messages, available_tools, task)
             
+            # Aggregate tool invocation summary
+            tool_invocations = []
+            for step in result.get('steps', []):
+                for tool_call in step.get('tool_calls', []):
+                    tool_invocations.append({
+                        "step": step.get('step'),
+                        "tool_call_id": tool_call.get('tool_call_id'),
+                        "tool_name": tool_call.get('tool_name'),
+                        "arguments": tool_call.get('arguments'),
+                        "result": tool_call.get('result'),
+                        "success": tool_call.get('success'),
+                        "error": tool_call.get('error'),
+                    })
+            
             # Judge the result
             evaluation = self.judge.evaluate(task, result)
             
@@ -81,6 +94,7 @@ class BenchmarkRunner:
                 "task_id": task_id,
                 "success": evaluation.get('success', False),
                 "result": result,
+                "tool_invocations": tool_invocations,
                 "evaluation": evaluation,
                 "execution_time": execution_time,
                 "steps_taken": len(result.get('steps', [])),
