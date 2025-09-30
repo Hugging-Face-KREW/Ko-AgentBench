@@ -1,4 +1,4 @@
-"""Base API interface for Ko-AgentBench."""
+"""Base interfaces for Ko-AgentBench tools and APIs."""
 
 from abc import ABC
 from typing import Any, Dict, List
@@ -26,4 +26,48 @@ class BaseAPI(ABC):
         return {
             "name": self.name,
             "description": self.description
+        }
+
+
+class BaseTool(ABC):
+    """Abstract base class for executable tools.
+    
+    Tools expose a function-calling schema for LLMs and must implement
+    parameter validation and execution logic.
+    """
+    
+    def __init__(self, name: str, description: str = ""):
+        """Initialize tool.
+        
+        Args:
+            name: Tool name (unique identifier)
+            description: Tool description for LLMs/users
+        """
+        self.name = name
+        self.description = description
+    
+    @abstractmethod
+    def execute(self, **kwargs) -> Any:
+        """Execute the tool with validated parameters."""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def validate_input(self, **kwargs) -> bool:
+        """Validate input parameters before execution."""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def _get_parameters_schema(self) -> Dict[str, Any]:
+        """Return JSON Schema for input parameters."""
+        raise NotImplementedError
+    
+    def get_schema(self) -> Dict[str, Any]:
+        """Return OpenAI-style tool/function schema for LLM function calling."""
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.description,
+                "parameters": self._get_parameters_schema()
+            }
         }
