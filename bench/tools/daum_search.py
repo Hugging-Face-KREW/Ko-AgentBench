@@ -11,7 +11,7 @@ class DaumSearchAPI(BaseAPI):
 
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
 
-    def _web_search_daum(self, query: str, sort: str = "accuracy", page: int = 1, size: int = 10) -> dict:
+    def _search_web(self, query: str, sort: str = "accuracy", page: int = 1, size: int = 10) -> dict:
         """다음 웹 검색 API 호출 (내부 구현)
         
         Args:
@@ -23,10 +23,22 @@ class DaumSearchAPI(BaseAPI):
         Returns:
             검색 결과를 포함한 딕셔너리
         """
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        url = "https://dapi.kakao.com/v2/search/web"
+        headers = {
+            "Authorization": f"KakaoAK {self.api_key}"
+        }
+        params = {
+            "query": query,
+            "sort": sort,
+            "page": page,
+            "size": size
+        }
+        
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        return response.json()
 
-    def _video_search_daum(self, query: str, sort: str = "accuracy", page: int = 1, size: int = 15) -> dict:
+    def _search_video(self, query: str, sort: str = "accuracy", page: int = 1, size: int = 15) -> dict:
         """다음 비디오 검색 API 호출 (내부 구현)
         
         Args:
@@ -38,39 +50,79 @@ class DaumSearchAPI(BaseAPI):
         Returns:
             검색 결과를 포함한 딕셔너리
         """
-        # TODO: 실제 API 호출 로직 구현
-        pass
-
-    def test_connection(self):
-        """연결 테스트를 위한 메서드"""
-        url = "https://dapi.kakao.com/v2/search/web"
+        url = "https://dapi.kakao.com/v2/search/vclip"
         headers = {
             "Authorization": f"KakaoAK {self.api_key}"
         }
         params = {
-            "query": "이효리"
+            "query": query,
+            "sort": sort,
+            "page": page,
+            "size": size
         }
         
-        try:
-            response = requests.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            
-            print(f"연결 성공! 상태 코드: {response.status_code}")
-            print(f"응답 데이터: {response.json()}")
-            return True
-            
-        except requests.exceptions.RequestException as e:
-            print(f"연결 실패: {e}")
-            return False
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        return response.json()
+
+    def test_connection(self) -> bool:
+        """API 연결 테스트 메서드
+        
+        Returns:
+            True if connection is successful, False otherwise
+        """
+        endpoints = [
+            ("웹 검색", "https://dapi.kakao.com/v2/search/web"),
+            ("비디오 검색", "https://dapi.kakao.com/v2/search/vclip")
+        ]
+        
+        print("=" * 50)
+        print("다음 검색 API 연결 테스트")
+        print("=" * 50)
+        
+        for name, url in endpoints:
+            try:
+                headers = {
+                    "Authorization": f"KakaoAK {self.api_key}"
+                }
+                params = {
+                    "query": "테스트"
+                }
+                
+                response = requests.get(url, headers=headers, params=params, timeout=10)
+                
+                # 200 상태 코드가 아니면 실패
+                if response.status_code != 200:
+                    print(f"❌ {name} - 실패 (상태 코드: {response.status_code})")
+                    print(f"   응답: {response.text}")
+                    return False
+                
+                print(f"✅ {name} - 성공 (상태 코드: {response.status_code})")
+                
+            except requests.exceptions.RequestException as e:
+                print(f"❌ {name} - 네트워크 오류: {e}")
+                return False
+            except Exception as e:
+                print(f"❌ {name} - 예상치 못한 오류: {e}")
+                return False
+        
+        print("=" * 50)
+        print("✅ 모든 다음 검색 API 연결 성공!")
+        print("=" * 50)
+        return True
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def WebSearch_daum(self) -> dict:
-        """웹 검색 tool calling 스키마"""
+    def Search_daum_web(self) -> dict:
+        """웹 검색 tool calling 스키마
+        
+        Returns:
+            OpenAI function calling 형식의 스키마
+        """
         return {
             "type": "function",
             "function": {
-                "name": "WebSearch_daum",
+                "name": "Search_daum_web",
                 "description": "다음 검색 서비스에서 질의어로 웹 문서를 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -88,7 +140,8 @@ class DaumSearchAPI(BaseAPI):
                         "page": {
                             "type": "integer",
                             "minimum": 1,
-                            "description": "결과 페이지 번호, 1~50 사이의 값, 기본 값 1	",
+                            "maximum": 50,
+                            "description": "결과 페이지 번호, 1~50 사이의 값, 기본 값 1",
                             "default": 1
                         },
                         "size": {
@@ -104,12 +157,16 @@ class DaumSearchAPI(BaseAPI):
             }
         }
     
-    def VideoSearch_daum(self) -> dict:
-        """비디오 검색 tool calling 스키마"""
+    def Search_daum_video(self) -> dict:
+        """비디오 검색 tool calling 스키마
+        
+        Returns:
+            OpenAI function calling 형식의 스키마
+        """
         return {
             "type": "function",
             "function": {
-                "name": "VideoSearch_daum",
+                "name": "Search_daum_video",
                 "description": "카카오 TV, 유튜브 등 서비스에서 질의어로 동영상을 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -150,15 +207,15 @@ class DaumSearchAPI(BaseAPI):
         """Tool call 실행
         
         Args:
-            tool_name: 실행할 tool 이름 (web_search_daum, search_video)
+            tool_name: 실행할 tool 이름 (Search_daum_web, Search_daum_video)
             **kwargs: tool별 매개변수
             
         Returns:
             tool 실행 결과
         """
         tool_map = {
-            "web_search_daum": self._web_search_daum,
-            "search_video": self._video_search_daum
+            "Search_daum_web": self._search_web,
+            "Search_daum_video": self._search_video
         }
         
         if tool_name not in tool_map:
@@ -169,8 +226,8 @@ class DaumSearchAPI(BaseAPI):
     def get_all_tool_schemas(self) -> list[dict]:
         """모든 tool 스키마 반환"""
         return [
-            self.web_search_daum_tool(),
-            self.video_search_daum_tool()
+            self.Search_daum_web(),
+            self.Search_daum_video()
         ]
 
 
