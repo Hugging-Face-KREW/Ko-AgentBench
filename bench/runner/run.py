@@ -3,12 +3,12 @@
 import json
 import time
 import logging
-from typing import Any, Dict, List, Optional
-from pathlib import Path
+from typing import Any, Dict, List
 
 from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
 from .judge import Judge
+from ..observability import observe, get_client, is_enabled
 
 
 class BenchmarkRunner:
@@ -40,6 +40,7 @@ class BenchmarkRunner:
         
         self.logger = logging.getLogger(__name__)
     
+    @observe(name="run_task")
     def run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """Run a single benchmark task.
         
@@ -47,11 +48,26 @@ class BenchmarkRunner:
             task: Task definition dictionary
             
         Returns:
-            Task execution result
+            Task execution result including tool invocation summary
         """
         start_time = time.time()
         task_id = task.get('id', 'unknown')
         
+        if is_enabled():
+            try:
+                langfuse = get_client()
+                langfuse.update_current_trace(
+                    name=f"Task: {task_id}",
+                    metadata={
+                        "task_id": task_id,
+                        "category": task.get("category"),
+                        "difficulty": task.get("difficulty"),
+                    },
+                    tags=[task.get("category", "unknown"), task.get("difficulty", "unknown")]
+                )
+            except Exception as e:
+                self.logger.debug(f"Langfuse update failed: {e}")
+
         self.logger.info(f"Starting task {task_id}")
         
         try:
@@ -72,26 +88,58 @@ class BenchmarkRunner:
             # Execute LLM-tool loop
             result = self._execute_loop(messages, available_tools, task)
             
+            # Aggregate tool invocation summary
+            tool_invocations = []
+            for step in result.get('steps', []):
+                for tool_call in step.get('tool_calls', []):
+                    tool_invocations.append({
+                        "step": step.get('step'),
+                        "tool_call_id": tool_call.get('tool_call_id'),
+                        "tool_name": tool_call.get('tool_name'),
+                        "arguments": tool_call.get('arguments'),
+                        "result": tool_call.get('result'),
+                        "success": tool_call.get('success'),
+                        "error": tool_call.get('error'),
+                    })
+            
             # Judge the result
             evaluation = self.judge.evaluate(task, result)
             
             execution_time = time.time() - start_time
             
-            return {
+            final_result = {
                 "task_id": task_id,
                 "success": evaluation.get('success', False),
                 "result": result,
+                "tool_invocations": tool_invocations,
                 "evaluation": evaluation,
                 "execution_time": execution_time,
                 "steps_taken": len(result.get('steps', [])),
                 "error": None
             }
             
+            # update trace with final result 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_trace(
+                        output=final_result,
+                        metadata={
+                            "success": final_result["success"],
+                            "steps_taken": final_result["steps_taken"],
+                            "tool_calls_count": len(tool_invocations),
+                        }
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return final_result
+            
         except Exception as e:
             execution_time = time.time() - start_time
             self.logger.error(f"Task {task_id} failed: {str(e)}")
             
-            return {
+            error_result = {
                 "task_id": task_id,
                 "success": False,
                 "result": None,
@@ -100,7 +148,21 @@ class BenchmarkRunner:
                 "steps_taken": 0,
                 "error": str(e)
             }
+            
+            # update trace with error 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_trace(
+                        output=error_result,
+                        metadata={"error": str(e)}
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return error_result
     
+    @observe(name="execute_loop")
     def _execute_loop(self, messages: List[Dict], 
                      tools: List[Dict], 
                      task: Dict[str, Any]) -> Dict[str, Any]:
@@ -160,6 +222,7 @@ class BenchmarkRunner:
             "conversation": messages
         }
     
+    @observe(as_type="generation")
     def _call_llm_with_retry(self, messages: List[Dict], 
                            tools: List[Dict]) -> Dict[str, Any]:
         """Call LLM with retry logic.
@@ -175,7 +238,25 @@ class BenchmarkRunner:
         
         for attempt in range(self.max_retries):
             try:
-                return self.adapter.chat_completion(messages, tools)
+                result = self.adapter.chat_completion(messages, tools)
+                
+                if is_enabled() and 'usage' in result:
+                    try:
+                        langfuse = get_client()
+                        langfuse.update_current_span(
+                            metadata={
+                                "model": result.get('model', self.adapter.model_name),
+                                "usage": {
+                                    "input_tokens": result['usage'].get('prompt_tokens', 0),
+                                    "output_tokens": result['usage'].get('completion_tokens', 0),
+                                    "total_tokens": result['usage'].get('total_tokens', 0),
+                                }
+                            }
+                        )
+                    except Exception as e:
+                        self.logger.debug(f"Langfuse update failed: {e}")
+                
+                return result
             except Exception as e:
                 last_error = e
                 self.logger.warning(f"LLM call attempt {attempt + 1} failed: {str(e)}")
@@ -184,6 +265,7 @@ class BenchmarkRunner:
         
         raise Exception(f"LLM call failed after {self.max_retries} attempts: {str(last_error)}")
     
+    @observe(name="execute_tool")
     def _execute_tool_call(self, tool_call: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a single tool call.
         
@@ -198,9 +280,20 @@ class BenchmarkRunner:
             tool_name = function.get('name')
             arguments = json.loads(function.get('arguments', '{}'))
             
+            # update current span with input 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_span(
+                        input=arguments,
+                        metadata={"tool_name": tool_name}
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
             result = self.tool_registry.execute_tool(tool_name, **arguments)
             
-            return {
+            tool_result = {
                 "tool_call_id": tool_call['id'],
                 "tool_name": tool_name,
                 "arguments": arguments,
@@ -209,8 +302,20 @@ class BenchmarkRunner:
                 "error": None
             }
             
+            # update current span with output 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_span(
+                        output=tool_result
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return tool_result
+            
         except Exception as e:
-            return {
+            error_result = {
                 "tool_call_id": tool_call['id'],
                 "tool_name": function.get('name'),
                 "arguments": arguments if 'arguments' in locals() else {},
@@ -218,3 +323,16 @@ class BenchmarkRunner:
                 "success": False,
                 "error": str(e)
             }
+            
+            # update current span with error 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_span(
+                        output=error_result,
+                        level="ERROR"
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return error_result
