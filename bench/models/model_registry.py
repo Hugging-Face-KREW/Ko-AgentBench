@@ -7,8 +7,6 @@ from typing import List
 
 MODEL_IDS: List[str] = [
     "openai/gpt-4o-mini",
-    "anthropic/claude-3-5-sonnet",
-    "groq/gemma-7b-it",
     "huggingface/Qwen/Qwen3-4B-Instruct-2507",
     "huggingface/Qwen/Qwen3-4B-Thinking-2507",
     "huggingface/Qwen/Qwen2.5-7B-Instruct",
