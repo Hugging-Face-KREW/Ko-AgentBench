@@ -2,8 +2,10 @@
 
 import json
 import re
+import logging
 from typing import Any, Dict, List, Optional, Callable
 from ..adapters.base_adapter import BaseAdapter
+from ..observability import observe, get_client, is_enabled
 
 
 class Judge:
@@ -16,6 +18,7 @@ class Judge:
             llm_adapter: Optional LLM adapter for LLM-based evaluation
         """
         self.llm_adapter = llm_adapter
+        self.logger = logging.getLogger(__name__)
         self._oracle_functions = {
             'exact_match': self._exact_match,
             'list_match': self._list_match,
@@ -25,6 +28,7 @@ class Judge:
             'schema_validation': self._schema_validation
         }
     
+    @observe(name="evaluate")
     def evaluate(self, task: Dict[str, Any], result: Dict[str, Any]) -> Dict[str, Any]:
         """Evaluate task result.
         
@@ -39,6 +43,20 @@ class Judge:
         expected_output = task.get('expected_output')
         actual_output = self._extract_output(result)
         
+        if is_enabled():
+            try:
+                langfuse = get_client()
+                langfuse.update_current_span(
+                    input={
+                        "oracle_type": oracle_type,
+                        "expected_output": expected_output,
+                        "actual_output": actual_output
+                    },
+                    metadata={"oracle_type": oracle_type}
+                )
+            except Exception as e:
+                self.logger.debug(f"Langfuse update failed: {e}")
+        
         if oracle_type not in self._oracle_functions:
             raise ValueError(f"Unknown oracle type: {oracle_type}")
         
@@ -47,7 +65,7 @@ class Judge:
         try:
             evaluation_result = oracle_function(expected_output, actual_output, task)
             
-            return {
+            final_result = {
                 "success": evaluation_result.get('success', False),
                 "score": evaluation_result.get('score', 0.0),
                 "oracle_type": oracle_type,
@@ -57,8 +75,24 @@ class Judge:
                 "error": None
             }
             
+            # update current span with result 
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_span(
+                        output=final_result,
+                        metadata={
+                            "success": final_result["success"],
+                            "score": final_result["score"]
+                        }
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return final_result
+            
         except Exception as e:
-            return {
+            error_result = {
                 "success": False,
                 "score": 0.0,
                 "oracle_type": oracle_type,
@@ -67,6 +101,19 @@ class Judge:
                 "details": {},
                 "error": str(e)
             }
+            
+            # update current span with error
+            if is_enabled():
+                try:
+                    langfuse = get_client()
+                    langfuse.update_current_span(
+                        output=error_result,
+                        level="ERROR"
+                    )
+                except Exception as e:
+                    self.logger.debug(f"Langfuse update failed: {e}")
+            
+            return error_result
     
     def _extract_output(self, result: Dict[str, Any]) -> Any:
         """Extract the final output from execution result.
@@ -176,6 +223,7 @@ class Judge:
         except re.error as e:
             return {"success": False, "score": 0.0, "details": {"error": f"Invalid regex pattern: {str(e)}"}}
     
+    @observe(as_type="generation")
     def _llm_judge(self, expected: Any, actual: Any, task: Dict) -> Dict[str, Any]:
         """LLM-based evaluation."""
         if not self.llm_adapter:

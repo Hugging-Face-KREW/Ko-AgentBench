@@ -1,5 +1,8 @@
 import os
-from typing import Any, List, Optional, Type
+import json
+from datetime import datetime
+from pathlib import Path
+from typing import Any, List, Optional, Type, Dict
 from dotenv import load_dotenv
 
 from bench.tools.tool_registry import ToolRegistry
@@ -9,6 +12,7 @@ from bench.tasks.task_loader import TaskLoader
 from bench.tools.base_tool import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
+from bench.observability import log_status
 
 
 def create_default_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = None) -> ToolRegistry:
@@ -26,10 +30,57 @@ def create_default_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = 
 
     return registry
 
+def save_results_to_json(results: List[Dict[str, Any]], model_name: str, output_dir: str = "logs") -> str:
+    """Save benchmark results to JSON file.
+    
+    Args:
+        results: List of task results
+        model_name: Name of the model used
+        output_dir: Directory to save logs
+        
+    Returns:
+        Path to saved JSON file
+    """
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    model_safe_name = model_name.replace("/", "_")
+    filename = f"benchmark_{model_safe_name}_{timestamp}.json"
+    filepath = Path(output_dir) / filename
+    
+    total_tasks = len(results)
+    successful_tasks = sum(1 for r in results if r.get('success', False))
+    total_time = sum(r.get('execution_time', 0) for r in results)
+    total_steps = sum(r.get('steps_taken', 0) for r in results)
+    total_tool_calls = sum(len(r.get('tool_invocations', [])) for r in results)
+    
+    log_data = {
+        "metadata": {
+            "timestamp": datetime.now().isoformat(),
+            "model": model_name,
+            "total_tasks": total_tasks,
+            "successful_tasks": successful_tasks,
+            "failed_tasks": total_tasks - successful_tasks,
+            "success_rate": successful_tasks / total_tasks if total_tasks > 0 else 0,
+            "total_execution_time": round(total_time, 2),
+            "average_execution_time": round(total_time / total_tasks, 2) if total_tasks > 0 else 0,
+            "total_steps": total_steps,
+            "total_tool_calls": total_tool_calls,
+        },
+        "results": results
+    }
+    
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(log_data, f, indent=2, ensure_ascii=False)
+    
+    return str(filepath)
+
 
 def run_tool_calling_demo(
     tool_classes: Optional[List[Type[BaseTool]]] = None,
     model_name: str = "huggingface/Qwen/Qwen3-4B-Instruct-2507",
+    save_logs: bool = True,  
+    log_dir: str = "logs",   
     **adapter_config: Any,
 ):
     """Tool-calling runner demo with configurable tools and model.
@@ -37,9 +88,10 @@ def run_tool_calling_demo(
     Args:
         tool_classes: 등록할 툴 클래스 목록. None이면 빈 레지스트리 사용
         model_name: LiteLLM이 인식하는 모델 식별자 (예: 'openai/gpt-4o-mini', 'anthropic/claude-3-5-sonnet', 'groq/gemma-7b-it')
+        save_logs: JSON 로그 저장 여부 
+        log_dir: 로그 저장 디렉토리 
         **adapter_config: LiteLLMAdapter 추가 설정값(temperature, max_tokens 등)
     """
-    load_dotenv()
     provider_keys = [
         "HUGGINGFACE_API_KEY",
         "OPENAI_API_KEY",
@@ -71,14 +123,16 @@ def run_tool_calling_demo(
     adapter = LiteLLMAdapter(model_name, **adapter_config)
     judge = Judge(llm_adapter=adapter)
     runner = BenchmarkRunner(adapter, registry, judge, max_steps=3, timeout=30)
+    all_results = []
 
-    # 첫 번째 태스크 실행
+    # 태스크 실행
     for i, task in enumerate(tasks, 1):
         print(f"\n--- Task {i}/{len(tasks)}: {task['id']} ---")
         print(f"설명: {task['description']}")
         
         try:
             result = runner.run_task(task)
+            all_results.append(result)
             print(f"성공 여부: {result['success']}")
             print(f"실행시간: {result['execution_time']:.2f}초")
             print(f"단계수: {result['steps_taken']}")
@@ -101,10 +155,32 @@ def run_tool_calling_demo(
                 
         except Exception as e:
             print(f"실행 실패: {e}")
+            all_results.append({
+                "task_id": task.get('id', 'unknown'),
+                "success": False,
+                "error": str(e),
+                "execution_time": 0,
+                "steps_taken": 0,
+                "tool_invocations": []
+            })
+    
+    if save_logs and all_results:
+        try:
+            filepath = save_results_to_json(all_results, model_name, log_dir)
+            print(f"\n{'='*60}")
+            print(f"결과가 JSON 파일로 저장되었습니다")
+            print(f"파일 위치: {filepath}")
+            print(f"{'='*60}\n")
+        except Exception as e:
+            print(f"\nJSON 저장 실패: {e}\n")
 
 
 def main() -> None:
     print("Hello from ko-agentbench!")
+    load_dotenv()
+    log_status()
+    print("="*50 + "\n")
+    
     registry = create_default_tool_registry()
     print("Registered tools:", registry.get_available_tools())
     # Sample call for quick verification (safe, no network calls)
@@ -124,6 +200,8 @@ def main() -> None:
         print(f"선택된 모델: {selected_model}")
         run_tool_calling_demo(
             model_name=selected_model,
+            save_logs=True, 
+            log_dir="logs", 
         )
 
 
