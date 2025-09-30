@@ -2,6 +2,7 @@ import requests
 import os
 from typing import Dict, List, Any
 from base_api import BaseAPI
+from tools.secrets import TMAP_APP_KEY
 
 class TmapNavigation(BaseAPI):
     def __init__(self):
@@ -14,33 +15,177 @@ class TmapNavigation(BaseAPI):
 
     # ========== 실제 API 호출 메서드들 ==========
 
-    def _poi_search(self, searchKeyword: str, count: int = 10, centerLon: float = None,
+    def POISearch_tmap(self, searchKeyword: str, count: int = 10, centerLon: float = None,
                     centerLat: float = None, radius: int = None, page: int = 1) -> Dict[str, Any]:
         """POI 통합검색 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        try:
+            endpoint = "/tmap/pois"
+            url = f"{self.base_url}{endpoint}"
+            
+            headers = {
+                "accept": "application/json",
+                "appKey": self.app_key
+            }
+            
+            params = {
+                "searchKeyword": searchKeyword,
+                "count": count,
+                "page": page,
+            }
+            
+            # 선택적 파라미터 추가
+            if centerLon is not None:
+                params["centerLon"] = centerLon
+            if centerLat is not None:
+                params["centerLat"] = centerLat
+            if radius is not None:
+                params["radius"] = radius
+                
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            return {
+                "success": False,
+                "error_code": "API_REQUEST_FAILED",
+                "error_message": f"POI 검색 API 호출 실패: {e}",
+                "suggested_actions": ["API 키 확인", "네트워크 연결 확인"]
+            }
 
-    def _car_route(self, startX: float, startY: float, endX: float, endY: float,
+
+    def CarRoute_tmap(self, startX: float, startY: float, endX: float, endY: float,
                    searchOption: int = 0) -> Dict[str, Any]:
         """자동차 경로안내 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        try:
+            endpoint = "/tmap/routes"
+            url = f"{self.base_url}{endpoint}"
+            
+            headers = {
+                "accept": "application/json",
+                "Content-Type": "application/json",
+                "appKey": self.app_key
+            }
+            
+            data = {
+                "startX": str(startX),
+                "startY": str(startY),
+                "endX": str(endX),
+                "endY": str(endY),
+                "searchOption": str(searchOption),
+            }
+            
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            return {
+                "success": False,
+                "error_code": "API_REQUEST_FAILED",
+                "error_message": f"자동차 경로 API 호출 실패: {e}",
+                "suggested_actions": ["좌표 범위 확인", "경로 검색 옵션 확인"]
+            }
+        
 
-    def _walk_route(self, startX: float, startY: float, endX: float, endY: float) -> Dict[str, Any]:
+    def WalkRoute_tmap(self, startX: float, startY: float, endX: float, endY: float) -> Dict[str, Any]:
         """보행자 경로안내 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        try:
+            endpoint = "/tmap/routes/pedestrian"
+            url = f"{self.base_url}{endpoint}"
+            
+            headers = {
+                "accept": "application/json",
+                "Content-Type": "application/json",
+                "appKey": self.app_key
+            }
+            
+            data = {
+                "startX": str(startX),
+                "startY": str(startY),
+                "endX": str(endX),
+                "endY": str(endY)
+            }
+            
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            return {
+                "success": False,
+                "error_code": "API_REQUEST_FAILED",
+                "error_message": f"보행자 경로 API 호출 실패: {e}",
+                "suggested_actions": ["좌표 범위 확인", "도보 가능 거리 확인"]
+            }
 
-    def _geocoding(self, fullAddr: str) -> Dict[str, Any]:
+
+    def Geocoding_tmap(self, fullAddr: str) -> Dict[str, Any]:
         """주소 좌표 변환 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        try:
+            endpoint = "/tmap/geo/geocoding"
+            url = f"{self.base_url}{endpoint}"
+            
+            headers = {
+                "accept": "application/json",
+                "appKey": self.app_key
+            }
+            
+            params = {
+                "fullAddr": fullAddr
+            }
+            
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            return {
+                "success": False,
+                "error_code": "API_REQUEST_FAILED",
+                "error_message": f"주소 변환 API 호출 실패: {e}",
+                "suggested_actions": ["주소 형식 확인", "도로명주소 또는 지번주소 사용"]
+            }
 
-    def _category_search(self, categories: str, centerLon: float, centerLat: float,
+
+    def CategorySearch_tmap(self, categories: str, centerLon: float, centerLat: float,
                          radius: int = 1000, count: int = 10) -> Dict[str, Any]:
         """카테고리별 장소 검색 (내부 구현)"""
-        # TODO: 실제 API 호출 로직 구현
-        pass
+        try:
+            endpoint = "/tmap/pois/categories"
+            url = f"{self.base_url}{endpoint}"
+            
+            headers = {
+                "accept": "application/json",
+                "appKey": self.app_key
+            }
+            
+            params = {
+                "categories": categories,
+                "centerLon": centerLon,
+                "centerLat": centerLat,
+                "radius": radius,
+                "count": count
+            }
+            
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            return {
+                "success": False,
+                "error_code": "API_REQUEST_FAILED",
+                "error_message": f"카테고리 검색 API 호출 실패: {e}",
+                "suggested_actions": ["카테고리명 확인", "검색 반경 조정", "좌표 확인"]
+            }
+
+
 
     # ========== Tool Calling 스키마 메서드들 ==========
 
@@ -225,11 +370,11 @@ class TmapNavigation(BaseAPI):
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""
         tool_map = {
-            "POISearch_tmap": self._poi_search,
-            "CarRoute_tmap": self._car_route,
-            "WalkRoute_tmap": self._walk_route,
-            "Geocoding_tmap": self._geocoding,
-            "CategorySearch_tmap": self._category_search
+            "POISearch_tmap": self.POISearch_tmap,
+            "CarRoute_tmap": self.CarRoute_tmap,
+            "WalkRoute_tmap": self.WalkRoute_tmap,
+            "Geocoding_tmap": self.Geocoding_tmap,
+            "CategorySearch_tmap": self.CategorySearch_tmap
         }
 
         if tool_name not in tool_map:
