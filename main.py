@@ -103,13 +103,13 @@ def run_tool_calling_demo(
     
     # JSONL 샘플 네이버 태스크 로드
     task_loader = TaskLoader()
-    tasks = task_loader.load_tasks("sample_naver_tasks.jsonl")
+    tasks = task_loader.load_tasks("sample_tasks_lv2.jsonl")
     
     # 태스크에 명시된 tools를 기준으로 필요한 툴 클래스를 자동 등록
     if tool_classes is None:
         requested: List[str] = []
         for t in tasks:
-            for name in t.get("tools", []) or []:
+            for name in t.get("available_tools", []) or []:
                 if name not in requested:
                     requested.append(name)
 
@@ -127,8 +127,8 @@ def run_tool_calling_demo(
 
     # 태스크 실행
     for i, task in enumerate(tasks, 1):
-        print(f"\n--- Task {i}/{len(tasks)}: {task['id']} ---")
-        print(f"설명: {task['description']}")
+        print(f"\n--- Task {i}/{len(tasks)}: {task['task_id']} ---")
+        print(f"설명: {task['instruction']}")
         
         try:
             result = runner.run_task(task)
@@ -156,7 +156,7 @@ def run_tool_calling_demo(
         except Exception as e:
             print(f"실행 실패: {e}")
             all_results.append({
-                "task_id": task.get('id', 'unknown'),
+                "task_id": task.get('task_id', 'unknown'),
                 "success": False,
                 "error": str(e),
                 "execution_time": 0,

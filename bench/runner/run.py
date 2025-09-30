@@ -51,19 +51,22 @@ class BenchmarkRunner:
             Task execution result including tool invocation summary
         """
         start_time = time.time()
-        task_id = task.get('id', 'unknown')
+        task_id = task.get('task_id', 'unknown')
         
         if is_enabled():
             try:
                 langfuse = get_client()
+                category = task.get('task_category') or task.get('category', 'unknown')
+                difficulty = task.get('task_level') or task.get('difficulty', 'unknown')
+                
                 langfuse.update_current_trace(
                     name=f"Task: {task_id}",
                     metadata={
                         "task_id": task_id,
-                        "category": task.get("category"),
-                        "difficulty": task.get("difficulty"),
+                        "category": category,
+                        "difficulty": difficulty,
                     },
-                    tags=[task.get("category", "unknown"), task.get("difficulty", "unknown")]
+                    tags=[str(category), str(difficulty)]
                 )
             except Exception as e:
                 self.logger.debug(f"Langfuse update failed: {e}")
@@ -71,14 +74,16 @@ class BenchmarkRunner:
         self.logger.info(f"Starting task {task_id}")
         
         try:
+            task_description = task.get('instruction') or task.get('description', '')
+            
             # Initialize conversation with task description
             messages = [
                 {"role": "system", "content": "You are a helpful assistant that can use tools to complete tasks."},
-                {"role": "user", "content": task.get('description', '')}
+                {"role": "user", "content": task_description}
             ]
             
             # Get available tools for this task
-            task_tools = task.get('tools', [])
+            task_tools = task.get('available_tools', [])
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
