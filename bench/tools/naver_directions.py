@@ -3,26 +3,23 @@ from typing import Dict, List, Optional
 from base_api import BaseAPI
 from tools.secrets import Directions_Client_ID, Directions_Client_Secret
 
-client_id = Directions_Client_ID
-secret_key = Directions_Client_Secret
-
 class NaverMapsAPI(BaseAPI):
-    def __init__(self, client_id: str, secret_key: str):
+    def __init__(self):
         super().__init__(
             name="naver_maps_api",
             description="Naver Maps API를 활용한 경로 탐색 도구"
         )
-        self.client_id = client_id
-        self.secret_key = secret_key
+        self.client_id = Directions_Client_ID
+        self.secret_key = Directions_Client_Secret
         self.base_url = "https://maps.apigw.ntruss.com"
 
     # ===== 실제 API 호출 메서드 (비즈니스 로직) =====
-    async def _directions(
+    def Directions_naver(
         self,
         start: str,
         goal: str,
         waypoints: Optional[List[str]] = None,
-        option: Optional[Dict] = None,
+        option: Optional[List[str]] = None,
     ) -> Dict:
 
         if not start or not goal:
@@ -41,18 +38,20 @@ class NaverMapsAPI(BaseAPI):
             "option": ":".join(option) if option else None
         }
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, params=params) as response:
-                return await response.json()
-
-
+        try:
+            response = requests.get(url, headers=headers, params={k:v for k,v in params.items() if v}, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            return {"error": str(e), "status": "error"}
+        
 
     # ===== Tool Calling용 스키마 정의 =====
     def directions_tool(self) -> Dict:
         return {
             "type": "function",
             "function": {
-                "name": "_directions",
+                "name": "Directions_naver",
                 "description": "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 및 통행 정보(소요 시간, 거리, 예상 유류비, 통행 요금 정보, 분기점 안내) 조회",
                 "parameters": {
                     "type": "object",
@@ -92,7 +91,7 @@ class NaverMapsAPI(BaseAPI):
     # =================== Tool 호출 실행기 ===================
     def execute_tool(self, tool_name: str, **kwargs) -> dict:
         tool_map = {
-            "directions": self._directions,
+            "Directions_naver": self.Directions_naver,
             # 필요 시 추가
         }
         if tool_name not in tool_map:
@@ -143,7 +142,7 @@ class NaverMapsAPI(BaseAPI):
 
 # ========== 연결 테스트 ==========
 if __name__ == "__main__":
-    api = NaverMapsAPI(client_id=Directions_Client_ID, secret_key=Directions_Client_Secret)
+    api = NaverMapsAPI()
     if api.test_connection():
         print("✅ API 연결 성공")
     else:
