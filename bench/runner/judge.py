@@ -25,7 +25,8 @@ class Judge:
             'numeric_tolerance': self._numeric_tolerance,
             'regex_match': self._regex_match,
             'llm_judge': self._llm_judge,
-            'schema_validation': self._schema_validation
+            'schema_validation': self._schema_validation,
+            'golden_action_match': self._golden_action_match,
         }
     
     @observe(name="evaluate")
@@ -39,8 +40,13 @@ class Judge:
         Returns:
             Evaluation result
         """
-        oracle_type = task.get('oracle', 'exact_match')
-        expected_output = task.get('expected_output')
+        if 'golden_action' in task:
+            oracle_type = 'golden_action_match'
+            expected_output = task.get('golden_action')
+        else:
+            oracle_type = task.get('oracle', 'exact_match')
+            expected_output = task.get('expected_output')
+        
         actual_output = self._extract_output(result)
         
         if is_enabled():
@@ -139,6 +145,29 @@ class Judge:
                             return tool_call['result']
         
         return final_response
+    
+    def _golden_action_match(self, expected: List[Dict], actual: Any, task: Dict) -> Dict[str, Any]:
+        """Evaluate based on golden_action(수정 필요)"""
+
+        if not isinstance(expected, list):
+            expected = [expected]
+
+        expected_tools = [e.get("tool") for e in expected if isinstance(e, dict)]
+        actual_str = str(actual) + " " + str(task)
+
+        matched = [tool for tool in expected_tools if tool and tool in actual_str]
+        success = len(matched) == len(expected_tools)
+
+        return {
+            "success": success,
+            "score": 1.0 if success else 0.0,
+            "details": {
+                "match_type": "golden_action",
+                "expected_tools": expected_tools,
+                "matched_tools": matched,
+                "note": "Success if expected tool keyword found in actual/task strings"
+            }
+        }
     
     def _exact_match(self, expected: Any, actual: Any, task: Dict) -> Dict[str, Any]:
         """Exact match evaluation."""
@@ -283,8 +312,10 @@ class Judge:
     
     def _default_judge_prompt(self, task: Dict, expected: Any, actual: Any) -> str:
         """Generate default judge prompt for LLM evaluation."""
+        description = task.get('instruction') or task.get('description', 'No description provided')
+        
         return f"""
-Task: {task.get('description', 'No description provided')}
+Task: {description}
 
 Expected Output: {expected}
 
