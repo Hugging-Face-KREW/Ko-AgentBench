@@ -10,7 +10,10 @@ MODEL_IDS: List[str] = [
     "anthropic/claude-3-5-sonnet",
     "groq/gemma-7b-it",
     "huggingface/Qwen/Qwen3-4B-Instruct-2507",
-    "huggingface/Qwen/Qwen2.5-7B-Instruct"
+    "huggingface/Qwen/Qwen3-4B-Thinking-2507",
+    "huggingface/Qwen/Qwen2.5-7B-Instruct",
+    "huggingface/moonshotai/Kimi-K2-Instruct",
+    "huggingface/zai-org/GLM-4.5"
 ]
 
 __all__ = ["MODEL_IDS"]
