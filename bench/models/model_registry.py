@@ -6,7 +6,6 @@ LiteLLM에서 인식 가능한 형식을 사용하세요 (예: 'openai/...', 'an
 from typing import List
 
 MODEL_IDS: List[str] = [
-    "openai/gpt-4o-mini",
     "huggingface/Qwen/Qwen3-4B-Instruct-2507",
     "huggingface/Qwen/Qwen3-4B-Thinking-2507",
     "huggingface/Qwen/Qwen2.5-7B-Instruct",
