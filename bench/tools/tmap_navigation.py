@@ -11,7 +11,7 @@ class TmapNavigation(BaseAPI):
             description="T맵 API - POI 검색, 경로 안내, 좌표 변환"
         )
         self.base_url = "https://apis.openapi.sk.com"
-        self.app_key = os.getenv(TMAP_APP_KEY)
+        self.app_key = TMAP_APP_KEY
 
     # ========== 실제 API 호출 메서드들 ==========
 
