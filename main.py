@@ -9,6 +9,7 @@ from bench.tasks.task_loader import TaskLoader
 from bench.tools.base_tool import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
+from bench.observability import log_status
 
 
 def create_default_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = None) -> ToolRegistry:
@@ -39,7 +40,6 @@ def run_tool_calling_demo(
         model_name: LiteLLM이 인식하는 모델 식별자 (예: 'openai/gpt-4o-mini', 'anthropic/claude-3-5-sonnet', 'groq/gemma-7b-it')
         **adapter_config: LiteLLMAdapter 추가 설정값(temperature, max_tokens 등)
     """
-    load_dotenv()
     provider_keys = [
         "HUGGINGFACE_API_KEY",
         "OPENAI_API_KEY",
@@ -72,7 +72,7 @@ def run_tool_calling_demo(
     judge = Judge(llm_adapter=adapter)
     runner = BenchmarkRunner(adapter, registry, judge, max_steps=3, timeout=30)
 
-    # 첫 번째 태스크 실행
+    # 태스크 실행
     for i, task in enumerate(tasks, 1):
         print(f"\n--- Task {i}/{len(tasks)}: {task['id']} ---")
         print(f"설명: {task['description']}")
@@ -105,6 +105,10 @@ def run_tool_calling_demo(
 
 def main() -> None:
     print("Hello from ko-agentbench!")
+    load_dotenv()
+    log_status()
+    print("="*50 + "\n")
+    
     registry = create_default_tool_registry()
     print("Registered tools:", registry.get_available_tools())
     # Sample call for quick verification (safe, no network calls)
