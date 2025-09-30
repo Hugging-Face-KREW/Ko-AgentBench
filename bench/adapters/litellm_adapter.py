@@ -2,6 +2,7 @@
 
 from typing import Any, Dict, List, Optional
 from .base_adapter import BaseAdapter
+from ..observability import observe
 
 try:
     import litellm
@@ -29,6 +30,7 @@ class LiteLLMAdapter(BaseAdapter):
         self.max_tokens = config.get('max_tokens', 1024)
         self.timeout = config.get('timeout', 60)
     
+    @observe(as_type="generation")
     def chat_completion(self, messages: List[Dict[str, str]], 
                        tools: Optional[List[Dict]] = None,
                        **kwargs) -> Dict[str, Any]:
