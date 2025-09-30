@@ -1,11 +1,10 @@
-import aiohttp
 import requests
 from typing import Dict, List, Optional
 from base_api import BaseAPI
 from tools.secrets import KTO_SERVICE_KEY
 
 class FestivalSearchAPI(BaseAPI):
-    def __init__(self, service_key: str):
+    def __init__(self):
         super().__init__(
             name="festival_search_api",
             description="한국관광공사 API를 활용한 행사/축제 정보 검색 도구"
@@ -21,18 +20,16 @@ class FestivalSearchAPI(BaseAPI):
 
 
     # ===== 실제 API 호출 메서드 (비즈니스 로직) =====
-
-    async def _search_festivals(self, eventStartDate: str = None,
+    """축제 검색 (내부 구현)"""
+    def FestivalSearch_kto(self, eventStartDate: str = None,
                                  eventEndDate: Optional[str] = None,
                                  location: Optional[str] = None,
                                  num_of_rows: int = 10) -> Dict:
         url = self.base_url
         params = {
             "serviceKey": self.service_key,
-            "numOfRows": num_of_rows,        # 한페이지 결과 수
+            "num_of_rows": num_of_rows,        # 한페이지 결과 수
             "pageNo": 1,
-            "MobileOS": "ETC",               # 슈도API 구현 시 제외
-            "MobileApp": "BenchmarkApp",     # 슈도API 구현 시 제외
             "_type": "json"
         }
 
@@ -49,25 +46,17 @@ class FestivalSearchAPI(BaseAPI):
             if area_code:
                 params["areaCode"] = area_code
 
-        # 슈도 API 구현 시 수정
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, params=params, timeout=10) as response:
-                    if response.status == 200:
-                        try:
-                            data = await response.json()
-                            return self._format_festival_response(data)
-                        except aiohttp.ContentTypeError:
-                            raw_text = await response.text()
-                            print(f"JSON 파싱 오류: 응답 텍스트\n{raw_text[:500]}...") # Print first 500 chars
-                            return {"error": "JSON 파싱 오류 발생", "status_code": response.status}
-                    else:
-                        return {"error": f"API 호출 실패: {response.status}", "status_code": response.status}
-        except aiohttp.ClientTimeout:
-            return {"error": "API 호출 시간 초과", "status_code": 408}
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            raw_data = response.json()
+            return self._format_festival_response(raw_data)
         except Exception as e:
-            return {"error": f"API 호출 중 오류 발생: {str(e)}", "status_code": 500}
-
+            return {
+                "error": f"API 호출 실패: {str(e)}",
+                "status": "error"
+            }
+        
 
     # area_code 매핑 함수 : 필요시 시군구코드(sigunguCode)매핑 로직 확장 예정
     def _extract_area_code(self, location: str) -> Optional[str]:
@@ -116,7 +105,7 @@ class FestivalSearchAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "festival_search",
+                "name": "FestivalSearch_kto",
                 "description": "행사/축제 정보를 날짜와 지역으로 검색",
                 "parameters": {
                     "type": "object",
@@ -151,9 +140,9 @@ class FestivalSearchAPI(BaseAPI):
 
     # ======================= Tool Call 실행기 ========================
 
-    async def execute_tool(self, tool_name: str, **kwargs) -> Dict:
-        if tool_name == "festival_search":
-            return await self._search_festivals(**kwargs)
+    def execute_tool(self, tool_name: str, **kwargs) -> Dict:
+        if tool_name == "FestivalSearch_kto":
+            return self.FestivalSearch_kto(**kwargs)
         else:
             raise ValueError(f"지원하지 않는 tool: {tool_name}")
 
