@@ -15,7 +15,7 @@ from urllib.parse import quote_plus
 
 try:
     # Optional base API for consistency; not strictly required by wrappers
-    from .base_tool import BaseAPI  # type: ignore
+    from .base_api import BaseAPI  # type: ignore
 except Exception:  # pragma: no cover - fallback for standalone usage
     class BaseAPI:  # type: ignore
         def __init__(self, name: str, description: str = "") -> None:

@@ -1,7 +1,7 @@
 """Sample tool implementations."""
 
 from typing import Any, Dict
-from .base_tool import BaseTool
+from .base_api import BaseTool
 
 
 class CalculatorTool(BaseTool):

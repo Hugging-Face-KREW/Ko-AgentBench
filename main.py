@@ -9,7 +9,7 @@ from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
 from bench.runner import BenchmarkRunner, Judge
 from bench.tasks.task_loader import TaskLoader
-from bench.tools.base_tool import BaseTool
+from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.observability import log_status
