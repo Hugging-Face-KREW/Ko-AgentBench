@@ -1,1 +1,30 @@
-
+[
+    {
+      "task_id": "L4-001",
+      "instruction": "2024년 겨울 헤어 트렌드를 웹검색과 블로그에서 각각 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "2024 겨울 헤어 트렌드",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "2024 겨울 헤어 트렌드",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "웹검색과 블로그 검색 결과에서 나타나는 헤어 트렌드의 언급 빈도, 전문가 추천도, 실제 적용 사례 수, 소셜미디어 반응도를 종합적으로 평가하여 가장 인기 있는 스타일을 판단",
+        "primary_criteria": "언급 빈도와 전문가 추천도"
+      }
+    }
+]
