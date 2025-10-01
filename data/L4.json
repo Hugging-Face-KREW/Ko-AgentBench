@@ -1,7 +1,7 @@
 [
     {
       "task_id": "L4-001",
-      "instruction": "2024년 겨울 헤어 트렌드를 웹검색과 블로그에서 각각 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘",
+      "instruction": "2024년 겨울 헤어 트렌드를 다양한 소스에서 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘",
       "task_level": 4,
       "task_category": "Multi Tool Parallel",
       "golden_action": [
@@ -25,6 +25,285 @@
         "decision_type": "multi_criteria",
         "criteria": "웹검색과 블로그 검색 결과에서 나타나는 헤어 트렌드의 언급 빈도, 전문가 추천도, 실제 적용 사례 수, 소셜미디어 반응도를 종합적으로 평가하여 가장 인기 있는 스타일을 판단",
         "primary_criteria": "언급 빈도와 전문가 추천도"
+      }
+    },
+    {
+      "task_id": "L4-002",
+      "instruction": "2025 여의도 불꽃축제 몇시부터 몇시까지야?",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "2025 여의도 불꽃축제 운영시간",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_news",
+          "args": {
+            "query": "2025 여의도 불꽃축제 운영시간",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "웹 검색을 통해 여의도 불꽃축제 시간 비교분석",
+        "primary_criteria": "최신데이터 검색 가능성"
+      }
+    },
+    {
+      "task_id": "L4-003",
+      "instruction": "직장인인데, 어떻게 하면 효과적으로 시간을 관리할 수 있을까?",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "효과적인 시간관리 방법",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "효과적인 시간관리 방법",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "효과적인 시간관리 방법 검색 후 비교후 통합",
+        "primary_criteria": "효과적인 시간관리 방법 검색 후 비교후 통합"
+      }
+    },
+    {
+      "task_id": "L4-004",
+      "instruction": "2024년 봄 메이크업 트렌드는 어떤 스타일이야?",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "2024 봄 메이크업 트렌드",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "2024 봄 메이크업 트렌드",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "웹검색과 뷰티 블로그에서 수집한 2024년 봄 메이크업 트렌드 정보를 종합하여 가장 인기 있는 컬러와 스타일을 결정하기 위해 다음 기준들을 적용: 1) 언급 빈도수 (얼마나 자주 언급되는가), 2) 신뢰할 수 있는 소스의 수 (유명 브랜드, 전문가, 인플루언서 언급), 3) 소셜미디어 반응도 (좋아요, 공유, 댓글 수), 4) 실제 제품 출시 현황 (브랜드들의 신제품 라인업), 5) 검색 트렌드 상승률",
+        "primary_criteria": "언급 빈도수와 신뢰할 수 있는 소스의 수를 종합한 가중 점수"
+      }
+    },
+    {
+      "task_id": "L4-005",
+      "instruction": "LG에너지솔루션(005930) 주식의 현재가와 최근 배터리 시장 동향을 종합해서 투자 전망을 분석해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "StockPrice_ls",
+          "args": {
+            "shcode": "005930",
+            "exchgubun": "K"
+          }
+        },
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "LG에너지솔루션 2024 투자전망",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "LG에너지솔루션의 투자 전망을 분석하기 위해 현재 주가 수준, 주가 변동성, 배터리 시장 성장률, 경쟁사 대비 시장점유율, 기술 경쟁력, 주요 고객사와의 계약 현황, 글로벌 전기차 시장 전망, 원자재 가격 동향, 재무건전성 지표를 종합적으로 평가",
+        "primary_criteria": "현재 주가 대비 적정 가치 평가와 배터리 시장에서의 경쟁 우위 지속 가능성"
+      }
+    },
+    {
+      "task_id": "L4-006",
+      "instruction": "2024년 카카오(005930)와 네이버(000660) 주가를 동시에 확인해서 국내 IT 플랫폼 기업들의 최근 주식 성과를 비교 분석해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "StockPrice_ls",
+          "args": {
+            "shcode": "005930",
+            "exchgubun": "K"
+          }
+        },
+        {
+          "tool": "StockPrice_ls",
+          "args": {
+            "shcode": "000660",
+            "exchgubun": "K"
+          }
+        },
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "카카오 2024 투자전망",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "네이버 2024 투자전망",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 4,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "카카오와 네이버의 주가 데이터를 수집한 후, 주가 변동률, 거래량, 시가총액, 최근 트렌드 등 다양한 지표를 종합적으로 분석하여 두 기업의 주식 성과를 객관적으로 비교 평가",
+        "primary_criteria": "최근 주가 변동률 및 시장 성과 지표"
+      }
+    },
+    {
+      "task_id": "L4-007",
+      "instruction": "2025년 정부의 민생지원금 정책에 대한 사람들의 반응을 종합해서 분석해줘.",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "2025 민생지원금 정책",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "2025 민생지원금 정책",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_news",
+          "args": {
+            "query": "2025 민생지원금 정책",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 3,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "2025년 민생지원금 정책의 효과성을 정부 발표 자료와 시민 반응 간의 괴리 정도를 분석하여 균형잡힌 종합 평가를 도출",
+        "primary_criteria": "정책의 객관적 성과 지표와 시민 체감도의 일치성"
+      }
+    },
+    {
+      "task_id": "L4-008",
+      "instruction": "2024년 의료진 파업 이슈를 웹, 블로그, 뉴스에서 각각 검색해서 찬반 의견과 해결방안을 종합 분석해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "2024 의료진 파업 이슈",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "2024 의료진 파업 이슈",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_news",
+          "args": {
+            "query": "2024 의료진 파업 이슈",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 3,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "의료진 파업 이슈에 대한 종합적 분석을 위해 다음 기준들을 적용: 1) 정보의 신뢰성과 출처의 다양성 (웹/블로그/뉴스 각 매체별 특성 고려), 2) 찬반 의견의 균형성과 대표성, 3) 제시된 해결방안의 실현 가능성과 구체성, 4) 이해관계자별 관점의 포괄성 (의료진, 환자, 정부, 시민사회 등), 5) 시의성과 최신 동향 반영도",
+        "primary_criteria": "정보 출처의 다양성 확보와 찬반 의견의 균형적 수집"
+      }
+    },
+    {
+      "task_id": "L4-009",
+      "instruction": "세종대왕이 사용한 스마트폰을 연도별로 정리해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "search_web",
+          "args": {
+            "query": "세종대왕 스마트폰 사용 기록",
+            "display": 10
+          }
+        },
+        {
+          "tool": "search_blog",
+          "args": {
+            "query": "세종대왕 스마트폰 사용 기록",
+            "display": 10
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "세종대왕 스마트폰 사용 기록에 대한 거짓정보 반응도 분석",
+        "primary_criteria": "거짓정보 반응도 분석"
+      }
+    },
+    {
+      "task_id": "L4-010",
+      "instruction": "2024년 현대차(005930) 주가와 비트코인 시세를 비교해서 자동차 산업 투자와 암호화폐 투자 중 어느 쪽이 더 수익성이 좋은지 분석해줘",
+      "task_level": 4,
+      "task_category": "Multi Tool Parallel",
+      "golden_action": [
+        {
+          "tool": "StockPrice_ls",
+          "args": {
+            "shcode": "005930",
+            "exchgubun": "K"
+          }
+        },
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_sources": 2,
+      "decision": {
+        "decision_type": "multi_criteria",
+        "criteria": "현대차 주가와 비트코인 시세의 과거 수익률, 변동성, 시장 트렌드, 리스크 대비 수익률을 종합적으로 분석하여 투자 수익성을 비교 평가",
+        "primary_criteria": "과거 1년간 수익률 비교"
       }
     }
 ]
