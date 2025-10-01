@@ -1,1 +1,74 @@
-
+[
+  {
+    "task_id": "L2-001",
+    "instruction": "최근 반도체 산업 관련 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["NewsSearch_naver","WebSearch_naver","BlogSearch_naver","WebSearch_daum","VideoSearch_daum"],
+    "golden_action": [{"tool": "NewsSearch_naver", "args": {"query": "반도체 산업", "sort": "date"}}]
+  },
+  {
+    "task_id": "L2-002",
+    "instruction": "제주도 맛집 후기 블로그를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["BlogSearch_naver","WebSearch_naver","NewsSearch_naver","PlaceSearch_kakao","CategorySearch_kakao"],
+    "golden_action": [{"tool": "BlogSearch_naver", "args": {"query": "제주도 맛집 후기", "sort": "sim"}}]
+  },
+  {
+    "task_id": "L2-003",
+    "instruction": "요가 초보자 강의 동영상을 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["VideoSearch_daum","WebSearch_daum","BlogSearch_naver","WebSearch_naver","ItemSearch_aladin"],
+    "golden_action": [{"tool": "VideoSearch_daum", "args": {"query": "요가 초보자 강의", "sort": "accuracy"}}]
+  },
+  {
+    "task_id": "L2-004",
+    "instruction": "아이폰 15 프로 실사용 후기를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["BlogSearch_naver", "NewsSearch_naver", "WebSearch_naver", "WebSearch_daum", "VideoSearch_daum"],
+    "golden_action": [{"tool": "BlogSearch_naver", "args": {"query": "아이폰 15 프로 실사용 후기", "sort": "sim"}}]
+  },
+  {
+    "task_id": "L2-005",
+    "instruction": "오늘 발표된 한국은행 기준금리 관련 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["NewsSearch_naver", "WebSearch_naver", "WebSearch_daum", "BlogSearch_naver", "VideoSearch_daum"],
+    "golden_action": [{"tool": "NewsSearch_naver", "args": {"query": "한국은행 기준금리", "sort": "date"}}]
+  },
+  {
+    "task_id": "L2-006",
+    "instruction": "2024년 개정된 부동산 세법 정보를 검색해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["WebSearch_daum", "WebSearch_naver", "NewsSearch_naver", "BlogSearch_naver", "VideoSearch_daum"],
+    "golden_action": [{"tool": "WebSearch_daum", "args": {"query": "2024년 부동산 세법 개정"}}]
+  },
+  {
+    "task_id": "L2-007",
+    "instruction": "전기차 충전소 설치 비용에 대한 정보를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["WebSearch_naver", "NewsSearch_naver", "BlogSearch_naver", "WebSearch_daum", "VideoSearch_daum"],
+    "golden_action": [{"tool": "WebSearch_naver", "args": {"query": "전기차 충전소 설치 비용"}}]
+  },
+  {
+    "task_id": "L2-008",
+    "instruction": "태풍 경로 예측 관련 최신 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["NewsSearch_naver", "Forecast_weather", "WebSearch_naver", "AirQuality_airkorea", "BlogSearch_naver"],
+    "golden_action": [{"tool": "NewsSearch_naver", "args": {"query": "태풍 경로 예측", "sort": "date"}}]
+  },
+  {
+    "task_id": "L2-010",
+    "instruction": "LG화학 주식 현재가를 확인해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": ["StockPrice_kis","StockPrice_ls","StockSearch_kis","NewsSearch_naver","CryptoPrice_upbit"],
+    "golden_action": [{"tool": "StockPrice_ls", "args": {"shcode": "051910"}}]
+  }
+]
