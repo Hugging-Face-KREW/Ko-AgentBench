@@ -260,7 +260,7 @@
             {
               "turn_number": 6,
               "role": "assistant",
-              "content": "네, 이전에 말씀하신 매트 헤이그 작가의 어린이 도서 중 현재 구매 가능한 책은 '크리스마스를 구한 소년'이 있습니다.",
+              "content": "네, 이전에 말씀하신 매트 헤이그 작가의 어린이 도서 중 현재 구매 가능한 책은 '크리스마스를 구한 소녀'가 있습니다.",
               "actions": [
                 {
                   "tool": "ItemSearch_aladin",
@@ -357,7 +357,7 @@
       },
       {
         "task_id": "L7-003",
-        "instruction": "IT 인공지능 국내 최신 뉴스 찾아봐 줄 수 있어?",
+        "instruction": "IT 인공지능 국내 뉴스 찾아봐 줄 수 있어?",
         "task_level": 7,
         "task_category": "Long-term Context",
         "conversation_tracking": {
@@ -367,17 +367,17 @@
             {
               "turn_number": 1,
               "role": "user",
-              "content": "IT 인공지능 국내 최신 뉴스 찾아봐 줄 수 있어? IT 특히 인공지능에 관심이 많아"
+              "content": "IT 인공지능 국내 뉴스 찾아봐 줄 수 있어? IT 특히 인공지능에 관심이 많아"
             },
             {
               "turn_number": 2,
               "role": "assistant",
-              "content": "네, 인공지능 관련 최신 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?",
+              "content": "네, 인공지능 관련 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?",
               "actions": [
                 {
                   "tool": "search_news",
                   "args": {
-                    "query": "IT 인공지능 국내 최신 뉴스"
+                    "query": "IT 인공지능 국내 뉴스"
                   },
                   "result": {
                     "total": 150,
@@ -791,7 +791,7 @@
                                             "warning": false,
                                             "caution": false
                                         }
-                                    }
+                                    },
                                     {
                                         "market": "KRW-XRP",
                                         "korean_name": "리플",
@@ -808,7 +808,7 @@
                     "context_used": [
                         {
                             "source_turn": 1,
-                            "info": "user's preferred quote currency is KRW",
+                            "info": "사용자가 선호하는 화폐 종류는 KRW입니다.",
                             "usage_type": "parameter_filling"
                         }
                     ]
@@ -895,7 +895,7 @@
             {
               "turn_number": 3,
               "role": "user",
-              "content": "좋아. 그럼 그 근처 디저트 맛있는 카페 찾아줘"
+              "content": "좋아. 그럼 디저트 맛있는 카페도 찾아줘"
             },
             {
               "turn_number": 4,
@@ -951,8 +951,8 @@
             "context_tests": [
               {
                 "turn": 4,
-                "should_remember": "The user is looking for a place near Gangnam Station.",
-                "trigger": "좋아. 그럼 그 근처 디저트 맛있는 카페 찾아줘",
+                "should_remember": "사용자는 강남역 근처에서 찾고 있습니다.",
+                "trigger": "좋아. 그럼 디저트 맛있는 카페도 찾아줘",
                 "expected_action": {
                   "tool": "PlaceSearch_kakao",
                   "args": {
@@ -969,13 +969,13 @@
             "info": "강남역 근처",
             "test_turn": 4,
             "time_distance": 3,
-            "trigger": "좋아. 그럼 그 근처 디저트 맛있는 카페 찾아줘"
+            "trigger": "좋아. 그럼 디저트 맛있는 카페도 찾아줘"
           }
         ]
       },
       {
         "task_id": "L7-007",
-        "instruction": "10월 초에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘.",
+        "instruction": "10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘.",
         "task_level": 7,
         "task_category": "Long-term Context",
         "conversation_tracking": {
@@ -985,17 +985,18 @@
                 {
                     "turn_number": 1,
                     "role": "user",
-                    "content": "10월 초에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘."
+                    "content": "10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘."
                 },
                 {
                     "turn_number": 2,
                     "role": "assistant",
-                    "content": "네, 10월 초 부산에서는 '부산국제영화제'가 2025년 10월 2일부터 10월 11일까지 열릴 예정입니다.",
+                    "content": "네, 10월 부산에서는 '부산국제영화제'가 2025년 10월 2일부터 10월 11일까지 열릴 예정입니다.",
                     "actions": [
                         {
                             "tool": "festival_search",
                             "args": {
                                 "eventStartDate": "20251001",
+                                "eventEndDate": "20251031",
                                 "location": "부산"
                             },
                             "result": {
@@ -1023,6 +1024,7 @@
                             "tool": "festival_search",
                             "args": {
                                 "eventStartDate": "20251001",
+                                "eventEndDate": "20251031",
                                 "location": "서울"
                             },
                             "result": {
@@ -1038,7 +1040,7 @@
                     "context_used": [
                         {
                             "source_turn": 1,
-                            "info": "10월 초",
+                            "info": "10월",
                             "usage_type": "parameter_filling"
                         }
                     ]
@@ -1070,7 +1072,7 @@
                 "context_plants": [
                     {
                         "turn": 1,
-                        "info": "10월 초",
+                        "info": "10월",
                         "type": "constraint"
                     },
                     {
@@ -1087,12 +1089,13 @@
                 "context_tests": [
                     {
                         "turn": 3,
-                        "should_remember": "10월 초에 부산으로 가족 여행을 간다.",
+                        "should_remember": "10월에 부산으로 가족 여행을 간다.",
                         "trigger": "다른 지역도 좀 볼까? 서울 쪽으로.",
                         "expected_action": {
                             "tool": "festival_search",
                             "args": {
                                 "eventStartDate": "20251001",
+                                "eventEndDate": "20251031",
                                 "location": "서울"
                             }
                         }
@@ -1117,7 +1120,7 @@
     },
     {
         "task_id": "L7-008",
-        "instruction": "요즘 제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 찐 후기 블로그 찾아줘.",
+        "instruction": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 찐 후기 찾아줘.",
         "task_level": 7,
         "task_category": "Long-term Context",
         "conversation_tracking": {
@@ -1127,7 +1130,7 @@
                 {
                     "turn_number": 1,
                     "role": "user",
-                    "content": "요즘 제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 찐 후기 블로그 찾아줘. "
+                    "content": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 찐 후기 찾아줘. "
                 },
                 {
                     "turn_number": 2,
@@ -1137,8 +1140,7 @@
                         {
                             "tool": "BlogSearch_naver",
                             "args": {
-                                "query": "제주도 애월 맛집 찐 후기",
-                                "display": 5
+                                "query": "제주도 애월 맛집 찐 후기"
                             },
                             "result": {
                                 "total": 5,
@@ -1162,7 +1164,7 @@
                 {
                     "turn_number": 3,
                     "role": "user",
-                    "content": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줄래요?"
+                    "content": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줘"
                 },
                 {
                     "turn_number": 4,
@@ -1172,9 +1174,7 @@
                         {
                             "tool": "BlogSearch_naver",
                             "args": {
-                                "query": "제주도 애월 분위기 좋은 카페 찐 후기",
-                                "display": 5,
-                                "sort": "sim"
+                                "query": "제주도 애월 분위기 좋은 카페 찐 후기"
                             },
                             "result": {
                                 "total": 1,
@@ -1225,7 +1225,7 @@
                     {
                         "turn": 4,
                         "should_remember": "사용자가 이전에 언급했던 여행지 '제주도 애월'과 선호사항 '찐 후기'를 기억하고 새로운 검색어에 반영해야 한다.",
-                        "trigger": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줄래요?",
+                        "trigger": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줘",
                         "expected_action": {
                             "tool": "BlogSearch_naver",
                             "args": {
@@ -1242,13 +1242,13 @@
                 "info": "사용자의 여행지는 '제주도 애월'이다.",
                 "test_turn": 4,
                 "time_distance": 3,
-                "trigger": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줄래요?"
+                "trigger": "좋아요. 그럼 같은 조건으로 이번엔 분위기 좋은 카페 알려줘"
             }
         ]
     },
     {
         "task_id": "L7-009",
-        "instruction": "강원도에 있는 직접 키운 나물로만 요리하는 한정식 식당을 찾고 싶어.",
+        "instruction": "강원도 직접 키운 나물로 요리하는 한정식 식당을 찾고 싶어.",
         "task_level": 7,
         "task_category": "Long-term Context",
         "conversation_tracking": {
@@ -1258,17 +1258,17 @@
             {
               "turn_number": 1,
               "role": "user",
-              "content": "강원도에 있는 직접 키운 나물로만 요리하는 한정식 식당을 찾고 싶어."
+              "content": "강원도 직접 키운 나물로 요리하는 한정식 식당을 찾고 싶어."
             },
             {
               "turn_number": 2,
               "role": "assistant",
-              "content": "강원도에 있는 직접 재배한 나물을 사용하는 '산채향'이라는 한정식집이 있네요. 정갈한 상차림으로 방문객들의 평이 좋습니다.",
+              "content": "강원도 직접 재배한 나물을 사용하는 '산채향'이라는 한정식집이 있네요. 정갈한 상차림으로 방문객들의 평이 좋습니다.",
               "actions": [
                 {
                   "tool": "WebSearch_daum",
                   "args": {
-                    "query": "강원도에 있는 직접 키운 나물로 요리하는 한정식 식당"
+                    "query": "강원도 직접 키운 나물로 요리하는 한정식 식당"
                   },
                   "result": {
                     "meta": {
@@ -1292,17 +1292,17 @@
             {
               "turn_number": 3,
               "role": "user",
-              "content": "음... 그럼 최근에 생긴 곳으로 다시 알아봐 줄 수 있을까?"
+              "content": "음... 그럼 최신 정보로 다시 알아봐 줄 수 있을까"
             },
             {
               "turn_number": 4,
               "role": "assistant",
-              "content": "네, 최근 개업한 곳 기준으로 다시 찾아보니 '강원나물밥'이라는 식당이 검색됩니다. 현대적인 인테리어와 깔끔한 맛으로 인기를 얻고 있다고 합니다.",
+              "content": "네, 다시 찾아보니 '강원나물밥'이라는 식당이 검색됩니다. 현대적인 인테리어와 깔끔한 맛으로 인기를 얻고 있다고 합니다.",
               "actions": [
                 {
                   "tool": "WebSearch_daum",
                   "args": {
-                    "query": "강원도에 있는 직접 키운 나물로 요리하는 한정식 식당",
+                    "query": "강원도 직접 키운 나물로 요리하는 한정식 식당",
                     "sort": "recency"
                   },
                   "result": {
@@ -1326,7 +1326,7 @@
               "context_used": [
                 {
                   "source_turn": 1,
-                  "info": "강원도에 있는 직접 키운 나물로 요리하는 한정식 식당",
+                  "info": "강원도 직접 키운 나물로 요리하는 한정식 식당",
                   "usage_type": "parameter_filling"
                 }
               ]
@@ -1349,11 +1349,11 @@
               {
                 "turn": 4,
                 "should_remember": "사용자가 이전에 요청했던 '강원도', '직접 키운 나물', '한정식'이라는 검색 조건을 유지한 채, 정렬 순서만 '최신순'으로 변경하여 검색을 수행해야 한다.",
-                "trigger": "최근에 생긴 곳으로 다시 알아봐 줄 수 있을까?",
+                "trigger": "최신 정보로 다시 알아봐 줄 수 있을까",
                 "expected_action": {
                   "tool": "WebSearch_daum",
                   "args": {
-                    "query": "강원도에 있는 직접 키운 나물로 요리하는 한정식 식당",
+                    "query": "강원도 직접 키운 나물로 요리하는 한정식 식당",
                     "sort": "recency"
                   }
                 }
@@ -1367,13 +1367,13 @@
             "info": "강원도, 직접 키운 나물, 한정식",
             "test_turn": 4,
             "time_distance": 3,
-            "trigger": "최근에 생긴 곳으로 다시 알아봐 줄 수 있을까?"
+            "trigger": "최신 정보로 다시 알아봐 줄 수 있을까"
           }
         ]
       },
       {
         "task_id": "L7-010",
-        "instruction": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. 10살 된 시츄인데, 관절 영양제 좀 알아봐야겠어요.",
+        "instruction": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. 10살 된 시츄 관절 영양제 좀 알아봐야겠어요.",
         "task_level": 7,
         "task_category": "Long-term Context",
         "conversation_tracking": {
@@ -1428,7 +1428,7 @@
                 {
                   "tool": "WebSearch_naver",
                   "args": {
-                    "query": "노견 시츄 장난감"
+                    "query": "10살 시츄 장난감"
                   },
                   "result": {
                     "total": 20,
@@ -1474,7 +1474,7 @@
                 "expected_action": {
                   "tool": "WebSearch_naver",
                   "args": {
-                    "query": "노견 시츄 장난감"
+                    "query": "10살 시츄 장난감"
                   }
                 }
               }
