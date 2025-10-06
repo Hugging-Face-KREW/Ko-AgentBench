@@ -1,6 +1,5 @@
 
 import hashlib
-import os
 import time
 import uuid
 from typing import Any, Dict, List
@@ -8,6 +7,7 @@ from urllib.parse import urlencode
 
 import jwt
 import requests
+
 from .base_api import BaseAPI
 
 
@@ -21,8 +21,9 @@ class BithumbStock(BaseAPI):
             description="빗썸 API - 국내외 주식 현재가, 종목 검색, 차트 데이터 조회"
         )
         self.base_url = "https://api.bithumb.com/v1"
-        self.access_key = os.getenv("BITHUMB_ACCESS_KEY")  
-        self.secret_key = os.getenv("BITHUMB_SECRET_KEY")
+        # 빗썸은 API요청시 API Key 발급 필요 없음
+        # self.access_key = BITHUMB_ACCESS_KEY
+        # self.secret_key = BITHUMB_SECRET_KEY
         self.access_token = None   # jwt token
 
     def _get_access_token(self) -> bool:
@@ -296,10 +297,50 @@ class BithumbStock(BaseAPI):
 
     def test_connection(self) -> bool:
         """
-        API 연결 상태를 테스트합니다. (현재는 항상 True를 반환)
+        API 연결 상태를 테스트합니다. (마켓 목록 조회 및 주요 API 호출 테스트)
         """
-        # TODO: 실제 API 호출을 통해 연결 상태 확인 로직 추가
-        return True
+        try:
+            # 1. 마켓 목록 조회 테스트 (기본 연결 확인)
+            market_list_response = self._marketList_bithumb()
+            print(f"Debug: market_list_response type: {type(market_list_response)}, content: {market_list_response}")
+            # _marketList_bithumb은 리스트를 반환하므로, 리스트가 비어있지 않은지 확인합니다.
+            if not (isinstance(market_list_response, list) and len(market_list_response) > 0):
+                print(f"Bithumb API connection test (market list) failed. Response: {market_list_response}")
+                return False
+            print("Bithumb API connection (market list) successful.")
+
+            # 2. 현재가 조회 테스트
+            crypto_price_response = self._cryptoPrice_bithumb(markets="KRW-BTC")
+            print(f"Debug: crypto_price_response type: {type(crypto_price_response)}, content: {crypto_price_response}")
+            # _cryptoPrice_bithumb도 리스트를 반환하므로, 리스트가 비어있지 않은지 확인합니다.
+            if not (isinstance(crypto_price_response, list) and len(crypto_price_response) > 0):
+                print(f"Bithumb API connection test (crypto price) failed. Response: {crypto_price_response}")
+                return False
+            print("Bithumb API connection (crypto price) successful.")
+
+            # 3. 호가 정보 조회 테스트
+            order_book_response = self._orderBook_bithumb(markets="KRW-BTC")
+            print(f"Debug: order_book_response type: {type(order_book_response)}, content: {order_book_response}")
+            # _orderBook_bithumb도 리스트를 반환하므로, 리스트가 비어있지 않은지 확인합니다.
+            if not (isinstance(order_book_response, list) and len(order_book_response) > 0):
+                print(f"Bithumb API connection test (order book) failed. Response: {order_book_response}")
+                return False
+            print("Bithumb API connection (order book) successful.")
+
+            # 4. 캔들스틱 조회 테스트 (예시: 1분봉, KRW-BTC)
+            crypto_candle_response = self._cryptoCandle_bithumb(time="minutes", unit=1, market="KRW-BTC", count=1)
+            print(f"Debug: crypto_candle_response type: {type(crypto_candle_response)}, content: {crypto_candle_response}")
+            # _cryptoCandle_bithumb도 리스트를 반환하므로, 리스트가 비어있지 않은지 확인합니다.
+            if not (isinstance(crypto_candle_response, list) and len(crypto_candle_response) > 0):
+                print(f"Bithumb API connection test (crypto candle) failed. Response: {crypto_candle_response}")
+                return False
+            print("Bithumb API connection (crypto candle) successful.")
+
+            print("All Bithumb API connection tests passed.")
+            return True
+        except Exception as e:
+            print(f"An error occurred during the Bithumb API connection test: {e}")
+            return False
 
 if __name__ == "__main__":
     api = BithumbStock()
