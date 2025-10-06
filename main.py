@@ -13,6 +13,7 @@ from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.observability import log_status
+import glob
 
 
 def create_default_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = None) -> ToolRegistry:
@@ -78,7 +79,7 @@ def save_results_to_json(results: List[Dict[str, Any]], model_name: str, output_
 
 def run_tool_calling_demo(
     tool_classes: Optional[List[Type[BaseTool]]] = None,
-    model_name: str = "huggingface/Qwen/Qwen3-4B-Instruct-2507",
+    model_name: str = "gpt-4.1",
     save_logs: bool = True,  
     log_dir: str = "logs",   
     **adapter_config: Any,
