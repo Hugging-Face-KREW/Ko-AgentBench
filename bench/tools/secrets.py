@@ -11,3 +11,13 @@ Directions_Client_Secret="4vdJIQEXJ4R8cHf5WLCORKSGF1J1ETfOXRcLAu00"
 # tmap_navigation
 TMAP_APP_KEY="jdGdpiNgtZ7k5por2yIAnJUDEM14Uku4i3PAE0oi"
 
+# naver_search
+NAVER_CLIENT_ID="nfe9e3rPKhRY5G3qwzuf"
+NAVER_CLIENT_SECRET="Il8nrlEM3r"
+
+# daum_search (Kakao API)
+DAUM_API_KEY="783ca97170d40abe26ba1f7e8a6678a0"
+
+# aladin_search
+ALADIN_API_KEY="ttbbbangggo1231514001"
+

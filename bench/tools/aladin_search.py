@@ -1,5 +1,6 @@
 import requests
 from .base_api import BaseAPI
+from .secrets import ALADIN_API_KEY
 
 class AladinAPI(BaseAPI):
     def __init__(self):
@@ -7,7 +8,7 @@ class AladinAPI(BaseAPI):
             name="aladin_api",
             description="알라딘 도서 검색 및 정보 조회 API"
         )
-        self.api_key = "ttbbbangggo1231514001"  # 테스트용 API 키 (실제 키로 교체 필요)
+        self.api_key = ALADIN_API_KEY
         self.base_url = "http://www.aladin.co.kr/ttb/api"
 
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========

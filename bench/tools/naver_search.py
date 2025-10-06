@@ -1,5 +1,6 @@
 import requests
 from .base_api import BaseAPI
+from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -7,8 +8,8 @@ class NaverSearchAPI(BaseAPI):
             name="naver_search_api",
             description="네이버 검색 API를 통한 웹, 블로그, 뉴스 검색 도구"
         )
-        self.client_id = "nfe9e3rPKhRY5G3qwzuf"
-        self.client_secret = "Il8nrlEM3r"
+        self.client_id = NAVER_CLIENT_ID
+        self.client_secret = NAVER_CLIENT_SECRET
     
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
     

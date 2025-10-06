@@ -1,5 +1,6 @@
 import requests
 from .base_api import BaseAPI
+from .secrets import DAUM_API_KEY
 
 class DaumSearchAPI(BaseAPI):
     def __init__(self):
@@ -7,7 +8,7 @@ class DaumSearchAPI(BaseAPI):
             name="daum_search_api",
             description="다음 검색 API를 통한 웹, 블로그, 뉴스 검색 도구"
         )
-        self.api_key = "783ca97170d40abe26ba1f7e8a6678a0"
+        self.api_key = DAUM_API_KEY
 
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
 
