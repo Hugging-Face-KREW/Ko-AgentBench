@@ -258,6 +258,11 @@ class NaverSearchMockAPI(BaseAPI):
             "items": items
         }
 
+    # Alias for dataset compatibility
+    def web_search_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+        """Alias for WebSearch_naver to match dataset naming."""
+        return self.WebSearch_naver(query=query, display=display, start=start)
+
 
 __all__ = [
     "NaverSearchMockAPI",

@@ -1,5 +1,5 @@
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -236,7 +236,7 @@ class NaverSearchAPI(BaseAPI):
         """Tool call 실행
         
         Args:
-            tool_name: 실행할 tool 이름 (Search_naver_web, Search_naver_blog, Search_naver_news)
+            tool_name: 실행할 tool 이름 (Search_naver_web, Search_naver_blog, Search_naver_news, search_web, search_blog, search_news)
             **kwargs: tool별 매개변수
             
         Returns:
@@ -245,7 +245,11 @@ class NaverSearchAPI(BaseAPI):
         tool_map = {
             "Search_naver_web": self._search_web,
             "Search_naver_blog": self._search_blog,
-            "Search_naver_news": self._search_news
+            "Search_naver_news": self._search_news,
+            # Alias for dataset compatibility
+            "search_web": self._search_web,
+            "search_blog": self._search_blog,
+            "search_news": self._search_news,
         }
         
         if tool_name not in tool_map:

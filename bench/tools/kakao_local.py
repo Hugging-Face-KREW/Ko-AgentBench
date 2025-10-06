@@ -1,7 +1,7 @@
 import requests
 import os
 from typing import Dict, List, Any
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 class KakaoLocal(BaseAPI):
     def __init__(self):

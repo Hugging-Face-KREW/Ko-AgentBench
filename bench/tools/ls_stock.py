@@ -2,7 +2,7 @@ import os
 from typing import Any, Dict, List
 
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 
 class LSStock(BaseAPI):

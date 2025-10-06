@@ -73,7 +73,6 @@ class BenchmarkRunner:
         try:
             # Initialize conversation with task description
             messages = [
-                {"role": "system", "content": "You are a helpful assistant that can use tools to complete tasks."},
                 {"role": "user", "content": task.get('description', '')}
             ]
             
@@ -196,20 +195,22 @@ class BenchmarkRunner:
             
             # Handle tool calls
             message = response.get('message', {})
+            
+            # Add assistant message to conversation FIRST (before tool results)
+            messages.append(message)
+            
             if 'tool_calls' in message:
                 for tool_call in message['tool_calls']:
                     tool_result = self._execute_tool_call(tool_call)
                     step_data['tool_calls'].append(tool_result)
                     
-                    # Add tool result to messages
+                    # Add tool result to messages AFTER assistant message
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call['id'],
                         "content": json.dumps(tool_result['result'])
                     })
             
-            # Add assistant message to conversation
-            messages.append(message)
             steps.append(step_data)
             
             # Check if task is complete (no more tool calls)

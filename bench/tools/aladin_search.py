@@ -1,5 +1,5 @@
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 class AladinAPI(BaseAPI):
     def __init__(self):
@@ -141,7 +141,7 @@ class AladinAPI(BaseAPI):
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def Search_aladin_item(self) -> dict:
+    def ItemSearch_aladin(self) -> dict:
         """상품 검색 tool calling 스키마
         
         Returns:
@@ -150,7 +150,7 @@ class AladinAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "Search_aladin_item",
+                "name": "ItemSearch_aladin",
                 "description": "키워드, 카테고리 등 상세 검색 조건으로 상품을 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -224,7 +224,7 @@ class AladinAPI(BaseAPI):
             }
         }
     
-    def List_aladin_item(self) -> dict:
+    def ItemList_aladin(self) -> dict:
         """상품 리스트 조회 tool calling 스키마
         
         Returns:
@@ -233,7 +233,7 @@ class AladinAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "List_aladin_item",
+                "name": "ItemList_aladin",
                 "description": "신간, 베스트셀러 등 특정 종류의 상품 리스트를 상세 조건으로 조회합니다.",
                 "parameters": {
                     "type": "object",
@@ -362,16 +362,19 @@ class AladinAPI(BaseAPI):
         """Tool call 실행
         
         Args:
-            tool_name: 실행할 tool 이름 (Search_aladin_item, List_aladin_item, Lookup_aladin_item)
+            tool_name: 실행할 tool 이름 (ItemSearch_aladin, ItemList_aladin, Lookup_aladin_item)
             **kwargs: tool별 매개변수
             
         Returns:
             tool 실행 결과
         """
         tool_map = {
+            "ItemSearch_aladin": self._search_item,
+            "ItemList_aladin": self._get_item_list,
+            "Lookup_aladin_item": self._get_item_details,
+            # Backward compatibility
             "Search_aladin_item": self._search_item,
             "List_aladin_item": self._get_item_list,
-            "Lookup_aladin_item": self._get_item_details
         }
         
         if tool_name not in tool_map:
@@ -382,8 +385,8 @@ class AladinAPI(BaseAPI):
     def get_all_tool_schemas(self) -> list[dict]:
         """모든 tool 스키마 반환"""
         return [
-            self.Search_aladin_item(),
-            self.List_aladin_item(),
+            self.ItemSearch_aladin(),
+            self.ItemList_aladin(),
             self.Lookup_aladin_item()
         ]
 

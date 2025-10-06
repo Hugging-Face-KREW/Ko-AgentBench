@@ -1,7 +1,7 @@
 import requests
 import os
 from typing import Dict, List, Any, Optional
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 class UpbitCrypto(BaseAPI):
     def __init__(self):

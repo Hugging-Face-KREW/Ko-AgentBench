@@ -8,7 +8,7 @@ from urllib.parse import urlencode
 
 import jwt
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
 
 
 class BithumbStock(BaseAPI):
