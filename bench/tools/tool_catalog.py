@@ -10,7 +10,6 @@ from typing import Any, Dict, List, Tuple, Type
 
 from .base_api import BaseTool
 from .method_tool_wrapper import make_method_tool_class
-from .naver_search_mock import NaverSearchMockAPI
 from .festival_search import FestivalSearchAPI
 from .naver_directions import NaverMapsAPI
 from .ls_stock import LSStock
@@ -263,6 +262,107 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "required": ["query"]
         },
     ),
+    # Aliases for dataset compatibility
+    "WebSearch_naver": (
+        NaverSearchAPI,
+        "_search_web",
+        "네이버 웹 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "검색어"
+                },
+                "display": {
+                    "type": "integer",
+                    "description": "한 번에 표시할 검색 결과 개수",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 10
+                },
+                "start": {
+                    "type": "integer",
+                    "description": "검색 시작 위치",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "default": 1
+                },
+                "sort": {
+                    "type": "string",
+                    "enum": ["sim", "date"],
+                    "description": "검색 결과 정렬 방법",
+                    "default": "sim"
+                }
+            },
+            "required": ["query"]
+        },
+    ),
+    "BlogSearch_naver": (
+        NaverSearchAPI,
+        "_search_blog",
+        "네이버 블로그 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "검색어"
+                },
+                "display": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 10
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "default": 1
+                },
+                "sort": {
+                    "type": "string",
+                    "enum": ["sim", "date"],
+                    "default": "sim"
+                }
+            },
+            "required": ["query"]
+        },
+    ),
+    "NewsSearch_naver": (
+        NaverSearchAPI,
+        "_search_news",
+        "네이버 뉴스 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "검색어"
+                },
+                "display": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 10
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "default": 1
+                },
+                "sort": {
+                    "type": "string",
+                    "enum": ["sim", "date"],
+                    "description": "정렬 옵션 (sim: 정확도순, date: 날짜순)",
+                    "default": "sim"
+                }
+            },
+            "required": ["query"]
+        },
+    ),
     
     # ===== Aladin =====
     "ItemSearch_aladin": (
@@ -495,50 +595,6 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 }
             },
             "required": ["category", "x", "y"]
-        },
-    ),
-    
-    # ===== Legacy Naver Mock (for backward compatibility) =====
-    "naver_web_search": (
-        NaverSearchMockAPI,
-        "WebSearch_naver",
-        "네이버 웹 검색 API",
-        {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000},
-            },
-            "required": ["query"],
-        },
-    ),
-    "naver_blog_search": (
-        NaverSearchMockAPI,
-        "BlogSearch_naver",
-        "네이버 블로그 검색 API",
-        {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000},
-            },
-            "required": ["query"],
-        },
-    ),
-    "naver_news_search": (
-        NaverSearchMockAPI,
-        "NewsSearch_naver",
-        "네이버 뉴스 검색 API",
-        {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100},
-                "start": {"type": "integer", "minimum": 1, "maximum": 1000},
-            },
-            "required": ["query"],
         },
     ),
 }

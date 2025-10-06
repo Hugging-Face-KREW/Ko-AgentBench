@@ -99,6 +99,56 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
     return converted_tasks
 
 
+def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Simplify and flatten a single task result for easier analysis.
+    
+    Args:
+        result: Original task result
+        
+    Returns:
+        Simplified, flattened result
+    """
+    simplified = {
+        "task_id": result.get("task_id", "unknown"),
+        "instruction": result.get("instruction", ""),
+        "level": result.get("level", 0),
+        "category": result.get("category", "unknown"),
+        "success": result.get("success", False),
+        "execution_time": result.get("execution_time", 0),
+        "steps_taken": result.get("steps_taken", 0),
+        "error": result.get("error"),
+        "expected_tools": result.get("expected_tools", []),
+        "golden_action": result.get("golden_action", []),
+    }
+    
+    # Extract tool calls in a simplified format with results
+    tool_calls = []
+    for invocation in result.get("tool_invocations", []):
+        tool_call = {
+            "step": invocation.get("step"),
+            "tool_name": invocation.get("tool_name"),
+            "arguments": invocation.get("arguments"),
+            "success": invocation.get("success"),
+            "error": invocation.get("error")
+        }
+        
+        # Include API result if available and successful
+        if invocation.get("success") and invocation.get("result"):
+            tool_call["result"] = invocation["result"]
+        
+        tool_calls.append(tool_call)
+    
+    simplified["tool_calls"] = tool_calls
+    
+    # Extract final response
+    if result.get("result") and result["result"].get("final_response"):
+        simplified["final_response"] = result["result"]["final_response"]
+    else:
+        simplified["final_response"] = None
+    
+    return simplified
+
+
 def save_detailed_results(
     results: List[Dict[str, Any]], 
     model_name: str, 
@@ -123,18 +173,21 @@ def save_detailed_results(
     filename = f"{level_name}_{model_safe_name}_{timestamp}.json"
     filepath = Path(output_dir) / filename
     
+    # Simplify and flatten results
+    simplified_results = [simplify_result(r) for r in results]
+    
     # Calculate statistics
-    total_tasks = len(results)
-    successful_tasks = sum(1 for r in results if r.get('success', False))
-    total_time = sum(r.get('execution_time', 0) for r in results)
-    total_steps = sum(r.get('steps_taken', 0) for r in results)
-    total_tool_calls = sum(len(r.get('tool_invocations', [])) for r in results)
+    total_tasks = len(simplified_results)
+    successful_tasks = sum(1 for r in simplified_results if r.get('success', False))
+    total_time = sum(r.get('execution_time', 0) for r in simplified_results)
+    total_steps = sum(r.get('steps_taken', 0) for r in simplified_results)
+    total_tool_calls = sum(len(r.get('tool_calls', [])) for r in simplified_results)
     
     # Tool usage statistics
     tool_usage_stats = {}
-    for result in results:
-        for invocation in result.get('tool_invocations', []):
-            tool_name = invocation.get('tool_name', 'unknown')
+    for result in simplified_results:
+        for tool_call in result.get('tool_calls', []):
+            tool_name = tool_call.get('tool_name', 'unknown')
             if tool_name not in tool_usage_stats:
                 tool_usage_stats[tool_name] = {
                     'count': 0,
@@ -142,7 +195,7 @@ def save_detailed_results(
                     'failure': 0
                 }
             tool_usage_stats[tool_name]['count'] += 1
-            if invocation.get('success', False):
+            if tool_call.get('success', False):
                 tool_usage_stats[tool_name]['success'] += 1
             else:
                 tool_usage_stats[tool_name]['failure'] += 1
@@ -164,7 +217,7 @@ def save_detailed_results(
             "average_tool_calls": round(total_tool_calls / total_tasks, 2) if total_tasks > 0 else 0,
         },
         "tool_usage_statistics": tool_usage_stats,
-        "results": results
+        "results": simplified_results
     }
     
     with open(filepath, 'w', encoding='utf-8') as f:
@@ -352,7 +405,8 @@ def main():
     all_level_results = {}
     
     # You can customize which levels to run
-    levels_to_run = ["L1", "L2", "L3", "L4", "L5", "L6", "L7"]  # Run all levels
+    levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6", "L7"]  # Run all levels
+    # levels_to_run = ["L1"]  # Run all levels
     
     for level_name in levels_to_run:
         if level_name in datasets:
