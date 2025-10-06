@@ -21,3 +21,8 @@ DAUM_API_KEY="783ca97170d40abe26ba1f7e8a6678a0"
 # aladin_search
 ALADIN_API_KEY="ttbbbangggo1231514001"
 
+# ls_stock
+LS_APP_KEY="PS0OYx1M8c3MF33cSHOdpC8Q19NLXlY42aXi"
+LS_APP_SECRET="ycFjZTD7RrnAOUedkoeN3vo1vrPqhBk6"
+
+
