@@ -1,7 +1,7 @@
 import requests
-import os
 from typing import Dict, List, Any
 from .base_api import BaseAPI
+from .secrets import KAKAO_REST_API_KEY
 
 class KakaoLocal(BaseAPI):
     def __init__(self):
@@ -10,7 +10,7 @@ class KakaoLocal(BaseAPI):
             description="카카오 로컬 API - 주소변환, 장소검색, 카테고리 검색"
         )
         self.base_url = "https://dapi.kakao.com"
-        self.rest_api_key = os.getenv("KAKAO_REST_API_KEY")
+        self.rest_api_key = KAKAO_REST_API_KEY
 
     # ========== 실제 API 호출 메서드들 ==========
 
