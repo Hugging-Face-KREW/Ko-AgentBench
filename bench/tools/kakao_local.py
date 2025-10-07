@@ -1,7 +1,7 @@
 import requests
-import os
 from typing import Dict, List, Any
-from base_api import BaseAPI
+from .base_api import BaseAPI
+from .secrets import KAKAO_REST_API_KEY
 
 class KakaoLocal(BaseAPI):
     def __init__(self):
@@ -10,7 +10,7 @@ class KakaoLocal(BaseAPI):
             description="카카오 로컬 API - 주소변환, 장소검색, 카테고리 검색"
         )
         self.base_url = "https://dapi.kakao.com"
-        self.rest_api_key = os.getenv("KAKAO_REST_API_KEY")
+        self.rest_api_key = KAKAO_REST_API_KEY
 
     # ========== 실제 API 호출 메서드들 ==========
 
@@ -40,6 +40,17 @@ class KakaoLocal(BaseAPI):
                       radius: int = None, sort: str = "accuracy",
                       page: int = 1, size: int = 15) -> Dict[str, Any]:
         """키워드 장소 검색"""
+
+        # Validation 추가: sort가 distance인데 좌표가 없으면 accuracy로 변경
+        if sort == "distance" and (x is None or y is None):
+            import warnings
+            warnings.warn(
+                f"sort='distance'는 x, y 좌표가 필요합니다. "
+                f"좌표가 제공되지 않아 sort='accuracy'로 자동 변경합니다.",
+                UserWarning
+            )
+            sort = "accuracy"
+
         endpoint = "/v2/local/search/keyword.json"
         headers = {"Authorization": f"KakaoAK {self.rest_api_key}"}
         params = {
