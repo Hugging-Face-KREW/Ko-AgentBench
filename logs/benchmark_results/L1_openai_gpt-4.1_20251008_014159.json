@@ -1,14 +1,14 @@
 {
   "metadata": {
-    "timestamp": "2025-10-07T03:11:44.121232",
+    "timestamp": "2025-10-08T01:41:59.130014",
     "model": "openai/gpt-4.1",
     "level": "L1",
     "total_tasks": 18,
     "successful_tasks": 0,
     "failed_tasks": 18,
     "success_rate": 0.0,
-    "total_execution_time": 22.46,
-    "average_execution_time": 1.25,
+    "total_execution_time": 29.05,
+    "average_execution_time": 1.61,
     "total_steps": 18,
     "average_steps": 1.0,
     "total_tool_calls": 18,
@@ -82,8 +82,8 @@
     },
     "AddressToCoord_kakao": {
       "count": 1,
-      "success": 0,
-      "failure": 1
+      "success": 1,
+      "failure": 0
     },
     "PlaceSearch_kakao": {
       "count": 1,
@@ -92,8 +92,8 @@
     },
     "CategorySearch_kakao": {
       "count": 1,
-      "success": 0,
-      "failure": 1
+      "success": 1,
+      "failure": 0
     }
   },
   "results": [
@@ -103,7 +103,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.8336825370788574,
+      "execution_time": 1.8359131813049316,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -146,7 +146,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 2.1186940670013428,
+      "execution_time": 3.1492810249328613,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -167,8 +167,8 @@
           "step": 1,
           "tool_name": "_directions",
           "arguments": {
-            "start": "127.111217,37.394761",
-            "goal": "127.071524,37.513059",
+            "start": "127.111217,37.394815",
+            "goal": "127.071029,37.514219",
             "option": "trafast"
           },
           "success": true,
@@ -176,114 +176,114 @@
           "result": {
             "code": 0,
             "message": "길찾기를 성공하였습니다.",
-            "currentDateTime": "2025-10-07T03:11:25",
+            "currentDateTime": "2025-10-08T01:41:36",
             "route": {
               "traoptimal": [
                 {
                   "guide": [
                     {
                       "distance": 38,
-                      "duration": 18836,
+                      "duration": 19596,
                       "instructions": "'분당내곡간도시고속화도로' 방면으로 우회전",
                       "pointIndex": 1,
                       "type": 3
                     },
                     {
                       "distance": 340,
-                      "duration": 117029,
+                      "duration": 126624,
                       "instructions": "느티나무사거리에서 '분당수서로' 방면으로 좌회전",
                       "pointIndex": 20,
                       "type": 2
                     },
                     {
                       "distance": 689,
-                      "duration": 98514,
+                      "duration": 109215,
                       "instructions": "매송사거리에서 '시청·시의회' 방면으로 좌회전",
                       "pointIndex": 43,
                       "type": 2
                     },
                     {
                       "distance": 356,
-                      "duration": 26365,
+                      "duration": 27302,
                       "instructions": "'서울, 성남시청·성남시의회' 방면으로 왼쪽 도시고속도로 진입",
                       "pointIndex": 53,
                       "type": 59
                     },
                     {
                       "distance": 1185,
-                      "duration": 56414,
+                      "duration": 56967,
                       "instructions": "벌말지하차도에서 지하차도 진입",
                       "pointIndex": 70,
                       "type": 56
                     },
                     {
                       "distance": 10706,
-                      "duration": 466872,
+                      "duration": 452436,
                       "instructions": "수서지하차도에서 지하차도 진입",
                       "pointIndex": 229,
                       "type": 56
                     },
                     {
                       "distance": 3294,
-                      "duration": 136523,
+                      "duration": 134815,
                       "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
                       "pointIndex": 275,
                       "type": 69
                     },
                     {
                       "distance": 160,
-                      "duration": 9179,
+                      "duration": 8991,
                       "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
                       "pointIndex": 278,
                       "type": 41
                     },
                     {
                       "distance": 901,
-                      "duration": 51692,
+                      "duration": 50632,
                       "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
                       "pointIndex": 295,
                       "type": 3
                     },
                     {
                       "distance": 289,
-                      "duration": 25680,
+                      "duration": 27576,
                       "instructions": "종합운동장에서 '장지동, 가락시장' 방면으로 우회전",
                       "pointIndex": 302,
                       "type": 3
                     },
                     {
                       "distance": 584,
-                      "duration": 72001,
+                      "duration": 68728,
                       "instructions": "종합운동장에서 '잠실역' 방면으로 좌회전",
                       "pointIndex": 316,
                       "type": 2
                     },
                     {
                       "distance": 635,
-                      "duration": 91793,
+                      "duration": 89168,
                       "instructions": "종합운동장에서 유턴",
                       "pointIndex": 322,
                       "type": 6
                     },
                     {
                       "distance": 384,
-                      "duration": 35551,
+                      "duration": 36283,
                       "instructions": "우회전",
                       "pointIndex": 326,
                       "type": 3
                     },
                     {
                       "distance": 331,
-                      "duration": 71226,
+                      "duration": 72744,
                       "instructions": "로터리에서 10시 방향",
                       "pointIndex": 341,
                       "type": 26
                     },
                     {
-                      "distance": 127,
-                      "duration": 28983,
+                      "distance": 221,
+                      "duration": 43457,
                       "instructions": "목적지",
-                      "pointIndex": 345,
+                      "pointIndex": 346,
                       "type": 88
                     }
                   ],
@@ -1669,8 +1669,12 @@
                       37.5136219
                     ],
                     [
-                      127.0714228,
-                      37.5135837
+                      127.0708393,
+                      37.513514
+                    ],
+                    [
+                      127.0707874,
+                      37.5138915
                     ]
                   ],
                   "section": [
@@ -1688,7 +1692,7 @@
                       "name": "분당수서간도시고속화도로",
                       "pointCount": 102,
                       "pointIndex": 73,
-                      "speed": 82
+                      "speed": 83
                     },
                     {
                       "congestion": 1,
@@ -1696,7 +1700,7 @@
                       "name": "동부간선도로",
                       "pointCount": 122,
                       "pointIndex": 174,
-                      "speed": 81
+                      "speed": 84
                     }
                   ],
                   "summary": {
@@ -1710,24 +1714,24 @@
                         37.5157448
                       ]
                     ],
-                    "departureTime": "2025-10-07T03:11:24",
-                    "distance": 20019,
-                    "duration": 1306658,
-                    "fuelPrice": 2378,
+                    "departureTime": "2025-10-08T01:41:35",
+                    "distance": 20113,
+                    "duration": 1324534,
+                    "fuelPrice": 2389,
                     "goal": {
-                      "dir": 1,
+                      "dir": 0,
                       "location": [
-                        127.0715231,
-                        37.5130586
+                        127.0710288,
+                        37.5142187
                       ]
                     },
                     "start": {
                       "location": [
-                        127.111217,
-                        37.3947606
+                        127.1112167,
+                        37.3948147
                       ]
                     },
-                    "taxiFare": 25930,
+                    "taxiFare": 26090,
                     "tollFare": 0
                   }
                 }
@@ -1744,7 +1748,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.8470916748046875,
+      "execution_time": 2.438032388687134,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -1765,8 +1769,8 @@
           "step": 1,
           "tool_name": "_directions",
           "arguments": {
-            "start": "127.1113,37.3948",
-            "goal": "127.0711,37.5131",
+            "start": "127.111217,37.394759",
+            "goal": "127.071524,37.513104",
             "option": "traavoidtoll"
           },
           "success": true,
@@ -1774,112 +1778,112 @@
           "result": {
             "code": 0,
             "message": "길찾기를 성공하였습니다.",
-            "currentDateTime": "2025-10-07T03:11:27",
+            "currentDateTime": "2025-10-08T01:41:39",
             "route": {
               "traoptimal": [
                 {
                   "guide": [
                     {
                       "distance": 38,
-                      "duration": 18836,
+                      "duration": 19596,
                       "instructions": "'분당내곡간도시고속화도로' 방면으로 우회전",
                       "pointIndex": 1,
                       "type": 3
                     },
                     {
                       "distance": 340,
-                      "duration": 117029,
+                      "duration": 126624,
                       "instructions": "느티나무사거리에서 '분당수서로' 방면으로 좌회전",
                       "pointIndex": 20,
                       "type": 2
                     },
                     {
                       "distance": 689,
-                      "duration": 98514,
+                      "duration": 109215,
                       "instructions": "매송사거리에서 '시청·시의회' 방면으로 좌회전",
                       "pointIndex": 43,
                       "type": 2
                     },
                     {
                       "distance": 356,
-                      "duration": 26365,
+                      "duration": 27302,
                       "instructions": "'서울, 성남시청·성남시의회' 방면으로 왼쪽 도시고속도로 진입",
                       "pointIndex": 53,
                       "type": 59
                     },
                     {
                       "distance": 1185,
-                      "duration": 56414,
+                      "duration": 56967,
                       "instructions": "벌말지하차도에서 지하차도 진입",
                       "pointIndex": 70,
                       "type": 56
                     },
                     {
                       "distance": 10706,
-                      "duration": 466872,
+                      "duration": 452434,
                       "instructions": "수서지하차도에서 지하차도 진입",
                       "pointIndex": 229,
                       "type": 56
                     },
                     {
                       "distance": 3294,
-                      "duration": 136523,
+                      "duration": 134815,
                       "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
                       "pointIndex": 275,
                       "type": 69
                     },
                     {
                       "distance": 160,
-                      "duration": 9179,
+                      "duration": 8991,
                       "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
                       "pointIndex": 278,
                       "type": 41
                     },
                     {
                       "distance": 901,
-                      "duration": 51692,
+                      "duration": 50632,
                       "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
                       "pointIndex": 295,
                       "type": 3
                     },
                     {
                       "distance": 289,
-                      "duration": 25680,
+                      "duration": 27576,
                       "instructions": "종합운동장에서 '장지동, 가락시장' 방면으로 우회전",
                       "pointIndex": 302,
                       "type": 3
                     },
                     {
                       "distance": 584,
-                      "duration": 72001,
+                      "duration": 68728,
                       "instructions": "종합운동장에서 '잠실역' 방면으로 좌회전",
                       "pointIndex": 316,
                       "type": 2
                     },
                     {
                       "distance": 635,
-                      "duration": 91793,
+                      "duration": 89168,
                       "instructions": "종합운동장에서 유턴",
                       "pointIndex": 322,
                       "type": 6
                     },
                     {
                       "distance": 384,
-                      "duration": 35551,
+                      "duration": 36283,
                       "instructions": "우회전",
                       "pointIndex": 326,
                       "type": 3
                     },
                     {
                       "distance": 331,
-                      "duration": 71226,
+                      "duration": 72743,
                       "instructions": "로터리에서 10시 방향",
                       "pointIndex": 341,
                       "type": 26
                     },
                     {
-                      "distance": 163,
-                      "duration": 32340,
+                      "distance": 126,
+                      "duration": 27961,
                       "instructions": "목적지",
                       "pointIndex": 345,
                       "type": 88
@@ -3267,8 +3271,8 @@
                       37.5136219
                     ],
                     [
-                      127.0710168,
-                      37.5135354
+                      127.0714318,
+                      37.5135847
                     ]
                   ],
                   "section": [
@@ -3286,7 +3290,7 @@
                       "name": "분당수서간도시고속화도로",
                       "pointCount": 102,
                       "pointIndex": 73,
-                      "speed": 82
+                      "speed": 83
                     },
                     {
                       "congestion": 1,
@@ -3294,7 +3298,7 @@
                       "name": "동부간선도로",
                       "pointCount": 122,
                       "pointIndex": 174,
-                      "speed": 81
+                      "speed": 84
                     }
                   ],
                   "summary": {
@@ -3308,21 +3312,21 @@
                         37.5157448
                       ]
                     ],
-                    "departureTime": "2025-10-07T03:11:26",
-                    "distance": 20055,
-                    "duration": 1310015,
-                    "fuelPrice": 2382,
+                    "departureTime": "2025-10-08T01:41:38",
+                    "distance": 20018,
+                    "duration": 1309035,
+                    "fuelPrice": 2378,
                     "goal": {
                       "dir": 1,
                       "location": [
-                        127.0710997,
-                        37.5130994
+                        127.071524,
+                        37.5131037
                       ]
                     },
                     "start": {
                       "location": [
-                        127.1112993,
-                        37.3947997
+                        127.111217,
+                        37.3947588
                       ]
                     },
                     "taxiFare": 25930,
@@ -3342,7 +3346,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.8071155548095703,
+      "execution_time": 2.832627058029175,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -3366,7 +3370,7 @@
           "arguments": {
             "start": "126.9706,37.5547",
             "goal": "126.4525,37.4602",
-            "waypoints": "126.9769,37.5714|126.9242,37.5219",
+            "waypoints": "126.9769,37.5714|126.9242,37.5264",
             "option": "traavoidtoll"
           },
           "success": true,
@@ -3374,121 +3378,107 @@
           "result": {
             "code": 0,
             "message": "길찾기를 성공하였습니다.",
-            "currentDateTime": "2025-10-07T03:11:29",
+            "currentDateTime": "2025-10-08T01:41:42",
             "route": {
               "traoptimal": [
                 {
                   "guide": [
                     {
                       "distance": 115,
-                      "duration": 30811,
+                      "duration": 31804,
                       "instructions": "'청파로' 방면으로 우회전",
                       "pointIndex": 6,
                       "type": 3
                     },
                     {
                       "distance": 180,
-                      "duration": 29306,
+                      "duration": 61959,
                       "instructions": "서울역(서부)에서 유턴",
                       "pointIndex": 14,
                       "type": 6
                     },
                     {
                       "distance": 205,
-                      "duration": 22942,
+                      "duration": 33017,
                       "instructions": "'공덕오거리' 방면으로 우회전",
                       "pointIndex": 26,
                       "type": 3
                     },
                     {
                       "distance": 2108,
-                      "duration": 343826,
+                      "duration": 335316,
                       "instructions": "공덕오거리에서 '마포대교' 방면으로 왼쪽 11시 방향",
                       "pointIndex": 150,
                       "type": 13
                     },
                     {
                       "distance": 851,
-                      "duration": 72744,
+                      "duration": 75773,
                       "instructions": "마포대교북단에서 '한남대교, 성산대교' 방면으로 오른쪽 도시고속도로 진입",
                       "pointIndex": 177,
                       "type": 68
                     },
                     {
                       "distance": 277,
-                      "duration": 22897,
+                      "duration": 23366,
                       "instructions": "마포대교북단에서 '일산, 성산대교' 방면으로 고가차도 왼쪽 옆길",
                       "pointIndex": 194,
                       "type": 63
                     },
                     {
                       "distance": 2501,
-                      "duration": 130693,
+                      "duration": 131694,
                       "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
                       "pointIndex": 259,
                       "type": 54
                     },
                     {
                       "distance": 2152,
-                      "duration": 97217,
+                      "duration": 102513,
                       "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
                       "pointIndex": 297,
                       "type": 54
                     },
                     {
                       "distance": 7458,
-                      "duration": 306992,
+                      "duration": 305252,
                       "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
                       "pointIndex": 407,
                       "type": 66
                     },
                     {
                       "distance": 16299,
-                      "duration": 626204,
-                      "instructions": "인천공항톨게이트 (통행료 0원)",
+                      "duration": 613921,
+                      "instructions": "인천공항톨게이트 (통행료 3,200원)",
                       "pointIndex": 575,
                       "type": 121
                     },
                     {
-                      "distance": 4996,
-                      "duration": 208117,
-                      "instructions": "영종대교휴게소에서 '인천공항(하부도로)' 방면으로 오른쪽 방향",
-                      "pointIndex": 618,
-                      "type": 5
-                    },
-                    {
-                      "distance": 4621,
-                      "duration": 199298,
-                      "instructions": "한상IC에서 왼쪽 도로 주행",
-                      "pointIndex": 671,
-                      "type": 41
-                    },
-                    {
-                      "distance": 12339,
-                      "duration": 487228,
+                      "distance": 21919,
+                      "duration": 802603,
                       "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
-                      "pointIndex": 794,
+                      "pointIndex": 761,
                       "type": 5
                     },
                     {
                       "distance": 2650,
-                      "duration": 163756,
+                      "duration": 181671,
                       "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
-                      "pointIndex": 836,
+                      "pointIndex": 803,
                       "type": 2
                     },
                     {
                       "distance": 1381,
-                      "duration": 127408,
+                      "duration": 123834,
                       "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
-                      "pointIndex": 864,
+                      "pointIndex": 831,
                       "type": 2
                     },
                     {
                       "distance": 33,
-                      "duration": 2354,
+                      "duration": 2271,
                       "instructions": "목적지",
-                      "pointIndex": 869,
+                      "pointIndex": 836,
                       "type": 88
                     }
                   ],
@@ -5970,264 +5960,132 @@
                       37.5550727
                     ],
                     [
-                      126.61518,
-                      37.5550123
+                      126.6140491,
+                      37.5547154
                     ],
                     [
-                      126.6146122,
-                      37.5549657
+                      126.6128372,
+                      37.5544729
                     ],
                     [
-                      126.6140293,
-                      37.5549505
+                      126.6109729,
+                      37.5540605
                     ],
                     [
-                      126.6130499,
-                      37.5549576
+                      126.609352,
+                      37.5536589
                     ],
                     [
-                      126.6124339,
-                      37.554971
+                      126.6085834,
+                      37.5534584
                     ],
                     [
-                      126.6119971,
-                      37.5549488
+                      126.6079371,
+                      37.553257
                     ],
                     [
-                      126.6113246,
-                      37.5548608
+                      126.6075344,
+                      37.5531314
                     ],
                     [
-                      126.6109136,
-                      37.554764
+                      126.6068012,
+                      37.5529032
                     ],
                     [
-                      126.6105934,
-                      37.5546534
+                      126.6064843,
+                      37.5528044
                     ],
                     [
-                      126.6096645,
-                      37.5543228
+                      126.604699,
+                      37.5522329
                     ],
                     [
-                      126.6094147,
-                      37.5541938
+                      126.603676,
+                      37.5519178
                     ],
                     [
-                      126.6088962,
-                      37.5540006
+                      126.6033014,
+                      37.5518095
                     ],
                     [
-                      126.6081635,
-                      37.5537283
+                      126.6026675,
+                      37.5516154
                     ],
                     [
-                      126.6081466,
-                      37.5537228
+                      126.6020743,
+                      37.5514234
                     ],
                     [
-                      126.6081027,
-                      37.5537071
+                      126.6014879,
+                      37.5512351
                     ],
                     [
-                      126.6080542,
-                      37.5536896
+                      126.5951649,
+                      37.5491994
                     ],
                     [
-                      126.607264,
-                      37.5533997
+                      126.5926875,
+                      37.548398
                     ],
                     [
-                      126.6061674,
-                      37.552984
+                      126.585436,
+                      37.54605
                     ],
                     [
-                      126.6056975,
-                      37.5528038
+                      126.5819407,
+                      37.5449187
                     ],
                     [
-                      126.6054575,
-                      37.5527101
+                      126.5810544,
+                      37.5446315
                     ],
                     [
-                      126.6040581,
-                      37.5521487
+                      126.5735083,
+                      37.5421876
                     ],
                     [
-                      126.6034902,
-                      37.5519245
+                      126.5709559,
+                      37.5413609
                     ],
                     [
-                      126.6032841,
-                      37.5518355
+                      126.5693658,
+                      37.5407868
                     ],
                     [
-                      126.6028721,
-                      37.5516404
+                      126.5683502,
+                      37.5404435
                     ],
                     [
-                      126.6016691,
-                      37.5512275
+                      126.5678385,
+                      37.54027
                     ],
                     [
-                      126.6003519,
-                      37.5508046
+                      126.5670714,
+                      37.5399692
                     ],
                     [
-                      126.5989592,
-                      37.5503569
+                      126.5661134,
+                      37.5395507
                     ],
                     [
-                      126.5980164,
-                      37.5500558
+                      126.5650227,
+                      37.5389661
                     ],
                     [
-                      126.5974018,
-                      37.5498591
+                      126.5646351,
+                      37.5387395
                     ],
                     [
-                      126.5955863,
-                      37.5492693
+                      126.5636279,
+                      37.5380871
                     ],
                     [
-                      126.5937076,
-                      37.548669
+                      126.5629873,
+                      37.5376331
                     ],
                     [
-                      126.5927412,
-                      37.5483552
-                    ],
-                    [
-                      126.592289,
-                      37.5482084
-                    ],
-                    [
-                      126.5900788,
-                      37.5475036
-                    ],
-                    [
-                      126.5886287,
-                      37.5470373
-                    ],
-                    [
-                      126.5863825,
-                      37.5463196
-                    ],
-                    [
-                      126.5854804,
-                      37.5460269
-                    ],
-                    [
-                      126.5842841,
-                      37.5456382
-                    ],
-                    [
-                      126.5842131,
-                      37.5456151
-                    ],
-                    [
-                      126.5824147,
-                      37.5450333
-                    ],
-                    [
-                      126.5819795,
-                      37.5448929
-                    ],
-                    [
-                      126.5811992,
-                      37.5446399
-                    ],
-                    [
-                      126.5801676,
-                      37.5443064
-                    ],
-                    [
-                      126.577775,
-                      37.543537
-                    ],
-                    [
-                      126.5735639,
-                      37.5421772
-                    ],
-                    [
-                      126.5709223,
-                      37.5413246
-                    ],
-                    [
-                      126.5708254,
-                      37.5412959
-                    ],
-                    [
-                      126.5703713,
-                      37.5412166
-                    ],
-                    [
-                      126.5702742,
-                      37.5411996
-                    ],
-                    [
-                      126.5694568,
-                      37.5410264
-                    ],
-                    [
-                      126.5683416,
-                      37.5407733
-                    ],
-                    [
-                      126.5675946,
-                      37.5405899
-                    ],
-                    [
-                      126.5672385,
-                      37.5404618
-                    ],
-                    [
-                      126.5670153,
-                      37.5403816
-                    ],
-                    [
-                      126.5665074,
-                      37.540173
-                    ],
-                    [
-                      126.5660374,
-                      37.5399223
-                    ],
-                    [
-                      126.5655293,
-                      37.5396389
-                    ],
-                    [
-                      126.5651366,
-                      37.5393654
-                    ],
-                    [
-                      126.5647574,
-                      37.5390902
-                    ],
-                    [
-                      126.5645097,
-                      37.5389016
-                    ],
-                    [
-                      126.5643818,
-                      37.5388051
-                    ],
-                    [
-                      126.5628468,
-                      37.5376428
-                    ],
-                    [
-                      126.5618857,
-                      37.5369339
-                    ],
-                    [
-                      126.5608216,
-                      37.5361278
-                    ],
-                    [
-                      126.5597945,
-                      37.5353571
+                      126.560178,
+                      37.5355567
                     ],
                     [
                       126.5593436,
@@ -6981,7 +6839,7 @@
                       "name": "강변북로",
                       "pointCount": 181,
                       "pointIndex": 177,
-                      "speed": 77
+                      "speed": 75
                     },
                     {
                       "congestion": 1,
@@ -6989,15 +6847,15 @@
                       "name": "자유로",
                       "pointCount": 51,
                       "pointIndex": 357,
-                      "speed": 89
+                      "speed": 90
                     },
                     {
                       "congestion": 1,
-                      "distance": 37016,
+                      "distance": 36979,
                       "name": "인천국제공항고속도로",
-                      "pointCount": 381,
+                      "pointCount": 348,
                       "pointIndex": 407,
-                      "speed": 90
+                      "speed": 97
                     }
                   ],
                   "summary": {
@@ -7011,10 +6869,10 @@
                         37.598338
                       ]
                     ],
-                    "departureTime": "2025-10-07T03:11:28",
-                    "distance": 58166,
-                    "duration": 2871793,
-                    "fuelPrice": 6910,
+                    "departureTime": "2025-10-08T01:41:41",
+                    "distance": 58129,
+                    "duration": 2824994,
+                    "fuelPrice": 6907,
                     "goal": {
                       "dir": 2,
                       "location": [
@@ -7028,8 +6886,8 @@
                         37.5546992
                       ]
                     },
-                    "taxiFare": 64620,
-                    "tollFare": 0
+                    "taxiFare": 68560,
+                    "tollFare": 3200
                   }
                 }
               ]
@@ -7045,7 +6903,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.342256784439087,
+      "execution_time": 1.96734619140625,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -7078,7 +6936,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.7730188369750977,
+      "execution_time": 3.968534231185913,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -7115,7 +6973,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.9139432907104492,
+      "execution_time": 1.5203993320465088,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -7141,31 +6999,31 @@
           "result": [
             {
               "market": "KRW-BTC",
-              "trade_date": "20251006",
-              "trade_time": "181130",
-              "trade_date_kst": "20251007",
-              "trade_time_kst": "031130",
-              "trade_timestamp": 1759806690927,
-              "opening_price": 177483000,
-              "high_price": 178520000,
-              "low_price": 177400000,
-              "trade_price": 177789000,
-              "prev_closing_price": 177483000,
-              "change": "RISE",
-              "change_price": 306000,
-              "change_rate": 0.0017,
-              "signed_change_price": 306000,
-              "signed_change_rate": 0.0017,
-              "trade_volume": 2.813e-05,
-              "acc_trade_price": 19984356655.77447,
-              "acc_trade_price_24h": 138692313514.12662,
-              "acc_trade_volume": 112.29401019,
-              "acc_trade_volume_24h": 781.84494333,
-              "highest_52_week_price": 178559000,
-              "highest_52_week_date": "2025-10-06",
+              "trade_date": "20251007",
+              "trade_time": "164146",
+              "trade_date_kst": "20251008",
+              "trade_time_kst": "014146",
+              "trade_timestamp": 1759887706998,
+              "opening_price": 176263000,
+              "high_price": 176400000,
+              "low_price": 174410000,
+              "trade_price": 175353000,
+              "prev_closing_price": 176263000,
+              "change": "FALL",
+              "change_price": 910000,
+              "change_rate": 0.0052,
+              "signed_change_price": -910000,
+              "signed_change_rate": -0.0052,
+              "trade_volume": 0.00194415,
+              "acc_trade_price": 32982921664.31037,
+              "acc_trade_price_24h": 160904510448.06717,
+              "acc_trade_volume": 188.22506224,
+              "acc_trade_volume_24h": 909.01910766,
+              "highest_52_week_price": 178960000,
+              "highest_52_week_date": "2025-10-08",
               "lowest_52_week_price": 80596000,
               "lowest_52_week_date": "2024-10-12",
-              "timestamp": 1759806690927
+              "timestamp": 1759887706998
             }
           ]
         }
@@ -7178,7 +7036,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.7283189296722412,
+      "execution_time": 0.5999269485473633,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9276,6 +9134,11 @@
               "english_name": "Camp Network"
             },
             {
+              "market": "KRW-XAN",
+              "korean_name": "아노마",
+              "english_name": "Anoma"
+            },
+            {
               "market": "KRW-POPCAT",
               "korean_name": "팝캣",
               "english_name": "Popcat"
@@ -9481,7 +9344,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.068800449371338,
+      "execution_time": 1.0492563247680664,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9508,8 +9371,8 @@
           "success": true,
           "error": null,
           "result": {
-            "lastBuildDate": "Tue, 07 Oct 2025 03:11:33 +0900",
-            "total": 1529797,
+            "lastBuildDate": "Wed, 08 Oct 2025 01:41:49 +0900",
+            "total": 1501525,
             "start": 1,
             "display": 1,
             "items": [
@@ -9530,7 +9393,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.0901398658752441,
+      "execution_time": 1.0198884010314941,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9559,8 +9422,8 @@
           "success": true,
           "error": null,
           "result": {
-            "lastBuildDate": "Tue, 07 Oct 2025 03:11:34 +0900",
-            "total": 2046,
+            "lastBuildDate": "Wed, 08 Oct 2025 01:41:50 +0900",
+            "total": 2054,
             "start": 1,
             "display": 1,
             "items": [
@@ -9584,7 +9447,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.0061402320861816,
+      "execution_time": 1.179034948348999,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9612,17 +9475,17 @@
           "success": true,
           "error": null,
           "result": {
-            "lastBuildDate": "Tue, 07 Oct 2025 03:11:35 +0900",
-            "total": 286517,
+            "lastBuildDate": "Wed, 08 Oct 2025 01:41:51 +0900",
+            "total": 286532,
             "start": 1,
             "display": 1,
             "items": [
               {
-                "title": "'140조 초대박 시장' 놓고…삼성·SK, 치열한 맞대결 예고 [황정수의 반...",
-                "originallink": "https://www.hankyung.com/article/202510056213i",
-                "link": "https://n.news.naver.com/mnews/article/015/0005194094?sid=101",
-                "description": "&quot;한국의 연간 <b>수출</b>액이 수천억달러(multi hundred billion U.S. dollar range) 규모로 증가할 수 있다.&quot; 지난 1일... 메모리·시스템 <b>반도체</b> 사업과 최첨단 패키징을 다 할 수 있는 '종합 <b>반도체</b> 기업'으로서 턴키서비스에... ",
-                "pubDate": "Sun, 05 Oct 2025 20:49:00 +0900"
+                "title": "한국산만 25% 대미 <b>수출</b> 뒷걸음…<b>수출</b> 전선 경고등[관세협상 딜레마②]",
+                "originallink": "https://www.newsis.com/view/NISX20251005_0003355835",
+                "link": "https://n.news.naver.com/mnews/article/003/0013524485?sid=101",
+                "description": "지난달 대미 <b>반도체 수출</b>은 10억8000만 달러로, 전년 대비 20.8% 늘며 견조한 흐름을 보였다. <b>반도체</b>와 함께... 향후 <b>전망</b>은 불투명한 상황이다. 이에 한국산 자동차는 여전히 25%의 관세가 부과되며 일본산·EU산과 비교해... ",
+                "pubDate": "Tue, 07 Oct 2025 06:00:00 +0900"
               }
             ]
           }
@@ -9636,7 +9499,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.533651351928711,
+      "execution_time": 1.201223611831665,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9676,7 +9539,7 @@
             "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
             "title": "알라딘 검색결과 - 히가시노 게이고",
             "link": "http://www.aladin.co.kr/search/wsearchresult.aspx?KeyAuthor=%c8%f7%b0%a1%bd%c3%b3%eb+%b0%d4%c0%cc%b0%ed&amp;SearchTarget=book&amp;partner=openAPI",
-            "pubDate": "Mon, 06 Oct 2025 18:11:37 GMT",
+            "pubDate": "Tue, 07 Oct 2025 16:41:53 GMT",
             "totalResults": 206,
             "startIndex": 1,
             "itemsPerPage": 1,
@@ -9720,7 +9583,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.7568235397338867,
+      "execution_time": 0.5783355236053467,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9760,7 +9623,7 @@
             "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
             "title": "알라딘 베스트셀러 리스트 - 국내도서",
             "link": "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&amp;BranchType=1&amp;Year=2025&amp;Month=10&amp;Week=1&amp;partner=openAPI",
-            "pubDate": "Mon, 06 Oct 2025 18:11:38 GMT",
+            "pubDate": "Tue, 07 Oct 2025 16:41:53 GMT",
             "totalResults": 1000,
             "startIndex": 1,
             "itemsPerPage": 1,
@@ -9786,7 +9649,7 @@
                 "categoryId": 263,
                 "categoryName": "국내도서>경제경영>트렌드/미래전망>트렌드/미래전망 일반",
                 "publisher": "미래의창",
-                "salesPoint": 133770,
+                "salesPoint": 127490,
                 "adult": false,
                 "fixedPrice": true,
                 "customerReviewRank": 8,
@@ -9806,7 +9669,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.202836513519287,
+      "execution_time": 1.3525869846343994,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9845,7 +9708,7 @@
             "meta": {
               "is_end": false,
               "pageable_count": 387,
-              "total_count": 2882184
+              "total_count": 2882601
             }
           }
         }
@@ -9858,7 +9721,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.8512723445892334,
+      "execution_time": 0.6958134174346924,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9881,8 +9744,6 @@
           "tool_name": "VideoSearch_daum",
           "arguments": {
             "query": "손흥민 헤드트릭",
-            "sort": "accuracy",
-            "page": 1,
             "size": 1
           },
           "success": true,
@@ -9917,7 +9778,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.2390649318695068,
+      "execution_time": 0.9104888439178467,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9938,8 +9799,14 @@
           "arguments": {
             "address": "서울 중구 세종대로 110"
           },
-          "success": false,
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+          "success": true,
+          "error": null,
+          "result": {
+            "address": "서울 중구 세종대로 110",
+            "latitude": 37.566370776634,
+            "longitude": 126.977918351844,
+            "address_name": "서울 중구 세종대로 110"
+          }
         }
       ],
       "final_response": null
@@ -9950,7 +9817,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 1.4947552680969238,
+      "execution_time": 1.7693779468536377,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -9980,7 +9847,7 @@
             "sort": "distance"
           },
           "success": false,
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
+          "error": "400 Client Error: Bad Request for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
         }
       ],
       "final_response": null
@@ -9991,7 +9858,7 @@
       "level": 1,
       "category": "Single Tool",
       "success": false,
-      "execution_time": 0.8481135368347168,
+      "execution_time": 0.9821109771728516,
       "steps_taken": 1,
       "error": null,
       "expected_tools": [
@@ -10021,8 +9888,22 @@
             "radius": 500,
             "size": 1
           },
-          "success": false,
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9239&y=37.5563&radius=500&page=1&size=1"
+          "success": true,
+          "error": null,
+          "result": {
+            "category": "CE7",
+            "total_count": 460,
+            "places": [
+              {
+                "name": "벌툰 봉화당 홍대입구역점",
+                "latitude": 37.5564499530999,
+                "longitude": 126.925146143059,
+                "address": "서울 마포구 동교동 169-11",
+                "phone": "02-333-5111",
+                "distance": "111"
+              }
+            ]
+          }
         }
       ],
       "final_response": null
