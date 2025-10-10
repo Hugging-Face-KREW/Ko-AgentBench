@@ -32,6 +32,8 @@ class TaskLoader:
                 if line.strip():
                     task = json.loads(line.strip())
                     tasks.append(task)
+        # Persist into loader state for later access (filtering, get by id)
+        self.tasks = tasks
         return tasks
     
     def get_task_by_id(self, task_id: str) -> Optional[Dict[str, Any]]:
