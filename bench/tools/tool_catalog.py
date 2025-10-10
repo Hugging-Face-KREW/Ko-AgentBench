@@ -518,7 +518,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     "PlaceSearch_kakao": (
         KakaoLocal,
         "_place_search",
-        "키워드 장소 검색",
+        "키워드 장소 검색. 거리순 정렬(sort=distance) 사용 시 반드시 x, y 좌표 필요",
         {
             "type": "object",
             "properties": {
@@ -528,11 +528,11 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 },
                 "x": {
                     "type": "number",
-                    "description": "중심 좌표의 경도"
+                    "description": "중심 좌표의 경도 (거리순 정렬 시 필수)"
                 },
                 "y": {
                     "type": "number",
-                    "description": "중심 좌표의 위도"
+                    "description": "중심 좌표의 위도 (거리순 정렬 시 필수)"
                 },
                 "radius": {
                     "type": "integer",
@@ -541,7 +541,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "sort": {
                     "type": "string",
                     "enum": ["accuracy", "distance"],
-                    "default": "accuracy"
+                    "default": "accuracy",
+                    "description": "정렬 방식 (accuracy: 정확도순, distance: 거리순). distance 선택 시 x, y 좌표 필수"
                 },
                 "page": {
                     "type": "integer",
