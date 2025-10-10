@@ -113,14 +113,188 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     ),
 
     # ===== Naver Search =====
-    "WebSearch_naver": (NaverSearchAPI, "_search_web", "네이버 웹 검색 API 호출", {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}),
-    "BlogSearch_naver": (NaverSearchAPI, "_search_blog", "네이버 블로그 검색 API 호출", {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}),
+    "WebSearch_naver": (
+        NaverSearchAPI, 
+        "_search_web", 
+        "네이버 웹 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "BlogSearch_naver": (
+        NaverSearchAPI, 
+        "_search_blog", 
+        "네이버 블로그 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "NewsSearch_naver": (
+        NaverSearchAPI, 
+        "_search_news", 
+        "네이버 뉴스 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+
+    # ===== Daum Search =====
+    "WebSearch_daum": (
+        DaumSearchAPI,
+        "_search_web",
+        "다음 웹 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "sort": {"type": "string", "enum": ["accuracy", "recency"], "default": "accuracy"},
+                "page": {"type": "integer", "minimum": 1, "default": 1},
+                "size": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10}
+            },
+            "required": ["query"]
+        }
+    ),
+    "VideoSearch_daum": (
+        DaumSearchAPI,
+        "_search_video",
+        "다음 동영상 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "sort": {"type": "string", "enum": ["accuracy", "recency"], "default": "accuracy"},
+                "page": {"type": "integer", "minimum": 1, "default": 1},
+                "size": {"type": "integer", "minimum": 1, "maximum": 30, "default": 10}
+            },
+            "required": ["query"]
+        }
+    ),
 
     # ===== Aladin =====
-    "ItemSearch_aladin": (AladinAPI, "_search_item", "알라딘 상품 검색 API", {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}),
+    "ItemSearch_aladin": (
+        AladinAPI, 
+        "_search_item", 
+        "알라딘 상품 검색 API", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "query_type": {"type": "string", "enum": ["Keyword", "Title", "Author", "Publisher"], "default": "Keyword"},
+                "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "ItemList_aladin": (
+        AladinAPI,
+        "_list_item",
+        "알라딘 베스트셀러/신간 리스트 조회",
+        {
+            "type": "object",
+            "properties": {
+                "query_type": {"type": "string", "enum": ["Bestseller", "ItemNewAll", "ItemNewSpecial"], "default": "Bestseller"},
+                "search_target": {"type": "string", "enum": ["Book", "Foreign", "eBook"], "default": "Book"},
+                "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1}
+            },
+            "required": ["query_type"]
+        }
+    ),
 
     # ===== Kakao Local =====
-    "PlaceSearch_kakao": (KakaoLocal, "_place_search", "키워드 장소 검색", {"type": "object", "properties": {"keyword": {"type": "string"}}, "required": ["keyword"]}),
+    "PlaceSearch_kakao": (
+        KakaoLocal, 
+        "_place_search", 
+        "키워드 장소 검색", 
+        {
+            "type": "object", 
+            "properties": {
+                "keyword": {"type": "string", "description": "검색 키워드"},
+                "x": {"type": "number", "description": "중심 경도"},
+                "y": {"type": "number", "description": "중심 위도"},
+                "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "description": "반경(m)"},
+                "sort": {"type": "string", "enum": ["distance", "accuracy"], "default": "accuracy"}
+            }, 
+            "required": ["keyword"]
+        }
+    ),
+    "AddressToCoord_kakao": (
+        KakaoLocal,
+        "_address_to_coord",
+        "주소를 좌표로 변환",
+        {
+            "type": "object",
+            "properties": {
+                "address": {"type": "string", "description": "변환할 주소"}
+            },
+            "required": ["address"]
+        }
+    ),
+    "CategorySearch_kakao": (
+        KakaoLocal,
+        "_category_search",
+        "카테고리별 장소 검색",
+        {
+            "type": "object",
+            "properties": {
+                "category": {"type": "string", "description": "카테고리 코드 (예: CE7=카페)"},
+                "x": {"type": "number", "description": "중심 경도"},
+                "y": {"type": "number", "description": "중심 위도"},
+                "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "default": 1000},
+                "size": {"type": "integer", "minimum": 1, "maximum": 15, "default": 15}
+            },
+            "required": ["category", "x", "y"]
+        }
+    ),
+
+    # ===== LS Stock (추가) =====
+    "StockPrice_ls": (
+        LSStock,
+        "_stock_price",
+        "LS증권 주식 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "종목 코드"}
+            },
+            "required": ["symbol"]
+        }
+    ),
+
+    # ===== Bithumb (추가) =====
+    "MarketList_bithumb": (
+        BithumbStock,
+        "_marketList_bithumb",
+        "빗썸 거래 가능 마켓 리스트 조회",
+        {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    ),
 
     # ===== Tmap Navigation ===== ✅ 추가
     "WalkRoute_tmap": (
@@ -157,6 +331,47 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
 }
 
 
+# TODO: 데이터셋 수정 후 삭제 예정
+# 임시 별칭 매핑: 데이터셋의 구 도구 이름 → TOOL_CATALOG 키로 변환
+TOOL_ALIAS_MAP: Dict[str, str] = {
+    # Naver Search 별칭
+    "search_web": "WebSearch_naver",
+    "search_blog": "BlogSearch_naver", 
+    "search_news": "NewsSearch_naver",
+    
+    # Daum Search 별칭 (이미 올바른 이름이지만 명시)
+    "WebSearch_daum": "WebSearch_daum",
+    "VideoSearch_daum": "VideoSearch_daum",
+    
+    # Aladin 별칭
+    "ItemList_aladin": "ItemList_aladin",
+    
+    # Kakao 별칭
+    "AddressToCoord_kakao": "AddressToCoord_kakao",
+    "CategorySearch_kakao": "CategorySearch_kakao",
+    
+    # LS Stock 별칭
+    "StockPrice_ls": "StockPrice_ls",
+    
+    # Bithumb 별칭
+    "MarketList_bithumb": "MarketList_bithumb",
+}
+
+
+def normalize_tool_name(tool_name: str) -> str:
+    """정규화된 도구 이름 반환 (별칭 → 실제 이름).
+    
+    TODO: 데이터셋 수정 후 이 함수 삭제 예정
+    
+    Args:
+        tool_name: 원본 도구 이름 (데이터셋에서 온 이름)
+        
+    Returns:
+        TOOL_CATALOG에서 사용하는 실제 이름
+    """
+    return TOOL_ALIAS_MAP.get(tool_name, tool_name)
+
+
 def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
     """Resolve given tool names to concrete BaseTool classes via catalog."""
     api_instances: Dict[Type[Any], Any] = {}
@@ -166,9 +381,15 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
     for name in tool_names:
         if name in seen:
             continue
-        seen.add(name)
+        
+        # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
+        normalized_name = normalize_tool_name(name)
+        
+        if normalized_name in seen:
+            continue
+        seen.add(normalized_name)
 
-        entry = TOOL_CATALOG.get(name)
+        entry = TOOL_CATALOG.get(normalized_name)
         if not entry:
             continue
         api_class, method_name, description, parameters_schema = entry
@@ -178,7 +399,7 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
         api_instance = api_instances[api_class]
 
         tool_class = make_method_tool_class(
-            name=name,
+            name=normalized_name,  # TODO: 데이터셋 수정 후 name으로 변경
             description=description,
             api_instance=api_instance,
             method_name=method_name,
@@ -189,4 +410,4 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
     return resolved
 
 
-__all__ = ["TOOL_CATALOG", "resolve_tool_classes"]
+__all__ = ["TOOL_CATALOG", "TOOL_ALIAS_MAP", "normalize_tool_name", "resolve_tool_classes"]
