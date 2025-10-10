@@ -32,7 +32,6 @@ class TaskLoader:
                 if line.strip():
                     task = json.loads(line.strip())
                     tasks.append(task)
-        # Persist into loader state for later access (filtering, get by id)
         self.tasks = tasks
         return tasks
     
@@ -46,27 +45,26 @@ class TaskLoader:
             Task dictionary or None if not found
         """
         for task in self.tasks:
-            if task.get('id') == task_id:
+            if task.get('task_id') == task_id or task.get('id') == task_id:
                 return task
         return None
     
-    def filter_tasks(self, category: Optional[str] = None, 
-                    difficulty: Optional[str] = None) -> List[Dict[str, Any]]:
+    def filter_tasks(self, task_level: Optional[int] = None, task_category: Optional[str] = None) -> List[Dict[str, Any]]:
         """Filter tasks by category and difficulty.
         
         Args:
-            category: Task category filter
-            difficulty: Task difficulty filter
+            task_level: Task level filter 
+            task_category: Task category filter 
             
         Returns:
             Filtered list of tasks
         """
         filtered = self.tasks
+
+        if task_category:
+            filtered = [t for t in filtered if t.get('task_category') == task_category]
         
-        if category:
-            filtered = [t for t in filtered if t.get('category') == category]
-        
-        if difficulty:
-            filtered = [t for t in filtered if t.get('difficulty') == difficulty]
+        if task_level is not None:
+            filtered = [t for t in filtered if t.get('task_level') == task_level]
             
         return filtered
