@@ -18,7 +18,7 @@ from bench.adapters.litellm_adapter import LiteLLMAdapter
 from bench.runner import BenchmarkRunner, Judge
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
-from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
+from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
 
 
 def load_benchmark_datasets(data_dir: str = "data") -> Dict[str, List[Dict]]:
@@ -230,7 +230,7 @@ def run_benchmark_on_dataset(
     level_name: str,
     tasks: List[Dict],
     model_name: str = "gpt-4.1",
-    max_steps: int = 1,  # Only 1 step to get tool calls, no final response
+    max_steps: int = 10,  
     timeout: int = 60,
     save_logs: bool = True,
     log_dir: str = "logs/benchmark_results",
@@ -273,9 +273,14 @@ def run_benchmark_on_dataset(
     
     print(f"Required tools: {all_required_tools}")
     
+    # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
+    # 별칭을 실제 도구 이름으로 변환
+    normalized_tools = [normalize_tool_name(t) for t in all_required_tools]
+    print(f"Normalized tools: {normalized_tools}")
+    
     # Resolve and register tools
     tool_classes = resolve_tool_classes(all_required_tools)
-    missing_tools = [t for t in all_required_tools if t not in TOOL_CATALOG]
+    missing_tools = [t for t in normalized_tools if t not in TOOL_CATALOG]
     if missing_tools:
         print(f"⚠ Warning: Missing tools in catalog: {missing_tools}")
     
@@ -405,8 +410,8 @@ def main():
     all_level_results = {}
     
     # You can customize which levels to run
-    levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6", "L7"]  # Run all levels
-    # levels_to_run = ["L1"]  # Run all levels
+    levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6"]  
+    # levels_to_run = ["L1"]  # Test only L1 first
     
     for level_name in levels_to_run:
         if level_name in datasets:
@@ -414,7 +419,7 @@ def main():
                 level_name=level_name,
                 tasks=datasets[level_name],
                 model_name=selected_model,
-                max_steps=1,  # Only get first tool call, skip final response
+                max_steps=10,  # Only get first tool call, skip final response
                 timeout=60,
                 save_logs=True,
                 log_dir="logs/benchmark_results"
