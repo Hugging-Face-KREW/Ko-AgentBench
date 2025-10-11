@@ -76,22 +76,39 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
             print(f"⚠ Warning: Skipping non-dict task: {type(task)}")
             continue
             
-        # Extract required tools from golden_action
+        # Extract required tools from golden_action OR conversation_tracking
         tools_needed = []
-        if "golden_action" in task:
+        
+        # L7 format: conversation_tracking with turns
+        if "conversation_tracking" in task:
+            print(f"🔍 DEBUG: Processing L7 format task: {task.get('task_id')}")
+            conversation = task["conversation_tracking"]
+            for turn in conversation.get("turns", []):
+                # Extract tools from assistant actions
+                for action in turn.get("actions", []):
+                    tool_name = action.get("tool", "")
+                    if tool_name and tool_name not in tools_needed:
+                        tools_needed.append(tool_name)
+                        print(f"  ✅ Found tool in turn: {tool_name}")
+        
+        # L1-L6 format: golden_action
+        elif "golden_action" in task:
             for action in task["golden_action"]:
                 tool_name = action.get("tool", "")
                 if tool_name and tool_name not in tools_needed:
                     tools_needed.append(tool_name)
         
+        print(f"  📝 Task {task.get('task_id')}: tools_needed = {tools_needed}")
+        
         converted_task = {
             "id": task.get("task_id", "unknown"),
             "description": task.get("instruction", ""),
             "expected_output": task.get("resp_schema", {}),
-            "tools": tools_needed,
+            "available_tools": tools_needed,  # Use 'available_tools' key for runner compatibility
             "level": task.get("task_level", 0),
             "category": task.get("task_category", "unknown"),
             "golden_action": task.get("golden_action", []),
+            "conversation_tracking": task.get("conversation_tracking"),
             "arg_schema": task.get("arg_schema", {})
         }
         converted_tasks.append(converted_task)
@@ -267,7 +284,7 @@ def run_benchmark_on_dataset(
     # Collect all required tools
     all_required_tools = []
     for task in converted_tasks:
-        for tool in task.get("tools", []):
+        for tool in task.get("available_tools", []):
             if tool not in all_required_tools:
                 all_required_tools.append(tool)
     
@@ -318,7 +335,7 @@ def run_benchmark_on_dataset(
         print(f"Task {i}/{len(converted_tasks)}: {task['id']}")
         print(f"Level: {task['level']} | Category: {task['category']}")
         print(f"Instruction: {task['description']}")
-        print(f"Expected tools: {task['tools']}")
+        print(f"Expected tools: {task['available_tools']}")
         print(f"{'─'*80}")
         
         try:
@@ -329,7 +346,7 @@ def run_benchmark_on_dataset(
             result['instruction'] = task['description']
             result['level'] = task['level']
             result['category'] = task['category']
-            result['expected_tools'] = task['tools']
+            result['expected_tools'] = task['available_tools']
             result['golden_action'] = task['golden_action']
             
             all_results.append(result)
@@ -430,8 +447,9 @@ def main():
     all_level_results = {}
     
     # You can customize which levels to run
-    levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6"]  
+    # levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6"]  
     # levels_to_run = ["L1"]  # Test only L1 first
+    levels_to_run = ["L7"]  # Run all available levels in order
     
     for level_name in levels_to_run:
         if level_name in datasets:
