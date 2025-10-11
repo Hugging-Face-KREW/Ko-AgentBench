@@ -1,6 +1,12 @@
 import requests
-from .base_api import BaseAPI
-from .secrets import ALADIN_API_KEY
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import ALADIN_API_KEY
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import ALADIN_API_KEY
 
 class AladinAPI(BaseAPI):
     def __init__(self):

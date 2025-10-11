@@ -1,7 +1,12 @@
 import requests
 import os
 from typing import Dict, List, Any, Optional
-from .base_api import BaseAPI
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+except ImportError:
+    from base_api import BaseAPI
 
 class UpbitCrypto(BaseAPI):
     def __init__(self):

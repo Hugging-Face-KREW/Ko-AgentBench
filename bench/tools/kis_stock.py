@@ -1,7 +1,13 @@
 import requests
 from typing import Dict, List, Any
-from .base_api import BaseAPI
-from .secrets import KIS_APP_KEY, KIS_APP_SECRET
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import KIS_APP_KEY, KIS_APP_SECRET
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import KIS_APP_KEY, KIS_APP_SECRET
 
 class KISStock(BaseAPI):
     def __init__(self):

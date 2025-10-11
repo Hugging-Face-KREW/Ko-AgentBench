@@ -1,8 +1,14 @@
 import requests
 import os
 from typing import Dict, List, Any
-from .base_api import BaseAPI
-from .secrets import TMAP_APP_KEY
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import TMAP_APP_KEY
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import TMAP_APP_KEY
 
 class TmapNavigation(BaseAPI):
     def __init__(self):

@@ -1,7 +1,13 @@
 import requests
 from typing import Dict, List, Optional
-from .base_api import BaseAPI
-from .secrets import Directions_Client_ID, Directions_Client_Secret
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import Directions_Client_ID, Directions_Client_Secret
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import Directions_Client_ID, Directions_Client_Secret
 
 class NaverMapsAPI(BaseAPI):
     def __init__(self):

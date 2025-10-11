@@ -1,7 +1,13 @@
 import requests
 from typing import Dict, List, Any
-from .base_api import BaseAPI
-from .secrets import KAKAO_REST_API_KEY
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import KAKAO_REST_API_KEY
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import KAKAO_REST_API_KEY
 
 class KakaoLocal(BaseAPI):
     def __init__(self):

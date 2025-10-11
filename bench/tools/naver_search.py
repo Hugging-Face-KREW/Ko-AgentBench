@@ -1,6 +1,14 @@
 import requests
-from .base_api import BaseAPI
-from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    # 패키지 내부에서 임포트할 때 (외부에서 사용)
+    from .base_api import BaseAPI
+    from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+except ImportError:
+    # 직접 실행할 때 (스크립트로 실행)
+    from base_api import BaseAPI
+    from secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -289,7 +297,7 @@ class NaverSearchAPI(BaseAPI):
                     "X-Naver-Client-Secret": self.client_secret
                 }
                 params = {
-                    "query": "테스트",  # 간단한 테스트 쿼리
+                    "query": "김치볶음밥 만드는 법",  # 간단한 테스트 쿼리
                     "display": 1  # 최소한의 결과만 요청
                 }
                 

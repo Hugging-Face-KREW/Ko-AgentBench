@@ -8,7 +8,11 @@ from urllib.parse import urlencode
 import jwt
 import requests
 
-from .base_api import BaseAPI
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+except ImportError:
+    from base_api import BaseAPI
 
 
 class BithumbStock(BaseAPI):

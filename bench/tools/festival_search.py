@@ -1,7 +1,13 @@
 import requests
 from typing import Dict, List, Optional
-from .base_api import BaseAPI
-from .secrets import KTO_SERVICE_KEY
+
+# 상대 임포트와 절대 임포트 모두 지원
+try:
+    from .base_api import BaseAPI
+    from .secrets import KTO_SERVICE_KEY
+except ImportError:
+    from base_api import BaseAPI
+    from secrets import KTO_SERVICE_KEY
 
 class FestivalSearchAPI(BaseAPI):
     def __init__(self):
