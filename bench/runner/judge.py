@@ -4,9 +4,97 @@ import json
 import re
 import logging
 from typing import Any, Dict, List, Optional, Callable
+from dataclasses import dataclass
 from ..adapters.base_adapter import BaseAdapter
 from ..observability import observe, get_client, is_enabled
 
+@dataclass
+class EvaluationResult:
+    """메트릭 평가 결과"""
+    metric_name: str
+    score: float
+    details: Dict[str, Any]
+
+@dataclass
+class EvalContext:
+    """평가 컨텍스트"""
+    task_schema: Dict[str, Any]
+    logs: Dict[str, Any]
+
+class Metric:
+    """메트릭 기본 클래스"""
+    name = "base_metric"
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        raise NotImplementedError
+
+class SRMetric(Metric):
+    """SR(성공률): success_condition 충족 여부"""
+    name = "SR"
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        # task에서 성공 여부 직접 확인
+        success = ctx.logs.get("success", False)
+        score = 1.0 if success else 0.0
+        
+        return EvaluationResult(
+            self.name, 
+            score, 
+            {"success": success}
+        )
+
+class EPRCVRMetric(Metric):
+    """EPR/CVR(유효 호출 비율): accept + schema_valid 비율"""
+    name = "EPR_CVR"
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        call_logs = ctx.logs.get("tool_invocations", [])
+        if not call_logs:
+            return EvaluationResult(self.name, 0.0, {
+                "total_calls": 0, 
+                "valid_calls": 0
+            })
+        
+        # success=True이고 error=None인 호출을 유효한 것으로 간주
+        valid_calls = sum(1 for log in call_logs 
+                         if log.get("success") and not log.get("error"))
+        total_calls = len(call_logs)
+        score = valid_calls / total_calls if total_calls > 0 else 0.0
+        
+        return EvaluationResult(self.name, score, {
+            "total_calls": total_calls,
+            "valid_calls": valid_calls
+        })
+
+class PassAtKMetric(Metric):
+    """pass@k(반복 안정성): k번 반복 시 성공 비율"""
+    name = "pass@k"
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        repetitions = ctx.task_schema.get("repetitions", 1)
+        repetition_results = ctx.logs.get("repetition_results", [])
+        
+        # 반복 실행이 없으면 현재 성공 여부만 사용
+        if not repetition_results:
+            current_success = ctx.logs.get("success", False)
+            repetition_results = [current_success]
+        
+        success_count = sum(1 for result in repetition_results if result)
+        actual_reps = len(repetition_results)
+        score = success_count / actual_reps if actual_reps > 0 else 0.0
+        
+        return EvaluationResult(self.name, score, {
+            "repetitions": repetitions,
+            "actual_repetitions": actual_reps,
+            "success_count": success_count
+        })
+
+# 메트릭 레지스트리
+METRICS = {
+    "SR": SRMetric(),
+    "EPR_CVR": EPRCVRMetric(),
+    "pass@k": PassAtKMetric()
+}
 
 class Judge:
     """Judge for evaluating task results with multiple evaluation methods."""
@@ -25,7 +113,8 @@ class Judge:
             'numeric_tolerance': self._numeric_tolerance,
             'regex_match': self._regex_match,
             'llm_judge': self._llm_judge,
-            'schema_validation': self._schema_validation
+            'schema_validation': self._schema_validation,
+            'golden_action_match': self._golden_action_match,
         }
     
     @observe(name="evaluate")
@@ -39,8 +128,13 @@ class Judge:
         Returns:
             Evaluation result
         """
-        oracle_type = task.get('oracle', 'exact_match')
-        expected_output = task.get('expected_output')
+        if 'golden_action' in task:
+            oracle_type = 'golden_action_match'
+            expected_output = task.get('golden_action')
+        else:
+            oracle_type = task.get('oracle', 'exact_match')
+            expected_output = task.get('expected_output')
+        
         actual_output = self._extract_output(result)
         
         if is_enabled():
@@ -65,6 +159,23 @@ class Judge:
         try:
             evaluation_result = oracle_function(expected_output, actual_output, task)
             
+            eval_ctx = EvalContext(
+                task_schema=task,
+                logs={
+                    "success": evaluation_result.get('success', False),
+                    "tool_invocations": result.get("tool_invocations", []),
+                    "repetition_results": result.get("repetition_results", [])
+                }
+            )
+            
+            metrics = {}
+            for metric_name, metric in METRICS.items():
+                metric_result = metric.evaluate(eval_ctx)
+                metrics[metric_name] = {
+                    "score": metric_result.score,
+                    "details": metric_result.details
+                }
+
             final_result = {
                 "success": evaluation_result.get('success', False),
                 "score": evaluation_result.get('score', 0.0),
@@ -72,6 +183,7 @@ class Judge:
                 "expected_output": expected_output,
                 "actual_output": actual_output,
                 "details": evaluation_result.get('details', {}),
+                "metrics": metrics,  # 메트릭 추가
                 "error": None
             }
             
@@ -139,6 +251,29 @@ class Judge:
                             return tool_call['result']
         
         return final_response
+    
+    def _golden_action_match(self, expected: List[Dict], actual: Any, task: Dict) -> Dict[str, Any]:
+        """Evaluate based on golden_action(수정 필요)"""
+
+        if not isinstance(expected, list):
+            expected = [expected]
+
+        expected_tools = [e.get("tool") for e in expected if isinstance(e, dict)]
+        actual_str = str(actual) + " " + str(task)
+
+        matched = [tool for tool in expected_tools if tool and tool in actual_str]
+        success = len(matched) == len(expected_tools)
+
+        return {
+            "success": success,
+            "score": 1.0 if success else 0.0,
+            "details": {
+                "match_type": "golden_action",
+                "expected_tools": expected_tools,
+                "matched_tools": matched,
+                "note": "Success if expected tool keyword found in actual/task strings"
+            }
+        }
     
     def _exact_match(self, expected: Any, actual: Any, task: Dict) -> Dict[str, Any]:
         """Exact match evaluation."""
@@ -283,8 +418,10 @@ class Judge:
     
     def _default_judge_prompt(self, task: Dict, expected: Any, actual: Any) -> str:
         """Generate default judge prompt for LLM evaluation."""
+        description = task.get('instruction') or task.get('description', 'No description provided')
+        
         return f"""
-Task: {task.get('description', 'No description provided')}
+Task: {description}
 
 Expected Output: {expected}
 

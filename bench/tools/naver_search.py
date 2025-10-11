@@ -1,4 +1,5 @@
 import requests
+<<<<<<< HEAD
 
 # 상대 임포트와 절대 임포트 모두 지원
 try:
@@ -9,6 +10,10 @@ except ImportError:
     # 직접 실행할 때 (스크립트로 실행)
     from base_api import BaseAPI
     from secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+=======
+from .base_api import BaseAPI
+from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
