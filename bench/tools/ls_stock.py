@@ -2,7 +2,6 @@ from typing import Any, Dict, List
 
 import requests
 
-<<<<<<< HEAD
 # 상대 임포트와 절대 임포트 모두 지원
 try:
     from .base_api import BaseAPI
@@ -10,10 +9,6 @@ try:
 except ImportError:
     from base_api import BaseAPI
     from secrets import LS_APP_KEY, LS_APP_SECRET
-=======
-from .base_api import BaseAPI
-from .secrets import LS_APP_KEY, LS_APP_SECRET
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
 
 
 class LSStock(BaseAPI):

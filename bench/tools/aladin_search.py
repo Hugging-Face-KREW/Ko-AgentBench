@@ -1,5 +1,4 @@
 import requests
-<<<<<<< HEAD
 
 # 상대 임포트와 절대 임포트 모두 지원
 try:
@@ -8,10 +7,6 @@ try:
 except ImportError:
     from base_api import BaseAPI
     from secrets import ALADIN_API_KEY
-=======
-from .base_api import BaseAPI
-from .secrets import ALADIN_API_KEY
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
 
 class AladinAPI(BaseAPI):
     def __init__(self):

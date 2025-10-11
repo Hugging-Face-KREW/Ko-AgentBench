@@ -590,24 +590,34 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
     resolved: List[Type[BaseTool]] = []
     seen: set[str] = set()
 
+    print(f"🔍 DEBUG resolve_tool_classes: Input tool_names = {tool_names}")
+
     for name in tool_names:
         if name in seen:
+            print(f"  ⏭️  Skipping duplicate: {name}")
             continue
         
         # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
         normalized_name = normalize_tool_name(name)
+        print(f"  🔄 Normalizing '{name}' → '{normalized_name}'")
         
         if normalized_name in seen:
+            print(f"  ⏭️  Skipping already normalized: {normalized_name}")
             continue
         seen.add(normalized_name)
 
         entry = TOOL_CATALOG.get(normalized_name)
         if not entry:
+            print(f"  ❌ Tool '{normalized_name}' NOT FOUND in TOOL_CATALOG")
+            print(f"     Available tools: {list(TOOL_CATALOG.keys())[:5]}...")
             continue
+        
+        print(f"  ✅ Found '{normalized_name}' in catalog")
         api_class, method_name, description, parameters_schema = entry
 
         if api_class not in api_instances:
             api_instances[api_class] = api_class()
+            print(f"     Created instance of {api_class.__name__}")
         api_instance = api_instances[api_class]
 
         tool_class = make_method_tool_class(
@@ -618,7 +628,9 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
             parameters_schema=parameters_schema,
         )
         resolved.append(tool_class)
+        print(f"     ✅ Tool class created for '{normalized_name}'")
 
+    print(f"🔍 DEBUG resolve_tool_classes: Resolved {len(resolved)} tools")
     return resolved
 
 

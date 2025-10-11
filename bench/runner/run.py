@@ -78,12 +78,7 @@ class BenchmarkRunner:
             
             # Initialize conversation with task description
             messages = [
-<<<<<<< HEAD
-                {"role": "user", "content": task.get('description', '')}
-=======
-                {"role": "system", "content": "You are a helpful assistant that can use tools to complete tasks."},
                 {"role": "user", "content": task_description}
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
             ]
             
             # Get available tools for this task
@@ -222,27 +217,16 @@ class BenchmarkRunner:
             # Handle tool calls
             message = response.get('message', {})
             
-<<<<<<< HEAD
-            # Add assistant message to conversation FIRST (before tool results)
-            messages.append(message)
-            
-            if 'tool_calls' in message:
-=======
             # Add assistant message to conversation first
             messages.append(message)
             
             # Then handle tool calls if present
             if 'tool_calls' in message and message['tool_calls']:
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
                 for tool_call in message['tool_calls']:
                     tool_result = self._execute_tool_call(tool_call)
                     step_data['tool_calls'].append(tool_result)
                     
-<<<<<<< HEAD
-                    # Add tool result to messages AFTER assistant message
-=======
                     # Add tool result to messages for next turn
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call['id'],
