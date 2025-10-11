@@ -310,6 +310,12 @@ class NaverSearchAPI(BaseAPI):
                     return False
                 
                 print(f"✅ {name} - 성공 (상태 코드: {response.status_code})")
+                print(f"\n📋 {name} API 응답 결과:")
+                print("-" * 50)
+                import json
+                print(json.dumps(response.json(), ensure_ascii=False, indent=2))
+                print("-" * 50)
+                print()
                     
             except requests.exceptions.RequestException as e:
                 print(f"❌ {name} - 네트워크 오류: {e}")

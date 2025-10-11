@@ -40,6 +40,21 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "required": ["eventStartDate"],
         },
     ),
+    "FestivalSearch_kto": (
+        FestivalSearchAPI,
+        "FestivalSearch_kto",
+        "한국관광공사 행사/축제 정보 검색",
+        {
+            "type": "object",
+            "properties": {
+                "eventStartDate": {"type": "string", "pattern": "^[0-9]{8}$", "description": "행사 시작일 (YYYYMMDD)"},
+                "eventEndDate": {"type": "string", "pattern": "^[0-9]{8}$", "description": "행사 종료일 (YYYYMMDD)"},
+                "location": {"type": "string", "description": "주소나 지역명 (예: '서울 강남')"},
+                "num_of_rows": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "검색 결과 개수"},
+            },
+            "required": ["eventStartDate"],
+        },
+    ),
 
     # ===== Naver Directions =====
     "_directions": (
@@ -357,6 +372,22 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "start": {"type": "integer", "minimum": 1, "default": 1}
             },
             "required": ["query_type"]
+        }
+    ),
+    "ItemLookup_aladin": (
+        AladinAPI,
+        "_get_item_details",
+        "알라딘 상품 상세 정보 조회",
+        {
+            "type": "object",
+            "properties": {
+                "item_id": {"type": "string", "description": "상품의 고유 ID (ISBN, ISBN13, 또는 알라딘 ItemId)"},
+                "item_id_type": {"type": "string", "enum": ["ISBN", "ISBN13", "ItemId"], "default": "ISBN13", "description": "ItemId의 종류"},
+                "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
+                "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
+                "opt_result": {"type": "string", "default": "", "description": "부가 정보 요청 (Toc, authors, reviewList, etc)"}
+            },
+            "required": ["item_id"]
         }
     ),
 
