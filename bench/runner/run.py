@@ -83,6 +83,16 @@ class BenchmarkRunner:
                 tool = self.tool_registry.get_tool(tool_name)
                 if tool:
                     available_tools.append(tool.get_schema())
+                else:
+                    self.logger.warning(f"Tool '{tool_name}' not found in registry")
+            
+            # DEBUG: Log tools being passed to LLM
+            self.logger.info(f"Task tools requested: {task_tools}")
+            self.logger.info(f"Available tools count: {len(available_tools)}")
+            if available_tools:
+                self.logger.info(f"First tool schema keys: {list(available_tools[0].keys())}")
+            else:
+                self.logger.warning("⚠️ NO TOOLS AVAILABLE FOR THIS TASK!")
             
             # Execute LLM-tool loop
             result = self._execute_loop(messages, available_tools, task)
@@ -178,6 +188,12 @@ class BenchmarkRunner:
         steps = []
         start_time = time.time()
         
+        # DEBUG: Log tools being used in loop
+        self.logger.info(f"_execute_loop: Received {len(tools)} tools")
+        if tools:
+            tool_names = [t.get('function', {}).get('name', 'unknown') for t in tools]
+            self.logger.info(f"Tool names in loop: {tool_names}")
+        
         for step in range(self.max_steps):
             # Check timeout
             if time.time() - start_time > self.timeout:
@@ -235,6 +251,9 @@ class BenchmarkRunner:
         Returns:
             LLM response
         """
+        # DEBUG: Log before calling LLM
+        self.logger.debug(f"Calling LLM with {len(tools)} tools")
+        
         last_error = None
         
         for attempt in range(self.max_retries):
