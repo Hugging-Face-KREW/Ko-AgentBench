@@ -201,20 +201,23 @@ class BenchmarkRunner:
             
             # Handle tool calls
             message = response.get('message', {})
-            if 'tool_calls' in message:
+            
+            # Add assistant message to conversation first
+            messages.append(message)
+            
+            # Then handle tool calls if present
+            if 'tool_calls' in message and message['tool_calls']:
                 for tool_call in message['tool_calls']:
                     tool_result = self._execute_tool_call(tool_call)
                     step_data['tool_calls'].append(tool_result)
                     
-                    # Add tool result to messages
+                    # Add tool result to messages for next turn
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call['id'],
                         "content": json.dumps(tool_result['result'])
                     })
             
-            # Add assistant message to conversation
-            messages.append(message)
             steps.append(step_data)
             
             # Check if task is complete (no more tool calls)
