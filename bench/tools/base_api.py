@@ -1,6 +1,6 @@
 """Base interfaces for Ko-AgentBench tools and APIs."""
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 
 

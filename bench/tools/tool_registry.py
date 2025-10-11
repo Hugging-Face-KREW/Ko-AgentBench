@@ -1,7 +1,7 @@
 """Tool registry for Ko-AgentBench."""
 
 from typing import Dict, List, Optional, Type
-from .base_tool import BaseTool
+from .base_api import BaseTool
 
 
 class ToolRegistry:

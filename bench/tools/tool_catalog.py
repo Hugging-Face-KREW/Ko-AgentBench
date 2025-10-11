@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple, Type
 
-from .base_tool import BaseTool
+from .base_api import BaseTool
 from .method_tool_wrapper import make_method_tool_class
 from .naver_search_mock import NaverSearchMockAPI
 

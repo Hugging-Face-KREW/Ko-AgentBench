@@ -6,7 +6,7 @@ interacts with them via the existing ToolRegistry and BaseTool interfaces.
 
 from typing import Any, Dict
 
-from .base_tool import BaseTool
+from .base_api import BaseTool
 
 
 class MethodToolWrapper(BaseTool):

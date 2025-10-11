@@ -6,6 +6,6 @@ Contains actual execution modules for tools, including:
 """
 
 from .tool_registry import ToolRegistry
-from .base_tool import BaseTool
+from .base_api import BaseTool
 
 __all__ = ['ToolRegistry', 'BaseTool']
