@@ -189,7 +189,7 @@
         "task_category": "Efficiency",
         "golden_action": [
           {
-            "tool": "search_news",
+            "tool": "NewsSearch_naver",
             "args": {
               "query": "반도체 기술",
               "display": 3,
@@ -205,7 +205,7 @@
             }
           },
           {
-            "tool": "search_news",
+            "tool": "NewsSearch_naver",
             "args": {
               "query": "삼성전자",
               "display": 1,
@@ -229,7 +229,7 @@
               "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
               "actions": [
                 {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "반도체 기술",
                     "display": 3,
@@ -289,7 +289,7 @@
               "context_used": [
                 {
                   "source_turn": 2,
-                  "info": "search_news(query='반도체 기술', display=3, sort='date')",
+                  "info": "NewsSearch_naver(query='반도체 기술', display=3, sort='date')",
                   "usage_type": "direct_reference"
                 }
               ]
@@ -305,7 +305,7 @@
               "content": "삼성전자 관련 최신 뉴스 1건을 찾았어. 첫 번째 기사는 '삼성전자, 차세대 메모리 반도체 공개'야. 더 궁금한 점이 있으면 알려줘.",
               "actions": [
                 {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "삼성전자",
                     "display": 1,
