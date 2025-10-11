@@ -286,6 +286,26 @@ def run_benchmark_on_dataset(
     
     # Setup components
     registry = create_tool_registry(tool_classes)
+    
+    # DEBUG: Check registered tools and their schemas
+    print(f"\n🔍 DEBUG: Registered tools in registry:")
+    registered_tool_names = registry.get_available_tools()
+    print(f"  Tool names: {registered_tool_names}")
+    
+    if registered_tool_names:
+        print(f"\n  Tool schemas:")
+        for tool_name in registered_tool_names[:3]:  # Show first 3
+            tool = registry.get_tool(tool_name)
+            if tool:
+                schema = tool.get_schema()
+                print(f"    - {tool_name}:")
+                print(f"      Schema keys: {list(schema.keys())}")
+                if 'function' in schema:
+                    print(f"      Function name: {schema['function'].get('name')}")
+                    print(f"      Description: {schema['function'].get('description')[:50]}...")
+    else:
+        print("  ⚠️ WARNING: No tools registered!")
+    
     adapter = LiteLLMAdapter(model_name, **adapter_config)
     judge = Judge(llm_adapter=adapter)
     runner = BenchmarkRunner(adapter, registry, judge, max_steps=max_steps, timeout=timeout)

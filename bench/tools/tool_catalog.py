@@ -13,6 +13,7 @@ from .festival_search import FestivalSearchAPI
 from .naver_directions import NaverMapsAPI
 from .ls_stock import LSStock
 from .bithumb_stock import BithumbStock
+from .upbit_crypto import UpbitCrypto
 from .naver_search import NaverSearchAPI
 from .daum_search import DaumSearchAPI
 from .aladin_search import AladinAPI
@@ -74,8 +75,45 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         "시장 지수 조회, LS증권 Open API를 활용합니다.",
         {"type": "object", "properties": {"jisu": {"type": "string", "enum": ["KOSPI", "KOSDAQ"], "default": "KOSPI"}}, "required": ["jisu"]},
     ),
+    "SectorStock_ls": (
+        LSStock,
+        "_sector_stock",
+        "업종별/테마별 종목 시세 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "tmcode": {"type": "string", "description": "테마 코드"}
+            },
+            "required": ["tmcode"]
+        }
+    ),
+    "OrderBook_ls": (
+        LSStock,
+        "_order_book",
+        "주식 호가 정보 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "shcode": {"type": "string", "description": "종목 코드 (6자리)"}
+            },
+            "required": ["shcode"]
+        }
+    ),
+    "StockTrades_ls": (
+        LSStock,
+        "_stock_trades",
+        "주식 시간대별 체결 내역 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "shcode": {"type": "string", "description": "종목 코드"},
+                "exchgubun": {"type": "string", "enum": ["N", "K"], "default": "N", "description": "거래소 구분 (N: KOSPI, K: KOSDAQ)"}
+            },
+            "required": ["shcode"]
+        }
+    ),
 
-    # ===== KIS Stock ===== ✅ 추가
+    # ===== KIS Stock =====
     "StockPrice_kis": (
         KISStock,
         "_stock_price",
@@ -88,6 +126,19 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             },
             "required": ["symbol"],
         },
+    ),
+    "USStockPrice_kis": (
+        KISStock,
+        "_us_stock_price",
+        "한국투자증권 미국 주식 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "종목 심볼 (예: AAPL, TSLA)"},
+                "exchange": {"type": "string", "enum": ["NASDAQ", "NYSE"], "default": "NASDAQ", "description": "거래소"}
+            },
+            "required": ["symbol"]
+        }
     ),
     "StockChart_kis": (
         KISStock,
@@ -108,8 +159,93 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     "CryptoPrice_bithumb": (
         BithumbStock,
         "_cryptoPrice_bithumb",
-        "현재가 정보, 빗썸 Open API를 활용합니다.",
+        "빗썸 암호화폐 현재가 정보 조회",
         {"type": "object", "properties": {"markets": {"type": "string", "default": "KRW-BTC"}}, "required": ["markets"]},
+    ),
+    "OrderBook_bithumb": (
+        BithumbStock,
+        "_orderBook_bithumb",
+        "빗썸 거래소 호가 정보 조회",
+        {
+            "type": "object",
+            "properties": {
+                "markets": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드 (예: KRW-BTC, BTC-ETH)"}
+            },
+            "required": ["markets"]
+        }
+    ),
+    "CryptoCandle_bithumb": (
+        BithumbStock,
+        "_cryptoCandle_bithumb",
+        "빗썸 암호화폐 캔들 데이터 조회",
+        {
+            "type": "object",
+            "properties": {
+                "time": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "description": "캔들 단위"},
+                "market": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드"},
+                "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 1, "description": "캔들 개수"},
+                "to": {"type": "string", "description": "마지막 캔들 시각 (yyyy-MM-dd'T'HH:mm:ss'Z')"},
+                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "default": 1, "description": "분 단위 (time이 minutes일 때만 사용)"}
+            },
+            "required": ["time"]
+        }
+    ),
+    "MarketList_bithumb": (
+        BithumbStock,
+        "_marketList_bithumb",
+        "빗썸 거래 가능 마켓 리스트 조회",
+        {
+            "type": "object",
+            "properties": {
+                "isDetails": {"type": "boolean", "default": False, "description": "상세 정보 노출 여부"}
+            },
+            "required": []
+        }
+    ),
+
+    # ===== Upbit Crypto =====
+    "CryptoPrice_upbit": (
+        UpbitCrypto,
+        "_crypto_price",
+        "업비트 암호화폐 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"}
+            },
+            "required": ["symbol"]
+        }
+    ),
+    "MarketList_upbit": (
+        UpbitCrypto,
+        "_market_list",
+        "업비트 마켓 목록 조회",
+        {
+            "type": "object",
+            "properties": {
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT", "ALL"], "default": "KRW", "description": "기준 통화"},
+                "include_event": {"type": "boolean", "default": True, "description": "이벤트 마켓 포함 여부"}
+            },
+            "required": []
+        }
+    ),
+    "CryptoCandle_upbit": (
+        UpbitCrypto,
+        "_crypto_candle",
+        "업비트 암호화폐 캔들 데이터 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"},
+                "candle_type": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "default": "days", "description": "캔들 타입"},
+                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
+                "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 30, "description": "조회할 캔들 개수"},
+                "to": {"type": "string", "description": "마지막 캔들 시각 (YYYY-MM-DD HH:mm:ss)"}
+            },
+            "required": ["symbol"]
+        }
     ),
 
     # ===== Naver Search =====
@@ -210,7 +346,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     ),
     "ItemList_aladin": (
         AladinAPI,
-        "_list_item",
+        "_get_item_list",
         "알라딘 베스트셀러/신간 리스트 조회",
         {
             "type": "object",
@@ -296,7 +432,52 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         }
     ),
 
-    # ===== Tmap Navigation ===== ✅ 추가
+    # ===== Tmap Navigation =====
+    "POISearch_tmap": (
+        TmapNavigation,
+        "POISearch_tmap",
+        "POI 통합 검색 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "searchKeyword": {"type": "string", "description": "검색 키워드"},
+                "count": {"type": "integer", "default": 10, "description": "검색 결과 개수"},
+                "centerLon": {"type": "number", "description": "중심 경도"},
+                "centerLat": {"type": "number", "description": "중심 위도"},
+                "radius": {"type": "integer", "description": "반경(m)"},
+                "page": {"type": "integer", "default": 1, "description": "페이지 번호"}
+            },
+            "required": ["searchKeyword"]
+        }
+    ),
+    "CarRoute_tmap": (
+        TmapNavigation,
+        "CarRoute_tmap",
+        "자동차 경로 안내 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "startX": {"type": "number", "description": "출발지 경도"},
+                "startY": {"type": "number", "description": "출발지 위도"},
+                "endX": {"type": "number", "description": "도착지 경도"},
+                "endY": {"type": "number", "description": "도착지 위도"},
+                "searchOption": {"type": "integer", "default": 0, "description": "경로 옵션 (0: 추천, 2: 최단거리 등)"}
+            },
+            "required": ["startX", "startY", "endX", "endY"]
+        }
+    ),
+    "Geocoding_tmap": (
+        TmapNavigation,
+        "Geocoding_tmap",
+        "주소 좌표 변환 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "fullAddr": {"type": "string", "description": "변환할 전체 주소"}
+            },
+            "required": ["fullAddr"]
+        }
+    ),
     "WalkRoute_tmap": (
         TmapNavigation,
         "WalkRoute_tmap",
