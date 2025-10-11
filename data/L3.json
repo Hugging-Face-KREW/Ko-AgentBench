@@ -7,7 +7,11 @@
     "golden_action": [
       {
         "step": 1,
+<<<<<<< HEAD
         "tool": "WebSearch_naver",    
+=======
+        "tool": "web_search_naver",    
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
         "args": {
           "query": "삼성전자 종목 코드",
           "display": 10,
@@ -32,7 +36,11 @@
     ],
     "minimum_steps": 3,
     "essential_tools": [
+<<<<<<< HEAD
       "WebSearch_naver",
+=======
+      "web_search_naver",
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       "StockPrice_kis",
       "StockChart_kis"
     ],
@@ -267,7 +275,11 @@
       "golden_action": [
         {
           "step": 1,
+<<<<<<< HEAD
           "tool": "WebSearch_naver",    
+=======
+          "tool": "web_search_naver",    
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
           "args": {
             "query": "카카오 종목 코드",
             "display": 10,
@@ -284,7 +296,11 @@
       ],
       "minimum_steps": 2,
       "essential_tools": [
+<<<<<<< HEAD
         "WebSearch_naver",
+=======
+        "web_search_naver",
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
         "StockPrice_kis"
       ],
       "data_flow": [
@@ -305,14 +321,22 @@
           "golden_action": [
             {
               "step": 1,
+<<<<<<< HEAD
               "tool": "WebSearch_naver",
+=======
+              "tool": "web_search_naver",
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
               "args": {
                 "query": "삼성 종목 코드"
               }        
             },
             {
               "step": 2,
+<<<<<<< HEAD
               "tool": "WebSearch_naver", 
+=======
+              "tool": "web_search_naver", 
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
               "args": {
                 "query": "애플 종목 코드"
               }        
@@ -334,7 +358,11 @@
           ],
           "minimum_steps": 4,
           "essential_tools": [
+<<<<<<< HEAD
             "WebSearch_naver",
+=======
+            "web_search_naver",
+>>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
             "StockPrice_kis",
             "USStockPrice_kis"
           ],
