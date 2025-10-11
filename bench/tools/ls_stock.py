@@ -1,8 +1,9 @@
-import os
 from typing import Any, Dict, List
 
 import requests
-from base_api import BaseAPI
+
+from .base_api import BaseAPI
+from .secrets import LS_APP_KEY, LS_APP_SECRET
 
 
 class LSStock(BaseAPI):
@@ -15,8 +16,8 @@ class LSStock(BaseAPI):
             description="LS증권 API - 국내외 주식 현재가, 종목 검색, 차트 데이터 조회"
         )
         self.base_url = "https://openapi.ls-sec.co.kr:8080"
-        self.app_key = os.getenv("LS_APP_KEY")  
-        self.app_secret = os.getenv("LS_APP_SECRET")
+        self.app_key = LS_APP_KEY
+        self.app_secret = LS_APP_SECRET
         self.access_token = None
 
     def _get_access_token(self) -> bool:
@@ -345,10 +346,9 @@ class LSStock(BaseAPI):
 
     def test_connection(self) -> bool:
         """
-        API 연결 상태를 테스트합니다. (현재는 항상 True를 반환)
+        API 연결 상태를 테스트합니다. (액세스 토큰 발급 테스트)
         """
-        # TODO: 실제 API 호출을 통해 연결 상태 확인 로직 추가
-        return True
+        return self._get_access_token()
 
 if __name__ == "__main__":
     api = LSStock()

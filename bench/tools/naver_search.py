@@ -1,5 +1,6 @@
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
+from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -7,8 +8,8 @@ class NaverSearchAPI(BaseAPI):
             name="naver_search_api",
             description="네이버 검색 API를 통한 웹, 블로그, 뉴스 검색 도구"
         )
-        self.client_id = "nfe9e3rPKhRY5G3qwzuf"
-        self.client_secret = "Il8nrlEM3r"
+        self.client_id = NAVER_CLIENT_ID
+        self.client_secret = NAVER_CLIENT_SECRET
     
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
     
@@ -236,7 +237,7 @@ class NaverSearchAPI(BaseAPI):
         """Tool call 실행
         
         Args:
-            tool_name: 실행할 tool 이름 (Search_naver_web, Search_naver_blog, Search_naver_news)
+            tool_name: 실행할 tool 이름 (Search_naver_web, Search_naver_blog, Search_naver_news, search_web, search_blog, search_news)
             **kwargs: tool별 매개변수
             
         Returns:
@@ -245,7 +246,11 @@ class NaverSearchAPI(BaseAPI):
         tool_map = {
             "Search_naver_web": self._search_web,
             "Search_naver_blog": self._search_blog,
-            "Search_naver_news": self._search_news
+            "Search_naver_news": self._search_news,
+            # Alias for dataset compatibility
+            "search_web": self._search_web,
+            "search_blog": self._search_blog,
+            "search_news": self._search_news,
         }
         
         if tool_name not in tool_map:

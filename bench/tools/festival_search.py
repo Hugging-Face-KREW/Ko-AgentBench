@@ -1,7 +1,7 @@
 import requests
 from typing import Dict, List, Optional
-from base_api import BaseAPI
-from tools.secrets import KTO_SERVICE_KEY
+from .base_api import BaseAPI
+from .secrets import KTO_SERVICE_KEY
 
 class FestivalSearchAPI(BaseAPI):
     def __init__(self):
@@ -141,7 +141,7 @@ class FestivalSearchAPI(BaseAPI):
     # ======================= Tool Call 실행기 ========================
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict:
-        if tool_name == "FestivalSearch_kto":
+        if tool_name in ["FestivalSearch_kto", "festival_search"]:
             return self.FestivalSearch_kto(**kwargs)
         else:
             raise ValueError(f"지원하지 않는 tool: {tool_name}")

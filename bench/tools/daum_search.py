@@ -1,5 +1,6 @@
 import requests
-from base_api import BaseAPI
+from .base_api import BaseAPI
+from .secrets import DAUM_API_KEY
 
 class DaumSearchAPI(BaseAPI):
     def __init__(self):
@@ -7,7 +8,7 @@ class DaumSearchAPI(BaseAPI):
             name="daum_search_api",
             description="다음 검색 API를 통한 웹, 블로그, 뉴스 검색 도구"
         )
-        self.api_key = "783ca97170d40abe26ba1f7e8a6678a0"
+        self.api_key = DAUM_API_KEY
 
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
 
@@ -113,7 +114,7 @@ class DaumSearchAPI(BaseAPI):
 
     # ========== Tool Calling 스키마 메서드들 ==========
     
-    def Search_daum_web(self) -> dict:
+    def WebSearch_daum(self) -> dict:
         """웹 검색 tool calling 스키마
         
         Returns:
@@ -122,7 +123,7 @@ class DaumSearchAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "Search_daum_web",
+                "name": "WebSearch_daum",
                 "description": "다음 검색 서비스에서 질의어로 웹 문서를 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -157,7 +158,7 @@ class DaumSearchAPI(BaseAPI):
             }
         }
     
-    def Search_daum_video(self) -> dict:
+    def VideoSearch_daum(self) -> dict:
         """비디오 검색 tool calling 스키마
         
         Returns:
@@ -166,7 +167,7 @@ class DaumSearchAPI(BaseAPI):
         return {
             "type": "function",
             "function": {
-                "name": "Search_daum_video",
+                "name": "VideoSearch_daum",
                 "description": "카카오 TV, 유튜브 등 서비스에서 질의어로 동영상을 검색합니다.",
                 "parameters": {
                     "type": "object",
@@ -207,15 +208,18 @@ class DaumSearchAPI(BaseAPI):
         """Tool call 실행
         
         Args:
-            tool_name: 실행할 tool 이름 (Search_daum_web, Search_daum_video)
+            tool_name: 실행할 tool 이름 (WebSearch_daum, VideoSearch_daum)
             **kwargs: tool별 매개변수
             
         Returns:
             tool 실행 결과
         """
         tool_map = {
+            "WebSearch_daum": self._search_web,
+            "VideoSearch_daum": self._search_video,
+            # Backward compatibility
             "Search_daum_web": self._search_web,
-            "Search_daum_video": self._search_video
+            "Search_daum_video": self._search_video,
         }
         
         if tool_name not in tool_map:
@@ -226,8 +230,8 @@ class DaumSearchAPI(BaseAPI):
     def get_all_tool_schemas(self) -> list[dict]:
         """모든 tool 스키마 반환"""
         return [
-            self.Search_daum_web(),
-            self.Search_daum_video()
+            self.WebSearch_daum(),
+            self.VideoSearch_daum()
         ]
 
 

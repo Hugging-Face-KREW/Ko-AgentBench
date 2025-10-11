@@ -1,7 +1,7 @@
 import requests
-import os
 from typing import Dict, List, Any
-from base_api import BaseAPI
+from .base_api import BaseAPI
+from .secrets import KIS_APP_KEY, KIS_APP_SECRET
 
 class KISStock(BaseAPI):
     def __init__(self):
@@ -10,8 +10,8 @@ class KISStock(BaseAPI):
             description="한국투자증권 API - 국내외 주식 현재가, 종목 검색, 차트 데이터 조회"
         )
         self.base_url = "https://openapi.koreainvestment.com:9443"
-        self.app_key = os.getenv("KIS_APP_KEY")
-        self.app_secret = os.getenv("KIS_APP_SECRET")
+        self.app_key = KIS_APP_KEY
+        self.app_secret = KIS_APP_SECRET
         self._token = None
 
     # ========== 실제 API 호출 메서드들 ==========

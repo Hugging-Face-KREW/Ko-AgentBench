@@ -1,8 +1,8 @@
 import requests
 import os
 from typing import Dict, List, Any
-from base_api import BaseAPI
-from tools.secrets import TMAP_APP_KEY
+from .base_api import BaseAPI
+from .secrets import TMAP_APP_KEY
 
 class TmapNavigation(BaseAPI):
     def __init__(self):

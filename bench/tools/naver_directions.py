@@ -1,7 +1,7 @@
 import requests
 from typing import Dict, List, Optional
-from base_api import BaseAPI
-from tools.secrets import Directions_Client_ID, Directions_Client_Secret
+from .base_api import BaseAPI
+from .secrets import Directions_Client_ID, Directions_Client_Secret
 
 class NaverMapsAPI(BaseAPI):
     def __init__(self):

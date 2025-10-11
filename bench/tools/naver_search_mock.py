@@ -209,9 +209,9 @@ class NaverSearchMockAPI(BaseAPI):
             "items": items
         }
 
-    def NewsSearch_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+    def NewsSearch_naver(self, query: str, display: int = 10, start: int = 1, sort: str = "sim") -> Dict[str, Any]:
         params = _CommonParams.from_kwargs(query=query, display=display, start=start)
-        rng = _deterministic_random(["news", params.query, str(params.start), str(params.display)])
+        rng = _deterministic_random(["news", params.query, str(params.start), str(params.display), sort])
 
         now = datetime.now(KST)
         last_build_date = _format_rfc2822(now)
@@ -236,8 +236,16 @@ class NaverSearchMockAPI(BaseAPI):
             aid = f"{rng.randint(1, 99999999):010d}"
             naver_link = f"https://n.news.naver.com/article/{oid}/{aid}"
 
-            days_ago = rng.randint(0, 14)
-            hours_offset = rng.randint(0, 23)
+            # Adjust date sorting based on sort parameter
+            if sort == "date":
+                # More recent dates for date sort
+                days_ago = rng.randint(0, 3)
+                hours_offset = rng.randint(0, 23)
+            else:
+                # Wider date range for relevance sort
+                days_ago = rng.randint(0, 14)
+                hours_offset = rng.randint(0, 23)
+                
             pub_dt = (now - timedelta(days=days_ago, hours=hours_offset)).astimezone(KST)
             pub_date = _format_rfc2822(pub_dt)
 
@@ -257,6 +265,11 @@ class NaverSearchMockAPI(BaseAPI):
             "display": params.display,
             "items": items
         }
+
+    # Alias for dataset compatibility
+    def web_search_naver(self, query: str, display: int = 10, start: int = 1) -> Dict[str, Any]:
+        """Alias for WebSearch_naver to match dataset naming."""
+        return self.WebSearch_naver(query=query, display=display, start=start)
 
 
 __all__ = [
