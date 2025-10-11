@@ -18,20 +18,33 @@ class TaskLoader:
         self.tasks: List[Dict[str, Any]] = []
     
     def load_tasks(self, file_path: str) -> List[Dict[str, Any]]:
-        """Load tasks from JSONL file.
+        """Load tasks from JSONL or JSON file.
         
         Args:
-            file_path: Path to JSONL file
+            file_path: Path to JSONL or JSON file
             
         Returns:
             List of task dictionaries
         """
         tasks = []
-        with open(self.tasks_dir / file_path, 'r', encoding='utf-8') as f:
-            for line in f:
-                if line.strip():
-                    task = json.loads(line.strip())
-                    tasks.append(task)
+        file_full_path = self.tasks_dir / file_path if not Path(file_path).is_absolute() else Path(file_path)
+        
+        with open(file_full_path, 'r', encoding='utf-8') as f:
+            # Try to load as JSON array first
+            content = f.read()
+            try:
+                data = json.loads(content)
+                if isinstance(data, list):
+                    tasks = data
+                else:
+                    tasks = [data]
+            except json.JSONDecodeError:
+                # If JSON fails, try JSONL format
+                for line in content.split('\n'):
+                    if line.strip():
+                        task = json.loads(line.strip())
+                        tasks.append(task)
+        
         self.tasks = tasks
         return tasks
     
