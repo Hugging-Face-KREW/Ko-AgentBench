@@ -1,1 +1,522 @@
-
+[ 
+  {
+    "task_id": "L3-001",
+    "instruction": "삼성전자 투자를 검토하고 있습니다. 현재 주가 정보를 확인한 후, 이번달 차트 데이터를 분석해서 종합 정보를 제공해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "web_search_naver",    
+        "args": {
+          "query": "삼성전자 종목 코드",
+          "display": 10,
+          "sort": "date"
+        }  
+      },
+      {
+        "step": 2,
+        "tool": "StockPrice_kis",      
+        "args": {
+          "symbol": "005930"          
+        }
+      },
+      {
+        "step": 3,
+        "tool": "StockChart_kis",     
+        "args": {
+          "symbol": "005930",         
+          "period": "M"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "web_search_naver",
+      "StockPrice_kis",
+      "StockChart_kis"
+    ],
+    "data_flow": [
+	    {
+        "to_step": 1,
+        "to_parameter": "query",       
+        "from_step": "user_input",
+        "from_output": "삼성전자 종목코드"     
+      }, 
+      {
+        "to_step": 2,
+        "to_parameter": "symbol",       
+        "from_step": 1,     
+        "from_output": "symbol"          
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "symbol",       
+        "from_step": 1,
+        "from_output": "symbol"        
+      }
+    ]
+  },
+  {
+    "task_id": "L3-002",
+    "instruction": "청량리역 근처로 이사를 고려하고 있습니다. 해당 지역에 가장 가까운 대학교를 알아보고, 그 근처에 병원이 몇개 있는지 조사해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",              
+        "args": {
+          "keyword": "청량리역 근처 대학교",            
+          "size": 1                             
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CategorySearch_tmap",       
+        "args" : {
+	        "categories" : "병원", 
+	        "centerLon" : "127.059028",          
+	        "centerLat" : "37.583917",          
+	        "radius" : 10000                    
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "centerLat",         
+        "from_step": 1,
+        "from_output": "latitude"           
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "centerLon",       
+        "from_step": 1,
+        "from_output": "longtitude"       
+      }
+    ]
+  },
+  {
+    "task_id": "L3-003",
+    "instruction": "교대역 근처에서 소개팅을 할 예정입니다. 교대역 주변의 소개팅하기 좋은 레스토랑을 조사하고, 관련 후기나 데이트 팁을 알아봐주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",              
+        "args": {
+          "keyword": "교대역 소개팅 식당",        
+          "size": 1                               
+        }
+      },
+      {
+        "step": 2,
+        "tool": "BlogSearch_naver",            
+        "args": {
+          "query": "{places} 후기",            
+          "display" : 20                       
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "BlogSearch_naver"
+    ],
+    "data_flow": [
+      {
+        "to_step": 1,
+        "to_parameter": "places",
+        "from_step": "user_input",
+        "from_output": "교대역 소개팅 식당"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "item",
+        "from_step": 1,
+        "from_output": "places"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-004",
+    "instruction": "독학하기 좋은 수능 모의고사 수학 문제집을 조사해주고, 가격도 알려줘.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "수능 수학 모의고사 문제집 추천 독학",
+          "display": 20,
+          "sort": "sim"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "ItemSearch_aladin",             
+        "args": {
+          "query": "{book_title}"
+        }
+      }
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "query",
+        "from_step": 1,
+        "from_output": "book_title"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-005",
+    "instruction": "강남역에서 가장 가까운 애플 매장까지 걸어서 얼마나 걸리는지 알려줘.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",               
+        "args": {
+          "keyword": "강남역",              
+          "size": 1,                               
+          "sort" : "accuracy"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "애플 매장",
+          "x" : "{x}",
+          "y" : "{y}",
+          "sort" : "accuracy",
+          "size" : 1
+        }
+      },
+      {
+        "step": 3,
+	        "tool": "WalkRoute_tmap",              
+        "args": {
+          "startX": "{startX}",
+          "startY": "{startY}",
+          "endX": "{endX}",
+          "endY": "{endY}"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "PlaceSearch_kakao", 
+      "WalkRoute_tmap"
+    ],
+    "data_flow": [
+       {
+        "to_step": 2,
+        "to_parameter": "x",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "y",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startX",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startY",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endX",
+        "from_step": 2,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endY",
+        "from_step": 2,
+        "from_output": "latitude"
+      }
+    ]
+  },
+  
+    {
+      "task_id": "L3-006",
+      "instruction": "현재 주가 정보를 확인한 후, 차트 데이터를 분석해서 투자 결정에 도움이 되는 종합 정보를 제공해주세요.",
+      "task_level": 3,
+      "task_category": "Multi Tool Sequential",
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "web_search_naver",    
+          "args": {
+            "query": "카카오 종목 코드",
+            "display": 10,
+            "sort": "date"
+          }        
+        },
+        {
+          "step": 2,
+          "tool": "StockPrice_kis",  
+          "args": {
+            "symbol": "035720"       
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "essential_tools": [
+        "web_search_naver",
+        "StockPrice_kis"
+      ],
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "current_price", 
+          "from_step": 1,     
+          "from_output": "symbol"          
+        }
+      ]
+    },
+    [
+        {
+          "task_id": "L3-007",
+          "instruction": "삼성전자랑 애플 주가 비교해줘",
+          "task_level": 3,
+          "task_category": "Multi Tool Sequential",
+          "golden_action": [
+            {
+              "step": 1,
+              "tool": "web_search_naver",
+              "args": {
+                "query": "삼성 종목 코드"
+              }        
+            },
+            {
+              "step": 2,
+              "tool": "web_search_naver", 
+              "args": {
+                "query": "애플 종목 코드"
+              }        
+            },
+            {
+              "step": 3,
+              "tool": "StockPrice_kis",      
+              "args": {
+                "symbol": "035720"           
+              }
+            },
+            {
+              "step": 4,
+              "tool": "USStockPrice_kis",       
+              "args": {
+                "symbol": "AAPL"        
+              }
+            }
+          ],
+          "minimum_steps": 4,
+          "essential_tools": [
+            "web_search_naver",
+            "StockPrice_kis",
+            "USStockPrice_kis"
+          ],
+          "data_flow": [
+            {
+              "to_step": 3,
+              "to_parameter": "symbol",      
+              "from_step": 1,     
+              "from_output": "symbol"         
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "symbol",     
+              "from_step": 2,     
+              "from_output": "symbol"        
+            }
+          ]
+        },
+        {
+            "task_id": "L3-008",
+            "instruction": "제주에서 9월에 열리는 행사 하나 찾아서 공항에서 행사지까지 차타고 얼마나 걸리는 지 알려줘.",
+            "task_level": 3,
+            "task_category": "Multi Tool Sequential",
+            "golden_action": [
+              {
+                "step": 1,
+                "tool": "FestivalSearch_kto",            
+                "args": {
+                  "location": "제주특별시",              
+                  "eventStartDate": "20250901",          
+                  "eventEndDate": "20250930"
+                }
+              },
+              {
+                "step": 2,
+                "tool": "PlaceSearch_kakao",
+                "args": {
+                  "keyword": "제주 공항",
+                  "sort" : "accuracy",
+                  "size" : 1
+                }
+              },
+              {
+                "step": 3,
+                    "tool": "WalkRoute_tmap",              
+                "args": {
+                  "startX": "{startX}",
+                  "startY": "{startY}",
+                  "endX": "{endX}",
+                  "endY": "{endY}"
+                }
+              }
+            ],
+            "minimum_steps": 3,
+            "essential_tools": [
+                "FestivalSearch_kto",
+              "PlaceSearch_kakao", 
+              "WalkRoute_tmap"
+            ],
+            "data_flow": [
+               {
+                "to_step": 3,
+                "to_parameter": "startX",
+                "from_step": 1,
+                "from_output": "mapx"           
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "startY",
+                "from_step": 1,
+                "from_output": "mapy"         
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "endX",
+                "from_step": 2,
+                "from_output": "longitude"
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "endY",
+                "from_step": 2,
+                "from_output": "latitude"
+              }
+            ]
+          }, 
+          {
+            "task_id": "L3-009",
+            "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
+            "task_level": 3,
+            "task_category": "Multi Tool Sequential",
+            "golden_action": [
+              {
+                "step": 1,
+                "tool": "Geocoding_tmap",               
+                "args": {
+                  "keyword": "강남역"
+                }
+              },
+              {
+                "step": 2,
+                "tool": "Geocoding_tmap",
+                "args": {
+                  "keyword": "이태원역"
+                }
+              },
+              {
+                "step": 3,
+                    "tool": "CarRoute_tmap",              
+                "args": {
+                  "startX": "{startX}",
+                  "startY": "{startY}",
+                  "endX": "{endX}",
+                  "endY": "{endY}",
+                  "searchOption": 0            
+                }
+              }
+            ],
+            "minimum_steps": 3,
+            "essential_tools": [
+                "Geocoding_tmap",
+              "CarRoute_tmap"
+            ],
+            "data_flow": [
+               {
+                "to_step": 3,
+                "to_parameter": "startX",
+                "from_step": 1,
+                "from_output": "lon"           
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "startY",
+                "from_step": 1,
+                "from_output": "lat"           
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "endX",
+                "from_step": 2,
+                "from_output": "lon"
+              },
+              {
+                "to_step": 3,
+                "to_parameter": "endY",
+                "from_step": 2,
+                "from_output": "lat"
+              }
+            ]
+          },
+          {
+            "task_id": "L3-010",
+            "instruction": "이번주 베스트 셀러 조회해서 가격 얼마인지 알려줘",
+            "task_level": 3,
+            "task_category": "Multi Tool Sequential",
+            "golden_action": [
+              {
+                "step": 1,
+                "tool": "ItemList_aladin",
+                "args": {
+                  "QueryType": "Bestseller",
+                  "MaxResults" : 1
+                }
+              },
+              {
+                "step": 2,
+                "tool": "ItemLookup_aladin",           
+                "args": {
+                  "itemId": "{isbn13}",                
+                  "OptResult" : "reviewList"           
+                }
+              }
+            ],
+            "data_flow": [
+              {
+                "to_step": 2,
+                "to_parameter": "itemId",
+                "from_step": 1,
+                "from_output": "isbn13"
+              }
+            ]
+          }
+    ]
+]
+  
