@@ -1,6 +1,5 @@
 import requests
-import os
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 # 상대 임포트와 절대 임포트 모두 지원
 try:
@@ -9,6 +8,7 @@ try:
 except ImportError:
     from base_api import BaseAPI
     from secrets import TMAP_APP_KEY
+
 
 class TmapNavigation(BaseAPI):
     def __init__(self):
@@ -39,7 +39,6 @@ class TmapNavigation(BaseAPI):
                 "page": page,
             }
             
-            # 선택적 파라미터 추가
             if centerLon is not None:
                 params["centerLon"] = centerLon
             if centerLat is not None:
@@ -47,7 +46,7 @@ class TmapNavigation(BaseAPI):
             if radius is not None:
                 params["radius"] = radius
                 
-            response = requests.get(url, headers=headers, params=params)
+            response = requests.get(url, headers=headers, params=params, timeout=10)
             response.raise_for_status()
             
             return response.json()
@@ -82,9 +81,8 @@ class TmapNavigation(BaseAPI):
                 "searchOption": str(searchOption),
             }
             
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(url, headers=headers, json=data, timeout=10)
             response.raise_for_status()
-            
             return response.json()
             
         except requests.exceptions.RequestException as e:
@@ -97,29 +95,32 @@ class TmapNavigation(BaseAPI):
         
 
     def WalkRoute_tmap(self, startX: float, startY: float, endX: float, endY: float) -> Dict[str, Any]:
-        """보행자 경로안내 (내부 구현)"""
+        """보행자 경로안내 (최신 스펙, 안정버전)"""
         try:
             endpoint = "/tmap/routes/pedestrian"
             url = f"{self.base_url}{endpoint}"
-            
+
             headers = {
                 "accept": "application/json",
                 "Content-Type": "application/json",
                 "appKey": self.app_key
             }
-            
+
             data = {
                 "startX": str(startX),
                 "startY": str(startY),
                 "endX": str(endX),
-                "endY": str(endY)
+                "endY": str(endY),
+                "reqCoordType": "WGS84GEO",
+                "resCoordType": "WGS84GEO",
+                "startName": "출발지",
+                "endName": "도착지"
             }
-            
-            response = requests.post(url, headers=headers, json=data)
+
+            response = requests.post(url, headers=headers, json=data, timeout=10)
             response.raise_for_status()
-            
             return response.json()
-            
+
         except requests.exceptions.RequestException as e:
             return {
                 "success": False,
@@ -129,154 +130,125 @@ class TmapNavigation(BaseAPI):
             }
 
 
-    def Geocoding_tmap(self, fullAddr: str) -> Dict[str, Any]:
-        """주소 좌표 변환 (내부 구현)"""
+    def Geocoding_tmap(self,
+                       city_do: str,
+                       gu_gun: str,
+                       dong: str,
+                       bunji: str = "",
+                       detailAddress: str = "",
+                       addressFlag: str = "F01",
+                       coordType: str = "WGS84GEO") -> Dict[str, Any]:
+        """주소를 GPS 좌표(위도, 경도)로 변환"""
         try:
             endpoint = "/tmap/geo/geocoding"
             url = f"{self.base_url}{endpoint}"
-            
-            headers = {
-                "accept": "application/json",
+            headers = {"accept": "application/json"}
+
+            params = {
+                "version": "1.0",
+                "city_do": city_do,
+                "gu_gun": gu_gun,
+                "dong": dong,
+                "addressFlag": addressFlag,
+                "coordType": coordType,
                 "appKey": self.app_key
             }
-            
-            params = {
-                "fullAddr": fullAddr
-            }
-            
-            response = requests.get(url, headers=headers, params=params)
+
+            if bunji:
+                params["bunji"] = bunji
+            if detailAddress:
+                params["detailAddress"] = detailAddress
+
+            response = requests.get(url, headers=headers, params=params, timeout=10)
             response.raise_for_status()
-            
+            print(f"요청 URL: {response.url}")
             return response.json()
-            
+
         except requests.exceptions.RequestException as e:
             return {
                 "success": False,
                 "error_code": "API_REQUEST_FAILED",
-                "error_message": f"주소 변환 API 호출 실패: {e}",
-                "suggested_actions": ["주소 형식 확인", "도로명주소 또는 지번주소 사용"]
+                "error_message": f"주소 변환 API 호출 실패: {e}"
             }
 
 
-    def CategorySearch_tmap(self, categories: str, centerLon: float, centerLat: float,
-                         radius: int = 1000, count: int = 10) -> Dict[str, Any]:
-        """카테고리별 장소 검색 (내부 구현)"""
+    def CategorySearch_tmap(self,
+                            categories: str,
+                            centerLon: float,
+                            centerLat: float,
+                            radius: int = 1,
+                            page: int = 1,
+                            count: int = 20,
+                            reqCoordType: str = "WGS84GEO",
+                            resCoordType: str = "WGS84GEO",
+                            sort: str = "distance",
+                            multiPoint: str = "N") -> Dict[str, Any]:
+        """명칭(POI) 주변 카테고리 검색 (최신 공식문서 기반)"""
         try:
-            endpoint = "/tmap/pois/categories"
+            endpoint = "/tmap/pois/search/around"
             url = f"{self.base_url}{endpoint}"
-            
-            headers = {
-                "accept": "application/json",
-                "appKey": self.app_key
-            }
-            
+
+            headers = {"accept": "application/json", "appKey": self.app_key}
+
             params = {
+                "version": 1,
+                "page": page,
+                "count": count,
                 "categories": categories,
                 "centerLon": centerLon,
                 "centerLat": centerLat,
                 "radius": radius,
-                "count": count
+                "reqCoordType": reqCoordType,
+                "resCoordType": resCoordType,
+                "multiPoint": multiPoint,
+                "sort": sort
             }
-            
-            response = requests.get(url, headers=headers, params=params)
+
+            response = requests.get(url, headers=headers, params=params, timeout=10)
             response.raise_for_status()
-            
-            return response.json()
-            
+
+            data = response.json()
+            if "searchPoiInfo" in data:
+                pois = data["searchPoiInfo"].get("pois", {}).get("poi", [])
+                parsed = [
+                    {
+                        "name": p.get("name"),
+                        "telNo": p.get("telNo"),
+                        "latitude": p.get("noorLat"),
+                        "longitude": p.get("noorLon"),
+                        "address": f"{p.get('upperAddrName', '')} {p.get('middleAddrName', '')} {p.get('lowerAddrName', '')}".strip(),
+                        "roadName": p.get("roadName"),
+                        "buildingNo": f"{p.get('firstBuildNo', '')}-{p.get('secondBuildNo', '')}",
+                        "radius_km": p.get("radius"),
+                        "dataKind": p.get("dataKind"),
+                        "stId": p.get("stId"),
+                        "parkFlag": p.get("parkFlag"),
+                        "merchantFlag": p.get("merchantFlag")
+                    } for p in pois
+                ]
+                return {
+                    "totalCount": data["searchPoiInfo"].get("totalCount", 0),
+                    "count": data["searchPoiInfo"].get("count", 0),
+                    "page": data["searchPoiInfo"].get("page", 1),
+                    "pois": parsed
+                }
+
+            return data
+
         except requests.exceptions.RequestException as e:
             return {
                 "success": False,
                 "error_code": "API_REQUEST_FAILED",
                 "error_message": f"카테고리 검색 API 호출 실패: {e}",
-                "suggested_actions": ["카테고리명 확인", "검색 반경 조정", "좌표 확인"]
+                "suggested_actions": [
+                    "categories 명칭 확인 (예: 카페, 병원, 주유소 등)",
+                    "좌표(centerLon/centerLat) 확인",
+                    "반경(radius) 1~33 범위 내 설정",
+                    "appKey 권한 확인"
+                ]
             }
-
-
 
     # ========== Tool Calling 스키마 메서드들 ==========
-
-    def poi_search_tool(self) -> Dict:
-        """POISearch_tmap tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "POISearch_tmap",
-                "description": "T map을 통해 키워드로 전국의 장소(POI)를 검색합니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "searchKeyword": {
-                            "type": "string",
-                            "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 병원, 부산 맛집)"
-                        },
-                        "count": {
-                            "type": "integer",
-                            "description": "검색 결과 개수",
-                            "default": 10,
-                            "minimum": 1,
-                            "maximum": 200
-                        },
-                        "centerLon": {
-                            "type": "number",
-                            "description": "검색 중심 경도"
-                        },
-                        "centerLat": {
-                            "type": "number",
-                            "description": "검색 중심 위도"
-                        },
-                        "radius": {
-                            "type": "integer",
-                            "description": "검색 반경(미터)"
-                        },
-                        "page": {
-                            "type": "integer",
-                            "description": "페이지 번호",
-                            "default": 1,
-                            "minimum": 1
-                        }
-                    },
-                    "required": ["searchKeyword"]
-                }
-            }
-        }
-
-    def car_route_tool(self) -> Dict:
-        """CarRoute_tmap tool schema"""
-        return {
-            "type": "function",
-            "function": {
-                "name": "CarRoute_tmap",
-                "description": "T map을 통해 자동차 최적 경로를 제공합니다. 실시간 교통정보가 반영됩니다.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "startX": {
-                            "type": "number",
-                            "description": "출발지 경도 (WGS84 좌표계)"
-                        },
-                        "startY": {
-                            "type": "number",
-                            "description": "출발지 위도 (WGS84 좌표계)"
-                        },
-                        "endX": {
-                            "type": "number",
-                            "description": "도착지 경도 (WGS84 좌표계)"
-                        },
-                        "endY": {
-                            "type": "number",
-                            "description": "도착지 위도 (WGS84 좌표계)"
-                        },
-                        "searchOption": {
-                            "type": "integer",
-                            "description": "경로 검색 옵션 (0:추천, 1:무료우선, 2:최소시간, 3:초보운전, 4:고속도로우선, 10:최단거리)",
-                            "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                            "default": 0
-                        }
-                    },
-                    "required": ["startX", "startY", "endX", "endY"]
-                }
-            }
-        }
 
     def walk_route_tool(self) -> Dict:
         """WalkRoute_tmap tool schema"""
@@ -288,22 +260,10 @@ class TmapNavigation(BaseAPI):
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "startX": {
-                            "type": "number",
-                            "description": "출발지 경도 (WGS84 좌표계)"
-                        },
-                        "startY": {
-                            "type": "number",
-                            "description": "출발지 위도 (WGS84 좌표계)"
-                        },
-                        "endX": {
-                            "type": "number",
-                            "description": "도착지 경도 (WGS84 좌표계)"
-                        },
-                        "endY": {
-                            "type": "number",
-                            "description": "도착지 위도 (WGS84 좌표계)"
-                        }
+                        "startX": {"type": "number", "description": "출발지 경도 (WGS84 좌표계)"},
+                        "startY": {"type": "number", "description": "출발지 위도 (WGS84 좌표계)"},
+                        "endX": {"type": "number", "description": "도착지 경도 (WGS84 좌표계)"},
+                        "endY": {"type": "number", "description": "도착지 위도 (WGS84 좌표계)"}
                     },
                     "required": ["startX", "startY", "endX", "endY"]
                 }
@@ -316,16 +276,17 @@ class TmapNavigation(BaseAPI):
             "type": "function",
             "function": {
                 "name": "Geocoding_tmap",
-                "description": "T map을 통해 주소를 GPS 좌표(위도, 경도)로 변환합니다.",
+                "description": "T map을 통해 시/도, 구/군, 동 입력을 기반으로 GPS 좌표(위도, 경도)로 변환합니다.",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "fullAddr": {
-                            "type": "string",
-                            "description": "변환할 주소 (도로명주소 또는 지번주소, 예: 서울시 강남구 역삼동 825)"
-                        }
+                        "city_do": {"type": "string", "description": "시/도 (예: 서울특별시)"},
+                        "gu_gun": {"type": "string", "description": "구/군 (예: 강남구)"},
+                        "dong": {"type": "string", "description": "동 (예: 역삼동)"},
+                        "bunji": {"type": "string", "description": "번지 (선택)", "default": ""},
+                        "detailAddress": {"type": "string", "description": "상세주소 (선택)", "default": ""}
                     },
-                    "required": ["fullAddr"]
+                    "required": ["city_do", "gu_gun", "dong"]
                 }
             }
         }
@@ -340,38 +301,18 @@ class TmapNavigation(BaseAPI):
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "categories": {
-                            "type": "string",
-                            "description": "T map 업종 카테고리 (예: 음식점, 병원, 주유소, 편의점, 은행, 카페, 마트, 약국, 학교, 숙박업소)"
-                        },
-                        "centerLon": {
-                            "type": "number",
-                            "description": "검색 중심 경도"
-                        },
-                        "centerLat": {
-                            "type": "number",
-                            "description": "검색 중심 위도"
-                        },
-                        "radius": {
-                            "type": "integer",
-                            "description": "검색 반경(미터)",
-                            "default": 1000,
-                            "minimum": 100,
-                            "maximum": 20000
-                        },
-                        "count": {
-                            "type": "integer",
-                            "description": "검색 결과 개수",
-                            "default": 10,
-                            "maximum": 100
-                        }
+                        "categories": {"type": "string", "description": "카테고리명 (예: 카페, 음식점 등)"},
+                        "centerLon": {"type": "number", "description": "검색 중심 경도"},
+                        "centerLat": {"type": "number", "description": "검색 중심 위도"},
+                        "radius": {"type": "integer", "description": "검색 반경(1=1km)", "default": 1},
+                        "count": {"type": "integer", "description": "검색 결과 개수", "default": 20}
                     },
                     "required": ["categories", "centerLon", "centerLat"]
                 }
             }
         }
 
-    # ========== Tool Call 실행기 ==========
+    # ========== Tool Call 실행기 & 테스트 ==========
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""
@@ -388,22 +329,15 @@ class TmapNavigation(BaseAPI):
 
         return tool_map[tool_name](**kwargs)
 
-    def get_all_tool_schemas(self) -> List[Dict]:
-        """모든 tool 스키마 반환"""
-        return [
-            self.poi_search_tool(),
-            self.car_route_tool(),
-            self.walk_route_tool(),
-            self.geocoding_tool(),
-            self.category_search_tool()
-        ]
-
     def test_connection(self) -> bool:
         """API 연결 테스트"""
         try:
             headers = {"appKey": self.app_key}
-            response = requests.get(f"{self.base_url}/tmap/pois?searchKeyword=테스트&count=1",
-                                    headers=headers, timeout=10)
-            return response.status_code == 200
-        except:
+            res = requests.get(
+                f"{self.base_url}/tmap/pois?searchKeyword=테스트&count=1",
+                headers=headers,
+                timeout=10
+            )
+            return res.status_code == 200
+        except Exception:
             return False
