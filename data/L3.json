@@ -7,7 +7,7 @@
     "golden_action": [
       {
         "step": 1,
-        "tool": "web_search_naver",    
+        "tool": "WebSearch_naver",    
         "args": {
           "query": "삼성전자 종목 코드",
           "display": 10,
@@ -32,7 +32,7 @@
     ],
     "minimum_steps": 3,
     "essential_tools": [
-      "web_search_naver",
+      "WebSearch_naver",
       "StockPrice_kis",
       "StockChart_kis"
     ],
@@ -266,7 +266,7 @@
       "golden_action": [
         {
           "step": 1,
-          "tool": "web_search_naver",    
+          "tool": "WebSearch_naver",    
           "args": {
             "query": "카카오 종목 코드",
             "display": 10,
@@ -283,7 +283,7 @@
       ],
       "minimum_steps": 2,
       "essential_tools": [
-        "web_search_naver",
+        "WebSearch_naver",
         "StockPrice_kis"
       ],
       "data_flow": [
@@ -303,14 +303,14 @@
         "golden_action": [
           {
             "step": 1,
-            "tool": "web_search_naver",
+            "tool": "WebSearch_naver",
             "args": {
               "query": "삼성 종목 코드"
             }        
           },
           {
             "step": 2,
-            "tool": "web_search_naver", 
+            "tool": "WebSearch_naver", 
             "args": {
               "query": "애플 종목 코드"
             }        
@@ -332,7 +332,7 @@
         ],
         "minimum_steps": 4,
         "essential_tools": [
-          "web_search_naver",
+          "WebSearch_naver",
           "StockPrice_kis",
           "USStockPrice_kis"
         ],
