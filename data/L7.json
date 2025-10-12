@@ -375,7 +375,7 @@
               "content": "네, 인공지능 관련 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?",
               "actions": [
                 {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "IT 인공지능 국내 뉴스"
                   },
@@ -414,7 +414,7 @@
               "content": "네, 스포츠 뉴스입니다. 'A팀, 9회말 역전 끝내기 안타로 5연승 질주' 등의 야구 소식이 올라와 있습니다.",
               "actions": [
                 {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "스포츠 야구"
                   },
@@ -453,7 +453,7 @@
               ],
               "actions": [
                 {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "IT 인공지능 국내 뉴스",
                     "sort": "date"
@@ -495,7 +495,7 @@
                 "should_remember": "사용자가 이전에 언급했던 '인공지능'이라는 주제를 기억하고, '최신순 정렬'이라는 새로운 요구사항을 반영하여 뉴스 검색을 수행해야 한다.",
                 "trigger": "처음에 그 주제 관련해서 새로 올라온 거 있나?",
                 "expected_action": {
-                  "tool": "search_news",
+                  "tool": "NewsSearch_naver",
                   "args": {
                     "query": "IT 인공지능 국내 뉴스",
                     "sort": "date"
