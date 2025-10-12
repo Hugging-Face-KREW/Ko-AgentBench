@@ -5,10 +5,12 @@ try:
     # 패키지 내부에서 임포트할 때 (외부에서 사용)
     from .base_api import BaseAPI
     from .secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+    from .web_crawler import postprocess_with_crawling
 except ImportError:
     # 직접 실행할 때 (스크립트로 실행)
     from base_api import BaseAPI
     from secrets import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+    from web_crawler import postprocess_with_crawling
 
 class NaverSearchAPI(BaseAPI):
     def __init__(self):
@@ -47,7 +49,10 @@ class NaverSearchAPI(BaseAPI):
         
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        result = postprocess_with_crawling(result)
+        
+        return result
     
     def _search_blog(self, query: str, display: int = 10, start: int = 1, sort: str = "sim") -> dict:
         """네이버 블로그 검색 API 호출 (내부 구현)
@@ -75,7 +80,11 @@ class NaverSearchAPI(BaseAPI):
         
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        result = postprocess_with_crawling(result)
+        
+        return result
+
 
     def _search_news(self, query: str, display: int = 10, start: int = 1, sort: str = "sim") -> dict:
         """네이버 뉴스 검색 API 호출 (내부 구현)
@@ -103,7 +112,10 @@ class NaverSearchAPI(BaseAPI):
         
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        result = postprocess_with_crawling(result)
+        
+        return result
     
     # ========== Tool Calling 스키마 메서드들 ==========
     

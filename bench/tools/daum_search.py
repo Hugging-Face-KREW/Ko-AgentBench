@@ -4,9 +4,11 @@ import requests
 try:
     from .base_api import BaseAPI
     from .secrets import DAUM_API_KEY
+    from .web_crawler import postprocess_with_crawling
 except ImportError:
     from base_api import BaseAPI
     from secrets import DAUM_API_KEY
+    from web_crawler import postprocess_with_crawling
 
 class DaumSearchAPI(BaseAPI):
     def __init__(self):
@@ -43,7 +45,10 @@ class DaumSearchAPI(BaseAPI):
         
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        result = postprocess_with_crawling(result)
+        
+        return result
 
     def _search_video(self, query: str, sort: str = "accuracy", page: int = 1, size: int = 15) -> dict:
         """다음 비디오 검색 API 호출 (내부 구현)
