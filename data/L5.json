@@ -2,11 +2,7 @@
 [
   {
     "task_id": "L5-001",
-<<<<<<< HEAD
-    "instruction": "‘서울 중구 세종대로 110’ 주소를 좌표로 바꿔서 경도,위도 한 줄로 알려줘.",
-=======
     "instruction": "서울 중구 세종대로 110 주소의 좌표를 알려줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -22,11 +18,7 @@
   },
   {
     "task_id": "L5-002",
-<<<<<<< HEAD
-    "instruction": "강남역 근처 300m에서 편의점 하나만 골라 상호명 한 줄로 알려줘. 없으면 없다고만 말해줘.",
-=======
     "instruction": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘.",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -43,11 +35,7 @@
   },
   {
     "task_id": "L5-003",
-<<<<<<< HEAD
-    "instruction": "2025년 4~5월 제주에서 하는 축제 중 하나만 골라 제목 한 줄로 알려줘.",
-=======
     "instruction": "2025년 4~5월 제주에서 하는 축제 하나만 추천해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -59,9 +47,6 @@
     "error_injection": {
       "tool": "festival_search",
       "error_type": "timeout"
-<<<<<<< HEAD
-    }
-=======
     },
     "fallback_options": [
       {
@@ -73,7 +58,6 @@
         "args": { "query": "2025년 4월 5월 제주 축제", "page": 1, "size": 5 }
       }
     ]
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
   },
   {
     "task_id": "L5-004",
@@ -89,9 +73,6 @@
     "error_injection": {
       "tool": "festival_search",
       "error_type": "complete_unavailable"
-<<<<<<< HEAD
-    }
-=======
     },
     "fallback_options": [
       {
@@ -103,7 +84,6 @@
         "args": { "query": "2025년 9월 10월 전북 축제", "page": 1, "size": 5 }
       }
     ]
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
   },
   {
     "task_id": "L5-005",
@@ -119,9 +99,6 @@
     "error_injection": {
       "tool": "MarketIndex_ls",
       "error_type": "complete_unavailable"
-<<<<<<< HEAD
-    }
-=======
     },
     "fallback_options": [
       {
@@ -133,7 +110,6 @@
         "args": { "query": "KOSDAQ 지수 현재가", "page": 1, "size": 1 }
       }
     ]
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
   },
   {
     "task_id": "L5-006",
@@ -153,11 +129,7 @@
   },
   {
     "task_id": "L5-007",
-<<<<<<< HEAD
-    "instruction": "다음에서 ‘아이폰 17 출시일’ 최신 글 하나만 제목 알려줘.",
-=======
     "instruction": "다음에서 아이폰 17 출시일 검색해줘.",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -169,13 +141,6 @@
     "error_injection": {
       "tool": "WebSearch_daum",
       "error_type": "timeout"
-<<<<<<< HEAD
-    }
-  },
-  {
-    "task_id": "L5-008",
-    "instruction": "다음에서 ‘아이유 콘서트 직캠’ 최신 동영상 하나만 제목 알려줘.",
-=======
     },
     "fallback_options": [
       {
@@ -187,7 +152,6 @@
   {
     "task_id": "L5-008",
     "instruction": "다음에서 '아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -199,13 +163,6 @@
     "error_injection": {
       "tool": "VideoSearch_daum",
       "error_type": "complete_unavailable"
-<<<<<<< HEAD
-    }
-  },
-  {
-    "task_id": "L5-009",
-    "instruction": "다음 검색에서 ‘전기차 충전 요금 인상’ 최신순으로 찾아 상위 1건의 제목만 알려줘.",
-=======
     },
     "fallback_options": [
       {
@@ -221,17 +178,12 @@
   {
     "task_id": "L5-009",
     "instruction": "다음에서 2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
       {
         "tool": "WebSearch_daum",
-<<<<<<< HEAD
-        "args": { "query": "전기차 충전 요금 인상", "sort": "recency", "page": 1, "size": 1 }
-=======
         "args": { "query": "2025 LoL 월드 챔피언쉽 한국팀 명단", "sort": "recency", "page": 1, "size": 1 }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ],
     "error_injection": {
@@ -241,43 +193,24 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-<<<<<<< HEAD
-        "args": { "query": "전기차 충전 요금 인상", "display": 10, "start": 1 }
-=======
         "args": { "query": "2025 LoL 월드 챔피언쉽 한국팀 명단", "display": 10, "start": 1 }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ]
   },
   {
     "task_id": "L5-010",
-<<<<<<< HEAD
-    "instruction": "네이버에서 김치 볶음밥 만드는 방법 검색해줘.",
-=======
     "instruction": "네이버에서 2025년도 노벨화학상 수상자를 검색해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
       {
         "tool": "WebSearch_naver",
-<<<<<<< HEAD
-        "args": { "query": "김치 볶음밥 만드는 법", "display": 10, "start": 1 }
-=======
         "args": { "query": "2025 노벨화학상 수상자", "display": 10, "start": 1 }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ],
     "error_injection": {
       "tool": "WebSearch_naver",
       "error_type": "timeout"
-<<<<<<< HEAD
-    }
-  },
-  {
-    "task_id": "L5-011",
-    "instruction": "네이버에서 북한 관련 최신 뉴스 하나만 제목 알려줘.",
-=======
     },
     "fallback_options": [
       {
@@ -289,25 +222,10 @@
   {
     "task_id": "L5-011",
     "instruction": "네이버에서 북한 해킹 조직 김수키에 대해 검색해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
       {
-<<<<<<< HEAD
-        "tool": "search_news",
-        "args": { "query": "북한", "display": 1, "start": 1, "sort": "date" }
-      }
-    ],
-    "error_injection": {
-      "tool": "search_news",
-      "error_type": "timeout"
-    }
-  },
-  {
-    "task_id": "L5-012",
-    "instruction": "‘성수동 카페 추천’ 블로그 글 중 상단 하나만 제목 알려줘.",
-=======
         "tool": "WebSearch_naver",
         "args": { "query": "북한 해킹 김수키", "display": 10, "start": 1 }
       }
@@ -326,7 +244,6 @@
   {
     "task_id": "L5-012",
     "instruction": "성수동 카페 소식을 알려주는 블로그 하나만 소개해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -343,33 +260,22 @@
       {
         "tool": "WebSearch_daum",
         "args": { "query": "성수동 카페 추천 블로그", "sort": "accuracy", "page": 1, "size": 1 }
-<<<<<<< HEAD
-=======
       },
       {
         "tool": "WebSearch_naver",
         "args": { "query": "성수동 카페 추천 블로그", "display": 10, "start": 1 }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ]
   },
   {
     "task_id": "L5-013",
-<<<<<<< HEAD
-    "instruction": "네이버에서 퓨리오사AI 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
-=======
     "instruction": "네이버에서 국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
       {
         "tool": "search_news",
-<<<<<<< HEAD
-        "args": { "query": "퓨리오사AI", "display": 1, "start": 1, "sort": "date" }
-=======
         "args": { "query": "국산 NPU", "display": 1, "start": 1, "sort": "date" }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ],
     "error_injection": {
@@ -379,25 +285,17 @@
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-<<<<<<< HEAD
-        "args": { "query": "퓨리오사AI 뉴스", "sort": "recency", "page": 1, "size": 1 }
-=======
         "args": { "query": "국산 NPU", "sort": "recency", "page": 1, "size": 1 }
       },
             {
         "tool": "WebSearch_naver",
         "args": { "query": "국산 NPU", "display": 10, "start": 1 }
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
       }
     ]
   },
   {
     "task_id": "L5-014",
-<<<<<<< HEAD
-    "instruction": "알라딘에서 ‘인공지능’ 검색해서 맨 위 결과의 제목만 한 줄로 알려줘.",
-=======
     "instruction": "알라딘에서 '인공지능' 검색해서 맨 위 결과의 제목만 한 줄로 알려줘.",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -409,13 +307,6 @@
     "error_injection": {
       "tool": "ItemSearch_aladin",
       "error_type": "timeout"
-<<<<<<< HEAD
-    }
-  },
-  {
-    "task_id": "L5-015",
-    "instruction": "알라딘 국내도서 베스트셀러(2025년 9월 1주) 3위 제목만 알려줘.",
-=======
     },
     "fallback_options": [
       {
@@ -431,7 +322,6 @@
   {
     "task_id": "L5-015",
     "instruction": "2025년 9월 1주차 알라딘 국내도서 베스트셀러 3위 제목만 알려줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -443,13 +333,6 @@
     "error_injection": {
       "tool": "ItemList_aladin",
       "error_type": "complete_unavailable"
-<<<<<<< HEAD
-    }
-  },
-  {
-    "task_id": "L5-016",
-    "instruction": "알라딘에서 한강 작가의 책 한권 추천해줘.",
-=======
     },
     "fallback_options": [
       {
@@ -465,7 +348,6 @@
   {
     "task_id": "L5-016",
     "instruction": "알라딘에서 한강 작가의 책 한권 추천해줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -485,11 +367,7 @@
   },
   {
     "task_id": "L5-017",
-<<<<<<< HEAD
-    "instruction": "알라딘 25년 9월 첫째주 국내도서 베스트셀러 1위 제목만 알려줘.",
-=======
     "instruction": "알라딘 25년 9월 첫째주 국내도서 베스트셀러 1위 제목만 알려줘",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -508,11 +386,7 @@
     ]
   },
   {
-<<<<<<< HEAD
-    "task_id": "L5-KIS-018",
-=======
     "task_id": "L5-018",
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
     "instruction": "애플(AAPL) 현재가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -525,9 +399,6 @@
     "error_injection": {
       "tool": "USStockPrice_kis",
       "error_type": "timeout"
-<<<<<<< HEAD
-    }
-=======
     },
     "fallback_options": [
       {
@@ -539,7 +410,6 @@
         "args": { "query": "AAPL 주가 현재가", "page": 1, "size": 1 }
       }
     ]
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
   },
   {
     "task_id": "L5-019",
@@ -663,8 +533,6 @@
         "args": { "start": "126.450517,37.46019", "goal": "127.0592,37.511", "option": "traoptimal" }
       }
     ]
-<<<<<<< HEAD
-=======
   },
   {
     "task_id": "L5-026",
@@ -779,6 +647,5 @@
         "args": { "startX": 127.108882, "startY": 37.394274, "endX": 126.92490, "endY": 37.52190, "searchOption": 2 }
       }
     ]  
->>>>>>> e899c6aa717f6ad4a22e0f4f343ce676421236b0
   }
 ]
