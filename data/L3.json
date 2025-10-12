@@ -258,8 +258,7 @@
       }
     ]
   },
-  
-    {
+  {
       "task_id": "L3-006",
       "instruction": "현재 주가 정보를 확인한 후, 차트 데이터를 분석해서 투자 결정에 도움이 되는 종합 정보를 제공해주세요.",
       "task_level": 3,
@@ -296,227 +295,224 @@
         }
       ]
     },
-    [
-        {
-          "task_id": "L3-007",
-          "instruction": "삼성전자랑 애플 주가 비교해줘",
+  {
+        "task_id": "L3-007",
+        "instruction": "삼성전자랑 애플 주가 비교해줘",
+        "task_level": 3,
+        "task_category": "Multi Tool Sequential",
+        "golden_action": [
+          {
+            "step": 1,
+            "tool": "web_search_naver",
+            "args": {
+              "query": "삼성 종목 코드"
+            }        
+          },
+          {
+            "step": 2,
+            "tool": "web_search_naver", 
+            "args": {
+              "query": "애플 종목 코드"
+            }        
+          },
+          {
+            "step": 3,
+            "tool": "StockPrice_kis",      
+            "args": {
+              "symbol": "035720"           
+            }
+          },
+          {
+            "step": 4,
+            "tool": "USStockPrice_kis",       
+            "args": {
+              "symbol": "AAPL"        
+            }
+          }
+        ],
+        "minimum_steps": 4,
+        "essential_tools": [
+          "web_search_naver",
+          "StockPrice_kis",
+          "USStockPrice_kis"
+        ],
+        "data_flow": [
+          {
+            "to_step": 3,
+            "to_parameter": "symbol",      
+            "from_step": 1,     
+            "from_output": "symbol"         
+          },
+          {
+            "to_step": 3,
+            "to_parameter": "symbol",     
+            "from_step": 2,     
+            "from_output": "symbol"        
+          }
+        ]
+      },
+      {
+          "task_id": "L3-008",
+          "instruction": "제주에서 9월에 열리는 행사 하나 찾아서 공항에서 행사지까지 차타고 얼마나 걸리는 지 알려줘.",
           "task_level": 3,
           "task_category": "Multi Tool Sequential",
           "golden_action": [
             {
               "step": 1,
-              "tool": "web_search_naver",
+              "tool": "FestivalSearch_kto",            
               "args": {
-                "query": "삼성 종목 코드"
-              }        
+                "location": "제주특별시",              
+                "eventStartDate": "20250901",          
+                "eventEndDate": "20250930"
+              }
             },
             {
               "step": 2,
-              "tool": "web_search_naver", 
+              "tool": "PlaceSearch_kakao",
               "args": {
-                "query": "애플 종목 코드"
-              }        
+                "keyword": "제주 공항",
+                "sort" : "accuracy",
+                "size" : 1
+              }
             },
             {
               "step": 3,
-              "tool": "StockPrice_kis",      
+                  "tool": "WalkRoute_tmap",              
               "args": {
-                "symbol": "035720"           
-              }
-            },
-            {
-              "step": 4,
-              "tool": "USStockPrice_kis",       
-              "args": {
-                "symbol": "AAPL"        
+                "startX": "{startX}",
+                "startY": "{startY}",
+                "endX": "{endX}",
+                "endY": "{endY}"
               }
             }
           ],
-          "minimum_steps": 4,
+          "minimum_steps": 3,
           "essential_tools": [
-            "web_search_naver",
-            "StockPrice_kis",
-            "USStockPrice_kis"
+              "FestivalSearch_kto",
+            "PlaceSearch_kakao", 
+            "WalkRoute_tmap"
           ],
           "data_flow": [
-            {
+              {
               "to_step": 3,
-              "to_parameter": "symbol",      
-              "from_step": 1,     
-              "from_output": "symbol"         
+              "to_parameter": "startX",
+              "from_step": 1,
+              "from_output": "mapx"           
             },
             {
               "to_step": 3,
-              "to_parameter": "symbol",     
-              "from_step": 2,     
-              "from_output": "symbol"        
+              "to_parameter": "startY",
+              "from_step": 1,
+              "from_output": "mapy"         
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "endX",
+              "from_step": 2,
+              "from_output": "longitude"
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "endY",
+              "from_step": 2,
+              "from_output": "latitude"
+            }
+          ]
+        }, 
+        {
+          "task_id": "L3-009",
+          "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
+          "task_level": 3,
+          "task_category": "Multi Tool Sequential",
+          "golden_action": [
+            {
+              "step": 1,
+              "tool": "Geocoding_tmap",               
+              "args": {
+                "keyword": "강남역"
+              }
+            },
+            {
+              "step": 2,
+              "tool": "Geocoding_tmap",
+              "args": {
+                "keyword": "이태원역"
+              }
+            },
+            {
+              "step": 3,
+                  "tool": "CarRoute_tmap",              
+              "args": {
+                "startX": "{startX}",
+                "startY": "{startY}",
+                "endX": "{endX}",
+                "endY": "{endY}",
+                "searchOption": 0            
+              }
+            }
+          ],
+          "minimum_steps": 3,
+          "essential_tools": [
+              "Geocoding_tmap",
+            "CarRoute_tmap"
+          ],
+          "data_flow": [
+              {
+              "to_step": 3,
+              "to_parameter": "startX",
+              "from_step": 1,
+              "from_output": "lon"           
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "startY",
+              "from_step": 1,
+              "from_output": "lat"           
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "endX",
+              "from_step": 2,
+              "from_output": "lon"
+            },
+            {
+              "to_step": 3,
+              "to_parameter": "endY",
+              "from_step": 2,
+              "from_output": "lat"
             }
           ]
         },
         {
-            "task_id": "L3-008",
-            "instruction": "제주에서 9월에 열리는 행사 하나 찾아서 공항에서 행사지까지 차타고 얼마나 걸리는 지 알려줘.",
-            "task_level": 3,
-            "task_category": "Multi Tool Sequential",
-            "golden_action": [
-              {
-                "step": 1,
-                "tool": "FestivalSearch_kto",            
-                "args": {
-                  "location": "제주특별시",              
-                  "eventStartDate": "20250901",          
-                  "eventEndDate": "20250930"
-                }
-              },
-              {
-                "step": 2,
-                "tool": "PlaceSearch_kakao",
-                "args": {
-                  "keyword": "제주 공항",
-                  "sort" : "accuracy",
-                  "size" : 1
-                }
-              },
-              {
-                "step": 3,
-                    "tool": "WalkRoute_tmap",              
-                "args": {
-                  "startX": "{startX}",
-                  "startY": "{startY}",
-                  "endX": "{endX}",
-                  "endY": "{endY}"
-                }
+          "task_id": "L3-010",
+          "instruction": "이번주 베스트 셀러 조회해서 가격 얼마인지 알려줘",
+          "task_level": 3,
+          "task_category": "Multi Tool Sequential",
+          "golden_action": [
+            {
+              "step": 1,
+              "tool": "ItemList_aladin",
+              "args": {
+                "QueryType": "Bestseller",
+                "MaxResults" : 1
               }
-            ],
-            "minimum_steps": 3,
-            "essential_tools": [
-                "FestivalSearch_kto",
-              "PlaceSearch_kakao", 
-              "WalkRoute_tmap"
-            ],
-            "data_flow": [
-               {
-                "to_step": 3,
-                "to_parameter": "startX",
-                "from_step": 1,
-                "from_output": "mapx"           
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "startY",
-                "from_step": 1,
-                "from_output": "mapy"         
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "endX",
-                "from_step": 2,
-                "from_output": "longitude"
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "endY",
-                "from_step": 2,
-                "from_output": "latitude"
+            },
+            {
+              "step": 2,
+              "tool": "ItemLookup_aladin",           
+              "args": {
+                "itemId": "{isbn13}",                
+                "OptResult" : "reviewList"           
               }
-            ]
-          }, 
-          {
-            "task_id": "L3-009",
-            "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
-            "task_level": 3,
-            "task_category": "Multi Tool Sequential",
-            "golden_action": [
-              {
-                "step": 1,
-                "tool": "Geocoding_tmap",               
-                "args": {
-                  "keyword": "강남역"
-                }
-              },
-              {
-                "step": 2,
-                "tool": "Geocoding_tmap",
-                "args": {
-                  "keyword": "이태원역"
-                }
-              },
-              {
-                "step": 3,
-                    "tool": "CarRoute_tmap",              
-                "args": {
-                  "startX": "{startX}",
-                  "startY": "{startY}",
-                  "endX": "{endX}",
-                  "endY": "{endY}",
-                  "searchOption": 0            
-                }
-              }
-            ],
-            "minimum_steps": 3,
-            "essential_tools": [
-                "Geocoding_tmap",
-              "CarRoute_tmap"
-            ],
-            "data_flow": [
-               {
-                "to_step": 3,
-                "to_parameter": "startX",
-                "from_step": 1,
-                "from_output": "lon"           
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "startY",
-                "from_step": 1,
-                "from_output": "lat"           
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "endX",
-                "from_step": 2,
-                "from_output": "lon"
-              },
-              {
-                "to_step": 3,
-                "to_parameter": "endY",
-                "from_step": 2,
-                "from_output": "lat"
-              }
-            ]
-          },
-          {
-            "task_id": "L3-010",
-            "instruction": "이번주 베스트 셀러 조회해서 가격 얼마인지 알려줘",
-            "task_level": 3,
-            "task_category": "Multi Tool Sequential",
-            "golden_action": [
-              {
-                "step": 1,
-                "tool": "ItemList_aladin",
-                "args": {
-                  "QueryType": "Bestseller",
-                  "MaxResults" : 1
-                }
-              },
-              {
-                "step": 2,
-                "tool": "ItemLookup_aladin",           
-                "args": {
-                  "itemId": "{isbn13}",                
-                  "OptResult" : "reviewList"           
-                }
-              }
-            ],
-            "data_flow": [
-              {
-                "to_step": 2,
-                "to_parameter": "itemId",
-                "from_step": 1,
-                "from_output": "isbn13"
-              }
-            ]
-          }
+            }
+          ],
+          "data_flow": [
+            {
+              "to_step": 2,
+              "to_parameter": "itemId",
+              "from_step": 1,
+              "from_output": "isbn13"
+            }
+          ]
+        }
     ]
-]
-  
