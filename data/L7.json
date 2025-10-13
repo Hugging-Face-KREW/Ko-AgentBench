@@ -993,18 +993,21 @@
           "content": "네, 10월 부산에서는 '부산국제영화제'가 2025년 10월 2일부터 10월 11일까지 열릴 예정입니다.",
           "actions": [
             {
-              "tool": "festival_search",
+              "tool": "WebSearch_naver",
               "args": {
-                "eventStartDate": "20251001",
-                "eventEndDate": "20251031",
-                "location": "부산"
+                "query": "2025년 10월 부산 축제"
               },
               "result": {
-                "totalCount": 1,
-                "title": "부산국제영화제",
-                "addr": "부산광역시 해운대구 우동",
-                "eventStartDate": "20251002",
-                "eventEndDate": "20251011"
+                "total": 2341,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "부산국제영화제 2025",
+                    "link": "https://www.biff.kr/",
+                    "description": "2025년 10월 2일부터 10월 11일까지 부산광역시 해운대구 우동에서 개최"
+                  }
+                ]
               },
               "timestamp": "2025-09-27T14:01:00Z"
             }
@@ -1021,18 +1024,21 @@
           "content": "서울에서는 '서울세계불꽃축제'가 10월 4일에 개최됩니다.",
           "actions": [
             {
-              "tool": "festival_search",
+              "tool": "WebSearch_naver",
               "args": {
-                "eventStartDate": "20251001",
-                "eventEndDate": "20251031",
-                "location": "서울"
+                "query": "2025년 10월 서울 축제"
               },
               "result": {
-                "totalCount": 1,
-                "title": "서울세계불꽃축제",
-                "addr": "서울특별시 영등포구 여의동로 330",
-                "eventStartDate": "20251004",
-                "eventEndDate": "20251004"
+                "total": 1876,
+                "start": 1,
+                "display": 10,
+                "items": [
+                  {
+                    "title": "서울세계불꽃축제 2025",
+                    "link": "https://www.hanwha.co.kr/",
+                    "description": "2025년 10월 4일 서울특별시 영등포구 여의동로 330에서 개최"
+                  }
+                ]
               },
               "timestamp": "2025-09-27T14:02:00Z"
             }
@@ -1092,11 +1098,9 @@
             "should_remember": "10월에 부산으로 가족 여행을 간다.",
             "trigger": "다른 지역도 좀 볼까? 서울 쪽으로.",
             "expected_action": {
-              "tool": "festival_search",
+              "tool": "WebSearch_naver",
               "args": {
-                "eventStartDate": "20251001",
-                "eventEndDate": "20251031",
-                "location": "서울"
+                "query": "2025년 10월 서울 축제"
               }
             }
           },
