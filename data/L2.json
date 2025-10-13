@@ -181,7 +181,6 @@
     "available_tools": [
       "StockPrice_kis",
       "StockPrice_ls",
-      "StockSearch_kis",
       "NewsSearch_naver",
       "CryptoPrice_upbit"
     ],
@@ -895,27 +894,6 @@
   },
   {
     "task_id": "L2-077",
-    "instruction": "'현대차' 종목 코드를 검색해줘",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "StockSearch_kis",
-      "StockSearch_ls",
-      "WebSearch_naver",
-      "NewsSearch_naver",
-      "StockPrice_ls"
-    ],
-    "golden_action": [
-      {
-        "tool": "StockSearch_kis",
-        "args": {
-          "keyword": "현대차"
-        }
-      }
-    ]
-  },
-  {
-    "task_id": "L2-078",
     "instruction": "업비트에서 거래 가능한 모든 암호화폐 목록을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -936,7 +914,7 @@
     ]
   },
   {
-    "task_id": "L2-079",
+    "task_id": "L2-078",
     "instruction": "서울특별시 강남구 테헤란로 152 주소를 좌표로 변환해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -957,7 +935,7 @@
     ]
   },
   {
-    "task_id": "L2-080",
+    "task_id": "L2-079",
     "instruction": "2025년 봄 시즌 제주도 축제 정보를 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -981,7 +959,7 @@
     ]
   },
   {
-    "task_id": "L2-081",
+    "task_id": "L2-080",
     "instruction": "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1003,13 +981,12 @@
     ]
   },
   {
-    "task_id": "L2-082",
+    "task_id": "L2-081",
     "instruction": "LS증권에서 '배터리'로 관련 종목을 검색해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
       "StockSearch_ls",
-      "StockSearch_kis",
       "SectorStock_ls",
       "WebSearch_naver",
       "NewsSearch_naver"
@@ -1024,7 +1001,7 @@
     ]
   },
   {
-    "task_id": "L2-083",
+    "task_id": "L2-082",
     "instruction": "강남역 반경 1km 이내 편의점을 T맵 카테고리로 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1048,7 +1025,7 @@
     ]
   },
   {
-    "task_id": "L2-084",
+    "task_id": "L2-083",
     "instruction": "테슬라(TSLA) 주가를 확인하고 싶어",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1070,7 +1047,7 @@
     ]
   },
   {
-    "task_id": "L2-085",
+    "task_id": "L2-084",
     "instruction": "서울 마포구 월드컵북로 396 주소의 경위도 좌표를 T맵으로 알려줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1091,7 +1068,7 @@
     ]
   },
   {
-    "task_id": "L2-086",
+    "task_id": "L2-085",
     "instruction": "이번 주 IT/컴퓨터 분야 신간 도서 목록을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
