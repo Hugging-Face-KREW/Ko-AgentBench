@@ -6,33 +6,29 @@
     "task_category": "Single Tool",
     "golden_action": [
       {
-        "tool": "festival_search",
+        "tool": "WebSearch_naver",
         "args": {
-          "eventStartDate": "20251001",
-          "eventEndDate": "20251031",
-          "location": "부산",
-          "num_of_rows": 1
+          "query": "25년도 10월 부산축제",
+          "display": 10
         }
       }
     ],
     "arg_schema": {
-      "eventStartDate": {
+      "query": {
         "type": "string",
-        "pattern": "^[0-9]{8}$",
         "required": true
       },
-      "eventEndDate": {
-        "type": "string",
-        "pattern": "^[0-9]{8}$"
-      },
-      "location": {
-        "type": "string"
-      },
-      "num_of_rows": {
+      "display": {
         "type": "integer",
         "minimum": 1,
         "maximum": 100,
         "default": 10
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 1
       }
     },
     "resp_schema": {
