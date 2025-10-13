@@ -1,1392 +1,1392 @@
 [
-    {
-        "task_id": "L6-001",
-        "instruction": "파이썬으로 배우는 알고리즘 트레이딩 책 좀 찾아줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "ItemSearch_aladin",
-            "args": {
-              "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-            }
-          },
-          {
-            "tool": "ItemSearch_aladin",
-            "args": {
-              "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-              "Sort": "SalesPoint"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-              "Sort": "SalesPoint"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-001",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "파이썬으로 배우는 알고리즘 트레이딩 책 좀 찾아줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다.",
-              "actions": [
-                {
-                  "tool": "ItemSearch_aladin",
-                  "args": {
-                    "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-                  },
-                  "result": {
-                    "totalResults": 1,
-                    "startIndex": 1,
-                    "itemsPerPage": 1,
-                    "query": "파이썬으로 배우는 알고리즘 트레이딩",
-                    "item": [
-                      {
-                        "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
-                        "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=288219920",
-                        "author": "조대표, 김형준, 이준혁",
-                        "pubDate": "2022-01-20",
-                        "description": "최신 시장 상황과 라이브러리 변경 사항을 반영한 개정판! 파이썬 기초부터 자동매매 전략 구현까지, 이 책 한 권으로 끝낸다.",
-                        "isbn13": "9791158393339",
-                        "itemId": 288219920,
-                        "priceSales": 34200,
-                        "priceStandard": 38000,
-                        "stockStatus": "보통",
-                        "mileage": 1900,
-                        "cover": "https://image.aladin.co.kr/product/28821/99/cover/k362734136_1.jpg",
-                        "publisher": "위키북스",
-                        "salesPoint": 54321,
-                        "customerReviewRank": 9.8,
-                        "adult": false
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-27T14:00:00Z"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 찾아준 책 다시 알려줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "'파이썬으로 배우는 알고리즘 트레이딩' 검색 결과",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "그럼 이번엔 판매량순으로 정렬해서 다시 찾아줘."
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "네, 판매량순으로 정렬했을 때도 '파이썬으로 배우는 알고리즘 트레이딩(개정판)'이 가장 상위에 검색됩니다.",
-              "actions": [
-                {
-                  "tool": "ItemSearch_aladin",
-                  "args": {
-                    "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-                    "Sort": "SalesPoint"
-                  },
-                  "result": {
-                    "totalResults": 1,
-                    "startIndex": 1,
-                    "itemsPerPage": 1,
-                    "query": "파이썬으로 배우는 알고리즘 트레이딩",
-                    "item": [
-                      {
-                        "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
-                        "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=288219920",
-                        "author": "조대표, 김형준, 이준혁",
-                        "pubDate": "2022-01-20",
-                        "description": "최신 시장 상황과 라이브러리 변경 사항을 반영한 개정판! 파이썬 기초부터 자동매매 전략 구현까지, 이 책 한 권으로 끝낸다.",
-                        "isbn13": "9791158393339",
-                        "itemId": 288219920,
-                        "priceSales": 34200,
-                        "priceStandard": 38000,
-                        "stockStatus": "보통",
-                        "mileage": 1900,
-                        "cover": "https://image.aladin.co.kr/product/28821/99/cover/k362734136_1.jpg",
-                        "publisher": "위키북스",
-                        "salesPoint": 54321,
-                        "customerReviewRank": 9.8,
-                        "adult": false
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-27T14:02:00Z"
-                }
-              ]
-            },
-            {
-              "turn_number": 7,
-              "role": "user",
-              "content": "판매량순으로 정렬한 거 다시 보여줘."
-            },
-            {
-              "turn_number": 8,
-              "role": "assistant",
-              "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬으로 배우는 알고리즘 트레이딩(개정판)' 입니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-                    "Sort": "SalesPoint"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 6,
-                  "info": "item search result for '파이썬으로 배우는 알고리즘 트레이딩' sorted by 'SalesPoint'",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            }
-          ]
+  {
+    "task_id": "L6-001",
+    "instruction": "파이썬으로 배우는 알고리즘 트레이딩 책 좀 찾아줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "Query": "파이썬으로 배우는 알고리즘 트레이딩"
         }
       },
       {
-        "task_id": "L6-002",
-        "instruction": "최신 반도체 기술 관련 뉴스 3개만 찾아줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "NewsSearch_naver",
-            "args": {
-              "query": "반도체 기술",
-              "display": 3,
-              "sort": "date"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "query": "반도체 기술",
-              "display": 3,
-              "sort": "date"
-            }
-          },
-          {
-            "tool": "NewsSearch_naver",
-            "args": {
-              "query": "삼성전자",
-              "display": 1,
-              "sort": "date"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-002",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "최신 반도체 기술 관련 뉴스 3개만 찾아줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
-              "actions": [
-                {
-                  "tool": "NewsSearch_naver",
-                  "args": {
-                    "query": "반도체 기술",
-                    "display": 3,
-                    "sort": "date"
-                  },
-                  "result": {
-                    "total": 87654,
-                    "start": 1,
-                    "display": 3,
-                    "items": [
-                      {
-                        "title": "차세대 AI 반도체 개발 동향",
-                        "link": "https://n.news.naver.com/mnews/article/001/0012345678",
-                        "description": "글로벌 빅테크 기업들이 인공지능(AI) 연산에 특화된 차세대 반도체 개발에 사활을 걸고 있다.",
-                        "originallink": "https://www.yna.co.kr/view/AKR20250926012345678",
-                        "pubDate": "Fri, 26 Sep 2025 10:30:00 +0900"
-                      },
-                      {
-                        "title": "국내 기업, 3나노 공정 수율 안정화 성공",
-                        "link": "https://n.news.naver.com/mnews/article/002/0009876543",
-                        "description": "국내 대표 반도체 기업이 극자외선(EUV)을 활용한 3나노미터 공정의 수율 안정화에 성공했다고 밝혔다.",
-                        "originallink": "https://www.etnews.com/20250926000123",
-                        "pubDate": "Fri, 26 Sep 2025 09:15:00 +0900"
-                      },
-                      {
-                        "title": "정부, 시스템 반도체 육성 전략 발표",
-                        "link": "https://n.news.naver.com/mnews/article/003/0011223344",
-                        "description": "정부는 미래차, AI 등 유망 산업의 핵심 부품인 시스템 반도체 생태계 강화를 위한 종합 전략을 발표했다.",
-                        "originallink": "https://www.chosun.com/economy/tech/2025/09/26/some-article-id",
-                        "pubDate": "Fri, 26 Sep 2025 08:45:00 +0900"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-26T11:00:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 찾아준 뉴스 다시 한번 보여줄래?"
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "query": "반도체 기술",
-                    "display": 3,
-                    "sort": "date"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "NewsSearch_naver(query='반도체 기술', display=3, sort='date')",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "고마워. 그럼 이번엔 삼성전자 관련 최신 뉴스로 1개 찾아줘."
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "삼성전자 관련 최신 뉴스 1건을 찾았어. 첫 번째 기사는 '삼성전자, 차세대 메모리 반도체 공개'야. 더 궁금한 점이 있으면 알려줘.",
-              "actions": [
-                {
-                  "tool": "NewsSearch_naver",
-                  "args": {
-                    "query": "삼성전자",
-                    "display": 1,
-                    "sort": "date"
-                  },
-                  "result": {
-                    "total": 15203,
-                    "start": 1,
-                    "display": 1,
-                    "items": [
-                      {
-                        "title": "삼성전자, 차세대 메모리 반도체 공개",
-                        "link": "https://n.news.naver.com/mnews/article/004/0001112222",
-                        "description": "삼성전자가 업계 최고 속도와 전력 효율을 구현한 차세대 D램을 공개하며 기술 리더십을 과시했다.",
-                        "originallink": "https://www.zdnet.co.kr/view/?no=20250926110500",
-                        "pubDate": "Fri, 26 Sep 2025 11:05:00 +0900"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-26T11:03:00+09:00"
-                }
-              ]
-            }
-          ]
+        "tool": "reuse",
+        "args": {
+          "Query": "파이썬으로 배우는 알고리즘 트레이딩"
         }
       },
       {
-        "task_id": "L6-003",
-        "instruction": "뉴진스 최신 영상 2개만 찾아줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "VideoSearch_daum",
-            "args": {
-              "query": "뉴진스",
-              "sort": "recency",
-              "size": 2
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "query": "뉴진스",
-              "sort": "recency",
-              "size": 2
-            }
-          }
-        ],
-        "minimum_calls": 1,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-003",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "뉴진스 최신 영상 2개만 찾아줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "actions": [
-                {
-                  "tool": "VideoSearch_daum",
-                  "args": {
-                    "query": "뉴진스",
-                    "sort": "recency",
-                    "size": 2
-                  },
-                  "result": {
-                    "meta": {
-                      "total_count": 50000,
-                      "pageable_count": 800,
-                      "is_end": false
-                    },
-                    "documents": [
-                      {
-                        "title": "뉴진스(NewJeans) 신곡 'Bubble Gum' MV",
-                        "play_time": 245,
-                        "thumbnail": "https://search.daum.net/fake/thumbnail/newjeans_mv1.jpg",
-                        "url": "https://tv.kakao.com/v/123456789",
-                        "datetime": "2025-09-28T09:00:00.000+09:00",
-                        "author": "HYBE LABELS"
-                      },
-                      {
-                        "title": "뉴진스 팝업스토어 방문 VLOG",
-                        "play_time": 720,
-                        "thumbnail": "https://search.daum.net/fake/thumbnail/newjeans_vlog.jpg",
-                        "url": "https://youtube.com/watch?v=abcdefgh",
-                        "datetime": "2025-09-27T18:30:00.000+09:00",
-                        "author": "NewJeans"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T08:30:00+09:00"
-                }
-              ],
-              "content": "뉴진스 최신 동영상 2개를 찾았습니다. '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "아까 알려준 영상들 다시 보여줄래?"
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "query": "뉴진스",
-                    "sort": "recency",
-                    "size": 2
-                  },
-                  "timestamp": "2025-09-28T08:35:00+09:00"
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "VideoSearch_daum(query='뉴진스', sort='recency', size=2)",
-                  "usage_type": "direct_reference"
-                }
-              ],
-              "content": "네, 방금 찾아드린 뉴진스 최신 영상은 '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
-            }
-          ]
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "Query": "파이썬으로 배우는 알고리즘 트레이딩",
+          "Sort": "SalesPoint"
         }
       },
       {
-        "task_id": "L6-004",
-        "instruction": "시흥시청 맛집 좀 찾아줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "PlaceSearch_kakao",
-            "args": {
-              "keyword": "시흥시청 맛집"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "keyword": "시흥시청 맛집"
-            }
-          },
-          {
-            "tool": "PlaceSearch_kakao",
-            "args": {
-              "keyword": "시흥시청 카페"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-004",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "시흥시청 맛집 좀 찾아줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등이 검색되었습니다.",
-              "actions": [
-                {
-                  "tool": "PlaceSearch_kakao",
-                  "args": {
-                    "keyword": "시흥시청 맛집"
-                  },
-                  "result": {
-                    "keyword": "시흥시청 맛집",
-                    "total_count": 58,
-                    "places": [
-                      {
-                        "name": "바오스시",
-                        "address": "경기 시흥시 시청로68번길 21",
-                        "road_address": "경기 시흥시 시청로68번길 21",
-                        "phone": "031-314-7734",
-                        "latitude": "37.3807",
-                        "longitude": "126.8025",
-                        "category": "음식점 > 일식 > 초밥,롤",
-                        "place_url": "http://place.map.kakao.com/12345678",
-                        "distance": "250"
-                      },
-                      {
-                        "name": "오늘도, 맑음",
-                        "address": "경기 시흥시 시청로50번길 1",
-                        "road_address": "경기 시흥시 시청로50번길 1",
-                        "phone": "031-311-2345",
-                        "latitude": "37.3811",
-                        "longitude": "126.8041",
-                        "category": "음식점 > 양식 > 파스타,피자",
-                        "place_url": "http://place.map.kakao.com/23456789",
-                        "distance": "400"
-                      },
-                      {
-                        "name": "만수채 시흥시청점",
-                        "address": "경기 시흥시 광석동 275",
-                        "road_address": "경기 시흥시 광석동 275",
-                        "phone": "031-404-4545",
-                        "latitude": "37.3822",
-                        "longitude": "126.8010",
-                        "category": "음식점 > 한식 > 한정식",
-                        "place_url": "http://place.map.kakao.com/34567890",
-                        "distance": "150"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T08:50:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 찾아준 맛집 목록 다시 알려줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등을 찾아드렸습니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "keyword": "시흥시청 맛집"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "PlaceSearch_kakao(keyword='시흥시청 맛집') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "고마워. 그럼 카페는 어디가 좋아?"
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "시흥시청 근처 카페로는 '카페 온기'가 있습니다.",
-              "actions": [
-                {
-                  "tool": "PlaceSearch_kakao",
-                  "args": {
-                    "keyword": "시흥시청 카페"
-                  },
-                  "result": {
-                    "keyword": "시흥시청 카페",
-                    "total_count": 42,
-                    "places": [
-                      {
-                        "name": "카페 온기",
-                        "address": "경기 시흥시 시청로68번길 15",
-                        "road_address": "경기 시흥시 시청로68번길 15",
-                        "phone": "031-314-9876",
-                        "latitude": "37.3805",
-                        "longitude": "126.8028",
-                        "category": "음식점 > 카페",
-                        "place_url": "http://place.map.kakao.com/45678901",
-                        "distance": "280"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T08:52:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-005",
-        "instruction": "25년 9월에 부산에서 하는 축제 찾아줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "festival_search",
-            "args": {
-              "eventStartDate": "20250901",
-              "location": "부산"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "eventStartDate": "20250901",
-              "location": "부산"
-            }
-          },
-          {
-            "tool": "festival_search",
-            "args": {
-              "eventStartDate": "20251001",
-              "location": "제주도"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-005",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "25년 9월에 부산에서 하는 축제 찾아줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "9월 부산 축제로는 '부산국제영화제'가 있습니다. 매년 다채로운 영화와 함께하는 아시아 최대 영화 축제입니다.",
-              "actions": [
-                {
-                  "tool": "festival_search",
-                  "args": {
-                    "eventStartDate": "20250901",
-                    "location": "부산"
-                  },
-                  "result": {
-                    "totalCount": 1,
-                    "title": "부산국제영화제",
-                    "addr": "부산광역시 해운대구 우동",
-                    "eventStartDate": "20250925",
-                    "eventEndDate": "20251004"
-                  },
-                  "timestamp": "2025-09-28T09:15:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "아까 알려준 9월 부산 축제 다시 말해줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 9월에 부산에서 열리는 축제는 '부산국제영화제'입니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "eventStartDate": "20250901",
-                    "location": "부산"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "festival_search(eventStartDate='20250901', location='부산') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "그럼 25년 10월에 제주도에서 하는 축제는 없어?"
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "10월 제주도 축제로는 '제주감귤박람회'가 있습니다.",
-              "actions": [
-                {
-                  "tool": "festival_search",
-                  "args": {
-                    "eventStartDate": "20251001",
-                    "location": "제주도"
-                  },
-                  "result": {
-                    "totalCount": 1,
-                    "title": "제주감귤박람회",
-                    "addr": "제주특별자치도 서귀포시 남원읍 중산간동로 7413",
-                    "eventStartDate": "20251008",
-                    "eventEndDate": "20251012"
-                  },
-                  "timestamp": "2025-09-28T09:17:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-006",
-        "instruction": "겨울 제주도 여행 코스 알려줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "BlogSearch_naver",
-            "args": {
-              "query": "겨울 제주도 여행 코스"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "query": "겨울 제주도 여행 코스"
-            }
-          },
-          {
-            "tool": "BlogSearch_naver",
-            "args": {
-              "query": "제주공항 근처 맛집"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-006",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "겨울 제주도 여행 코스 알려줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "네, '겨울 제주도 여행 코스'로 검색했을 때 '한라산 눈꽃 산행과 감귤 체험'을 추천하는 블로그 글이 있네요.",
-              "actions": [
-                {
-                  "tool": "BlogSearch_naver",
-                  "args": {
-                    "query": "겨울 제주도 여행 코스"
-                  },
-                  "result": {
-                    "total": 123456,
-                    "start": 1,
-                    "display": 1,
-                    "items": [
-                      {
-                        "title": "눈부신 설경! <b>겨울 제주도 여행 코스</b> (한라산, 감귤체험)",
-                        "link": "https://blog.naver.com/travelholic/123456789",
-                        "description": "<b>겨울 제주도 여행</b>의 백미, 한라산 눈꽃 산행과 따뜻한 비닐하우스에서의 감귤 체험 <b>코스</b>를 소개합니다.",
-                        "bloggername": "여행에미치다",
-                        "bloggerlink": "https://blog.naver.com/travelholic",
-                        "postdate": "20241215"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:50:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "아까 추천해준 여행 코스 다시 알려줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 감귤 체험 코스를 추천해드렸습니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "query": "겨울 제주도 여행 코스"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "BlogSearch_naver(query='겨울 제주도 여행 코스') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "좋네. 그럼 제주공항 근처 맛집도 찾아볼래?"
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "'제주공항 근처 맛집'으로 검색해보니 '우진해장국' 블로그 후기가 가장 많이 보입니다.",
-              "actions": [
-                {
-                  "tool": "BlogSearch_naver",
-                  "args": {
-                    "query": "제주공항 근처 맛집"
-                  },
-                  "result": {
-                    "total": 98765,
-                    "start": 1,
-                    "display": 1,
-                    "items": [
-                      {
-                        "title": "<b>제주공항 근처 맛집</b>, 웨이팅 필수 '우진해장국'",
-                        "link": "https://blog.naver.com/foodlover/987654321",
-                        "description": "제주 도착 첫 끼 혹은 마지막 식사로 추천하는 <b>제주공항 근처 맛집</b>! 우진해장국의 고사리 육개장은 꼭 먹어봐야 할 메뉴입니다.",
-                        "bloggername": "맛집탐험가",
-                        "bloggerlink": "https://blog.naver.com/foodlover",
-                        "postdate": "20250910"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:52:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-007",
-        "instruction": "AI 기술 최신 동향에 대해 알려줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "WebSearch_daum",
-            "args": {
-              "query": "AI 기술 최신 동향"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "query": "AI 기술 최신 동향"
-            }
-          },
-          {
-            "tool": "WebSearch_daum",
-            "args": {
-              "query": "양자 컴퓨팅"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-007",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "AI 기술 최신 동향에 대해 알려줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "최근 AI 기술은 생성형 AI와 거대 언어 모델(LLM)의 발전이 주도하고 있습니다. 관련 웹문서의 제목은 '2025년 AI 기술 트렌드 전망'입니다.",
-              "actions": [
-                {
-                  "tool": "WebSearch_daum",
-                  "args": {
-                    "query": "AI 기술 최신 동향"
-                  },
-                  "result": {
-                    "meta": {
-                      "total_count": 1234567,
-                      "pageable_count": 800,
-                      "is_end": false
-                    },
-                    "documents": [
-                      {
-                        "datetime": "2025-09-28T09:20:00.000+09:00",
-                        "contents": "생성형 <b>AI</b>와 거대 언어 모델(LLM)의 발전이 <b>기술</b> 산업 전반에 큰 영향을 미치고 있다...",
-                        "title": "2025년 <b>AI</b> <b>기술</b> 트렌드 전망",
-                        "url": "https://tech.example.com/ai-trends-2025"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T09:22:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 찾아준 AI 기술 동향 다시 설명해줄래?"
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "query": "AI 기술 최신 동향"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "WebSearch_daum(query='AI 기술 최신 동향') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "고마워. 그럼 이번엔 양자 컴퓨팅에 대해 검색해줘."
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "양자 컴퓨팅은 양자역학 원리를 이용해 기존 컴퓨터의 한계를 뛰어넘는 계산 능력을 목표로 하는 기술입니다. 관련 웹문서 '양자 컴퓨팅의 원리와 미래'를 찾았습니다.",
-              "actions": [
-                {
-                  "tool": "WebSearch_daum",
-                  "args": {
-                    "query": "양자 컴퓨팅"
-                  },
-                  "result": {
-                    "meta": {
-                      "total_count": 876543,
-                      "pageable_count": 750,
-                      "is_end": false
-                    },
-                    "documents": [
-                      {
-                        "datetime": "2025-09-27T11:00:00.000+09:00",
-                        "contents": "<b>양자 컴퓨팅</b>은 중첩과 얽힘 같은 양자역학적 현상을 활용하여 기존 컴퓨터보다 훨씬 빠른 연산을 수행하는 기술이다.",
-                        "title": "<b>양자 컴퓨팅</b>의 원리와 미래",
-                        "url": "https://science.example.com/quantum-computing-basics"
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T09:24:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-008",
-        "instruction": "기후 변화 원인에 대해 알려줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "WebSearch_naver",
-            "args": {
-              "query": "기후 변화 원인"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "query": "기후 변화 원인"
-            }
-          },
-          {
-            "tool": "WebSearch_naver",
-            "args": {
-              "query": "탄소중립 실천 방안"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-008",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "기후 변화 원인에 대해 알려줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 대표적으로 '산업혁명 이후 화석 연료 사용 증가'가 가장 큰 원인으로 꼽힙니다.",
-              "actions": [
-                {
-                  "tool": "WebSearch_naver",
-                  "args": {
-                    "query": "기후 변화 원인"
-                  },
-                  "result": {
-                    "total": 3456789,
-                    "start": 1,
-                    "display": 1,
-                    "items": [
-                      {
-                        "title": "<b>기후변화</b>의 <b>원인</b>과 영향 - 국립기상과학원",
-                        "link": "https://www.nims.go.kr/portal/content/view.do?p=252",
-                        "description": "<b>기후변화</b>는 자연적인 <b>원인</b>과 인위적인 <b>원인</b>으로 구분할 수 있다. ... 산업혁명 이후 화석 연료의 사용, 삼림 파괴 등 인간의 활동이 대기 중 온실가스 농도를 급격히 증가시키면서..."
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T09:30:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 설명해준 기후 변화의 원인이 뭐라고 했지?"
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 기후 변화의 핵심 원인은 인간 활동에 따른 온실가스 배출 증가입니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "query": "기후 변화 원인"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "WebSearch_naver(query='기후 변화 원인') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "그렇구나. 그럼 탄소중립 실천 방안도 찾아줘."
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "탄소중립 실천 방안으로는 대중교통 이용, 일회용품 사용 줄이기, 에너지 절약 등이 있습니다.",
-              "actions": [
-                {
-                  "tool": "WebSearch_naver",
-                  "args": {
-                    "query": "탄소중립 실천 방안"
-                  },
-                  "result": {
-                    "total": 123456,
-                    "start": 1,
-                    "display": 1,
-                    "items": [
-                      {
-                        "title": "생활 속 <b>탄소중립 실천 방안</b> 5가지",
-                        "link": "https://example-carbon-neutral.com/actions",
-                        "description": "일상생활에서 쉽게 <b>실천</b>할 수 있는 <b>탄소중립 방안</b>. 첫째, 대중교통 이용하기. 둘째, 일회용품 사용 줄이기..."
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T09:32:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-009",
-        "instruction": "업비트 원화마켓에 상장된 코인 목록 알려줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "MarketList_upbit",
-            "args": {
-              "quote": "KRW"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "quote": "KRW"
-            }
-          },
-          {
-            "tool": "MarketList_upbit",
-            "args": {
-              "quote": "BTC"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-009",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "업비트 원화마켓에 상장된 코인 목록 알려줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다.",
-              "actions": [
-                {
-                  "tool": "MarketList_upbit",
-                  "args": {
-                    "quote": "KRW"
-                  },
-                  "result": {
-                    "markets": [
-                      "KRW-BTC",
-                      "KRW-ETH",
-                      "KRW-XRP"
-                    ],
-                    "market_count": 120,
-                    "quote": "KRW",
-                    "details": [
-                      {
-                        "market": "KRW-BTC",
-                        "korean_name": "비트코인",
-                        "english_name": "Bitcoin",
-                        "market_event": {
-                          "warning": false,
-                          "caution": false
-                        }
-                      },
-                      {
-                        "market": "KRW-ETH",
-                        "korean_name": "이더리움",
-                        "english_name": "Ethereum",
-                        "market_event": {
-                          "warning": false,
-                          "caution": false
-                        }
-                      },
-                      {
-                        "market": "KRW-XRP",
-                        "korean_name": "리플",
-                        "english_name": "Ripple",
-                        "market_event": {
-                          "warning": false,
-                          "caution": false
-                        }
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:00:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 알려준 원화마켓 목록 다시 보여줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 업비트 원화 마켓 목록입니다. 비트코인, 이더리움 등이 포함되어 있습니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "quote": "KRW"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "MarketList_upbit(quote='KRW') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "그럼 BTC 마켓 목록도 알려줄래?"
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "네, 비트코인(BTC) 마켓에는 이더리움(ETH), 리플(XRP), 이오스(EOS) 등 총 80개의 암호화폐가 거래되고 있습니다.",
-              "actions": [
-                {
-                  "tool": "MarketList_upbit",
-                  "args": {
-                    "quote": "BTC"
-                  },
-                  "result": {
-                    "markets": [
-                      "BTC-ETH",
-                      "BTC-XRP",
-                      "BTC-EOS"
-                    ],
-                    "market_count": 80,
-                    "quote": "BTC",
-                    "details": [
-                      {
-                        "market": "BTC-ETH",
-                        "korean_name": "이더리움",
-                        "english_name": "Ethereum",
-                        "market_event": {
-                          "warning": false,
-                          "caution": false
-                        }
-                      },
-                      {
-                        "market": "BTC-XRP",
-                        "korean_name": "리플",
-                        "english_name": "Ripple",
-                        "market_event": {
-                          "warning": false,
-                          "caution": false
-                        }
-                      },
-                      {
-                        "market": "BTC-EOS",
-                        "korean_name": "이오스",
-                        "english_name": "EOS",
-                        "market_event": {
-                            "warning": false,
-                            "caution": false
-                        }
-                        }     
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:02:00+09:00"
-                }
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "task_id": "L6-010",
-        "instruction": "9월 넷째 주 삼성전자 주봉 데이터 알려줘.",
-        "task_level": 6,
-        "task_category": "Efficiency",
-        "golden_action": [
-          {
-            "tool": "StockChart_kis",
-            "args": {
-              "symbol": "005930",
-              "period": "W",
-              "date": "20250926"
-            }
-          },
-          {
-            "tool": "reuse",
-            "args": {
-              "symbol": "005930",
-              "period": "W",
-              "date": "20250926"
-            }
-          },
-          {
-            "tool": "StockChart_kis",
-            "args": {
-              "symbol": "000660",
-              "period": "W",
-              "date": "20250926"
-            }
-          }
-        ],
-        "minimum_calls": 2,
-        "freshness_threshold": "24h",
-        "conversation_tracking": {
-          "conversation_id": "conv-L6-010",
-          "turns": [
-            {
-              "turn_number": 1,
-              "role": "user",
-              "content": "9월 넷째 주 삼성전자 주봉 데이터 알려줘."
-            },
-            {
-              "turn_number": 2,
-              "role": "assistant",
-              "content": "네, 9월 넷째 주 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다.",
-              "actions": [
-                {
-                  "tool": "StockChart_kis",
-                  "args": {
-                    "symbol": "005930",
-                    "period": "W",
-                    "date": "20250926"
-                  },
-                  "result": {
-                    "symbol": "005930",
-                    "stock_name": "삼성전자",
-                    "period": "W",
-                    "count": 1,
-                    "chart_data": [
-                      {
-                        "date": "20250926",
-                        "open": 79000,
-                        "high": 81500,
-                        "low": 78800,
-                        "close": 81200,
-                        "volume": 75000000
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:45:00+09:00"
-                }
-              ]
-            },
-            {
-              "turn_number": 3,
-              "role": "user",
-              "content": "방금 알려준 주봉 데이터 다시 보여줘."
-            },
-            {
-              "turn_number": 4,
-              "role": "assistant",
-              "content": "네, 9월 넷째 주 삼성전자 주봉 종가는 81,200원이었습니다.",
-              "actions": [
-                {
-                  "tool": "reuse",
-                  "args": {
-                    "symbol": "005930",
-                    "period": "W",
-                    "date": "20250926"
-                  }
-                }
-              ],
-              "context_used": [
-                {
-                  "source_turn": 2,
-                  "info": "StockChart_kis(symbol='005930', period='W') result",
-                  "usage_type": "direct_reference"
-                }
-              ]
-            },
-            {
-              "turn_number": 5,
-              "role": "user",
-              "content": "그럼 같은 주 SK하이닉스 주봉은 어땠어?"
-            },
-            {
-              "turn_number": 6,
-              "role": "assistant",
-              "content": "네, 9월 넷째 주 SK하이닉스(000660)의 주봉 종가는 235,000원이었습니다.",
-              "actions": [
-                {
-                  "tool": "StockChart_kis",
-                  "args": {
-                    "symbol": "000660",
-                    "period": "W",
-                    "date": "20250926"
-                  },
-                  "result": {
-                    "symbol": "000660",
-                    "stock_name": "SK하이닉스",
-                    "period": "W",
-                    "count": 1,
-                    "chart_data": [
-                      {
-                        "date": "20250926",
-                        "open": 225000,
-                        "high": 236000,
-                        "low": 224500,
-                        "close": 235000,
-                        "volume": 25000000
-                      }
-                    ]
-                  },
-                  "timestamp": "2025-09-28T10:47:00+09:00"
-                }
-              ]
-            }
-          ]
+        "tool": "reuse",
+        "args": {
+          "Query": "파이썬으로 배우는 알고리즘 트레이딩",
+          "Sort": "SalesPoint"
         }
       }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-001",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "파이썬으로 배우는 알고리즘 트레이딩 책 좀 찾아줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다.",
+          "actions": [
+            {
+              "tool": "ItemSearch_aladin",
+              "args": {
+                "Query": "파이썬으로 배우는 알고리즘 트레이딩"
+              },
+              "result": {
+                "totalResults": 1,
+                "startIndex": 1,
+                "itemsPerPage": 1,
+                "query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "item": [
+                  {
+                    "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
+                    "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=288219920",
+                    "author": "조대표, 김형준, 이준혁",
+                    "pubDate": "2022-01-20",
+                    "description": "최신 시장 상황과 라이브러리 변경 사항을 반영한 개정판! 파이썬 기초부터 자동매매 전략 구현까지, 이 책 한 권으로 끝낸다.",
+                    "isbn13": "9791158393339",
+                    "itemId": 288219920,
+                    "priceSales": 34200,
+                    "priceStandard": 38000,
+                    "stockStatus": "보통",
+                    "mileage": 1900,
+                    "cover": "https://image.aladin.co.kr/product/28821/99/cover/k362734136_1.jpg",
+                    "publisher": "위키북스",
+                    "salesPoint": 54321,
+                    "customerReviewRank": 9.8,
+                    "adult": false
+                  }
+                ]
+              },
+              "timestamp": "2025-09-27T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 찾아준 책 다시 알려줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "Query": "파이썬으로 배우는 알고리즘 트레이딩"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "'파이썬으로 배우는 알고리즘 트레이딩' 검색 결과",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "그럼 이번엔 판매량순으로 정렬해서 다시 찾아줘."
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "네, 판매량순으로 정렬했을 때도 '파이썬으로 배우는 알고리즘 트레이딩(개정판)'이 가장 상위에 검색됩니다.",
+          "actions": [
+            {
+              "tool": "ItemSearch_aladin",
+              "args": {
+                "Query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "Sort": "SalesPoint"
+              },
+              "result": {
+                "totalResults": 1,
+                "startIndex": 1,
+                "itemsPerPage": 1,
+                "query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "item": [
+                  {
+                    "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
+                    "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=288219920",
+                    "author": "조대표, 김형준, 이준혁",
+                    "pubDate": "2022-01-20",
+                    "description": "최신 시장 상황과 라이브러리 변경 사항을 반영한 개정판! 파이썬 기초부터 자동매매 전략 구현까지, 이 책 한 권으로 끝낸다.",
+                    "isbn13": "9791158393339",
+                    "itemId": 288219920,
+                    "priceSales": 34200,
+                    "priceStandard": 38000,
+                    "stockStatus": "보통",
+                    "mileage": 1900,
+                    "cover": "https://image.aladin.co.kr/product/28821/99/cover/k362734136_1.jpg",
+                    "publisher": "위키북스",
+                    "salesPoint": 54321,
+                    "customerReviewRank": 9.8,
+                    "adult": false
+                  }
+                ]
+              },
+              "timestamp": "2025-09-27T14:02:00Z"
+            }
+          ]
+        },
+        {
+          "turn_number": 7,
+          "role": "user",
+          "content": "판매량순으로 정렬한 거 다시 보여줘."
+        },
+        {
+          "turn_number": 8,
+          "role": "assistant",
+          "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬으로 배우는 알고리즘 트레이딩(개정판)' 입니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "Query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "Sort": "SalesPoint"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 6,
+              "info": "item search result for '파이썬으로 배우는 알고리즘 트레이딩' sorted by 'SalesPoint'",
+              "usage_type": "direct_reference"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-002",
+    "instruction": "최신 반도체 기술 관련 뉴스 3개만 찾아줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "반도체 기술",
+          "display": 3,
+          "sort": "date"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "query": "반도체 기술",
+          "display": 3,
+          "sort": "date"
+        }
+      },
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "삼성전자",
+          "display": 1,
+          "sort": "date"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-002",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "최신 반도체 기술 관련 뉴스 3개만 찾아줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
+          "actions": [
+            {
+              "tool": "NewsSearch_naver",
+              "args": {
+                "query": "반도체 기술",
+                "display": 3,
+                "sort": "date"
+              },
+              "result": {
+                "total": 87654,
+                "start": 1,
+                "display": 3,
+                "items": [
+                  {
+                    "title": "차세대 AI 반도체 개발 동향",
+                    "link": "https://n.news.naver.com/mnews/article/001/0012345678",
+                    "description": "글로벌 빅테크 기업들이 인공지능(AI) 연산에 특화된 차세대 반도체 개발에 사활을 걸고 있다.",
+                    "originallink": "https://www.yna.co.kr/view/AKR20250926012345678",
+                    "pubDate": "Fri, 26 Sep 2025 10:30:00 +0900"
+                  },
+                  {
+                    "title": "국내 기업, 3나노 공정 수율 안정화 성공",
+                    "link": "https://n.news.naver.com/mnews/article/002/0009876543",
+                    "description": "국내 대표 반도체 기업이 극자외선(EUV)을 활용한 3나노미터 공정의 수율 안정화에 성공했다고 밝혔다.",
+                    "originallink": "https://www.etnews.com/20250926000123",
+                    "pubDate": "Fri, 26 Sep 2025 09:15:00 +0900"
+                  },
+                  {
+                    "title": "정부, 시스템 반도체 육성 전략 발표",
+                    "link": "https://n.news.naver.com/mnews/article/003/0011223344",
+                    "description": "정부는 미래차, AI 등 유망 산업의 핵심 부품인 시스템 반도체 생태계 강화를 위한 종합 전략을 발표했다.",
+                    "originallink": "https://www.chosun.com/economy/tech/2025/09/26/some-article-id",
+                    "pubDate": "Fri, 26 Sep 2025 08:45:00 +0900"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-26T11:00:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 찾아준 뉴스 다시 한번 보여줄래?"
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "query": "반도체 기술",
+                "display": 3,
+                "sort": "date"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "NewsSearch_naver(query='반도체 기술', display=3, sort='date')",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "고마워. 그럼 이번엔 삼성전자 관련 최신 뉴스로 1개 찾아줘."
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "삼성전자 관련 최신 뉴스 1건을 찾았어. 첫 번째 기사는 '삼성전자, 차세대 메모리 반도체 공개'야. 더 궁금한 점이 있으면 알려줘.",
+          "actions": [
+            {
+              "tool": "NewsSearch_naver",
+              "args": {
+                "query": "삼성전자",
+                "display": 1,
+                "sort": "date"
+              },
+              "result": {
+                "total": 15203,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "삼성전자, 차세대 메모리 반도체 공개",
+                    "link": "https://n.news.naver.com/mnews/article/004/0001112222",
+                    "description": "삼성전자가 업계 최고 속도와 전력 효율을 구현한 차세대 D램을 공개하며 기술 리더십을 과시했다.",
+                    "originallink": "https://www.zdnet.co.kr/view/?no=20250926110500",
+                    "pubDate": "Fri, 26 Sep 2025 11:05:00 +0900"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-26T11:03:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-003",
+    "instruction": "뉴진스 최신 영상 2개만 찾아줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "VideoSearch_daum",
+        "args": {
+          "query": "뉴진스",
+          "sort": "recency",
+          "size": 2
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "query": "뉴진스",
+          "sort": "recency",
+          "size": 2
+        }
+      }
+    ],
+    "minimum_calls": 1,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-003",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "뉴진스 최신 영상 2개만 찾아줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "actions": [
+            {
+              "tool": "VideoSearch_daum",
+              "args": {
+                "query": "뉴진스",
+                "sort": "recency",
+                "size": 2
+              },
+              "result": {
+                "meta": {
+                  "total_count": 50000,
+                  "pageable_count": 800,
+                  "is_end": false
+                },
+                "documents": [
+                  {
+                    "title": "뉴진스(NewJeans) 신곡 'Bubble Gum' MV",
+                    "play_time": 245,
+                    "thumbnail": "https://search.daum.net/fake/thumbnail/newjeans_mv1.jpg",
+                    "url": "https://tv.kakao.com/v/123456789",
+                    "datetime": "2025-09-28T09:00:00.000+09:00",
+                    "author": "HYBE LABELS"
+                  },
+                  {
+                    "title": "뉴진스 팝업스토어 방문 VLOG",
+                    "play_time": 720,
+                    "thumbnail": "https://search.daum.net/fake/thumbnail/newjeans_vlog.jpg",
+                    "url": "https://youtube.com/watch?v=abcdefgh",
+                    "datetime": "2025-09-27T18:30:00.000+09:00",
+                    "author": "NewJeans"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T08:30:00+09:00"
+            }
+          ],
+          "content": "뉴진스 최신 동영상 2개를 찾았습니다. '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "아까 알려준 영상들 다시 보여줄래?"
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "query": "뉴진스",
+                "sort": "recency",
+                "size": 2
+              },
+              "timestamp": "2025-09-28T08:35:00+09:00"
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "VideoSearch_daum(query='뉴진스', sort='recency', size=2)",
+              "usage_type": "direct_reference"
+            }
+          ],
+          "content": "네, 방금 찾아드린 뉴진스 최신 영상은 '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-004",
+    "instruction": "시흥시청 맛집 좀 찾아줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "시흥시청 맛집"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "keyword": "시흥시청 맛집"
+        }
+      },
+      {
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "시흥시청 카페"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-004",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "시흥시청 맛집 좀 찾아줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등이 검색되었습니다.",
+          "actions": [
+            {
+              "tool": "PlaceSearch_kakao",
+              "args": {
+                "keyword": "시흥시청 맛집"
+              },
+              "result": {
+                "keyword": "시흥시청 맛집",
+                "total_count": 58,
+                "places": [
+                  {
+                    "name": "바오스시",
+                    "address": "경기 시흥시 시청로68번길 21",
+                    "road_address": "경기 시흥시 시청로68번길 21",
+                    "phone": "031-314-7734",
+                    "latitude": "37.3807",
+                    "longitude": "126.8025",
+                    "category": "음식점 > 일식 > 초밥,롤",
+                    "place_url": "http://place.map.kakao.com/12345678",
+                    "distance": "250"
+                  },
+                  {
+                    "name": "오늘도, 맑음",
+                    "address": "경기 시흥시 시청로50번길 1",
+                    "road_address": "경기 시흥시 시청로50번길 1",
+                    "phone": "031-311-2345",
+                    "latitude": "37.3811",
+                    "longitude": "126.8041",
+                    "category": "음식점 > 양식 > 파스타,피자",
+                    "place_url": "http://place.map.kakao.com/23456789",
+                    "distance": "400"
+                  },
+                  {
+                    "name": "만수채 시흥시청점",
+                    "address": "경기 시흥시 광석동 275",
+                    "road_address": "경기 시흥시 광석동 275",
+                    "phone": "031-404-4545",
+                    "latitude": "37.3822",
+                    "longitude": "126.8010",
+                    "category": "음식점 > 한식 > 한정식",
+                    "place_url": "http://place.map.kakao.com/34567890",
+                    "distance": "150"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T08:50:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 찾아준 맛집 목록 다시 알려줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등을 찾아드렸습니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "keyword": "시흥시청 맛집"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "PlaceSearch_kakao(keyword='시흥시청 맛집') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "고마워. 그럼 카페는 어디가 좋아?"
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "시흥시청 근처 카페로는 '카페 온기'가 있습니다.",
+          "actions": [
+            {
+              "tool": "PlaceSearch_kakao",
+              "args": {
+                "keyword": "시흥시청 카페"
+              },
+              "result": {
+                "keyword": "시흥시청 카페",
+                "total_count": 42,
+                "places": [
+                  {
+                    "name": "카페 온기",
+                    "address": "경기 시흥시 시청로68번길 15",
+                    "road_address": "경기 시흥시 시청로68번길 15",
+                    "phone": "031-314-9876",
+                    "latitude": "37.3805",
+                    "longitude": "126.8028",
+                    "category": "음식점 > 카페",
+                    "place_url": "http://place.map.kakao.com/45678901",
+                    "distance": "280"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T08:52:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-005",
+    "instruction": "25년 9월에 부산에서 하는 축제 찾아줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "festival_search",
+        "args": {
+          "eventStartDate": "20250901",
+          "location": "부산"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "eventStartDate": "20250901",
+          "location": "부산"
+        }
+      },
+      {
+        "tool": "festival_search",
+        "args": {
+          "eventStartDate": "20251001",
+          "location": "제주도"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-005",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "25년 9월에 부산에서 하는 축제 찾아줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "9월 부산 축제로는 '부산국제영화제'가 있습니다. 매년 다채로운 영화와 함께하는 아시아 최대 영화 축제입니다.",
+          "actions": [
+            {
+              "tool": "festival_search",
+              "args": {
+                "eventStartDate": "20250901",
+                "location": "부산"
+              },
+              "result": {
+                "totalCount": 1,
+                "title": "부산국제영화제",
+                "addr": "부산광역시 해운대구 우동",
+                "eventStartDate": "20250925",
+                "eventEndDate": "20251004"
+              },
+              "timestamp": "2025-09-28T09:15:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "아까 알려준 9월 부산 축제 다시 말해줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 9월에 부산에서 열리는 축제는 '부산국제영화제'입니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "eventStartDate": "20250901",
+                "location": "부산"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "festival_search(eventStartDate='20250901', location='부산') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "그럼 25년 10월에 제주도에서 하는 축제는 없어?"
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "10월 제주도 축제로는 '제주감귤박람회'가 있습니다.",
+          "actions": [
+            {
+              "tool": "festival_search",
+              "args": {
+                "eventStartDate": "20251001",
+                "location": "제주도"
+              },
+              "result": {
+                "totalCount": 1,
+                "title": "제주감귤박람회",
+                "addr": "제주특별자치도 서귀포시 남원읍 중산간동로 7413",
+                "eventStartDate": "20251008",
+                "eventEndDate": "20251012"
+              },
+              "timestamp": "2025-09-28T09:17:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-006",
+    "instruction": "겨울 제주도 여행 코스 알려줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "겨울 제주도 여행 코스"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "query": "겨울 제주도 여행 코스"
+        }
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "제주공항 근처 맛집"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-006",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "겨울 제주도 여행 코스 알려줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "네, '겨울 제주도 여행 코스'로 검색했을 때 '한라산 눈꽃 산행과 감귤 체험'을 추천하는 블로그 글이 있네요.",
+          "actions": [
+            {
+              "tool": "BlogSearch_naver",
+              "args": {
+                "query": "겨울 제주도 여행 코스"
+              },
+              "result": {
+                "total": 123456,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "눈부신 설경! <b>겨울 제주도 여행 코스</b> (한라산, 감귤체험)",
+                    "link": "https://blog.naver.com/travelholic/123456789",
+                    "description": "<b>겨울 제주도 여행</b>의 백미, 한라산 눈꽃 산행과 따뜻한 비닐하우스에서의 감귤 체험 <b>코스</b>를 소개합니다.",
+                    "bloggername": "여행에미치다",
+                    "bloggerlink": "https://blog.naver.com/travelholic",
+                    "postdate": "20241215"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:50:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "아까 추천해준 여행 코스 다시 알려줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 감귤 체험 코스를 추천해드렸습니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "query": "겨울 제주도 여행 코스"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "BlogSearch_naver(query='겨울 제주도 여행 코스') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "좋네. 그럼 제주공항 근처 맛집도 찾아볼래?"
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "'제주공항 근처 맛집'으로 검색해보니 '우진해장국' 블로그 후기가 가장 많이 보입니다.",
+          "actions": [
+            {
+              "tool": "BlogSearch_naver",
+              "args": {
+                "query": "제주공항 근처 맛집"
+              },
+              "result": {
+                "total": 98765,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "<b>제주공항 근처 맛집</b>, 웨이팅 필수 '우진해장국'",
+                    "link": "https://blog.naver.com/foodlover/987654321",
+                    "description": "제주 도착 첫 끼 혹은 마지막 식사로 추천하는 <b>제주공항 근처 맛집</b>! 우진해장국의 고사리 육개장은 꼭 먹어봐야 할 메뉴입니다.",
+                    "bloggername": "맛집탐험가",
+                    "bloggerlink": "https://blog.naver.com/foodlover",
+                    "postdate": "20250910"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:52:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-007",
+    "instruction": "AI 기술 최신 동향에 대해 알려줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "AI 기술 최신 동향"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "query": "AI 기술 최신 동향"
+        }
+      },
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "양자 컴퓨팅"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-007",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "AI 기술 최신 동향에 대해 알려줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "최근 AI 기술은 생성형 AI와 거대 언어 모델(LLM)의 발전이 주도하고 있습니다. 관련 웹문서의 제목은 '2025년 AI 기술 트렌드 전망'입니다.",
+          "actions": [
+            {
+              "tool": "WebSearch_daum",
+              "args": {
+                "query": "AI 기술 최신 동향"
+              },
+              "result": {
+                "meta": {
+                  "total_count": 1234567,
+                  "pageable_count": 800,
+                  "is_end": false
+                },
+                "documents": [
+                  {
+                    "datetime": "2025-09-28T09:20:00.000+09:00",
+                    "contents": "생성형 <b>AI</b>와 거대 언어 모델(LLM)의 발전이 <b>기술</b> 산업 전반에 큰 영향을 미치고 있다...",
+                    "title": "2025년 <b>AI</b> <b>기술</b> 트렌드 전망",
+                    "url": "https://tech.example.com/ai-trends-2025"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T09:22:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 찾아준 AI 기술 동향 다시 설명해줄래?"
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "query": "AI 기술 최신 동향"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "WebSearch_daum(query='AI 기술 최신 동향') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "고마워. 그럼 이번엔 양자 컴퓨팅에 대해 검색해줘."
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "양자 컴퓨팅은 양자역학 원리를 이용해 기존 컴퓨터의 한계를 뛰어넘는 계산 능력을 목표로 하는 기술입니다. 관련 웹문서 '양자 컴퓨팅의 원리와 미래'를 찾았습니다.",
+          "actions": [
+            {
+              "tool": "WebSearch_daum",
+              "args": {
+                "query": "양자 컴퓨팅"
+              },
+              "result": {
+                "meta": {
+                  "total_count": 876543,
+                  "pageable_count": 750,
+                  "is_end": false
+                },
+                "documents": [
+                  {
+                    "datetime": "2025-09-27T11:00:00.000+09:00",
+                    "contents": "<b>양자 컴퓨팅</b>은 중첩과 얽힘 같은 양자역학적 현상을 활용하여 기존 컴퓨터보다 훨씬 빠른 연산을 수행하는 기술이다.",
+                    "title": "<b>양자 컴퓨팅</b>의 원리와 미래",
+                    "url": "https://science.example.com/quantum-computing-basics"
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T09:24:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-008",
+    "instruction": "기후 변화 원인에 대해 알려줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "기후 변화 원인"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "query": "기후 변화 원인"
+        }
+      },
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "탄소중립 실천 방안"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-008",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "기후 변화 원인에 대해 알려줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 대표적으로 '산업혁명 이후 화석 연료 사용 증가'가 가장 큰 원인으로 꼽힙니다.",
+          "actions": [
+            {
+              "tool": "WebSearch_naver",
+              "args": {
+                "query": "기후 변화 원인"
+              },
+              "result": {
+                "total": 3456789,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "<b>기후변화</b>의 <b>원인</b>과 영향 - 국립기상과학원",
+                    "link": "https://www.nims.go.kr/portal/content/view.do?p=252",
+                    "description": "<b>기후변화</b>는 자연적인 <b>원인</b>과 인위적인 <b>원인</b>으로 구분할 수 있다. ... 산업혁명 이후 화석 연료의 사용, 삼림 파괴 등 인간의 활동이 대기 중 온실가스 농도를 급격히 증가시키면서..."
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T09:30:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 설명해준 기후 변화의 원인이 뭐라고 했지?"
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 기후 변화의 핵심 원인은 인간 활동에 따른 온실가스 배출 증가입니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "query": "기후 변화 원인"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "WebSearch_naver(query='기후 변화 원인') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "그렇구나. 그럼 탄소중립 실천 방안도 찾아줘."
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "탄소중립 실천 방안으로는 대중교통 이용, 일회용품 사용 줄이기, 에너지 절약 등이 있습니다.",
+          "actions": [
+            {
+              "tool": "WebSearch_naver",
+              "args": {
+                "query": "탄소중립 실천 방안"
+              },
+              "result": {
+                "total": 123456,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "생활 속 <b>탄소중립 실천 방안</b> 5가지",
+                    "link": "https://example-carbon-neutral.com/actions",
+                    "description": "일상생활에서 쉽게 <b>실천</b>할 수 있는 <b>탄소중립 방안</b>. 첫째, 대중교통 이용하기. 둘째, 일회용품 사용 줄이기..."
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T09:32:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-009",
+    "instruction": "업비트 원화마켓에 상장된 코인 목록 알려줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "MarketList_upbit",
+        "args": {
+          "quote": "KRW"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "quote": "KRW"
+        }
+      },
+      {
+        "tool": "MarketList_upbit",
+        "args": {
+          "quote": "BTC"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-009",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "업비트 원화마켓에 상장된 코인 목록 알려줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다.",
+          "actions": [
+            {
+              "tool": "MarketList_upbit",
+              "args": {
+                "quote": "KRW"
+              },
+              "result": {
+                "markets": [
+                  "KRW-BTC",
+                  "KRW-ETH",
+                  "KRW-XRP"
+                ],
+                "market_count": 120,
+                "quote": "KRW",
+                "details": [
+                  {
+                    "market": "KRW-BTC",
+                    "korean_name": "비트코인",
+                    "english_name": "Bitcoin",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  },
+                  {
+                    "market": "KRW-ETH",
+                    "korean_name": "이더리움",
+                    "english_name": "Ethereum",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  },
+                  {
+                    "market": "KRW-XRP",
+                    "korean_name": "리플",
+                    "english_name": "Ripple",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:00:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 알려준 원화마켓 목록 다시 보여줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 업비트 원화 마켓 목록입니다. 비트코인, 이더리움 등이 포함되어 있습니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "quote": "KRW"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "MarketList_upbit(quote='KRW') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "그럼 BTC 마켓 목록도 알려줄래?"
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "네, 비트코인(BTC) 마켓에는 이더리움(ETH), 리플(XRP), 이오스(EOS) 등 총 80개의 암호화폐가 거래되고 있습니다.",
+          "actions": [
+            {
+              "tool": "MarketList_upbit",
+              "args": {
+                "quote": "BTC"
+              },
+              "result": {
+                "markets": [
+                  "BTC-ETH",
+                  "BTC-XRP",
+                  "BTC-EOS"
+                ],
+                "market_count": 80,
+                "quote": "BTC",
+                "details": [
+                  {
+                    "market": "BTC-ETH",
+                    "korean_name": "이더리움",
+                    "english_name": "Ethereum",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  },
+                  {
+                    "market": "BTC-XRP",
+                    "korean_name": "리플",
+                    "english_name": "Ripple",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  },
+                  {
+                    "market": "BTC-EOS",
+                    "korean_name": "이오스",
+                    "english_name": "EOS",
+                    "market_event": {
+                      "warning": false,
+                      "caution": false
+                    }
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:02:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "task_id": "L6-010",
+    "instruction": "9월 넷째 주 삼성전자 주봉 데이터 알려줘.",
+    "task_level": 6,
+    "task_category": "Efficiency",
+    "golden_action": [
+      {
+        "tool": "StockChart_kis",
+        "args": {
+          "symbol": "005930",
+          "period": "W",
+          "date": "20250926"
+        }
+      },
+      {
+        "tool": "reuse",
+        "args": {
+          "symbol": "005930",
+          "period": "W",
+          "date": "20250926"
+        }
+      },
+      {
+        "tool": "StockChart_kis",
+        "args": {
+          "symbol": "000660",
+          "period": "W",
+          "date": "20250926"
+        }
+      }
+    ],
+    "minimum_calls": 2,
+    "freshness_threshold": "24h",
+    "conversation_tracking": {
+      "conversation_id": "conv-L6-010",
+      "turns": [
+        {
+          "turn_number": 1,
+          "role": "user",
+          "content": "9월 넷째 주 삼성전자 주봉 데이터 알려줘."
+        },
+        {
+          "turn_number": 2,
+          "role": "assistant",
+          "content": "네, 9월 넷째 주 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다.",
+          "actions": [
+            {
+              "tool": "StockChart_kis",
+              "args": {
+                "symbol": "005930",
+                "period": "W",
+                "date": "20250926"
+              },
+              "result": {
+                "symbol": "005930",
+                "stock_name": "삼성전자",
+                "period": "W",
+                "count": 1,
+                "chart_data": [
+                  {
+                    "date": "20250926",
+                    "open": 79000,
+                    "high": 81500,
+                    "low": 78800,
+                    "close": 81200,
+                    "volume": 75000000
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:45:00+09:00"
+            }
+          ]
+        },
+        {
+          "turn_number": 3,
+          "role": "user",
+          "content": "방금 알려준 주봉 데이터 다시 보여줘."
+        },
+        {
+          "turn_number": 4,
+          "role": "assistant",
+          "content": "네, 9월 넷째 주 삼성전자 주봉 종가는 81,200원이었습니다.",
+          "actions": [
+            {
+              "tool": "reuse",
+              "args": {
+                "symbol": "005930",
+                "period": "W",
+                "date": "20250926"
+              }
+            }
+          ],
+          "context_used": [
+            {
+              "source_turn": 2,
+              "info": "StockChart_kis(symbol='005930', period='W') result",
+              "usage_type": "direct_reference"
+            }
+          ]
+        },
+        {
+          "turn_number": 5,
+          "role": "user",
+          "content": "그럼 같은 주 SK하이닉스 주봉은 어땠어?"
+        },
+        {
+          "turn_number": 6,
+          "role": "assistant",
+          "content": "네, 9월 넷째 주 SK하이닉스(000660)의 주봉 종가는 235,000원이었습니다.",
+          "actions": [
+            {
+              "tool": "StockChart_kis",
+              "args": {
+                "symbol": "000660",
+                "period": "W",
+                "date": "20250926"
+              },
+              "result": {
+                "symbol": "000660",
+                "stock_name": "SK하이닉스",
+                "period": "W",
+                "count": 1,
+                "chart_data": [
+                  {
+                    "date": "20250926",
+                    "open": 225000,
+                    "high": 236000,
+                    "low": 224500,
+                    "close": 235000,
+                    "volume": 25000000
+                  }
+                ]
+              },
+              "timestamp": "2025-09-28T10:47:00+09:00"
+            }
+          ]
+        }
+      ]
+    }
+  }
 ]

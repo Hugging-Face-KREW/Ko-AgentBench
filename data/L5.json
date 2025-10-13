@@ -1,4 +1,3 @@
-
 [
   {
     "task_id": "L5-001",
@@ -8,7 +7,9 @@
     "golden_action": [
       {
         "tool": "AddressToCoord_kakao",
-        "args": { "address": "서울 중구 세종대로 110" }
+        "args": {
+          "address": "서울 중구 세종대로 110"
+        }
       }
     ],
     "error_injection": {
@@ -24,7 +25,15 @@
     "golden_action": [
       {
         "tool": "PlaceSearch_kakao",
-        "args": { "keyword": "편의점", "x": 127.02758, "y": 37.49794, "radius": 300, "sort": "distance", "page": 1, "size": 1 }
+        "args": {
+          "keyword": "편의점",
+          "x": 127.02758,
+          "y": 37.49794,
+          "radius": 300,
+          "sort": "distance",
+          "page": 1,
+          "size": 1
+        }
       }
     ],
     "error_injection": {
@@ -41,7 +50,12 @@
     "golden_action": [
       {
         "tool": "festival_search",
-        "args": { "eventStartDate": "20250401", "eventEndDate": "20250531", "location": "제주", "num_of_rows": 5 }
+        "args": {
+          "eventStartDate": "20250401",
+          "eventEndDate": "20250531",
+          "location": "제주",
+          "num_of_rows": 5
+        }
       }
     ],
     "error_injection": {
@@ -51,11 +65,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "2025년 4월 5월 제주 축제", "display": 5 }
+        "args": {
+          "query": "2025년 4월 5월 제주 축제",
+          "display": 5
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "2025년 4월 5월 제주 축제", "page": 1, "size": 5 }
+        "args": {
+          "query": "2025년 4월 5월 제주 축제",
+          "page": 1,
+          "size": 5
+        }
       }
     ]
   },
@@ -67,7 +88,12 @@
     "golden_action": [
       {
         "tool": "festival_search",
-        "args": { "eventStartDate": "20250901", "eventEndDate": "20251031", "location": "전북", "num_of_rows": 5 }
+        "args": {
+          "eventStartDate": "20250901",
+          "eventEndDate": "20251031",
+          "location": "전북",
+          "num_of_rows": 5
+        }
       }
     ],
     "error_injection": {
@@ -77,11 +103,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "2025년 9월 10월 전북 축제", "display": 5 }
+        "args": {
+          "query": "2025년 9월 10월 전북 축제",
+          "display": 5
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "2025년 9월 10월 전북 축제", "page": 1, "size": 5 }
+        "args": {
+          "query": "2025년 9월 10월 전북 축제",
+          "page": 1,
+          "size": 5
+        }
       }
     ]
   },
@@ -93,7 +126,9 @@
     "golden_action": [
       {
         "tool": "MarketIndex_ls",
-        "args": { "jisu": "KOSDAQ" }
+        "args": {
+          "jisu": "KOSDAQ"
+        }
       }
     ],
     "error_injection": {
@@ -103,11 +138,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "KOSDAQ 지수 현재가", "display": 1 }
+        "args": {
+          "query": "KOSDAQ 지수 현재가",
+          "display": 1
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "KOSDAQ 지수 현재가", "page": 1, "size": 1 }
+        "args": {
+          "query": "KOSDAQ 지수 현재가",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -119,7 +161,9 @@
     "golden_action": [
       {
         "tool": "CryptoPrice_bithumb",
-        "args": { "markets": "KRW-BTC" }
+        "args": {
+          "markets": "KRW-BTC"
+        }
       }
     ],
     "error_injection": {
@@ -135,7 +179,12 @@
     "golden_action": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "아이폰 17 출시일", "sort": "recency", "page": 1, "size": 1 }
+        "args": {
+          "query": "아이폰 17 출시일",
+          "sort": "recency",
+          "page": 1,
+          "size": 1
+        }
       }
     ],
     "error_injection": {
@@ -145,7 +194,10 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "아이폰 17 출시일", "display": 1 }
+        "args": {
+          "query": "아이폰 17 출시일",
+          "display": 1
+        }
       }
     ]
   },
@@ -157,7 +209,12 @@
     "golden_action": [
       {
         "tool": "VideoSearch_daum",
-        "args": { "query": "아이유 콘서트 직캠", "sort": "recency", "page": 1, "size": 1 }
+        "args": {
+          "query": "아이유 콘서트 직캠",
+          "sort": "recency",
+          "page": 1,
+          "size": 1
+        }
       }
     ],
     "error_injection": {
@@ -167,11 +224,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "아이유 콘서트 직캠", "display": 5 }
+        "args": {
+          "query": "아이유 콘서트 직캠",
+          "display": 5
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "아이유 콘서트 직캠", "page": 1, "size": 5 }
+        "args": {
+          "query": "아이유 콘서트 직캠",
+          "page": 1,
+          "size": 5
+        }
       }
     ]
   },
@@ -183,7 +247,12 @@
     "golden_action": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "2025 LoL 월드 챔피언쉽 한국팀 명단", "sort": "recency", "page": 1, "size": 1 }
+        "args": {
+          "query": "2025 LoL 월드 챔피언쉽 한국팀 명단",
+          "sort": "recency",
+          "page": 1,
+          "size": 1
+        }
       }
     ],
     "error_injection": {
@@ -193,7 +262,11 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "2025 LoL 월드 챔피언쉽 한국팀 명단", "display": 10, "start": 1 }
+        "args": {
+          "query": "2025 LoL 월드 챔피언쉽 한국팀 명단",
+          "display": 10,
+          "start": 1
+        }
       }
     ]
   },
@@ -205,7 +278,11 @@
     "golden_action": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "2025 노벨화학상 수상자", "display": 10, "start": 1 }
+        "args": {
+          "query": "2025 노벨화학상 수상자",
+          "display": 10,
+          "start": 1
+        }
       }
     ],
     "error_injection": {
@@ -215,7 +292,11 @@
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "2025 노벨화학상 수상자", "page": 1, "size": 10 }
+        "args": {
+          "query": "2025 노벨화학상 수상자",
+          "page": 1,
+          "size": 10
+        }
       }
     ]
   },
@@ -227,7 +308,11 @@
     "golden_action": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "북한 해킹 김수키", "display": 10, "start": 1 }
+        "args": {
+          "query": "북한 해킹 김수키",
+          "display": 10,
+          "start": 1
+        }
       }
     ],
     "error_injection": {
@@ -237,7 +322,12 @@
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "북한 해킹 김수키", "sort": "recency", "page": 1, "size": 1 }
+        "args": {
+          "query": "북한 해킹 김수키",
+          "sort": "recency",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -249,7 +339,12 @@
     "golden_action": [
       {
         "tool": "BlogSearch_naver",
-        "args": { "query": "성수동 카페 추천", "display": 10, "start": 1, "sort": "sim" }
+        "args": {
+          "query": "성수동 카페 추천",
+          "display": 10,
+          "start": 1,
+          "sort": "sim"
+        }
       }
     ],
     "error_injection": {
@@ -259,11 +354,20 @@
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "성수동 카페 추천 블로그", "sort": "accuracy", "page": 1, "size": 1 }
+        "args": {
+          "query": "성수동 카페 추천 블로그",
+          "sort": "accuracy",
+          "page": 1,
+          "size": 1
+        }
       },
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "성수동 카페 추천 블로그", "display": 10, "start": 1 }
+        "args": {
+          "query": "성수동 카페 추천 블로그",
+          "display": 10,
+          "start": 1
+        }
       }
     ]
   },
@@ -274,22 +378,36 @@
     "task_category": "Robustness",
     "golden_action": [
       {
-        "tool": "search_news",
-        "args": { "query": "국산 NPU", "display": 1, "start": 1, "sort": "date" }
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "국산 NPU",
+          "display": 1,
+          "start": 1,
+          "sort": "date"
+        }
       }
     ],
     "error_injection": {
-      "tool": "search_news",
+      "tool": "NewsSearch_naver",
       "error_type": "data_not_available"
     },
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "국산 NPU", "sort": "recency", "page": 1, "size": 1 }
+        "args": {
+          "query": "국산 NPU",
+          "sort": "recency",
+          "page": 1,
+          "size": 1
+        }
       },
-            {
+      {
         "tool": "WebSearch_naver",
-        "args": { "query": "국산 NPU", "display": 10, "start": 1 }
+        "args": {
+          "query": "국산 NPU",
+          "display": 10,
+          "start": 1
+        }
       }
     ]
   },
@@ -301,7 +419,14 @@
     "golden_action": [
       {
         "tool": "ItemSearch_aladin",
-        "args": { "Query": "인공지능", "QueryType": "Keyword", "SearchTarget": "Book", "Start": 1, "MaxResults": 10, "Sort": "Accuracy" }
+        "args": {
+          "Query": "인공지능",
+          "QueryType": "Keyword",
+          "SearchTarget": "Book",
+          "Start": 1,
+          "MaxResults": 10,
+          "Sort": "Accuracy"
+        }
       }
     ],
     "error_injection": {
@@ -311,11 +436,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "알라딘 인공지능 책", "display": 5 }
+        "args": {
+          "query": "알라딘 인공지능 책",
+          "display": 5
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "알라딘 인공지능 책", "page": 1, "size": 5 }
+        "args": {
+          "query": "알라딘 인공지능 책",
+          "page": 1,
+          "size": 5
+        }
       }
     ]
   },
@@ -327,7 +459,15 @@
     "golden_action": [
       {
         "tool": "ItemList_aladin",
-        "args": { "QueryType": "Bestseller", "SearchTarget": "Book", "Year": 2025, "Month": 9, "Week": 1, "Start": 1, "MaxResults": 10 }
+        "args": {
+          "QueryType": "Bestseller",
+          "SearchTarget": "Book",
+          "Year": 2025,
+          "Month": 9,
+          "Week": 1,
+          "Start": 1,
+          "MaxResults": 10
+        }
       }
     ],
     "error_injection": {
@@ -337,11 +477,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "알라딘 베스트셀러 2025년 9월 1주", "display": 1 }
+        "args": {
+          "query": "알라딘 베스트셀러 2025년 9월 1주",
+          "display": 1
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "알라딘 베스트셀러 2025년 9월 1주", "page": 1, "size": 1 }
+        "args": {
+          "query": "알라딘 베스트셀러 2025년 9월 1주",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -353,7 +500,14 @@
     "golden_action": [
       {
         "tool": "ItemSearch_aladin",
-        "args": { "Query": "한강", "QueryType": "Keyword", "SearchTarget": "Book", "MaxResults": 10, "Start": 1, "Sort": "Accuracy" }
+        "args": {
+          "Query": "한강",
+          "QueryType": "Keyword",
+          "SearchTarget": "Book",
+          "MaxResults": 10,
+          "Start": 1,
+          "Sort": "Accuracy"
+        }
       }
     ],
     "error_injection": {
@@ -361,8 +515,20 @@
       "error_type": "timeout"
     },
     "fallback_options": [
-      { "tool": "WebSearch_naver", "args": { "query": "한강 알라딘" } },
-      { "tool": "WebSearch_daum", "args": { "query": "한강 알라딘", "page": 1, "size": 1 } }
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "한강 알라딘"
+        }
+      },
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "한강 알라딘",
+          "page": 1,
+          "size": 1
+        }
+      }
     ]
   },
   {
@@ -373,7 +539,15 @@
     "golden_action": [
       {
         "tool": "ItemList_aladin",
-        "args": { "QueryType": "Bestseller", "SearchTarget": "Book", "Year": 2025, "Month": 9, "Week": 1, "Start": 1, "MaxResults": 10 }
+        "args": {
+          "QueryType": "Bestseller",
+          "SearchTarget": "Book",
+          "Year": 2025,
+          "Month": 9,
+          "Week": 1,
+          "Start": 1,
+          "MaxResults": 10
+        }
       }
     ],
     "error_injection": {
@@ -381,8 +555,20 @@
       "error_type": "complete_unavailable"
     },
     "fallback_options": [
-      { "tool": "WebSearch_naver", "args": { "query": "알라딘 2025년 9월 1주 베스트셀러 1위" } },
-      { "tool": "WebSearch_daum", "args": { "query": "알라딘 2025년 9월 1주 베스트셀러 1위", "page": 1, "size": 1 } }
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "알라딘 2025년 9월 1주 베스트셀러 1위"
+        }
+      },
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "알라딘 2025년 9월 1주 베스트셀러 1위",
+          "page": 1,
+          "size": 1
+        }
+      }
     ]
   },
   {
@@ -393,7 +579,10 @@
     "golden_action": [
       {
         "tool": "USStockPrice_kis",
-        "args": { "symbol": "AAPL", "exchange": "NASDAQ" }
+        "args": {
+          "symbol": "AAPL",
+          "exchange": "NASDAQ"
+        }
       }
     ],
     "error_injection": {
@@ -403,11 +592,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "AAPL 주가 현재가", "display": 1 }
+        "args": {
+          "query": "AAPL 주가 현재가",
+          "display": 1
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "AAPL 주가 현재가", "page": 1, "size": 1 }
+        "args": {
+          "query": "AAPL 주가 현재가",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -419,7 +615,10 @@
     "golden_action": [
       {
         "tool": "StockPrice_kis",
-        "args": { "symbol": "005930", "market": "KOSPI" }
+        "args": {
+          "symbol": "005930",
+          "market": "KOSPI"
+        }
       }
     ],
     "error_injection": {
@@ -429,7 +628,10 @@
     "fallback_options": [
       {
         "tool": "StockPrice_ls",
-        "args": { "shcode": "005930", "exchgubun": "K" }
+        "args": {
+          "shcode": "005930",
+          "exchgubun": "K"
+        }
       }
     ]
   },
@@ -441,7 +643,10 @@
     "golden_action": [
       {
         "tool": "CryptoPrice_upbit",
-        "args": { "symbol": "BTC", "quote": "KRW" }
+        "args": {
+          "symbol": "BTC",
+          "quote": "KRW"
+        }
       }
     ],
     "error_injection": {
@@ -449,7 +654,12 @@
       "error_type": "timeout"
     },
     "fallback_options": [
-      { "tool": "CryptoPrice_bithumb", "args": { "markets": "KRW-BTC" } }
+      {
+        "tool": "CryptoPrice_bithumb",
+        "args": {
+          "markets": "KRW-BTC"
+        }
+      }
     ]
   },
   {
@@ -460,7 +670,13 @@
     "golden_action": [
       {
         "tool": "CryptoCandle_upbit",
-        "args": { "symbol": "ETH", "quote": "KRW", "candle_type": "minutes", "unit": 1, "count": 30 }
+        "args": {
+          "symbol": "ETH",
+          "quote": "KRW",
+          "candle_type": "minutes",
+          "unit": 1,
+          "count": 30
+        }
       }
     ],
     "error_injection": {
@@ -468,7 +684,15 @@
       "error_type": "data_not_available"
     },
     "fallback_options": [
-      { "tool": "CryptoCandle_bithumb", "args": { "time": "minutes", "unit": 1, "market": "KRW-ETH", "count": 30 } }
+      {
+        "tool": "CryptoCandle_bithumb",
+        "args": {
+          "time": "minutes",
+          "unit": 1,
+          "market": "KRW-ETH",
+          "count": 30
+        }
+      }
     ]
   },
   {
@@ -479,7 +703,9 @@
     "golden_action": [
       {
         "tool": "CryptoPrice_bithumb",
-        "args": { "markets": "KRW-XRP" }
+        "args": {
+          "markets": "KRW-XRP"
+        }
       }
     ],
     "error_injection": {
@@ -487,7 +713,13 @@
       "error_type": "timeout"
     },
     "fallback_options": [
-      { "tool": "CryptoPrice_upbit", "args": { "symbol": "XRP", "quote": "KRW" } }
+      {
+        "tool": "CryptoPrice_upbit",
+        "args": {
+          "symbol": "XRP",
+          "quote": "KRW"
+        }
+      }
     ]
   },
   {
@@ -498,7 +730,13 @@
     "golden_action": [
       {
         "tool": "CarRoute_tmap",
-        "args": { "startX": 127.027621, "startY": 37.497942, "endX": 126.977022, "endY": 37.566536, "searchOption": 2 }
+        "args": {
+          "startX": 127.027621,
+          "startY": 37.497942,
+          "endX": 126.977022,
+          "endY": 37.566536,
+          "searchOption": 2
+        }
       }
     ],
     "error_injection": {
@@ -508,7 +746,11 @@
     "fallback_options": [
       {
         "tool": "_directions",
-        "args": { "start": "127.027621,37.497942", "goal": "126.977022,37.566536", "option": "trafast" }
+        "args": {
+          "start": "127.027621,37.497942",
+          "goal": "126.977022,37.566536",
+          "option": "trafast"
+        }
       }
     ]
   },
@@ -520,7 +762,13 @@
     "golden_action": [
       {
         "tool": "CarRoute_tmap",
-        "args": { "startX": 126.450517, "startY": 37.46019, "endX": 127.0592, "endY": 37.511, "searchOption": 0 }
+        "args": {
+          "startX": 126.450517,
+          "startY": 37.46019,
+          "endX": 127.0592,
+          "endY": 37.511,
+          "searchOption": 0
+        }
       }
     ],
     "error_injection": {
@@ -530,7 +778,11 @@
     "fallback_options": [
       {
         "tool": "_directions",
-        "args": { "start": "126.450517,37.46019", "goal": "127.0592,37.511", "option": "traoptimal" }
+        "args": {
+          "start": "126.450517,37.46019",
+          "goal": "127.0592,37.511",
+          "option": "traoptimal"
+        }
       }
     ]
   },
@@ -542,7 +794,14 @@
     "golden_action": [
       {
         "tool": "CategorySearch_kakao",
-        "args": { "category": "CS2", "x": 126.92370, "y": 37.55630, "radius": 500, "page": 1, "size": 1 }
+        "args": {
+          "category": "CS2",
+          "x": 126.9237,
+          "y": 37.5563,
+          "radius": 500,
+          "page": 1,
+          "size": 1
+        }
       }
     ],
     "error_injection": {
@@ -552,7 +811,15 @@
     "fallback_options": [
       {
         "tool": "PlaceSearch_kakao",
-        "args": { "keyword": "편의점", "x": 126.92370, "y": 37.55630, "radius": 500, "sort": "distance", "page": 1, "size": 1 }
+        "args": {
+          "keyword": "편의점",
+          "x": 126.9237,
+          "y": 37.5563,
+          "radius": 500,
+          "sort": "distance",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -564,7 +831,9 @@
     "golden_action": [
       {
         "tool": "StockSearch_ls",
-        "args": { "query_index": "카카오" }
+        "args": {
+          "query_index": "카카오"
+        }
       }
     ],
     "error_injection": {
@@ -574,11 +843,18 @@
     "fallback_options": [
       {
         "tool": "WebSearch_naver",
-        "args": { "query": "카카오 종목코드", "display": 1 }
+        "args": {
+          "query": "카카오 종목코드",
+          "display": 1
+        }
       },
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "카카오 종목코드", "page": 1, "size": 1 }
+        "args": {
+          "query": "카카오 종목코드",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -589,18 +865,27 @@
     "task_category": "Robustness",
     "golden_action": [
       {
-        "tool": "search_blog",
-        "args": { "query": "제주도 가을 여행 코스", "display": 1, "start": 1 }
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "제주도 가을 여행 코스",
+          "display": 1,
+          "start": 1
+        }
       }
     ],
     "error_injection": {
-      "tool": "search_blog",
+      "tool": "BlogSearch_naver",
       "error_type": "timeout"
     },
     "fallback_options": [
       {
         "tool": "WebSearch_daum",
-        "args": { "query": "제주도 가을 여행 코스 블로그", "sort": "accuracy", "page": 1, "size": 1 }
+        "args": {
+          "query": "제주도 가을 여행 코스 블로그",
+          "sort": "accuracy",
+          "page": 1,
+          "size": 1
+        }
       }
     ]
   },
@@ -612,7 +897,9 @@
     "golden_action": [
       {
         "tool": "MarketList_bithumb",
-        "args": { "isDetails": false }
+        "args": {
+          "isDetails": false
+        }
       }
     ],
     "error_injection": {
@@ -622,9 +909,11 @@
     "fallback_options": [
       {
         "tool": "MarketList_upbit",
-        "args": { "quote": "KRW" }
+        "args": {
+          "quote": "KRW"
+        }
       }
-    ]  
+    ]
   },
   {
     "task_id": "L5-030",
@@ -634,7 +923,11 @@
     "golden_action": [
       {
         "tool": "_directions",
-        "args": { "start": "127.108882,37.394274", "goal": "126.92490,37.52190", "option": "trafast" }
+        "args": {
+          "start": "127.108882,37.394274",
+          "goal": "126.92490,37.52190",
+          "option": "trafast"
+        }
       }
     ],
     "error_injection": {
@@ -644,8 +937,14 @@
     "fallback_options": [
       {
         "tool": "CarRoute_tmap",
-        "args": { "startX": 127.108882, "startY": 37.394274, "endX": 126.92490, "endY": 37.52190, "searchOption": 2 }
+        "args": {
+          "startX": 127.108882,
+          "startY": 37.394274,
+          "endX": 126.9249,
+          "endY": 37.5219,
+          "searchOption": 2
+        }
       }
-    ]  
+    ]
   }
 ]
