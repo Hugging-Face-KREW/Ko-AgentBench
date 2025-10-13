@@ -596,24 +596,21 @@
     "task_category": "Efficiency",
     "golden_action": [
       {
-        "tool": "festival_search",
+        "tool": "WebSearch_naver",
         "args": {
-          "eventStartDate": "20250901",
-          "location": "부산"
+          "query": "2025년 9월 부산 축제"
         }
       },
       {
         "tool": "reuse",
         "args": {
-          "eventStartDate": "20250901",
-          "location": "부산"
+          "query": "2025년 9월 부산 축제"
         }
       },
       {
-        "tool": "festival_search",
+        "tool": "WebSearch_naver",
         "args": {
-          "eventStartDate": "20251001",
-          "location": "제주도"
+          "query": "2025년 10월 제주도 축제"
         }
       }
     ],
@@ -633,17 +630,21 @@
           "content": "9월 부산 축제로는 '부산국제영화제'가 있습니다. 매년 다채로운 영화와 함께하는 아시아 최대 영화 축제입니다.",
           "actions": [
             {
-              "tool": "festival_search",
+              "tool": "WebSearch_naver",
               "args": {
-                "eventStartDate": "20250901",
-                "location": "부산"
+                "query": "2025년 9월 부산 축제"
               },
               "result": {
-                "totalCount": 1,
-                "title": "부산국제영화제",
-                "addr": "부산광역시 해운대구 우동",
-                "eventStartDate": "20250925",
-                "eventEndDate": "20251004"
+                "total": 1234,
+                "start": 1,
+                "display": 1,
+                "items": [
+                  {
+                    "title": "부산 벡스코 행사 - 부산시 통합검색",
+                    "link": "https://www.busan.go.kr/search/total?searchText=%EB%B6%80%EC%82%B0+%EB%B2%A1%EC%8A%A4%EC%BD%94+%ED%96%89%EC%82%AC&search_category=newsns&currentPage=1",
+                    "description": "fSW2025TODAYㅣ09.24.(수)ㅣ#페스티벌시월 #BPAM2025 시민과 함께하는 보건의료 축제, 코메드(KOMED) 2025 개최! [#댓글이벤트] fSW2025TODAYㅣ09.23.(화)ㅣ#페스티벌시월 #BIFF2025"
+                  }
+                ]
               },
               "timestamp": "2025-09-28T09:15:00+09:00"
             }
@@ -662,15 +663,14 @@
             {
               "tool": "reuse",
               "args": {
-                "eventStartDate": "20250901",
-                "location": "부산"
+                "query": "2025년 9월 부산 축제"
               }
             }
           ],
           "context_used": [
             {
               "source_turn": 2,
-              "info": "festival_search(eventStartDate='20250901', location='부산') result",
+              "info": "WebSearch_naver(query='2025년 9월 부산 축제') result",
               "usage_type": "direct_reference"
             }
           ]
@@ -686,17 +686,21 @@
           "content": "10월 제주도 축제로는 '제주감귤박람회'가 있습니다.",
           "actions": [
             {
-              "tool": "festival_search",
+              "tool": "WebSearch_naver",
               "args": {
-                "eventStartDate": "20251001",
-                "location": "제주도"
+                "query": "2025년 10월 제주도 축제"
               },
               "result": {
-                "totalCount": 1,
-                "title": "제주감귤박람회",
-                "addr": "제주특별자치도 서귀포시 남원읍 중산간동로 7413",
-                "eventStartDate": "20251008",
-                "eventEndDate": "20251012"
+                "total": 856,
+                "start": 1,
+                "display": 10,
+                "items": [
+                  {
+                    "title": "제주도 10월 가을여행 Top 5! 축제일정부터 명소 코스",
+                    "link": "https://blog.naver.com/realplan01/224013983394",
+                    "description": "제64회 탐라문화제 – 제주 최대 전통문화 축제 일정: 2025년 10월 10일(금) ~ 10월 14일(화), 사전행사 10월 8일(수) 장소: 제주시 탐라문화광장, 산지천, 해변공연장, 서귀포 칠십리야외공연장 등 운영 시간: 본행사 13:00 ~ 22:00 / 사전행사 10:0..."
+                  }
+                ]
               },
               "timestamp": "2025-09-28T09:17:00+09:00"
             }
