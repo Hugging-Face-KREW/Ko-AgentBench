@@ -12,6 +12,7 @@ MODEL_IDS: List[str] = [
     # "huggingface/moonshotai/Kimi-K2-Instruct",
     # "huggingface/zai-org/GLM-4.5"
     "openai/gpt-4.1",  # OpenAI - provider prefix 추가
+    "azure/gpt-4.1"
 ]
 
 __all__ = ["MODEL_IDS"]

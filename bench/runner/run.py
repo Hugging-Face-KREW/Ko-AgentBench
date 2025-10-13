@@ -9,6 +9,7 @@ from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
 from .judge import Judge
 from ..observability import observe, get_client, is_enabled
+from ..tools.caching_executor import CachingExecutor
 
 
 class BenchmarkRunner:
@@ -317,6 +318,7 @@ class BenchmarkRunner:
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
             
+            # Execute tool (may include caching layer under the hood)
             result = self.tool_registry.execute_tool(tool_name, **arguments)
             
             tool_result = {
@@ -332,9 +334,16 @@ class BenchmarkRunner:
             if is_enabled():
                 try:
                     langfuse = get_client()
-                    langfuse.update_current_span(
-                        output=tool_result
-                    )
+                    # Attach cache metadata if available from wrapper
+                    cache_meta = None
+                    try:
+                        # Access underlying caching executor via tool wrapper if present
+                        tool_obj = self.tool_registry.get_tool(tool_name)
+                        if hasattr(tool_obj, "_caching_executor"):
+                            cache_meta = tool_obj._caching_executor.get_last_meta()
+                    except Exception:
+                        cache_meta = None
+                    langfuse.update_current_span(output=tool_result, metadata={"cache": cache_meta})
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
             

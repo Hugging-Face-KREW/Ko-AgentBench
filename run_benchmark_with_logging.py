@@ -439,7 +439,7 @@ def main():
     if MODEL_IDS:
         selected_model = MODEL_IDS[-1]  # Use last model in list
     else:
-        selected_model = "gpt-4.1"  # Default fallback
+        selected_model = "azure/gpt-4.1"  # Default fallback
     
     print(f"\nSelected model: {selected_model}")
     
@@ -448,8 +448,8 @@ def main():
     
     # You can customize which levels to run
     # levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6"]  
-    # levels_to_run = ["L1"]  # Test only L1 first
-    levels_to_run = ["L7"]  # Run all available levels in order
+    levels_to_run = ["L1"]  # Test only L1 first
+    # levels_to_run = ["L7"]  # Run all available levels in order
     
     for level_name in levels_to_run:
         if level_name in datasets:
