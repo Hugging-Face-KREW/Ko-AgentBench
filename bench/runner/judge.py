@@ -290,7 +290,153 @@ class ProvAccMetric(Metric):
             "total_flows": total_flows,
             "flow_details": flow_details
         })
+
+class CoverageMetric(Metric):
+    """Coverage: 필수 소스를 모두 성공적으로 조회했는지 비율
+    - golden_action에 명시된 도구들을 모두 사용했는지 확인
+    """
+    name = "Coverage"
     
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        # golden_action에서 필수 도구 추출
+        golden_action = ctx.task_schema.get("golden_action", [])
+        required_tools = [action.get("tool") for action in golden_action if action.get("tool")]
+        
+        if not required_tools:
+            # 필수 도구가 없으면 만점
+            return EvaluationResult(self.name, 1.0, {
+                "reason": "golden_action에 도구 정보 없음",
+                "required_tools": [],
+                "covered_tools": []
+            })
+        
+        # 실제로 성공한 도구 호출 확인
+        action_trace = ctx.action_trace
+        successful_tools = set()
+        
+        for action in action_trace:
+            tool_name = action.get("tool")
+            success = action.get("success", False)
+            
+            # 성공하고 결과가 있는 경우만 카운트
+            if success and tool_name:
+                result = action.get("result")
+                # 결과가 비어있지 않은지 확인
+                has_meaningful_result = False
+                
+                if isinstance(result, dict):
+                    # 검색 결과의 경우 items나 places 확인
+                    items = result.get("items") or result.get("places") or []
+                    if items:
+                        has_meaningful_result = True
+                    # total_count가 0보다 크면 의미있는 결과
+                    elif result.get("total_count", 0) > 0:
+                        has_meaningful_result = True
+                elif result:
+                    # dict가 아니더라도 결과가 있으면 의미있다고 판단
+                    has_meaningful_result = True
+                
+                if has_meaningful_result:
+                    successful_tools.add(tool_name)
+        
+        # 필수 도구 중 성공한 것들
+        covered_tools = [tool for tool in required_tools if tool in successful_tools]
+        
+        # 중복 제거 (같은 도구를 여러 번 호출할 수 있으므로)
+        unique_required = list(set(required_tools))
+        unique_covered = list(set(covered_tools))
+        
+        score = len(unique_covered) / len(unique_required) if unique_required else 0.0
+        
+        return EvaluationResult(self.name, score, {
+            "required_tools": unique_required,
+            "covered_tools": unique_covered,
+            "missing_tools": [t for t in unique_required if t not in unique_covered],
+            "total_required": len(unique_required),
+            "total_covered": len(unique_covered)
+        })
+    
+class SourceEPRMetric(Metric):
+    """SourceEPR: 소스별 유효 호출 비율의 평균
+    
+    각 필수 소스(도구)에 대해
+    - 유효 호출 = success=True AND error=None AND 의미있는 결과
+    - EPR = 유효 호출 / 전체 호출
+    - 최종 점수 = 모든 소스의 EPR 평균
+    """
+    name = "SourceEPR"
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        # golden_action에서 필수 도구 추출
+        golden_action = ctx.task_schema.get("golden_action", [])
+        required_tools = [action.get("tool") for action in golden_action if action.get("tool")]
+        
+        if not required_tools:
+            return EvaluationResult(self.name, 1.0, {
+                "reason": "필수 도구 없음",
+                "source_eprs": {}
+            })
+        
+        # 중복 제거
+        unique_tools = list(set(required_tools))
+        
+        # 실제 호출 로그
+        action_trace = ctx.action_trace
+        
+        source_eprs = {}
+        all_epr_values = []
+        
+        for tool_name in unique_tools:
+            # 이 도구에 대한 모든 호출
+            tool_calls = [
+                action for action in action_trace 
+                if action.get("tool") == tool_name
+            ]
+            
+            if not tool_calls:
+                # 호출하지 않은 도구는 EPR = 0
+                source_eprs[tool_name] = {
+                    "epr": 0.0,
+                    "total_calls": 0,
+                    "valid_calls": 0,
+                    "reason": "도구 미호출"
+                }
+                all_epr_values.append(0.0)
+                continue
+            
+            # 유효한 호출 카운트
+            valid_calls = 0
+            for call in tool_calls:
+                success = call.get("success", False)
+                error = call.get("error")
+                
+                if success and not error:
+                    # 결과가 의미있는지도 확인
+                    result = call.get("result")
+                    if isinstance(result, dict):
+                        items = result.get("items") or result.get("places") or []
+                        if items or result.get("total_count", 0) > 0:
+                            valid_calls += 1
+                    elif result:
+                        valid_calls += 1
+            
+            epr = valid_calls / len(tool_calls)
+            source_eprs[tool_name] = {
+                "epr": round(epr, 4),
+                "total_calls": len(tool_calls),
+                "valid_calls": valid_calls
+            }
+            all_epr_values.append(epr)
+        
+        # 모든 소스의 EPR 평균
+        score = sum(all_epr_values) / len(all_epr_values) if all_epr_values else 0.0
+        
+        return EvaluationResult(self.name, score, {
+            "source_eprs": source_eprs,
+            "average_epr": round(score, 4),
+            "total_sources": len(unique_tools)
+        })
+
 # 메트릭 레지스트리
 METRICS = {
     "SR": SRMetric(),
@@ -300,7 +446,10 @@ METRICS = {
     "FSM": FSMMetric(),
     "PSM": PSMMetric(),
     "ΔSteps_norm": DeltaStepsNormMetric(),
-    "ProvAcc": ProvAccMetric()
+    "ProvAcc": ProvAccMetric(),
+
+    "Coverage": CoverageMetric(),
+    "SourceEPR": SourceEPRMetric(),
 }
 
 class Judge:
