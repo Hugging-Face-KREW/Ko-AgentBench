@@ -54,7 +54,14 @@ class FileCacheStore:
 
         return None
 
-    def put(self, key: str, data: dict, tool_name: Optional[str] = None) -> None:
+    def put(
+        self, 
+        key: str, 
+        data: dict, 
+        tool_name: Optional[str] = None,
+        input_params: Optional[dict] = None,
+        raw_args: Optional[dict] = None
+    ) -> None:
         path = self._path_for_key(key, tool_name=tool_name)
         path.parent.mkdir(parents=True, exist_ok=True)
         tmp_path = path.with_suffix(".json.tmp")
@@ -62,6 +69,8 @@ class FileCacheStore:
             "key": key,
             "tool": tool_name,
             "created_at": datetime.utcnow().isoformat(),
+            "input_params": input_params or {},  # Normalized parameters used for API call
+            "raw_args": raw_args or {},  # Original arguments before normalization
             "data": data,
         }
         with tmp_path.open("w", encoding="utf-8") as f:
