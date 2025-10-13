@@ -5,7 +5,7 @@
 
 import json
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -21,18 +21,71 @@ class EvaluationResult:
 class LevelEvaluator:
     """레벨별 벤치마크 결과 평가기 (L6, L7)"""
     
-    def __init__(self, log_file_path: str):
+    def __init__(self, log_file_path: str, llm_model: str = "anthropic/claude-3-7-sonnet-latest"):
         """
         Args:
             log_file_path: 평가할 로그 파일 경로
+            llm_model: LLM-as-a-Judge에 사용할 모델 
         """
         self.log_file_path = Path(log_file_path)
         self.log_data = self._load_log()
+        self.llm_model = llm_model
+        self.llm_client = None
         
+        level = self.log_data.get("metadata", {}).get("level", "L7")
+        if level == "L7":
+            self._init_llm_client()
+    
+    def _init_llm_client(self):
+        """LLM 클라이언트 초기화"""
+        from bench.adapters.litellm_adapter import LiteLLMAdapter
+        self.llm_client = LiteLLMAdapter(self.llm_model)
+        print(f"LLM Judge 초기화 완료: {self.llm_model}")
+    
     def _load_log(self) -> Dict[str, Any]:
         """로그 파일 로드"""
         with open(self.log_file_path, 'r', encoding='utf-8') as f:
             return json.load(f)
+    
+    def _format_messages(self, messages: List[Dict[str, str]]) -> str:
+        """메시지 목록을 읽기 쉬운 형식으로 변환"""
+        formatted = []
+        for i, msg in enumerate(messages, 1):
+            role = msg.get("role", "unknown")
+            content = msg.get("content", "")
+            if role == "user":
+                formatted.append(f"[턴 {i}] 사용자: {content}")
+            elif role == "assistant":
+                formatted.append(f"[턴 {i}] AI: {content[:200]}{'...' if len(content) > 200 else ''}")
+        return "\n".join(formatted)
+    
+    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
+        """LLM Judge 호출"""
+        if not self.llm_client:
+            return {"score": 0.0, "reason": "LLM client not available"}
+        
+        try:
+            messages = [
+                {"role": "system", "content": "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.llm_client.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            try:
+                result = json.loads(content)
+                return result
+            except json.JSONDecodeError:
+                import re
+                score_match = re.search(r'"score"\s*:\s*([0-9.]+)', content)
+                if score_match:
+                    return {"score": float(score_match.group(1)), "reason": "Parsed from text"}
+                return {"score": 0.0, "reason": "Failed to parse LLM response"}
+                
+        except Exception as e:
+            print(f"LLM Judge 호출 실패: {e}")
+            return {"score": 0.0, "reason": f"Error: {str(e)}"}
     
     def evaluate_SR(self, result: Dict[str, Any]) -> EvaluationResult:
         """SR(성공률): success 필드 확인"""
@@ -87,11 +140,12 @@ class LevelEvaluator:
             }
         )
     
+    # L6 지표
     def evaluate_ReuseRate(self, result: Dict[str, Any]) -> EvaluationResult:
         """ReuseRate: 재사용 기회 대비 실제 재사용 비율"""
         golden_action = result.get("golden_action", [])
         tool_calls = result.get("tool_calls", [])
-        
+
         # 재사용 기회: golden_action에서 "reuse" 도구의 개수
         reuse_opportunities = sum(
             1 for action in golden_action 
@@ -127,7 +181,7 @@ class LevelEvaluator:
                 golden_unique_tools.add(tool)
         
         expected_unique_calls = len(golden_unique_tools)
-        
+
         # 실제 재사용 비율 계산
         if expected_unique_calls == 0:
             reused = 0
@@ -158,7 +212,7 @@ class LevelEvaluator:
         """RedundantCallRate: 재사용이 정답인 상황에서 불필요한 API 호출 비율"""
         golden_action = result.get("golden_action", [])
         tool_calls = result.get("tool_calls", [])
-        
+
         # 재사용 기회: golden_action에서 "reuse" 도구의 개수
         reuse_opportunities = sum(
             1 for action in golden_action 
@@ -203,11 +257,9 @@ class LevelEvaluator:
         success = result.get("success", False)
         actual_calls = len(result.get("tool_calls", []))
         
-        # minimum_calls는 태스크 스키마에 있거나, golden_action에서 계산
         minimum_calls = result.get("minimum_calls")
         
         if minimum_calls is None:
-            # golden_action에서 "reuse"를 제외한 유니크 도구 수로 계산
             golden_action = result.get("golden_action", [])
             unique_tools = set()
             for action in golden_action:
@@ -239,44 +291,119 @@ class LevelEvaluator:
             }
         )
     
+    # L7 지표
     def evaluate_ContextRetention(self, result: Dict[str, Any]) -> EvaluationResult:
-        """ContextRetention: 필요한 순간에 과거 맥락을 사용했는지의 비율"""
-        context_tests = result.get("context_tests", [])
+        """ContextRetention: LLM-as-a-Judge로 과거 맥락 활용도 평가"""
+        conv_preview = result.get("conversation_preview", {})
         
-        if not context_tests:
+        if not conv_preview:
             return EvaluationResult(
                 metric_name="ContextRetention",
                 score=0.0,
-                details={"total": 0, "used": 0, "reason": "No context tests"}
+                details={"reason": "No conversation preview available"}
             )
         
-        used = sum(1 for t in context_tests if t.get("used") is True)
-        score = used / len(context_tests)
+        first_messages = conv_preview.get("first_messages", [])
+        last_messages = conv_preview.get("last_messages", [])
+        
+        if len(first_messages) < 2 or len(last_messages) < 2:
+            return EvaluationResult(
+                metric_name="ContextRetention",
+                score=0.0,
+                details={"reason": "Not enough messages for context evaluation"}
+            )
+        
+        # LLM Judge 프롬프트 구성
+        prompt = f"""다음 대화에서 AI가 이전 맥락을 적절히 유지하고 활용했는지 평가해주세요.
+
+        대화 내용:
+        {self._format_messages(first_messages + last_messages)}
+
+        평가 기준:
+        1. AI가 이전 대화의 핵심 정보를 기억하고 있는가?
+        2. 사용자가 과거 맥락을 참조할 때("그때", "아까", "전에 말한") 적절히 연결했는가?
+        3. 새로운 질문에 이전 정보를 고려하여 답변했는가?
+        4. 불필요한 재질문 없이 맥락을 유지했는가?
+
+        점수 기준:
+        - 1.0: 모든 맥락을 완벽히 유지하고 적절히 활용
+        - 0.7-0.9: 대부분의 맥락을 유지하고 활용
+        - 0.4-0.6: 일부 맥락만 유지하거나 부분적으로만 활용
+        - 0.1-0.3: 맥락 유지가 미흡
+        - 0.0: 맥락을 전혀 유지하지 못함
+
+        JSON 형식으로만 답변해주세요:
+        {{"score": 0.0-1.0, "retained": true/false, "reason": "간단한 이유"}}"""
+
+        llm_result = self._call_llm_judge(prompt)
+        score = float(llm_result.get("score", 0.0))
         
         return EvaluationResult(
             metric_name="ContextRetention",
             score=score,
-            details={"used": used, "total": len(context_tests)}
+            details={
+                "retained": llm_result.get("retained", score > 0.5),
+                "reason": llm_result.get("reason", "LLM evaluation"),
+                "total_messages": len(first_messages) + len(last_messages)
+            }
         )
-
+    
     def evaluate_RefRecall(self, result: Dict[str, Any]) -> EvaluationResult:
-        """RefRecall: 오래된 정보 회상 비율"""
-        long_term_tests = result.get("long_term_tests", [])
+        """RefRecall: LLM-as-a-Judge로 오래된 정보 회상 능력 평가"""
+        conv_preview = result.get("conversation_preview", {})
         
-        if not long_term_tests:
+        if not conv_preview:
             return EvaluationResult(
                 metric_name="RefRecall",
                 score=0.0,
-                details={"total": 0, "recalled": 0, "reason": "No long-term tests"}
+                details={"reason": "No conversation preview available"}
             )
         
-        recalled = sum(1 for t in long_term_tests if t.get("recalled") is True)
-        score = recalled / len(long_term_tests)
+        first_messages = conv_preview.get("first_messages", [])
+        last_messages = conv_preview.get("last_messages", [])
+        total_messages = conv_preview.get("total_messages", len(first_messages) + len(last_messages))
+        
+        if len(first_messages) < 2 or len(last_messages) < 2:
+            return EvaluationResult(
+                metric_name="RefRecall",
+                score=0.0,
+                details={"reason": "Not enough messages for recall evaluation"}
+            )
+        
+        # LLM Judge 프롬프트 구성
+        prompt = f"""다음 대화에서 AI가 오래된 정보를 정확히 회상하고 활용했는지 평가해주세요.
+
+        대화 내용 (총 {total_messages}개 메시지 중 일부):
+        {self._format_messages(first_messages + last_messages)}
+
+        평가 기준:
+        1. 초반 대화의 구체적 정보(숫자, 이름, 특징 등)를 나중에도 정확히 기억하는가?
+        2. 시간이 지난 후에도 이전 정보를 정확하게 참조하는가?
+        3. 여러 턴이 지난 후에도 맥락의 연속성을 유지하는가?
+        4. 혼동 없이 정확한 정보를 회상하는가?
+
+        점수 기준:
+        - 1.0: 모든 과거 정보를 정확히 회상
+        - 0.7-0.9: 대부분의 정보를 정확히 회상
+        - 0.4-0.6: 일부 정보만 회상하거나 부분적으로 정확
+        - 0.1-0.3: 회상이 부정확하거나 미흡
+        - 0.0: 과거 정보를 전혀 회상하지 못함
+
+        JSON 형식으로만 답변해주세요:
+        {{"score": 0.0-1.0, "recalled": true/false, "reason": "간단한 이유"}}"""
+
+        llm_result = self._call_llm_judge(prompt)
+        score = float(llm_result.get("score", 0.0))
         
         return EvaluationResult(
             metric_name="RefRecall",
             score=score,
-            details={"recalled": recalled, "total": len(long_term_tests)}
+            details={
+                "recalled": llm_result.get("recalled", score > 0.5),
+                "reason": llm_result.get("reason", "LLM evaluation"),
+                "total_messages": total_messages,
+                "evaluated_messages": len(first_messages) + len(last_messages)
+            }
         )
     
     def evaluate_all_tasks(self) -> Dict[str, Any]:
@@ -296,8 +423,9 @@ class LevelEvaluator:
         
         metric_scores = {name: [] for name in metric_names}
         
-        for result in results:
+        for idx, result in enumerate(results, 1):
             task_id = result.get("task_id")
+            print(f"\n[{idx}/{len(results)}] 평가 중: {task_id}")
             
             # 공통 지표 평가
             sr = self.evaluate_SR(result)
@@ -374,8 +502,9 @@ class LevelEvaluator:
         return {
             "metadata": {
                 "timestamp": datetime.now().isoformat(),
-                "level": level,  # 레벨 정보 추가
+                "level": level,
                 "log_file": str(self.log_file_path),
+                "llm_model": self.llm_model if level == "L7" else None,
                 "original_metadata": self.log_data.get("metadata", {}),
                 "total_tasks": len(results)
             },
@@ -393,6 +522,7 @@ class LevelEvaluator:
             output_path = log_dir / f"{log_filename}_evaluation.json"
         else:
             output_path = Path(output_path)
+        
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, 'w', encoding='utf-8') as f:
@@ -409,9 +539,21 @@ def main():
         type=str,
         help="평가할 로그 파일 경로"
     )
+    parser.add_argument(
+        "-o", "--output",  
+        type=str,
+        default=None,
+        help="결과 파일 저장 경로"
+    )
+    parser.add_argument(
+        "--llm-model",
+        type=str,
+        default="anthropic/claude-3-7-sonnet-latest",
+        help="LLM Judge 모델"
+    )
     args = parser.parse_args()
     
-    evaluator = LevelEvaluator(args.log_file)  
+    evaluator = LevelEvaluator(args.log_file, llm_model=args.llm_model)
     output_path = evaluator.save_results(args.output)
     
     evaluation_results = evaluator.evaluate_all_tasks()
@@ -420,6 +562,8 @@ def main():
     print(f"{level} 레벨 평가 완료")
     print(f"\n로그 파일: {args.log_file}")
     print(f"결과 파일: {output_path}")
+    if level == "L7":
+        print(f"LLM Judge 모델: {args.llm_model}")
     print(f"\n총 태스크 수: {evaluation_results['metadata']['total_tasks']}")
 
 if __name__ == "__main__":
