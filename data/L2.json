@@ -873,27 +873,6 @@
   },
   {
     "task_id": "L2-076",
-    "instruction": "서울시 버스 141번 노선의 도착 정보를 알려줘",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "getArrInfoByRouteAllList",
-      "WebSearch_naver",
-      "PlaceSearch_kakao",
-      "POISearch_tmap"
-    ],
-    "golden_action": [
-      {
-        "tool": "getArrInfoByRouteAllList",
-        "args": {
-          "busRouteId": "100100118",
-          "routeNumber": "141"
-        }
-      }
-    ]
-  },
-  {
-    "task_id": "L2-077",
     "instruction": "업비트에서 거래 가능한 모든 암호화폐 목록을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -914,7 +893,7 @@
     ]
   },
   {
-    "task_id": "L2-078",
+    "task_id": "L2-077",
     "instruction": "서울특별시 강남구 테헤란로 152 주소를 좌표로 변환해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -935,7 +914,7 @@
     ]
   },
   {
-    "task_id": "L2-079",
+    "task_id": "L2-078",
     "instruction": "2025년 봄 시즌 제주도 축제 정보를 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -959,7 +938,7 @@
     ]
   },
   {
-    "task_id": "L2-080",
+    "task_id": "L2-079",
     "instruction": "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -981,7 +960,7 @@
     ]
   },
   {
-    "task_id": "L2-081",
+    "task_id": "L2-080",
     "instruction": "LS증권에서 '배터리'로 관련 종목을 검색해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1001,7 +980,7 @@
     ]
   },
   {
-    "task_id": "L2-082",
+    "task_id": "L2-081",
     "instruction": "강남역 반경 1km 이내 편의점을 T맵 카테고리로 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1025,7 +1004,7 @@
     ]
   },
   {
-    "task_id": "L2-083",
+    "task_id": "L2-082",
     "instruction": "테슬라(TSLA) 주가를 확인하고 싶어",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1047,7 +1026,7 @@
     ]
   },
   {
-    "task_id": "L2-084",
+    "task_id": "L2-083",
     "instruction": "서울 마포구 월드컵북로 396 주소의 경위도 좌표를 T맵으로 알려줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
@@ -1068,7 +1047,7 @@
     ]
   },
   {
-    "task_id": "L2-085",
+    "task_id": "L2-084",
     "instruction": "이번 주 IT/컴퓨터 분야 신간 도서 목록을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
