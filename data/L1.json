@@ -6,22 +6,34 @@
     "task_category": "Single Tool",
     "golden_action": [
       {
-        "tool": "festival_search",
+        "tool": "WebSearch_naver",
         "args": {
-          "eventStartDate": "20251001",
-          "eventEndDate": "20251031",
-          "location": "부산",
-          "num_of_rows": 1
+          "query": "25년도 10월 부산축제",
+          "display": 10
         }
       }
     ],
     "arg_schema": {
-      "eventStartDate": { "type": "string", "pattern": "^[0-9]{8}$", "required": true },
-      "eventEndDate": { "type": "string", "pattern": "^[0-9]{8}$" },
-      "location": { "type": "string" },
-      "num_of_rows": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 }
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "display": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 1
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-002",
@@ -39,18 +51,33 @@
       }
     ],
     "arg_schema": {
-      "start": { "type": "string", "required": true },
-      "goal": { "type": "string", "required": true },
+      "start": {
+        "type": "string",
+        "required": true
+      },
+      "goal": {
+        "type": "string",
+        "required": true
+      },
       "waypoints": {
         "type": "string",
         "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
       },
       "option": {
         "type": "string",
-        "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"]
+        "enum": [
+          "trafast",
+          "tracomfort",
+          "traoptimal",
+          "traavoidtoll",
+          "traavoidcaronly",
+          "trafast:traavoidtoll"
+        ]
       }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-003",
@@ -68,18 +95,33 @@
       }
     ],
     "arg_schema": {
-      "start": { "type": "string", "required": true },
-      "goal": { "type": "string", "required": true },
+      "start": {
+        "type": "string",
+        "required": true
+      },
+      "goal": {
+        "type": "string",
+        "required": true
+      },
       "waypoints": {
         "type": "string",
         "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
       },
       "option": {
         "type": "string",
-        "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"]
+        "enum": [
+          "trafast",
+          "tracomfort",
+          "traoptimal",
+          "traavoidtoll",
+          "traavoidcaronly",
+          "trafast:traavoidtoll"
+        ]
       }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-004",
@@ -98,18 +140,33 @@
       }
     ],
     "arg_schema": {
-      "start": { "type": "string", "required": true },
-      "goal": { "type": "string", "required": true },
+      "start": {
+        "type": "string",
+        "required": true
+      },
+      "goal": {
+        "type": "string",
+        "required": true
+      },
       "waypoints": {
         "type": "string",
         "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
       },
       "option": {
         "type": "string",
-        "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"]
+        "enum": [
+          "trafast",
+          "tracomfort",
+          "traoptimal",
+          "traavoidtoll",
+          "traavoidcaronly",
+          "trafast:traavoidtoll"
+        ]
       }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-005",
@@ -117,12 +174,22 @@
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "StockSearch_ls", "args": { "query_index": "삼성전자" } }
+      {
+        "tool": "StockSearch_ls",
+        "args": {
+          "query_index": "삼성전자"
+        }
+      }
     ],
     "arg_schema": {
-      "query_index": { "type": "string", "required": true }
+      "query_index": {
+        "type": "string",
+        "required": true
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-106",
@@ -130,12 +197,28 @@
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "MarketIndex_ls", "args": { "jisu": "KOSDAQ" } }
+      {
+        "tool": "MarketIndex_ls",
+        "args": {
+          "jisu": "KOSDAQ"
+        }
+      }
     ],
     "arg_schema": {
-      "jisu": { "type": "string", "enum": ["KOSPI", "KOSPI200", "KRX100", "KOSDAQ"], "required": true }
+      "jisu": {
+        "type": "string",
+        "enum": [
+          "KOSPI",
+          "KOSPI200",
+          "KRX100",
+          "KOSDAQ"
+        ],
+        "required": true
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-007",
@@ -143,73 +226,140 @@
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "CryptoPrice_bithumb", "args": { "markets": "KRW-BTC" } }
+      {
+        "tool": "CryptoPrice_bithumb",
+        "args": {
+          "markets": "KRW-BTC"
+        }
+      }
     ],
     "arg_schema": {
-      "markets": { "type": "string", "enum": ["KRW-BTC", "BTC-ETH"], "required": true }
+      "markets": {
+        "type": "string",
+        "enum": [
+          "KRW-BTC",
+          "BTC-ETH"
+        ],
+        "required": true
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-008",
-    "instruction": "빗썸에서 거래 가능한 마켓 전체 개수를 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      { "tool": "MarketList_bithumb", "args": { "isDetails": false } }
-    ],
-    "arg_schema": {
-      "isDetails": { "type": "boolean", "default": false }
-    },
-    "resp_schema": { "type": "string" }
-  },
-  {
-    "task_id": "L1-009",
     "instruction": "네이버에서 ‘전기차 충전 요금 인상’ 검색해서 첫 번째 결과 제목만 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "search_web", "args": { "query": "전기차 충전 요금 인상", "display": 1, "start": 1 } }
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "전기차 충전 요금 인상",
+          "display": 1,
+          "start": 1
+        }
+      }
     ],
     "arg_schema": {
-      "query": { "type": "string", "required": true },
-      "display": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-      "start": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 1 }
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "display": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 1
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
+  },
+  {
+    "task_id": "L1-009",
+    "instruction": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+    "task_level": 1,
+    "task_category": "Single Tool",
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "제주 가을 여행 코스 후기",
+          "display": 1,
+          "start": 1
+        }
+      }
+    ],
+    "arg_schema": {
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "display": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 1
+      }
+    },
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-010",
-    "instruction": "네이버 블로그에서 ‘제주 가을 여행 코스 후기’로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+    "instruction": "네이버 뉴스에서 '반도체 수출 전망'으로 검색해서 상단 기사 하나만 골라 제목을 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "search_blog", "args": { "query": "제주 가을 여행 코스 후기", "display": 1, "start": 1 } }
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "반도체 수출 전망",
+          "display": 1,
+          "start": 1
+        }
+      }
     ],
     "arg_schema": {
-      "query": { "type": "string", "required": true },
-      "display": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-      "start": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 1 }
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "display": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "start": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 1
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-011",
-    "instruction": "네이버 뉴스에서 ‘반도체 수출 전망’으로 검색해서 상단 기사 하나만 골라 제목을 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      { "tool": "search_news", "args": { "query": "반도체 수출 전망", "display": 1, "start": 1 } }
-    ],
-    "arg_schema": {
-      "query": { "type": "string", "required": true },
-      "display": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-      "start": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 1 }
-    },
-    "resp_schema": { "type": "string" }
-  },
-  {
-    "task_id": "L1-012",
     "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 맨 위 책 제목만 한 줄로 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
@@ -231,22 +381,98 @@
       }
     ],
     "arg_schema": {
-      "Query": { "type": "string", "required": true },
-      "QueryType": { "type": "string", "enum": ["Keyword", "Title", "Author", "Publisher"], "default": "Keyword" },
-      "SearchTarget": { "type": "string", "enum": ["Book", "Foreign", "Music", "DVD", "Used", "eBook", "All"], "default": "Book" },
-      "Start": { "type": "integer", "minimum": 1, "default": 1 },
-      "MaxResults": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-      "Sort": { "type": "string", "enum": ["Accuracy", "PublishTime", "SalesPoint", "CustomerRating", "MyReviewCount"], "default": "Accuracy" },
-      "Cover": { "type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid" },
-      "CategoryId": { "type": "integer", "default": 0 },
-      "Output": { "type": "string", "enum": ["XML", "JS"], "default": "XML" },
-      "outofStockFilter": { "type": "integer", "enum": [0, 1], "default": 0 },
-      "OptResult": { "type": "string", "default": "" }
+      "Query": {
+        "type": "string",
+        "required": true
+      },
+      "QueryType": {
+        "type": "string",
+        "enum": [
+          "Keyword",
+          "Title",
+          "Author",
+          "Publisher"
+        ],
+        "default": "Keyword"
+      },
+      "SearchTarget": {
+        "type": "string",
+        "enum": [
+          "Book",
+          "Foreign",
+          "Music",
+          "DVD",
+          "Used",
+          "eBook",
+          "All"
+        ],
+        "default": "Book"
+      },
+      "Start": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1
+      },
+      "MaxResults": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "Sort": {
+        "type": "string",
+        "enum": [
+          "Accuracy",
+          "PublishTime",
+          "SalesPoint",
+          "CustomerRating",
+          "MyReviewCount"
+        ],
+        "default": "Accuracy"
+      },
+      "Cover": {
+        "type": "string",
+        "enum": [
+          "Big",
+          "MidBig",
+          "Mid",
+          "Small",
+          "Mini",
+          "None"
+        ],
+        "default": "Mid"
+      },
+      "CategoryId": {
+        "type": "integer",
+        "default": 0
+      },
+      "Output": {
+        "type": "string",
+        "enum": [
+          "XML",
+          "JS"
+        ],
+        "default": "XML"
+      },
+      "outofStockFilter": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0
+      },
+      "OptResult": {
+        "type": "string",
+        "default": ""
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
-    "task_id": "L1-013",
+    "task_id": "L1-012",
     "instruction": "알라딘 국내 베스트셀러 2025년 9월 1주차 첫 번째 결과 제목만 한 줄로 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
@@ -269,101 +495,338 @@
       }
     ],
     "arg_schema": {
-      "QueryType": { "type": "string", "enum": ["ItemNewAll", "ItemNewSpecial", "ItemEditorChoice", "Bestseller", "BlogBest"], "required": true },
-      "SearchTarget": { "type": "string", "enum": ["Book", "Foreign", "Music", "DVD", "Used", "eBook", "All"], "default": "Book" },
-      "SubSearchTarget": { "type": "string", "enum": ["Book", "Music", "DVD"] },
-      "Start": { "type": "integer", "minimum": 1, "default": 1 },
-      "MaxResults": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 },
-      "Cover": { "type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid" },
-      "CategoryId": { "type": "integer", "default": 0 },
-      "Year": { "type": "integer" },
-      "Month": { "type": "integer" },
-      "Week": { "type": "integer" },
-      "Output": { "type": "string", "enum": ["XML", "JS"], "default": "XML" },
-      "outofStockFilter": { "type": "integer", "enum": [0, 1], "default": 0 }
+      "QueryType": {
+        "type": "string",
+        "enum": [
+          "ItemNewAll",
+          "ItemNewSpecial",
+          "ItemEditorChoice",
+          "Bestseller",
+          "BlogBest"
+        ],
+        "required": true
+      },
+      "SearchTarget": {
+        "type": "string",
+        "enum": [
+          "Book",
+          "Foreign",
+          "Music",
+          "DVD",
+          "Used",
+          "eBook",
+          "All"
+        ],
+        "default": "Book"
+      },
+      "SubSearchTarget": {
+        "type": "string",
+        "enum": [
+          "Book",
+          "Music",
+          "DVD"
+        ]
+      },
+      "Start": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1
+      },
+      "MaxResults": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 10
+      },
+      "Cover": {
+        "type": "string",
+        "enum": [
+          "Big",
+          "MidBig",
+          "Mid",
+          "Small",
+          "Mini",
+          "None"
+        ],
+        "default": "Mid"
+      },
+      "CategoryId": {
+        "type": "integer",
+        "default": 0
+      },
+      "Year": {
+        "type": "integer"
+      },
+      "Month": {
+        "type": "integer"
+      },
+      "Week": {
+        "type": "integer"
+      },
+      "Output": {
+        "type": "string",
+        "enum": [
+          "XML",
+          "JS"
+        ],
+        "default": "XML"
+      },
+      "outofStockFilter": {
+        "type": "integer",
+        "enum": [
+          0,
+          1
+        ],
+        "default": 0
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
+  },
+  {
+    "task_id": "L1-013",
+    "instruction": "다음에서 '손흥민' 검색해서 첫 결과 제목만 한 줄로 알려줘.",
+    "task_level": 1,
+    "task_category": "Single Tool",
+    "golden_action": [
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "손흥민",
+          "sort": "accuracy",
+          "page": 1,
+          "size": 1
+        }
+      }
+    ],
+    "arg_schema": {
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "sort": {
+        "type": "string",
+        "enum": [
+          "accuracy",
+          "recency"
+        ],
+        "default": "accuracy"
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 1
+      },
+      "size": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 50,
+        "default": 10
+      }
+    },
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-014",
-    "instruction": "다음에서 ‘손흥민’ 검색해서 첫 결과 제목만 한 줄로 알려줘.",
+    "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목만 한 줄로 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "WebSearch_daum", "args": { "query": "손흥민", "sort": "accuracy", "page": 1, "size": 1 } }
+      {
+        "tool": "VideoSearch_daum",
+        "args": {
+          "query": "손흥민 헤드트릭",
+          "sort": "accuracy",
+          "page": 1,
+          "size": 1
+        }
+      }
     ],
     "arg_schema": {
-      "query": { "type": "string", "required": true },
-      "sort": { "type": "string", "enum": ["accuracy", "recency"], "default": "accuracy" },
-      "page": { "type": "integer", "minimum": 1, "maximum": 50, "default": 1 },
-      "size": { "type": "integer", "minimum": 1, "maximum": 50, "default": 10 }
+      "query": {
+        "type": "string",
+        "required": true
+      },
+      "sort": {
+        "type": "string",
+        "enum": [
+          "accuracy",
+          "recency"
+        ],
+        "default": "accuracy"
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 15,
+        "default": 1
+      },
+      "size": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 30,
+        "default": 15
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
     "task_id": "L1-015",
-    "instruction": "다음 동영상에서 ‘손흥민 헤드트릭’ 검색해서 첫 영상 제목만 한 줄로 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      { "tool": "VideoSearch_daum", "args": { "query": "손흥민 헤드트릭", "sort": "accuracy", "page": 1, "size": 1 } }
-    ],
-    "arg_schema": {
-      "query": { "type": "string", "required": true },
-      "sort": { "type": "string", "enum": ["accuracy", "recency"], "default": "accuracy" },
-      "page": { "type": "integer", "minimum": 1, "maximum": 15, "default": 1 },
-      "size": { "type": "integer", "minimum": 1, "maximum": 30, "default": 15 }
-    },
-    "resp_schema": { "type": "string" }
-  },
-  {
-    "task_id": "L1-016",
     "instruction": "카카오맵으로 서울 중구 세종대로 110 주소를 좌표로 바꿔줘",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "AddressToCoord_kakao", "args": { "address": "서울 중구 세종대로 110" } }
+      {
+        "tool": "AddressToCoord_kakao",
+        "args": {
+          "address": "서울 중구 세종대로 110"
+        }
+      }
     ],
     "arg_schema": {
-      "address": { "type": "string", "required": true }
+      "address": {
+        "type": "string",
+        "required": true
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
-    "task_id": "L1-017",
-    "instruction": "카카오맵으로 강남역 근처에서 ‘파스타’ 검색해서 첫 번째 가게 이름만 한 줄로 알려줘.",
+    "task_id": "L1-016",
+    "instruction": "카카오맵으로 강남역 근처에서 '파스타' 검색해서 첫 번째 가게 이름만 한 줄로 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "PlaceSearch_kakao", "args": { "keyword": "파스타", "x": 127.02758, "y": 37.49794, "radius": 1000, "sort": "distance", "page": 1, "size": 1 } }
+      {
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "파스타",
+          "x": 127.02758,
+          "y": 37.49794,
+          "radius": 1000,
+          "sort": "distance",
+          "page": 1,
+          "size": 1
+        }
+      }
     ],
     "arg_schema": {
-      "keyword": { "type": "string", "required": true },
-      "x": { "type": "number" },
-      "y": { "type": "number" },
-      "radius": { "type": "integer", "maximum": 20000 },
-      "sort": { "type": "string", "enum": ["accuracy", "distance"], "default": "accuracy" },
-      "page": { "type": "integer", "minimum": 1, "maximum": 45, "default": 1 },
-      "size": { "type": "integer", "minimum": 1, "maximum": 15, "default": 15 }
+      "keyword": {
+        "type": "string",
+        "required": true
+      },
+      "x": {
+        "type": "number"
+      },
+      "y": {
+        "type": "number"
+      },
+      "radius": {
+        "type": "integer",
+        "maximum": 20000
+      },
+      "sort": {
+        "type": "string",
+        "enum": [
+          "accuracy",
+          "distance"
+        ],
+        "default": "accuracy"
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 45,
+        "default": 1
+      },
+      "size": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 15,
+        "default": 15
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   },
   {
-    "task_id": "L1-018",
+    "task_id": "L1-017",
     "instruction": "홍대입구역 기준 500m 안에 있는 카페 하나만 찾아서 상호명 한 줄로 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
-      { "tool": "CategorySearch_kakao", "args": { "category": "CE7", "x": 126.92370, "y": 37.55630, "radius": 500, "page": 1, "size": 1 } }
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "CE7",
+          "x": 126.9237,
+          "y": 37.5563,
+          "radius": 500,
+          "page": 1,
+          "size": 1
+        }
+      }
     ],
     "arg_schema": {
-      "category": { "type": "string", "enum": ["MT1", "CS2", "PS3", "SC4", "AC5", "PK6", "OL7", "SW8", "BK9", "CT1", "AG2", "PO3", "AT4", "AD5", "FD6", "CE7", "HP8", "PM9"], "required": true },
-      "x": { "type": "number" },
-      "y": { "type": "number" },
-      "radius": { "type": "integer", "minimum": 0, "maximum": 20000, "default": 1000 },
-      "page": { "type": "integer", "minimum": 1, "default": 1 },
-      "size": { "type": "integer", "minimum": 1, "maximum": 15, "default": 15 }
+      "category": {
+        "type": "string",
+        "enum": [
+          "MT1",
+          "CS2",
+          "PS3",
+          "SC4",
+          "AC5",
+          "PK6",
+          "OL7",
+          "SW8",
+          "BK9",
+          "CT1",
+          "AG2",
+          "PO3",
+          "AT4",
+          "AD5",
+          "FD6",
+          "CE7",
+          "HP8",
+          "PM9"
+        ],
+        "required": true
+      },
+      "x": {
+        "type": "number"
+      },
+      "y": {
+        "type": "number"
+      },
+      "radius": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 20000,
+        "default": 1000
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1
+      },
+      "size": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 15,
+        "default": 15
+      }
     },
-    "resp_schema": { "type": "string" }
+    "resp_schema": {
+      "type": "string"
+    }
   }
 ]
