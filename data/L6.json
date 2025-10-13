@@ -12,7 +12,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "ItemSearch_aladin",
         "args": {
           "Query": "파이썬으로 배우는 알고리즘 트레이딩"
         }
@@ -25,7 +25,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "ItemSearch_aladin",
         "args": {
           "Query": "파이썬으로 배우는 알고리즘 트레이딩",
           "Sort": "SalesPoint"
@@ -93,7 +93,7 @@
           "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "ItemSearch_aladin",
               "args": {
                 "Query": "파이썬으로 배우는 알고리즘 트레이딩"
               }
@@ -164,7 +164,7 @@
           "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬으로 배우는 알고리즘 트레이딩(개정판)' 입니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "ItemSearch_aladin",
               "args": {
                 "Query": "파이썬으로 배우는 알고리즘 트레이딩",
                 "Sort": "SalesPoint"
@@ -197,7 +197,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "NewsSearch_naver",
         "args": {
           "query": "반도체 기술",
           "display": 3,
@@ -278,7 +278,7 @@
           "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "NewsSearch_naver",
               "args": {
                 "query": "반도체 기술",
                 "display": 3,
@@ -347,7 +347,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "VideoSearch_daum",
         "args": {
           "query": "뉴진스",
           "sort": "recency",
@@ -416,7 +416,7 @@
           "role": "assistant",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "VideoSearch_daum",
               "args": {
                 "query": "뉴진스",
                 "sort": "recency",
@@ -450,7 +450,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "PlaceSearch_kakao",
         "args": {
           "keyword": "시흥시청 맛집"
         }
@@ -536,7 +536,7 @@
           "content": "네, 시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등을 찾아드렸습니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "PlaceSearch_kakao",
               "args": {
                 "keyword": "시흥시청 맛집"
               }
@@ -602,7 +602,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "WebSearch_naver",
         "args": {
           "query": "2025년 9월 부산 축제"
         }
@@ -661,7 +661,7 @@
           "content": "네, 9월에 부산에서 열리는 축제는 '부산국제영화제'입니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "WebSearch_naver",
               "args": {
                 "query": "2025년 9월 부산 축제"
               }
@@ -722,7 +722,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "BlogSearch_naver",
         "args": {
           "query": "겨울 제주도 여행 코스"
         }
@@ -784,7 +784,7 @@
           "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 감귤 체험 코스를 추천해드렸습니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "BlogSearch_naver",
               "args": {
                 "query": "겨울 제주도 여행 코스"
               }
@@ -848,7 +848,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "WebSearch_daum",
         "args": {
           "query": "AI 기술 최신 동향"
         }
@@ -910,7 +910,7 @@
           "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "WebSearch_daum",
               "args": {
                 "query": "AI 기술 최신 동향"
               }
@@ -974,7 +974,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "WebSearch_naver",
         "args": {
           "query": "기후 변화 원인"
         }
@@ -1033,7 +1033,7 @@
           "content": "네, 기후 변화의 핵심 원인은 인간 활동에 따른 온실가스 배출 증가입니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "WebSearch_naver",
               "args": {
                 "query": "기후 변화 원인"
               }
@@ -1094,7 +1094,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "MarketList_upbit",
         "args": {
           "quote": "KRW"
         }
@@ -1179,7 +1179,7 @@
           "content": "네, 업비트 원화 마켓 목록입니다. 비트코인, 이더리움 등이 포함되어 있습니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "MarketList_upbit",
               "args": {
                 "quote": "KRW"
               }
@@ -1268,7 +1268,7 @@
         }
       },
       {
-        "tool": "reuse",
+        "tool": "StockChart_kis",
         "args": {
           "symbol": "005930",
           "period": "W",
@@ -1337,7 +1337,7 @@
           "content": "네, 9월 넷째 주 삼성전자 주봉 종가는 81,200원이었습니다.",
           "actions": [
             {
-              "tool": "reuse",
+              "tool": "StockChart_kis",
               "args": {
                 "symbol": "005930",
                 "period": "W",
