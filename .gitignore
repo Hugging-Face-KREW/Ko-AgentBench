@@ -1,4 +1,25 @@
-# Byte-compiled / optimized / DLL files
+# Python
+__pycache__/
+*.py[cod]
+
+# Environments
+.env
+.venv/
+venv/
+
+
+# Credentials and keys
+bench/runner/vertex_credentials.json
+*credentials*.json
+*service_account*.json
+
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS artifacts
+.DS_Store
+Thumbs.db# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -38,7 +59,6 @@ htmlcov/
 .nox/
 .coverage
 .coverage.*
-.cache
 nosetests.xml
 coverage.xml
 *.cover
@@ -113,3 +133,7 @@ Desktop.ini
 .env
 .env.local
 .env.*.local
+
+# API Keys and Secrets
+bench/tools/secrets.py
+configs/secrets.py

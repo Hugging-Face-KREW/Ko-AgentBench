@@ -6,12 +6,17 @@ data 폴더의 L1~L7 데이터셋을 로드하여 각 질문(instruction)을 실
 """
 
 import os
+import argparse
 import json
 import glob
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional, Type, Dict
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv  # provided by python-dotenv
+except Exception:
+    def load_dotenv(*args, **kwargs):  # no-op fallback if package not available
+        return False
 
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
@@ -98,13 +103,15 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                 if tool_name and tool_name not in tools_needed:
                     tools_needed.append(tool_name)
         
-        print(f"  📝 Task {task.get('task_id')}: tools_needed = {tools_needed}")
+        # Normalize tool names to match registry keys
+        normalized_tools_needed = [normalize_tool_name(t) for t in tools_needed]
+        print(f"  📝 Task {task.get('task_id')}: tools_needed = {tools_needed} → normalized = {normalized_tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
             "description": task.get("instruction", ""),
             "expected_output": task.get("resp_schema", {}),
-            "available_tools": tools_needed,  # Use 'available_tools' key for runner compatibility
+            "available_tools": normalized_tools_needed,  # normalized for runner compatibility
             "level": task.get("task_level", 0),
             "category": task.get("task_category", "unknown"),
             "golden_action": task.get("golden_action", []),
@@ -162,6 +169,33 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         simplified["final_response"] = result["result"]["final_response"]
     else:
         simplified["final_response"] = None
+
+    # Add a compact conversation preview to help verify multi-turn seeding
+    try:
+        conv = (result.get("result") or {}).get("conversation") or []
+        total_msgs = len(conv)
+        def _preview(msg):
+            content = (msg.get("content") or "")
+            content = content if len(content) <= 160 else content[:157] + "..."
+            role = msg.get("role", "unknown")
+            tcid = msg.get("tool_call_id")  # present for tool messages
+            if role == "tool" and tcid:
+                # Avoid dumping full tool JSON in preview
+                return {"role": role, "tool_call_id": tcid, "content": "<tool result omitted>"}
+            return {"role": role, "content": content}
+
+        first_k = 3
+        last_k = 3
+        head = conv[:first_k]
+        tail = conv[-last_k:] if total_msgs > first_k else []
+        simplified["conversation_preview"] = {
+            "total_messages": total_msgs,
+            "first_messages": [_preview(m) for m in head],
+            "last_messages": [_preview(m) for m in tail] if tail else [],
+        }
+    except Exception:
+        # Non-fatal: skip preview if structure unexpected
+        pass
     
     return simplified
 
@@ -278,7 +312,7 @@ def run_benchmark_on_dataset(
     if isinstance(tasks, list) and len(tasks) > 0:
         print(f"DEBUG: first task type = {type(tasks[0])}")
     
-    # Convert dataset format to runner format
+    # Convert dataset format to runner format (always use full set)
     converted_tasks = convert_dataset_to_tasks(tasks)
     
     # Collect all required tools
@@ -336,6 +370,11 @@ def run_benchmark_on_dataset(
         print(f"Level: {task['level']} | Category: {task['category']}")
         print(f"Instruction: {task['description']}")
         print(f"Expected tools: {task['available_tools']}")
+        # Brief note about seeding multi-turn history
+        if task.get("conversation_tracking") and isinstance(task["conversation_tracking"].get("turns"), list):
+            turns = task["conversation_tracking"]["turns"]
+            valid = [t for t in turns if t.get("role") in ("user", "assistant") and t.get("content")]
+            print(f"Seeding prior turns: {len(valid)} (user/assistant)")
         print(f"{'─'*80}")
         
         try:
@@ -405,6 +444,21 @@ def run_benchmark_on_dataset(
 
 def main():
     """Main execution function."""
+    parser = argparse.ArgumentParser(description="Ko-AgentBench runner with tool-call logging")
+    parser.add_argument("--levels", type=str, default=None,
+                        help="Comma-separated levels to run (e.g., L6,L7). Default: all detected")
+    # removed --limit: always run full level
+    parser.add_argument("--max-steps", type=int, default=10,
+                        help="Maximum steps per task")
+    parser.add_argument("--timeout", type=int, default=60,
+                        help="Timeout (seconds) per task")
+    parser.add_argument("--no-save-logs", action="store_true",
+                        help="Do not save JSON logs to disk")
+    parser.add_argument("--model", type=str, default=None,
+                        help="Explicit model id (overrides auto selection)")
+
+    args = parser.parse_args()
+
     print("="*80)
     print("Ko-AgentBench Dataset Runner with Tool Call Logging")
     print("="*80)
@@ -476,15 +530,20 @@ def main():
         # Final fallback
         selected_model = "openai/gpt-4.1" if os.getenv("OPENAI_API_KEY") else "azure/gpt-4.1"
     
+    # Override model from CLI if provided
+    if args.model:
+        selected_model = args.model
     print(f"\nSelected model: {selected_model}")
     
     # Run benchmarks on each level
     all_level_results = {}
     
-    # You can customize which levels to run
-    # levels_to_run = ["L1","L2", "L3", "L4", "L5", "L6"]  
-    levels_to_run = ["L1"]  # Test only L1 first
-    # levels_to_run = ["L7"]  # Run all available levels in order
+    # Determine which levels to run
+    if args.levels:
+        levels_to_run = [lvl.strip() for lvl in args.levels.split(',') if lvl.strip()]
+    else:
+        # Default: run all discovered levels (including multi-turn L6/L7)
+        levels_to_run = sorted(list(datasets.keys()))
     
     for level_name in levels_to_run:
         if level_name in datasets:
@@ -492,9 +551,9 @@ def main():
                 level_name=level_name,
                 tasks=datasets[level_name],
                 model_name=selected_model,
-                max_steps=10,  # Only get first tool call, skip final response
-                timeout=60,
-                save_logs=True,
+                max_steps=args.max_steps,
+                timeout=args.timeout,
+                save_logs=(not args.no_save_logs),
                 log_dir="logs/benchmark_results"
             )
             all_level_results[level_name] = results
