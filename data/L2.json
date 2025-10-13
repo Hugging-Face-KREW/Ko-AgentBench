@@ -383,7 +383,7 @@
       "CarRoute_tmap",
       "Directions_naver",
       "PlaceSearch_kakao",
-      "convert_coord_to_address"
+      "CoordToAddress_kakao"
     ],
     "golden_action": [
       {
@@ -425,7 +425,7 @@
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
-      "convert_coord_to_address",
+      "CoordToAddress_kakao",
       "AddressToCoord_kakao",
       "Geocoding_tmap",
       "PlaceSearch_kakao",
@@ -433,7 +433,7 @@
     ],
     "golden_action": [
       {
-        "tool": "convert_coord_to_address",
+        "tool": "CoordToAddress_kakao",
         "args": {
           "x": "126.9780",
           "y": "37.5665"
