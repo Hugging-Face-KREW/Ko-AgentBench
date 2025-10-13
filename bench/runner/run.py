@@ -52,7 +52,8 @@ class BenchmarkRunner:
             Task execution result including tool invocation summary
         """
         start_time = time.time()
-        task_id = task.get('task_id', 'unknown')
+        # Accept both 'task_id' and 'id' from upstream converters
+        task_id = task.get('task_id') or task.get('id', 'unknown')
         
         if is_enabled():
             try:
@@ -75,15 +76,38 @@ class BenchmarkRunner:
         self.logger.info(f"Starting task {task_id}")
         
         try:
-            task_description = task.get('instruction') or task.get('description', '')
-            
-            # Initialize conversation with task description
-            messages = [
-                {"role": "user", "content": task_description}
-            ]
+            # Seed conversation messages
+            messages: List[Dict[str, Any]] = []
+            conversation = task.get('conversation_tracking') or task.get('conversation')
+            if isinstance(conversation, dict) and isinstance(conversation.get('turns'), list):
+                # Build messages from provided multi-turn conversation, trimming to the last user turn
+                turns = conversation.get('turns', [])
+                for t in turns:
+                    role = t.get('role')
+                    content = t.get('content', '')
+                    if role in ("user", "assistant") and content:
+                        messages.append({"role": role, "content": content})
+                # Trim trailing assistant messages so the next model output is a response to the last user
+                if messages:
+                    # Find last index of a user message
+                    last_user_idx = None
+                    for idx in range(len(messages) - 1, -1, -1):
+                        if messages[idx].get('role') == 'user':
+                            last_user_idx = idx
+                            break
+                    if last_user_idx is not None:
+                        messages = messages[: last_user_idx + 1]
+                # Fallback if conversation contained no valid user message
+                if not messages:
+                    task_description = task.get('instruction') or task.get('description', '')
+                    messages = [{"role": "user", "content": task_description}]
+            else:
+                # Single-turn fallback
+                task_description = task.get('instruction') or task.get('description', '')
+                messages = [{"role": "user", "content": task_description}]
             
             # Get available tools for this task
-            task_tools = task.get('available_tools', [])
+            task_tools = task.get('available_tools') or task.get('tools', [])
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
