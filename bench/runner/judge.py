@@ -239,18 +239,20 @@ class Judge:
         if not result:
             return None
         
-        # Try to get final response
-        final_response = result.get('final_response', '')
-        
-        # Try to extract from tool calls if final response is empty
-        if not final_response and 'steps' in result:
+        # Prefer the last successful tool result if available (tool-oriented tasks)
+        if 'steps' in result:
             for step in reversed(result['steps']):
                 if step.get('tool_calls'):
-                    for tool_call in step['tool_calls']:
-                        if tool_call.get('success') and tool_call.get('result'):
+                    # iterate reversed tool_calls to get the latest successful one
+                    for tool_call in reversed(step['tool_calls']):
+                        if tool_call.get('success') and tool_call.get('result') is not None:
                             return tool_call['result']
-        
-        return final_response
+
+        # Fallback to final assistant response content
+        return result.get('final_response', '')
+
+        # Fallback to final assistant response text
+        return result.get('final_response', '')
     
     def _golden_action_match(self, expected: List[Dict], actual: Any, task: Dict) -> Dict[str, Any]:
         """Evaluate based on golden_action(수정 필요)"""
