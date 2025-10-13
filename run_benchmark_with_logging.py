@@ -412,12 +412,14 @@ def main():
     # Load environment variables
     load_dotenv()
     
-    # Check API keys
+    # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [
         "HUGGINGFACE_API_KEY",
         "OPENAI_API_KEY",
         "ANTHROPIC_API_KEY",
         "GROQ_API_KEY",
+        "AZURE_API_KEY",
+        "GOOGLE_API_KEY",
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
@@ -435,11 +437,44 @@ def main():
     
     print(f"\n✓ Loaded {len(datasets)} dataset levels")
     
-    # Select model
+    # Select a model compatible with available provider keys
+    def _provider_ready(model_id: str) -> bool:
+        """Return True if the provider for model_id has required env keys."""
+        # Model id format: "<provider>/<model_name>"
+        if "/" not in model_id:
+            return False
+        provider = model_id.split("/", 1)[0].lower()
+        if provider == "azure":
+            return bool(os.getenv("AZURE_API_KEY") and os.getenv("AZURE_API_BASE") and os.getenv("AZURE_API_VERSION"))
+        if provider == "openai":
+            return bool(os.getenv("OPENAI_API_KEY"))
+        if provider == "anthropic":
+            return bool(os.getenv("ANTHROPIC_API_KEY"))
+        if provider == "groq":
+            return bool(os.getenv("GROQ_API_KEY"))
+        if provider in ("google", "gemini"):
+            return bool(os.getenv("GOOGLE_API_KEY"))
+        if provider == "huggingface":
+            return bool(os.getenv("HUGGINGFACE_API_KEY"))
+        return False
+
+    selected_model = None
     if MODEL_IDS:
-        selected_model = MODEL_IDS[-1]  # Use last model in list
+        # Prefer the first model in MODEL_IDS that matches available keys
+        for m in MODEL_IDS:
+            if _provider_ready(m):
+                selected_model = m
+                break
+        # Fallback: keep existing preference order if none match, but warn
+        if selected_model is None:
+            selected_model = MODEL_IDS[0]
+            print(
+                f"⚠ No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
+                f"  Tip: Set provider keys to match one of: {MODEL_IDS}"
+            )
     else:
-        selected_model = "azure/gpt-4.1"  # Default fallback
+        # Final fallback
+        selected_model = "openai/gpt-4.1" if os.getenv("OPENAI_API_KEY") else "azure/gpt-4.1"
     
     print(f"\nSelected model: {selected_model}")
     

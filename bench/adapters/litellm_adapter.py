@@ -1,5 +1,6 @@
 """LiteLLM adapter for Ko-AgentBench."""
 
+import os
 from typing import Any, Dict, List, Optional
 from .base_adapter import BaseAdapter
 from ..observability import observe
@@ -24,7 +25,49 @@ class LiteLLMAdapter(BaseAdapter):
             raise ImportError("litellm package is required for LiteLLMAdapter")
             
         super().__init__(model_name, **config)
+
+        # Load provider keys from configs.secrets if available and set env vars for LiteLLM
+        try:
+            from configs import secrets as _secrets
+        except Exception:
+            _secrets = None
+
+        def _set_env(name: str, value: Optional[str]):
+            if value and not os.getenv(name):
+                os.environ[name] = value
+
+        if _secrets is not None:
+            # Azure
+            _set_env("AZURE_API_KEY", getattr(_secrets, "AZURE_API_KEY", None))
+            _set_env("AZURE_API_BASE", getattr(_secrets, "AZURE_API_BASE", None))
+            _set_env("AZURE_API_VERSION", getattr(_secrets, "AZURE_API_VERSION", None))
+            # Anthropic
+            _set_env("ANTHROPIC_API_KEY", getattr(_secrets, "ANTHROPIC_API_KEY", None))
+            # Google / Gemini
+            _set_env("GOOGLE_API_KEY", getattr(_secrets, "GOOGLE_API_KEY", None))
         
+        # Validate provider credentials early for clearer errors
+        provider = (self.model_name.split("/", 1)[0].lower() if "/" in self.model_name else "")
+        if provider == "azure":
+            missing = [k for k in ("AZURE_API_KEY", "AZURE_API_BASE", "AZURE_API_VERSION") if not os.getenv(k)]
+            if missing:
+                raise ValueError(
+                    f"Azure provider selected but missing environment variables: {missing}. "
+                    "Set them via environment or configs/secrets.py."
+                )
+        elif provider == "openai":
+            if not os.getenv("OPENAI_API_KEY"):
+                raise ValueError("OpenAI provider selected but OPENAI_API_KEY is not set.")
+        elif provider == "anthropic":
+            if not os.getenv("ANTHROPIC_API_KEY"):
+                raise ValueError("Anthropic provider selected but ANTHROPIC_API_KEY is not set.")
+        elif provider in ("google", "gemini"):
+            if not os.getenv("GOOGLE_API_KEY"):
+                raise ValueError("Google/Gemini provider selected but GOOGLE_API_KEY is not set.")
+        elif provider == "groq":
+            if not os.getenv("GROQ_API_KEY"):
+                raise ValueError("Groq provider selected but GROQ_API_KEY is not set.")
+
         # Set default configuration
         self.temperature = config.get('temperature', 0.7)
         self.max_tokens = config.get('max_tokens', 1024)
