@@ -774,24 +774,29 @@ class SourceEPRMetric(Metric):
 
 # 메트릭 레지스트리
 METRICS = {
+    #공통 메트릭
     "SR": SRMetric(),
     "EPR_CVR": EPRCVRMetric(),
     "pass@k": PassAtKMetric(),
+    #레벨1 메트릭
     "ToolAcc": ToolAccMetric(),
     "ArgAcc": ArgAccMetric(),
     "CallEM": CallEMMetric(),     
     "RespOK": RespOKMetric(),  
+    #레벨2 메트릭
     "SelectAcc": SelectAccMetric(),
-    "ErrorDetect": ErrorDetectMetric(), 
-    "GracefulFail": GracefulFailMetric(),
-    "FallbackSR": FallbackSRMetric(),
+    #레벨3 메트릭
     "FSM": FSMMetric(),
     "PSM": PSMMetric(),
     "ΔSteps_norm": DeltaStepsNormMetric(),
     "ProvAcc": ProvAccMetric(),
-
+    #레벨4 메트릭
     "Coverage": CoverageMetric(),
     "SourceEPR": SourceEPRMetric(),
+    #레벨5 메트릭
+    "ErrorDetect": ErrorDetectMetric(), 
+    "GracefulFail": GracefulFailMetric(),
+    "FallbackSR": FallbackSRMetric(),
 }
 
 class Judge:
