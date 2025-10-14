@@ -6,5 +6,6 @@ for converting between canonical and provider-specific formats.
 
 from .base_adapter import BaseAdapter
 from .litellm_adapter import LiteLLMAdapter
+from .transformers_adapter import TransformersAdapter
 
-__all__ = ['BaseAdapter', 'LiteLLMAdapter']
+__all__ = ['BaseAdapter', 'LiteLLMAdapter', 'TransformersAdapter']

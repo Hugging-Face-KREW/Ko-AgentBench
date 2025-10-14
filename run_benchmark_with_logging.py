@@ -20,6 +20,7 @@ except Exception:
 
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
+from bench.adapters.transformers_adapter import TransformersAdapter
 from bench.runner import BenchmarkRunner, Judge
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
@@ -281,6 +282,7 @@ def run_benchmark_on_dataset(
     level_name: str,
     tasks: List[Dict],
     model_name: str = "gpt-4.1",
+    use_local: bool = False,
     max_steps: int = 10,  
     timeout: int = 60,
     save_logs: bool = True,
@@ -293,11 +295,12 @@ def run_benchmark_on_dataset(
         level_name: Dataset level name (L1, L2, etc.)
         tasks: List of tasks to execute
         model_name: LLM model identifier
+        use_local: If True, use TransformersAdapter for local inference
         max_steps: Maximum steps per task
         timeout: Timeout per task in seconds
         save_logs: Whether to save results to JSON
         log_dir: Directory to save logs
-        **adapter_config: Additional LiteLLM adapter configuration
+        **adapter_config: Additional adapter configuration
         
     Returns:
         List of detailed task results
@@ -357,7 +360,14 @@ def run_benchmark_on_dataset(
     else:
         print("  ⚠️ WARNING: No tools registered!")
     
-    adapter = LiteLLMAdapter(model_name, **adapter_config)
+    # Create adapter based on use_local flag
+    if use_local:
+        print(f"\n🖥️  Using TransformersAdapter for local inference")
+        adapter = TransformersAdapter(model_name, **adapter_config)
+    else:
+        print(f"\n☁️  Using LiteLLMAdapter for API inference")
+        adapter = LiteLLMAdapter(model_name, **adapter_config)
+    
     judge = Judge(llm_adapter=adapter)
     runner = BenchmarkRunner(adapter, registry, judge, max_steps=max_steps, timeout=timeout)
     
@@ -456,6 +466,15 @@ def main():
                         help="Do not save JSON logs to disk")
     parser.add_argument("--model", type=str, default=None,
                         help="Explicit model id (overrides auto selection)")
+    parser.add_argument("--use-local", action="store_true",
+                        help="Use local transformers inference instead of API")
+    parser.add_argument("--quantization", type=str, default=None, choices=['4bit', '8bit'],
+                        help="Quantization method for local models (4bit or 8bit)")
+    parser.add_argument("--device", type=str, default="auto",
+                        help="Device for local inference (cuda, cpu, auto)")
+    parser.add_argument("--torch-dtype", type=str, default="auto",
+                        choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
+                        help="Torch dtype for local models")
 
     args = parser.parse_args()
 
@@ -535,6 +554,26 @@ def main():
         selected_model = args.model
     print(f"\nSelected model: {selected_model}")
     
+    # For local inference, model name doesn't need provider prefix
+    if args.use_local:
+        # Remove provider prefix if present (e.g., "huggingface/Qwen/..." -> "Qwen/...")
+        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "google", "gemini"]:
+            selected_model = "/".join(selected_model.split("/")[1:])
+        print(f"Using local inference mode")
+        print(f"Model: {selected_model}")
+        if args.quantization:
+            print(f"Quantization: {args.quantization}")
+        print(f"Device: {args.device}")
+        print(f"Torch dtype: {args.torch_dtype}")
+    
+    # Prepare adapter config for local models
+    adapter_config = {}
+    if args.use_local:
+        adapter_config['device'] = args.device
+        adapter_config['torch_dtype'] = args.torch_dtype
+        if args.quantization:
+            adapter_config['quantization'] = args.quantization
+    
     # Run benchmarks on each level
     all_level_results = {}
     
@@ -551,10 +590,12 @@ def main():
                 level_name=level_name,
                 tasks=datasets[level_name],
                 model_name=selected_model,
+                use_local=args.use_local,
                 max_steps=args.max_steps,
                 timeout=args.timeout,
                 save_logs=(not args.no_save_logs),
-                log_dir="logs/benchmark_results"
+                log_dir="logs/benchmark_results",
+                **adapter_config
             )
             all_level_results[level_name] = results
         else:

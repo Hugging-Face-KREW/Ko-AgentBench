@@ -2,10 +2,18 @@
 
 Ko-AgentBench는 도구 호출(함수 호출)을 활용하는 에이전트를 한국어 데이터셋 L1~L7로 평가하는 벤치마크입니다. 본 문서는 벤치마크 실행 스크립트와 플래그 사용법을 설명합니다.
 
+## 🎯 주요 기능
+- ✅ **API 기반 추론**: LiteLLM을 통한 다양한 LLM 제공자 지원
+- ✅ **로컬 추론**: Transformers를 사용한 로컬 모델 추론 (신규!)
+- ✅ **멀티턴 대화**: L6, L7 레벨의 멀티턴 대화 평가
+- ✅ **도구 호출**: 다양한 도구를 사용하는 에이전트 평가
+- ✅ **상세 로깅**: Tool call 내역 및 실행 결과 자동 저장
+
 ## 요구 사항
 - Python 3.10 이상
 - [uv](https://github.com/astral-sh/uv) (권장)
-- LLM API 키(중 하나 이상): `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `GROQ_API_KEY`, `AZURE_API_KEY`(+ `AZURE_API_BASE`, `AZURE_API_VERSION`), `HUGGINGFACE_API_KEY`
+- **API 사용 시**: LLM API 키(중 하나 이상): `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`, `GROQ_API_KEY`, `AZURE_API_KEY`(+ `AZURE_API_BASE`, `AZURE_API_VERSION`), `HUGGINGFACE_API_KEY`
+- **로컬 추론 시**: `torch`, `transformers`, `accelerate` (선택적으로 `bitsandbytes`)
 
 ## 환경 세팅 (uv 권장)
 ```bash
@@ -26,6 +34,16 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+### 로컬 추론을 위한 추가 설치
+```bash
+# GPU 지원
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install transformers accelerate bitsandbytes
+
+# CPU만 사용
+pip install torch transformers accelerate
+```
+
 ## 데이터셋 경로
 기본적으로 `data/` 폴더의 `L1.json` ~ `L7.json`을 자동으로 탐색합니다.
 - L6, L7은 멀티턴(`conversation_tracking`) 데이터셋이며, 러너가 자동으로 대화 이력을 주입하고 마지막 사용자 턴까지만 잘라서 모델을 호출합니다.
@@ -41,9 +59,9 @@ uv run python run_benchmark_with_logging.py
 ## CLI 플래그
 `run_benchmark_with_logging.py`는 다음 옵션을 제공합니다.
 
+### 기본 옵션
 - `--levels L6,L7`
 	- 실행할 레벨을 콤마로 구분해 지정합니다. 미설정 시 `data/`에서 감지된 모든 레벨을 실행합니다.
-// `--limit` 옵션은 제거되었습니다. 항상 레벨의 모든 태스크를 실행합니다.
 - `--max-steps 10`
 	- 태스크별 최대 스텝 수를 지정합니다. 도구 호출 루프의 상한입니다.
 - `--timeout 60`
@@ -53,7 +71,19 @@ uv run python run_benchmark_with_logging.py
 - `--model provider/model`
 	- 사용할 모델을 명시합니다. 예: `openai/gpt-4.1`, `anthropic/claude-3-5-sonnet-20241022`, `google/gemini-1.5-pro` 등.
 
+### 로컬 추론 옵션 (신규!)
+- `--use-local`
+	- 로컬 transformers를 사용한 추론을 활성화합니다.
+- `--quantization {4bit,8bit}`
+	- 양자화 방식을 선택합니다. 4bit 또는 8bit (GPU 필요).
+- `--device {auto,cuda,cpu}`
+	- 추론에 사용할 디바이스를 지정합니다.
+- `--torch-dtype {auto,float16,bfloat16,float32}`
+	- Torch 데이터 타입을 지정합니다.
+
 ## 사용 예시
+
+### API 기반 추론 (기존 방식)
 - 멀티턴 레벨(L6,L7)만 실행
 ```bash
 uv run python run_benchmark_with_logging.py --levels L6,L7 --max-steps 4 --timeout 60
@@ -68,6 +98,43 @@ uv run python run_benchmark_with_logging.py --levels L7 --no-save-logs
 ```bash
 uv run python run_benchmark_with_logging.py --levels L7 --model openai/gpt-4.1
 ```
+
+### 로컬 추론 (신규!)
+
+**기본 사용법**
+```bash
+uv run python run_benchmark_with_logging.py \
+    --model "Qwen/Qwen2.5-7B-Instruct" \
+    --use-local \
+    --quantization 4bit \
+    --levels L1
+```
+
+**주요 옵션**
+- `--quantization 4bit|8bit`: 메모리 효율적인 양자화 (GPU 필요)
+- `--device auto|cuda|cpu`: 추론 디바이스 선택
+- `--torch-dtype auto|float16|bfloat16|float32`: 데이터 타입
+
+**메모리 가이드**
+| 모델 크기 | 4-bit | 8-bit | Full |
+|----------|-------|-------|------|
+| 0.5B | 0.5GB | 1GB | 2GB |
+| 7B | 7GB | 14GB | 28GB |
+| 70B | 70GB | 140GB | 280GB |
+
+**테스트**
+```bash
+# 간단한 예제 실행
+python example_local_inference.py
+
+# 자동화 테스트
+python test_local_inference.py
+```
+
+**주의사항**
+- GPU가 없는 경우 `--device cpu` 사용 (느리지만 메모리 제한 없음)
+- 양자화는 CUDA + bitsandbytes 라이브러리 필요
+- OOM 발생 시 더 작은 모델 사용 또는 양자화 적용
 
 ## 결과 로그
 - 기본 저장 위치: `logs/benchmark_results/`
