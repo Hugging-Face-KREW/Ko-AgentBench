@@ -12,10 +12,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-        }
+        "action": "context_used"
       },
       {
         "tool": "ItemSearch_aladin",
@@ -25,11 +22,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-          "Sort": "SalesPoint"
-        }
+        "action": "context_used"
       }
     ],
     "minimum_calls": 2,
@@ -46,8 +39,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다.",
-          "actions": [
-            {
+          "action": {
               "tool": "ItemSearch_aladin",
               "args": {
                 "Query": "파이썬으로 배우는 알고리즘 트레이딩"
@@ -80,8 +72,7 @@
               },
               "timestamp": "2025-09-27T14:00:00Z"
             }
-          ]
-        },
+          },
         {
           "turn_number": 3,
           "role": "user",
@@ -91,21 +82,15 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
-          "actions": [
-            {
-              "tool": "reuse",
-              "args": {
-                "Query": "파이썬으로 배우는 알고리즘 트레이딩"
-              }
-            }
-          ],
-          "context_used": [
+          "action": {
+            "context_used": [
             {
               "source_turn": 2,
               "info": "'파이썬으로 배우는 알고리즘 트레이딩' 검색 결과",
               "usage_type": "direct_reference"
             }
           ]
+          } 
         },
         {
           "turn_number": 5,
@@ -116,7 +101,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 판매량순으로 정렬했을 때도 '파이썬으로 배우는 알고리즘 트레이딩(개정판)'이 가장 상위에 검색됩니다.",
-          "actions": [
+          "action":
             {
               "tool": "ItemSearch_aladin",
               "args": {
@@ -151,7 +136,6 @@
               },
               "timestamp": "2025-09-27T14:02:00Z"
             }
-          ]
         },
         {
           "turn_number": 7,
@@ -162,22 +146,15 @@
           "turn_number": 8,
           "role": "assistant",
           "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬으로 배우는 알고리즘 트레이딩(개정판)' 입니다.",
-          "actions": [
-            {
-              "tool": "reuse",
-              "args": {
-                "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-                "Sort": "SalesPoint"
-              }
-            }
-          ],
-          "context_used": [
+          "action": {
+              "context_used": [
             {
               "source_turn": 6,
               "info": "item search result for '파이썬으로 배우는 알고리즘 트레이딩' sorted by 'SalesPoint'",
               "usage_type": "direct_reference"
             }
-          ]
+            ]
+            }
         }
       ]
     }
@@ -197,12 +174,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "반도체 기술",
-          "display": 3,
-          "sort": "date"
-        }
+        "action": "context_used"
       },
       {
         "tool": "NewsSearch_naver",
@@ -227,7 +199,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
-          "actions": [
+          "action": 
             {
               "tool": "NewsSearch_naver",
               "args": {
@@ -265,7 +237,7 @@
               },
               "timestamp": "2025-09-26T11:00:00+09:00"
             }
-          ]
+          
         },
         {
           "turn_number": 3,
@@ -276,23 +248,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "반도체 기술",
-                "display": 3,
-                "sort": "date"
-              }
-            }
-          ],
-          "context_used": [
+              "context_used": [
             {
               "source_turn": 2,
               "info": "NewsSearch_naver(query='반도체 기술', display=3, sort='date')",
               "usage_type": "direct_reference"
             }
           ]
+            }
         },
         {
           "turn_number": 5,
@@ -303,7 +268,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "삼성전자 관련 최신 뉴스 1건을 찾았어. 첫 번째 기사는 '삼성전자, 차세대 메모리 반도체 공개'야. 더 궁금한 점이 있으면 알려줘.",
-          "actions": [
+          "action": 
             {
               "tool": "NewsSearch_naver",
               "args": {
@@ -327,7 +292,6 @@
               },
               "timestamp": "2025-09-26T11:03:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -347,12 +311,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "뉴진스",
-          "sort": "recency",
-          "size": 2
-        }
+        "action": "context_used"
       }
     ],
     "minimum_calls": 1,
@@ -368,7 +327,7 @@
         {
           "turn_number": 2,
           "role": "assistant",
-          "actions": [
+          "action": 
             {
               "tool": "VideoSearch_daum",
               "args": {
@@ -403,7 +362,7 @@
               },
               "timestamp": "2025-09-28T08:30:00+09:00"
             }
-          ],
+          ,
           "content": "뉴진스 최신 동영상 2개를 찾았습니다. '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
         },
         {
@@ -414,24 +373,17 @@
         {
           "turn_number": 4,
           "role": "assistant",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "뉴진스",
-                "sort": "recency",
-                "size": 2
-              },
-              "timestamp": "2025-09-28T08:35:00+09:00"
-            }
-          ],
-          "context_used": [
+              "context_used": [
             {
               "source_turn": 2,
               "info": "VideoSearch_daum(query='뉴진스', sort='recency', size=2)",
               "usage_type": "direct_reference"
             }
-          ],
+          ]
+            }
+          ,
           "content": "네, 방금 찾아드린 뉴진스 최신 영상은 '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
         }
       ]
@@ -450,10 +402,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "keyword": "시흥시청 맛집"
-        }
+        "action": "context_used"
       },
       {
         "tool": "PlaceSearch_kakao",
@@ -476,7 +425,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등이 검색되었습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "PlaceSearch_kakao",
               "args": {
@@ -523,7 +472,6 @@
               },
               "timestamp": "2025-09-28T08:50:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -534,21 +482,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등을 찾아드렸습니다.",
-          "actions": [
+          "action":
             {
-              "tool": "reuse",
-              "args": {
-                "keyword": "시흥시청 맛집"
-              }
-            }
-          ],
-          "context_used": [
+              "context_used": [
             {
               "source_turn": 2,
               "info": "PlaceSearch_kakao(keyword='시흥시청 맛집') result",
               "usage_type": "direct_reference"
             }
           ]
+            }          
         },
         {
           "turn_number": 5,
@@ -559,7 +502,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "시흥시청 근처 카페로는 '카페 온기'가 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "PlaceSearch_kakao",
               "args": {
@@ -584,7 +527,7 @@
               },
               "timestamp": "2025-09-28T08:52:00+09:00"
             }
-          ]
+          
         }
       ]
     }
@@ -602,10 +545,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "2025년 9월 부산 축제"
-        }
+        "action": "context_used"
       },
       {
         "tool": "WebSearch_naver",
@@ -628,7 +568,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "9월 부산 축제로는 '페스티월시월'가 있습니다. 매년 시민과 함께하는 보건의료 축제입니다.",
-          "actions": [
+          "action":
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -648,7 +588,6 @@
               },
               "timestamp": "2025-09-28T09:15:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -659,21 +598,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 9월에 부산에서 열리는 축제는 '부산국제영화제'입니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "2025년 9월 부산 축제"
-              }
-            }
-          ],
-          "context_used": [
-            {
+              "context_used": [
+              {
               "source_turn": 2,
               "info": "WebSearch_naver(query='2025년 9월 부산 축제') result",
               "usage_type": "direct_reference"
+              }
+            ]
             }
-          ]
         },
         {
           "turn_number": 5,
@@ -684,7 +618,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "10월 제주도 축제로는 '탐라문화제'가 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -704,7 +638,6 @@
               },
               "timestamp": "2025-09-28T09:17:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -722,10 +655,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "겨울 제주도 여행 코스"
-        }
+        "action": "context_used"
       },
       {
         "tool": "BlogSearch_naver",
@@ -748,7 +678,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, '겨울 제주도 여행 코스'로 검색했을 때 '한라산 눈꽃 산행과 감귤 체험'을 추천하는 블로그 글이 있네요.",
-          "actions": [
+          "action": 
             {
               "tool": "BlogSearch_naver",
               "args": {
@@ -771,7 +701,6 @@
               },
               "timestamp": "2025-09-28T10:50:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -782,21 +711,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 감귤 체험 코스를 추천해드렸습니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "겨울 제주도 여행 코스"
+              "context_used": [
+              {
+                "source_turn": 2,
+                "info": "BlogSearch_naver(query='겨울 제주도 여행 코스') result",
+                "usage_type": "direct_reference"
               }
-            }
-          ],
-          "context_used": [
-            {
-              "source_turn": 2,
-              "info": "BlogSearch_naver(query='겨울 제주도 여행 코스') result",
-              "usage_type": "direct_reference"
-            }
-          ]
+            ]
+          }
         },
         {
           "turn_number": 5,
@@ -807,7 +731,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "'제주공항 근처 맛집'으로 검색해보니 '우진해장국' 블로그 후기가 가장 많이 보입니다.",
-          "actions": [
+          "action": 
             {
               "tool": "BlogSearch_naver",
               "args": {
@@ -830,7 +754,6 @@
               },
               "timestamp": "2025-09-28T10:52:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -848,10 +771,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "AI 기술 최신 동향"
-        }
+        "action": "context_used"
       },
       {
         "tool": "WebSearch_daum",
@@ -874,7 +794,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "최근 AI 기술은 생성형 AI와 거대 언어 모델(LLM)의 발전이 주도하고 있습니다. 관련 웹문서의 제목은 '2025년 AI 기술 트렌드 전망'입니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_daum",
               "args": {
@@ -897,7 +817,6 @@
               },
               "timestamp": "2025-09-28T09:22:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -908,21 +827,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "AI 기술 최신 동향"
+              "context_used": [
+              {
+                "source_turn": 2,
+                "info": "WebSearch_daum(query='AI 기술 최신 동향') result",
+                "usage_type": "direct_reference"
               }
+              ]
             }
-          ],
-          "context_used": [
-            {
-              "source_turn": 2,
-              "info": "WebSearch_daum(query='AI 기술 최신 동향') result",
-              "usage_type": "direct_reference"
-            }
-          ]
         },
         {
           "turn_number": 5,
@@ -933,7 +847,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "양자 컴퓨팅은 양자역학 원리를 이용해 기존 컴퓨터의 한계를 뛰어넘는 계산 능력을 목표로 하는 기술입니다. 관련 웹문서 '양자 컴퓨팅의 원리와 미래'를 찾았습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_daum",
               "args": {
@@ -956,7 +870,6 @@
               },
               "timestamp": "2025-09-28T09:24:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -974,10 +887,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "query": "기후 변화 원인"
-        }
+        "action": "context_used"
       },
       {
         "tool": "WebSearch_naver",
@@ -1000,7 +910,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 대표적으로 '산업혁명 이후 화석 연료 사용 증가'가 가장 큰 원인으로 꼽힙니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1020,7 +930,6 @@
               },
               "timestamp": "2025-09-28T09:30:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1031,21 +940,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 기후 변화의 핵심 원인은 인간 활동에 따른 온실가스 배출 증가입니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "query": "기후 변화 원인"
+              "context_used": [
+              {
+                "source_turn": 2,
+                "info": "WebSearch_naver(query='기후 변화 원인') result",
+                "usage_type": "direct_reference"
               }
+              ]
             }
-          ],
-          "context_used": [
-            {
-              "source_turn": 2,
-              "info": "WebSearch_naver(query='기후 변화 원인') result",
-              "usage_type": "direct_reference"
-            }
-          ]
         },
         {
           "turn_number": 5,
@@ -1056,7 +960,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "탄소중립 실천 방안으로는 대중교통 이용, 일회용품 사용 줄이기, 에너지 절약 등이 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1076,7 +980,6 @@
               },
               "timestamp": "2025-09-28T09:32:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -1094,10 +997,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "quote": "KRW"
-        }
+        "action": "context_used"
       },
       {
         "tool": "MarketList_upbit",
@@ -1120,7 +1020,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "MarketList_upbit",
               "args": {
@@ -1166,7 +1066,6 @@
               },
               "timestamp": "2025-09-28T10:00:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1177,21 +1076,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 업비트 원화 마켓 목록입니다. 비트코인, 이더리움 등이 포함되어 있습니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "quote": "KRW"
+              "context_used": [
+              {
+                "source_turn": 2,
+                "info": "MarketList_upbit(quote='KRW') result",
+                "usage_type": "direct_reference"
               }
+              ]
             }
-          ],
-          "context_used": [
-            {
-              "source_turn": 2,
-              "info": "MarketList_upbit(quote='KRW') result",
-              "usage_type": "direct_reference"
-            }
-          ]
         },
         {
           "turn_number": 5,
@@ -1202,7 +1096,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 비트코인(BTC) 마켓에는 이더리움(ETH), 리플(XRP), 이오스(EOS) 등 총 80개의 암호화폐가 거래되고 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "MarketList_upbit",
               "args": {
@@ -1248,7 +1142,6 @@
               },
               "timestamp": "2025-09-28T10:02:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -1268,12 +1161,7 @@
         }
       },
       {
-        "tool": "reuse",
-        "args": {
-          "symbol": "005930",
-          "period": "W",
-          "date": "20250926"
-        }
+        "action": "context_used"
       },
       {
         "tool": "StockChart_kis",
@@ -1298,7 +1186,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 9월 넷째 주 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "StockChart_kis",
               "args": {
@@ -1324,7 +1212,6 @@
               },
               "timestamp": "2025-09-28T10:45:00+09:00"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1335,23 +1222,16 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 9월 넷째 주 삼성전자 주봉 종가는 81,200원이었습니다.",
-          "actions": [
+          "action": 
             {
-              "tool": "reuse",
-              "args": {
-                "symbol": "005930",
-                "period": "W",
-                "date": "20250926"
+              "context_used": [
+              {
+                "source_turn": 2,
+                "info": "StockChart_kis(symbol='005930', period='W') result",
+                "usage_type": "direct_reference"
               }
+            ]
             }
-          ],
-          "context_used": [
-            {
-              "source_turn": 2,
-              "info": "StockChart_kis(symbol='005930', period='W') result",
-              "usage_type": "direct_reference"
-            }
-          ]
         },
         {
           "turn_number": 5,
@@ -1362,7 +1242,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 9월 넷째 주 SK하이닉스(000660)의 주봉 종가는 235,000원이었습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "StockChart_kis",
               "args": {
@@ -1388,7 +1268,6 @@
               },
               "timestamp": "2025-09-28T10:47:00+09:00"
             }
-          ]
         }
       ]
     }
@@ -1406,10 +1285,7 @@
       }
     },
     {
-      "tool": "reuse",
-      "args": {
-        "Query": "클린 아키텍처"
-      }
+        "action": "context_used"
     }
   ],
   "minimum_calls": 1,
@@ -1426,7 +1302,7 @@
         "turn_number": 2,
         "role": "assistant",
         "content": "'클린 아키텍처' 관련 도서를 찾았습니다:\n\n* **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (로버트 C. 마틴)\n* **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (한용재)\n* **아키텍처를 알아야 앱 개발이 보인다** (옥수환)\n* **만들면서 배우는 클린 아키텍처** (톰 홈버그)",
-        "actions": [
+        "action": 
           {
             "tool": "ItemSearch_aladin",
             "args": {
@@ -1494,7 +1370,6 @@
             },
             "timestamp": "2025-10-13T14:32:56Z"
           }
-        ]
       },
       {
         "turn_number": 3,
@@ -1505,14 +1380,15 @@
         "turn_number": 4,
         "role": "assistant",
         "content": "기존 검색 결과를 판매량 순으로 다시 정렬했습니다.\n\n1.  **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (판매지수: 4533)\n2.  **만들면서 배우는 클린 아키텍처** (판매지수: 836)\n3.  **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (판매지수: 821)\n4.  **아키텍처를 알아야 앱 개발이 보인다** (판매지수: 203)",
-        "actions": [],
-        "context_used": [
+        "action": {
+          "context_used": [
           {
             "source_turn": 2,
             "info": "클린 아키텍처 도서 검색 결과",
             "usage_type": "direct_reference"
           }
-        ]
+          ]
+        }
       }
     ]
   }
@@ -1532,12 +1408,7 @@
       }
     },
     {
-        "tool": "reuse",
-        "args": {
-          "query": "아이유 콘서트 직캠",
-          "sort": "recency",
-          "size": 1
-    }
+        "action": "context_used"
     }  
   ],
   "minimum_calls": 1,
@@ -1554,7 +1425,7 @@
         "turn_number": 2,
         "role": "assistant",
         "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다.",
-        "actions": [
+        "action": 
           {
             "tool": "VideoSearch_daum",
             "args": {
@@ -1581,7 +1452,6 @@
             },
             "timestamp": "2025-10-13T14:41:24Z"
           }
-        ]
       },
       {
         "turn_number": 3,
@@ -1592,14 +1462,16 @@
         "turn_number": 4,
         "role": "assistant",
         "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다.",
-        "actions": [],
-        "context_used": [
+        "action": {
+          "context_used": [
           {
             "source_turn": 2,
             "info": "아이유 콘서트 직캠 최신 영상 검색 결과",
             "usage_type": "direct_reference"
           }
         ]
+        }
+
       }
     ]
   }
@@ -1619,12 +1491,7 @@
       }
     },
     {
-      "tool": "reuse",
-      "args": {
-        "query": "2024년 겨울 헤어 트렌드",
-        "display": 5,
-        "sort": "date"
-      }
+      "action": "context_used"
     }
   ],
   "minimum_calls": 1,
@@ -1641,7 +1508,7 @@
         "turn_number": 2,
         "role": "assistant",
         "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개를 찾아봤어요.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천",
-        "actions": [
+        "action": 
           {
             "tool": "BlogSearch_naver",
             "args": {
@@ -1699,7 +1566,6 @@
             },
             "timestamp": "2025-10-13T14:37:02Z"
           }
-        ]
       },
       {
         "turn_number": 3,
@@ -1710,14 +1576,15 @@
         "turn_number": 4,
         "role": "assistant",
         "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천",
-        "actions": [],
-        "context_used": [
+        "action": {
+          "context_used": [
           {
             "source_turn": 2,
             "info": "2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개 검색 결과",
             "usage_type": "direct_reference"
           }
-        ]
+          ]
+        }
       }
     ]
   }
@@ -1737,12 +1604,7 @@
       }
     },
     {
-      "tool": "reuse",
-      "args": {
-        "symbol": "000660",
-        "period": "W",
-        "count": 5
-      }
+      "action": "context_used"
     }
   ],
   "minimum_calls": 1,
@@ -1759,7 +1621,7 @@
         "turn_number": 2,
         "role": "assistant",
         "content": "SK하이닉스의 최근 5주간 주봉 차트 데이터입니다.\n- 2025년 10월 13일 (종가: 415,000원)\n- 2025년 10월 10일 (종가: 428,000원)\n- 2025년 9월 29일 (종가: 395,500원)\n- 2025년 9월 22일 (종가: 336,500원)\n- 2025년 9월 15일 (종가: 353,000원)",
-        "actions": [
+        "action": 
           {
             "tool": "StockChart_kis",
             "args": {
@@ -1817,7 +1679,6 @@
             },
             "timestamp": "2025-10-13T14:46:24Z"
           }
-        ]
       },
       {
         "turn_number": 3,
@@ -1828,14 +1689,15 @@
         "turn_number": 4,
         "role": "assistant",
         "content": "확인해 보니, 5주 중 종가가 가장 높았던 때는 2025년 10월 10일이며, 종가는 428,000원이었습니다.",
-        "actions": [],
-        "context_used": [
+        "action": {
+          "context_used": [
           {
             "source_turn": 2,
             "info": "하이닉스 주봉 차트 최근 5주치 검색 결과",
             "usage_type": "direct_reference"
           }
-        ]
+          ]
+        } 
       }
     ]
   }
@@ -1853,10 +1715,7 @@
       }
     },
     {
-        "tool": "reuse",
-        "args": {
-            "keyword" : "강남역 디저트 카페"
-        }
+      "action": "context_used"
     }
   ],
   "minimum_calls": 1,
@@ -1873,7 +1732,7 @@
         "turn_number": 2,
         "role": "assistant",
         "content": "강남역 근처 디저트 카페를 찾아봤어요. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있네요.",
-        "actions": [
+        "action": 
           {
             "tool": "PlaceSearch_kakao",
             "args": {
@@ -1922,7 +1781,6 @@
             },
             "timestamp": "2025-10-13T14:47:29Z"
           }
-        ]
       },
       {
         "turn_number": 3,
@@ -1933,14 +1791,15 @@
         "turn_number": 4,
         "role": "assistant",
         "content": "네, '장꼬방'의 주소는 '서울 서초구 강남대로61길 27'입니다.",
-        "actions": [],
-        "context_used": [
+        "action": {
+          "context_used": [
           {
             "source_turn": 2,
             "info": "강남역 카페 검색 결과",
             "usage_type": "direct_reference"
           }
         ]
+        }
       }
     ]
   }
