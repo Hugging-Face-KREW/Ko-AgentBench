@@ -84,6 +84,11 @@ class BenchmarkRunner:
             
             # Get available tools for this task
             task_tools = task.get('available_tools', [])
+            
+            # If no available_tools specified, use all registered tools
+            if not task_tools:
+                task_tools = self.tool_registry.get_available_tools()
+            
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
@@ -106,6 +111,9 @@ class BenchmarkRunner:
                         "success": tool_call.get('success'),
                         "error": tool_call.get('error'),
                     })
+            
+            # Add tool_invocations to result before evaluation
+            result['tool_invocations'] = tool_invocations
             
             # Judge the result
             evaluation = self.judge.evaluate(task, result)

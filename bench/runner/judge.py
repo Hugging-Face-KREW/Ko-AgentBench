@@ -103,7 +103,342 @@ class PassAtKMetric(Metric):
             "actual_repetitions": actual_reps,
             "success_count": success_count
         })
+        
+class ToolAccMetric(Metric):
+    """ToolAcc: 첫번째 예측 툴이 golden_action.tool과 일치하는지"""
+    name = "ToolAcc"
 
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+
+        golden = ctx.task_schema.get("golden_action", [])
+        if isinstance(golden, dict):
+            golden = [golden]
+        golden_tool = next((g["tool"] for g in golden if isinstance(g, dict) and "tool" in g), None)
+
+        invocations = ctx.logs.get("tool_invocations", []) or []
+        first_pred_tool = next((inv.get("tool") or inv.get("tool_name") for inv in invocations if inv.get("tool") or inv.get("tool_name")), None)
+
+        matched = (golden_tool is not None and first_pred_tool == golden_tool)
+        score = 1.0 if matched else 0.0
+
+        return EvaluationResult(
+            self.name,
+            score,
+            {"matched": matched}  
+        )
+        
+        
+class ArgAccMetric(Metric):
+    """
+    ArgAcc: 도구 인자 정확도. (P/R/F1)
+    """
+    name = "ArgAcc"
+    DEFAULT_SCORE_KEY = "f1"
+
+    @staticmethod
+    def _prf1(tp: int, fp: int, fn: int):
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall    = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
+        return precision, recall, f1
+
+    @staticmethod
+    def _get_first_pred_args_for_tool(ctx: EvalContext, golden_tool: str) -> Dict[str, Any]:
+        invocations = ctx.logs.get("tool_invocations", []) or []
+        for inv in invocations:
+            tool = inv.get("tool") or inv.get("tool_name")
+            if tool == golden_tool:
+                args = inv.get("arguments")
+                if args is None:
+                    args = inv.get("args")
+                return args or {}
+        return {}
+
+    @classmethod
+    def _compute_prf(cls, ctx: EvalContext) -> Dict[str, Any]:
+        golden_actions = ctx.task_schema.get("golden_action", [])
+        if isinstance(golden_actions, dict):
+            golden_actions = [golden_actions]
+
+        if not golden_actions or not isinstance(golden_actions[0], dict):
+            return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
+
+        golden_tool = golden_actions[0].get("tool")
+        golden_args: Dict[str, Any] = golden_actions[0].get("args", {}) or {}
+        arg_schema: Dict[str, Any]   = ctx.task_schema.get("arg_schema", {}) or {}
+
+        if not golden_tool:
+            return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
+
+        pred_args: Dict[str, Any] = cls._get_first_pred_args_for_tool(ctx, golden_tool)
+
+        # TP/FP
+        tp = fp = 0
+        for k, v in pred_args.items():
+            if k in golden_args and v == golden_args[k]:
+                tp += 1
+            else:
+                fp += 1
+
+        # FN 
+        fn = 0
+        for k, gv in golden_args.items():
+            pv = pred_args.get(k, (arg_schema.get(k, {}) or {}).get("default"))
+            if pv != gv:
+                fn += 1
+
+        precision, recall, f1 = cls._prf1(tp, fp, fn)
+        return {"ok": True, "precision": precision, "recall": recall, "f1": f1}
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        r = self._compute_prf(ctx)
+        if not r.get("ok"):
+            return EvaluationResult(self.name, 0.0, {"ok": False})
+
+        score_key = ctx.task_schema.get("argacc_score_key", self.DEFAULT_SCORE_KEY)
+        if score_key not in ("precision", "recall", "f1"):
+            score_key = self.DEFAULT_SCORE_KEY
+
+        score = float(r[score_key])
+
+        details = {"ok": True, "precision": r["precision"], "recall": r["recall"], "f1": r["f1"]}
+        return EvaluationResult(self.name, score, details)
+
+
+class CallEMMetric(Metric):
+    """CallEM: 첫 호출이 정답 호출(tool+args)과 완전히 동일한지 (EM)"""
+    name = "CallEM"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        golden_actions = ctx.task_schema.get("golden_action", [])
+        if isinstance(golden_actions, dict):
+            golden_actions = [golden_actions]
+        if not golden_actions or not isinstance(golden_actions[0], dict):
+            return EvaluationResult(self.name, 0.0, {})
+
+        golden_tool = golden_actions[0].get("tool")
+        golden_args = golden_actions[0].get("args", {}) or {}
+        if not golden_tool:
+            return EvaluationResult(self.name, 0.0, {})
+
+
+        invocations = ctx.logs.get("tool_invocations", []) or []
+        first_pred_tool = None
+        first_pred_args: Dict[str, Any] = {}
+
+        for inv in invocations:
+            tool = inv.get("tool") or inv.get("tool_name")
+            if tool:
+                first_pred_tool = tool
+                # 표준 키: "arguments"
+                first_pred_args = inv.get("arguments") or {}
+                break
+
+        matched = (
+            first_pred_tool is not None
+            and first_pred_tool == golden_tool
+            and first_pred_args == golden_args
+        )
+        score = 1.0 if matched else 0.0
+
+        return EvaluationResult(self.name, score, {})
+
+class RespOKMetric(Metric):
+    """
+    RespOK : actual_output이 resp_schema를 만족하는지 평가
+    """
+    name = "RespOK"
+
+    @staticmethod
+    def _extract_candidate(ctx: EvalContext):
+        cand = ctx.logs.get("actual_output")
+
+        if isinstance(cand, (str, dict, list)):
+            return cand
+        return None
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        schema = ctx.task_schema.get("resp_schema")
+        if not isinstance(schema, dict):
+            return EvaluationResult(self.name, 0.0, {})
+
+        candidate = self._extract_candidate(ctx)
+        if candidate is None:
+            return EvaluationResult(self.name, 0.0, {})
+
+        # jsonschema가 있으면 
+        try:
+            import jsonschema
+            jsonschema.validate(instance=candidate, schema=schema)
+            return EvaluationResult(self.name, 1.0, {})
+        except ImportError:
+
+            expected_type = schema.get("type")
+            ok = (expected_type == "string" and isinstance(candidate, str))
+            return EvaluationResult(self.name, 1.0 if ok else 0.0, {})
+        except Exception:
+            return EvaluationResult(self.name, 0.0, {})
+
+
+class SelectAccMetric(Metric):
+    name = "SelectAcc"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        ga = ctx.task_schema.get("golden_action", [])
+        if isinstance(ga, dict):
+            ga = [ga]
+        golden_tool = ga[0].get("tool") if (ga and isinstance(ga[0], dict)) else None
+
+        pred_tool = ctx.logs.get("selected_tool")
+        if not isinstance(pred_tool, str) or not pred_tool:
+            inv = ctx.logs.get("tool_invocations", []) or []
+            for call in inv:
+                if isinstance(call, dict):
+                    t = call.get("tool") or call.get("tool_name")
+                    if isinstance(t, str) and t:
+                        pred_tool = t
+                        break
+
+        success = (golden_tool is not None and pred_tool == golden_tool)
+        score = 1.0 if success else 0.0
+
+        return EvaluationResult(self.name, score, {"success": success})
+
+
+class ErrorDetectMetric(Metric):
+    """
+    ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
+    """
+    name = "ErrorDetect"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        inj = ctx.task_schema.get("error_injection", {}) or {}
+        inj_tool = inj.get("tool")
+        inj_type = inj.get("error_type")
+
+        actual_pairs = []
+
+        for e in (ctx.logs.get("errors") or []):
+            if isinstance(e, dict):
+                t = e.get("tool")
+                et = e.get("error_type") or e.get("type")
+                if t == inj_tool and et == inj_type:
+                    actual_pairs.append((t, et))
+
+        for inv in (ctx.logs.get("tool_invocations") or []):
+            if isinstance(inv, dict) and inv.get("error"):
+                t = inv.get("tool") or inv.get("tool_name")
+                et = inv.get("error_type") or inv.get("type")
+                if t == inj_tool and et == inj_type:
+                    actual_pairs.append((t, et))
+
+        if not actual_pairs:
+            return EvaluationResult(self.name, 0.0, {"ratio": 0.0})
+
+        if ctx.logs.get("error_reported"):
+            return EvaluationResult(self.name, 1.0, {"ratio": 1.0})
+
+        reported_pairs = {
+            (r.get("tool"), r.get("error_type") or r.get("type"))
+            for r in (ctx.logs.get("error_reports") or [])
+            if isinstance(r, dict)
+        }
+
+        hit = sum(1 for p in actual_pairs if p in reported_pairs)
+        ratio = hit / len(actual_pairs)
+        return EvaluationResult(self.name, ratio, {"ratio": ratio})
+
+
+class GracefulFailMetric(Metric):
+    """
+    GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
+    """
+    name = "GracefulFail"
+
+    @staticmethod
+    def _has_output(v: Any) -> bool:
+        """출력이 유효한지 확인"""
+        if v is None:
+            return False
+        if isinstance(v, str):
+            return v.strip() != ""
+        if isinstance(v, (list, dict)):
+            return len(v) > 0
+        return True
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+
+        inj = ctx.task_schema.get("error_injection")
+        if not isinstance(inj, dict) or not inj:
+            return EvaluationResult(self.name, 0.0, {})
+
+        # 반복 실행 결과가 있는 경우
+        reps = ctx.logs.get("repetition_results")
+        if isinstance(reps, list) and reps and isinstance(reps[0], dict):
+            total_fail = sum(1 for r in reps if not bool(r.get("success", False)))
+            graceful_fail = sum(
+                1 for r in reps
+                if (not bool(r.get("success", False))) and (not self._has_output(r.get("actual_output")))
+            )
+            score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
+            return EvaluationResult(self.name, score, {
+                "total_fail": total_fail,
+                "graceful_fail": graceful_fail,
+                "repetitions": len(reps)
+            })
+
+        # 반복 정보 없으면 단일 시도
+        success = bool(ctx.logs.get("success", False))
+        if success:
+            return EvaluationResult(self.name, 0.0, {})
+        
+        out = ctx.logs.get("actual_output", None)
+        graceful = not self._has_output(out)
+        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {})
+    
+
+class FallbackSRMetric(Metric):
+    """
+    FallbackSR : 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율
+    """
+    name = "FallbackSR"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        # 에러 주입 없는 태스크면 0 (비적용)
+        if not ctx.task_schema.get("error_injection"):
+            return EvaluationResult(self.name, 0.0, {})
+
+        fallback_opts = ctx.task_schema.get("fallback_options") or []
+        fallback_tools = {
+            opt.get("tool") for opt in fallback_opts
+            if isinstance(opt, dict) and opt.get("tool")
+        }
+        if not fallback_tools:
+            return EvaluationResult(self.name, 0.0, {})
+
+        invocations = ctx.logs.get("tool_invocations", []) or []
+        attempts, successes = 0, 0
+
+        for call in invocations:
+            if not isinstance(call, dict):
+                continue
+            tool = call.get("tool") or call.get("tool_name")
+            if tool not in fallback_tools:
+                continue
+
+            attempts += 1
+            ok = (
+                call.get("success") is True
+                or (isinstance(call.get("status_code"), int) and 200 <= call["status_code"] < 300)
+                or (not call.get("error") and any(call.get(k) for k in ("output", "result", "response", "data")))
+            )
+            if ok:
+                successes += 1
+
+        score = (successes / attempts) if attempts > 0 else 0.0
+        return EvaluationResult(self.name, score, {"attempts": attempts, "successes": successes})
+    
+    
 class FSMMetric(Metric):
     """FSM(Full Sequence Match): 정답 경로와 완전 일치"""
     name = "FSM"
@@ -442,7 +777,14 @@ METRICS = {
     "SR": SRMetric(),
     "EPR_CVR": EPRCVRMetric(),
     "pass@k": PassAtKMetric(),
-    
+    "ToolAcc": ToolAccMetric(),
+    "ArgAcc": ArgAccMetric(),
+    "CallEM": CallEMMetric(),     
+    "RespOK": RespOKMetric(),  
+    "SelectAcc": SelectAccMetric(),
+    "ErrorDetect": ErrorDetectMetric(), 
+    "GracefulFail": GracefulFailMetric(),
+    "FallbackSR": FallbackSRMetric(),
     "FSM": FSMMetric(),
     "PSM": PSMMetric(),
     "ΔSteps_norm": DeltaStepsNormMetric(),
@@ -513,14 +855,19 @@ class Judge:
         oracle_function = self._oracle_functions[oracle_type]
         
         try:
-            evaluation_result = oracle_function(expected_output, actual_output, task)
+            # golden_action_match는 전체 result가 필요
+            if oracle_type == 'golden_action_match':
+                evaluation_result = oracle_function(expected_output, result, task)
+            else:
+                evaluation_result = oracle_function(expected_output, actual_output, task)
             
             eval_ctx = EvalContext(
                 task_schema=task,
                 logs={
                     "success": evaluation_result.get('success', False),
                     "tool_invocations": result.get("tool_invocations", []),
-                    "repetition_results": result.get("repetition_results", [])
+                    "repetition_results": result.get("repetition_results", []),
+                    "actual_output": actual_output,
                 }
             )
             
