@@ -42,7 +42,8 @@ class Metric:
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         raise NotImplementedError
-
+    
+#공통 메트릭
 class SRMetric(Metric):
     """SR(성공률): success_condition 충족 여부"""
     name = "SR"
@@ -104,6 +105,7 @@ class PassAtKMetric(Metric):
             "success_count": success_count
         })
         
+#레벨1 메트릭
 class ToolAccMetric(Metric):
     """ToolAcc: 첫번째 예측 툴이 golden_action.tool과 일치하는지"""
     name = "ToolAcc"
@@ -280,6 +282,7 @@ class RespOKMetric(Metric):
             return EvaluationResult(self.name, 0.0, {})
 
 
+#레벨2 메트릭
 class SelectAccMetric(Metric):
     name = "SelectAcc"
 
@@ -304,141 +307,7 @@ class SelectAccMetric(Metric):
 
         return EvaluationResult(self.name, score, {"success": success})
 
-
-class ErrorDetectMetric(Metric):
-    """
-    ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
-    """
-    name = "ErrorDetect"
-
-    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        inj = ctx.task_schema.get("error_injection", {}) or {}
-        inj_tool = inj.get("tool")
-        inj_type = inj.get("error_type")
-
-        actual_pairs = []
-
-        for e in (ctx.logs.get("errors") or []):
-            if isinstance(e, dict):
-                t = e.get("tool")
-                et = e.get("error_type") or e.get("type")
-                if t == inj_tool and et == inj_type:
-                    actual_pairs.append((t, et))
-
-        for inv in (ctx.logs.get("tool_invocations") or []):
-            if isinstance(inv, dict) and inv.get("error"):
-                t = inv.get("tool") or inv.get("tool_name")
-                et = inv.get("error_type") or inv.get("type")
-                if t == inj_tool and et == inj_type:
-                    actual_pairs.append((t, et))
-
-        if not actual_pairs:
-            return EvaluationResult(self.name, 0.0, {"ratio": 0.0})
-
-        if ctx.logs.get("error_reported"):
-            return EvaluationResult(self.name, 1.0, {"ratio": 1.0})
-
-        reported_pairs = {
-            (r.get("tool"), r.get("error_type") or r.get("type"))
-            for r in (ctx.logs.get("error_reports") or [])
-            if isinstance(r, dict)
-        }
-
-        hit = sum(1 for p in actual_pairs if p in reported_pairs)
-        ratio = hit / len(actual_pairs)
-        return EvaluationResult(self.name, ratio, {"ratio": ratio})
-
-
-class GracefulFailMetric(Metric):
-    """
-    GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
-    """
-    name = "GracefulFail"
-
-    @staticmethod
-    def _has_output(v: Any) -> bool:
-        """출력이 유효한지 확인"""
-        if v is None:
-            return False
-        if isinstance(v, str):
-            return v.strip() != ""
-        if isinstance(v, (list, dict)):
-            return len(v) > 0
-        return True
-
-    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-
-        inj = ctx.task_schema.get("error_injection")
-        if not isinstance(inj, dict) or not inj:
-            return EvaluationResult(self.name, 0.0, {})
-
-        # 반복 실행 결과가 있는 경우
-        reps = ctx.logs.get("repetition_results")
-        if isinstance(reps, list) and reps and isinstance(reps[0], dict):
-            total_fail = sum(1 for r in reps if not bool(r.get("success", False)))
-            graceful_fail = sum(
-                1 for r in reps
-                if (not bool(r.get("success", False))) and (not self._has_output(r.get("actual_output")))
-            )
-            score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
-            return EvaluationResult(self.name, score, {
-                "total_fail": total_fail,
-                "graceful_fail": graceful_fail,
-                "repetitions": len(reps)
-            })
-
-        # 반복 정보 없으면 단일 시도
-        success = bool(ctx.logs.get("success", False))
-        if success:
-            return EvaluationResult(self.name, 0.0, {})
-        
-        out = ctx.logs.get("actual_output", None)
-        graceful = not self._has_output(out)
-        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {})
-    
-
-class FallbackSRMetric(Metric):
-    """
-    FallbackSR : 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율
-    """
-    name = "FallbackSR"
-
-    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        # 에러 주입 없는 태스크면 0 (비적용)
-        if not ctx.task_schema.get("error_injection"):
-            return EvaluationResult(self.name, 0.0, {})
-
-        fallback_opts = ctx.task_schema.get("fallback_options") or []
-        fallback_tools = {
-            opt.get("tool") for opt in fallback_opts
-            if isinstance(opt, dict) and opt.get("tool")
-        }
-        if not fallback_tools:
-            return EvaluationResult(self.name, 0.0, {})
-
-        invocations = ctx.logs.get("tool_invocations", []) or []
-        attempts, successes = 0, 0
-
-        for call in invocations:
-            if not isinstance(call, dict):
-                continue
-            tool = call.get("tool") or call.get("tool_name")
-            if tool not in fallback_tools:
-                continue
-
-            attempts += 1
-            ok = (
-                call.get("success") is True
-                or (isinstance(call.get("status_code"), int) and 200 <= call["status_code"] < 300)
-                or (not call.get("error") and any(call.get(k) for k in ("output", "result", "response", "data")))
-            )
-            if ok:
-                successes += 1
-
-        score = (successes / attempts) if attempts > 0 else 0.0
-        return EvaluationResult(self.name, score, {"attempts": attempts, "successes": successes})
-    
-    
+#레벨3 메트릭   
 class FSMMetric(Metric):
     """FSM(Full Sequence Match): 정답 경로와 완전 일치"""
     name = "FSM"
@@ -625,7 +494,8 @@ class ProvAccMetric(Metric):
             "total_flows": total_flows,
             "flow_details": flow_details
         })
-
+        
+#레벨4 메트릭
 class CoverageMetric(Metric):
     """Coverage: 필수 소스를 모두 성공적으로 조회했는지 비율
     - golden_action에 명시된 도구들을 모두 사용했는지 확인
@@ -771,6 +641,142 @@ class SourceEPRMetric(Metric):
             "average_epr": round(score, 4),
             "total_sources": len(unique_tools)
         })
+
+#레벨5 메트릭
+class ErrorDetectMetric(Metric):
+    """
+    ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
+    """
+    name = "ErrorDetect"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        inj = ctx.task_schema.get("error_injection", {}) or {}
+        inj_tool = inj.get("tool")
+        inj_type = inj.get("error_type")
+
+        actual_pairs = []
+
+        for e in (ctx.logs.get("errors") or []):
+            if isinstance(e, dict):
+                t = e.get("tool")
+                et = e.get("error_type") or e.get("type")
+                if t == inj_tool and et == inj_type:
+                    actual_pairs.append((t, et))
+
+        for inv in (ctx.logs.get("tool_invocations") or []):
+            if isinstance(inv, dict) and inv.get("error"):
+                t = inv.get("tool") or inv.get("tool_name")
+                et = inv.get("error_type") or inv.get("type")
+                if t == inj_tool and et == inj_type:
+                    actual_pairs.append((t, et))
+
+        if not actual_pairs:
+            return EvaluationResult(self.name, 0.0, {"ratio": 0.0})
+
+        if ctx.logs.get("error_reported"):
+            return EvaluationResult(self.name, 1.0, {"ratio": 1.0})
+
+        reported_pairs = {
+            (r.get("tool"), r.get("error_type") or r.get("type"))
+            for r in (ctx.logs.get("error_reports") or [])
+            if isinstance(r, dict)
+        }
+
+        hit = sum(1 for p in actual_pairs if p in reported_pairs)
+        ratio = hit / len(actual_pairs)
+        return EvaluationResult(self.name, ratio, {"ratio": ratio})
+
+
+class GracefulFailMetric(Metric):
+    """
+    GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
+    """
+    name = "GracefulFail"
+
+    @staticmethod
+    def _has_output(v: Any) -> bool:
+        """출력이 유효한지 확인"""
+        if v is None:
+            return False
+        if isinstance(v, str):
+            return v.strip() != ""
+        if isinstance(v, (list, dict)):
+            return len(v) > 0
+        return True
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+
+        inj = ctx.task_schema.get("error_injection")
+        if not isinstance(inj, dict) or not inj:
+            return EvaluationResult(self.name, 0.0, {})
+
+        # 반복 실행 결과가 있는 경우
+        reps = ctx.logs.get("repetition_results")
+        if isinstance(reps, list) and reps and isinstance(reps[0], dict):
+            total_fail = sum(1 for r in reps if not bool(r.get("success", False)))
+            graceful_fail = sum(
+                1 for r in reps
+                if (not bool(r.get("success", False))) and (not self._has_output(r.get("actual_output")))
+            )
+            score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
+            return EvaluationResult(self.name, score, {
+                "total_fail": total_fail,
+                "graceful_fail": graceful_fail,
+                "repetitions": len(reps)
+            })
+
+        # 반복 정보 없으면 단일 시도
+        success = bool(ctx.logs.get("success", False))
+        if success:
+            return EvaluationResult(self.name, 0.0, {})
+        
+        out = ctx.logs.get("actual_output", None)
+        graceful = not self._has_output(out)
+        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {})
+    
+
+class FallbackSRMetric(Metric):
+    """
+    FallbackSR : 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율
+    """
+    name = "FallbackSR"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        # 에러 주입 없는 태스크면 0 (비적용)
+        if not ctx.task_schema.get("error_injection"):
+            return EvaluationResult(self.name, 0.0, {})
+
+        fallback_opts = ctx.task_schema.get("fallback_options") or []
+        fallback_tools = {
+            opt.get("tool") for opt in fallback_opts
+            if isinstance(opt, dict) and opt.get("tool")
+        }
+        if not fallback_tools:
+            return EvaluationResult(self.name, 0.0, {})
+
+        invocations = ctx.logs.get("tool_invocations", []) or []
+        attempts, successes = 0, 0
+
+        for call in invocations:
+            if not isinstance(call, dict):
+                continue
+            tool = call.get("tool") or call.get("tool_name")
+            if tool not in fallback_tools:
+                continue
+
+            attempts += 1
+            ok = (
+                call.get("success") is True
+                or (isinstance(call.get("status_code"), int) and 200 <= call["status_code"] < 300)
+                or (not call.get("error") and any(call.get(k) for k in ("output", "result", "response", "data")))
+            )
+            if ok:
+                successes += 1
+
+        score = (successes / attempts) if attempts > 0 else 0.0
+        return EvaluationResult(self.name, score, {"attempts": attempts, "successes": successes})
+    
+
 
 # 메트릭 레지스트리
 METRICS = {
