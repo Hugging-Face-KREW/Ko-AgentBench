@@ -108,6 +108,22 @@ class BenchmarkRunner:
             
             # Get available tools for this task
             task_tools = task.get('available_tools') or task.get('tools', [])
+            
+            # If no available_tools specified, extract from golden_action
+            if not task_tools and task.get('golden_action'):
+                golden_action = task.get('golden_action', [])
+                if isinstance(golden_action, dict):
+                    golden_action = [golden_action]
+                
+                for action in golden_action:
+                    if isinstance(action, dict):
+                        tool_name = action.get('tool')
+                        if tool_name and tool_name != 'reuse' and tool_name not in task_tools:
+                            task_tools.append(tool_name)
+                
+                if task_tools:
+                    self.logger.info(f"📋 Extracted tools from golden_action: {task_tools}")
+            
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
@@ -139,7 +155,11 @@ class BenchmarkRunner:
                         "result": tool_call.get('result'),
                         "success": tool_call.get('success'),
                         "error": tool_call.get('error'),
+                        "error_type": tool_call.get('error_type'),  # For ErrorDetect metric
                     })
+            
+            # Add tool_invocations to result for judge evaluation
+            result['tool_invocations'] = tool_invocations
             
             # Judge the result
             evaluation = self.judge.evaluate(task, result)
