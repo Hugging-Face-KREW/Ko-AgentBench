@@ -26,6 +26,15 @@ from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
 
+# Import API keys from secrets
+from configs.secrets import (
+    AZURE_API_KEY, 
+    AZURE_API_BASE, 
+    AZURE_API_VERSION,
+    ANTHROPIC_API_KEY
+)
+
+
 
 def load_benchmark_datasets(data_dir: str = "data") -> Dict[str, List[Dict]]:
     """Load all benchmark datasets from data directory.
@@ -171,32 +180,46 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
     else:
         simplified["final_response"] = None
 
-    # Add a compact conversation preview to help verify multi-turn seeding
+    # Store complete conversation log for multi-turn scenarios
     try:
         conv = (result.get("result") or {}).get("conversation") or []
         total_msgs = len(conv)
-        def _preview(msg):
-            content = (msg.get("content") or "")
-            content = content if len(content) <= 160 else content[:157] + "..."
+        
+        def _format_message(msg):
+            """Format a single message for logging."""
             role = msg.get("role", "unknown")
-            tcid = msg.get("tool_call_id")  # present for tool messages
-            if role == "tool" and tcid:
-                # Avoid dumping full tool JSON in preview
-                return {"role": role, "tool_call_id": tcid, "content": "<tool result omitted>"}
+            content = msg.get("content", "")
+            
+            # For tool messages, include tool_call_id
+            if role == "tool":
+                tcid = msg.get("tool_call_id")
+                # Try to parse and format tool result
+                try:
+                    tool_data = json.loads(content) if isinstance(content, str) else content
+                    return {
+                        "role": role,
+                        "tool_call_id": tcid,
+                        "content": tool_data
+                    }
+                except:
+                    return {
+                        "role": role,
+                        "tool_call_id": tcid,
+                        "content": content
+                    }
+            
+            # For user/assistant messages, return as-is
             return {"role": role, "content": content}
 
-        first_k = 3
-        last_k = 3
-        head = conv[:first_k]
-        tail = conv[-last_k:] if total_msgs > first_k else []
-        simplified["conversation_preview"] = {
+        # Store complete conversation log
+        simplified["conversation_log"] = {
             "total_messages": total_msgs,
-            "first_messages": [_preview(m) for m in head],
-            "last_messages": [_preview(m) for m in tail] if tail else [],
+            "messages": [_format_message(m) for m in conv]
         }
-    except Exception:
-        # Non-fatal: skip preview if structure unexpected
-        pass
+            
+    except Exception as e:
+        # Non-fatal: skip conversation logging if structure unexpected
+        simplified["conversation_log_error"] = str(e)
     
     return simplified
 
@@ -380,11 +403,25 @@ def run_benchmark_on_dataset(
         print(f"Level: {task['level']} | Category: {task['category']}")
         print(f"Instruction: {task['description']}")
         print(f"Expected tools: {task['available_tools']}")
-        # Brief note about seeding multi-turn history
+        
+        # Log multi-turn conversation context if present
         if task.get("conversation_tracking") and isinstance(task["conversation_tracking"].get("turns"), list):
             turns = task["conversation_tracking"]["turns"]
-            valid = [t for t in turns if t.get("role") in ("user", "assistant") and t.get("content")]
-            print(f"Seeding prior turns: {len(valid)} (user/assistant)")
+            valid_turns = [t for t in turns if t.get("role") in ("user", "assistant") and t.get("content")]
+            print(f"\n📚 Multi-turn conversation context:")
+            print(f"   Total turns to seed: {len(valid_turns)}")
+            for idx, turn in enumerate(valid_turns, 1):
+                role = turn.get("role", "unknown")
+                content = turn.get("content", "")
+                content_preview = content[:100] + "..." if len(content) > 100 else content
+                print(f"   Turn {idx} [{role}]: {content_preview}")
+                
+                # Log any tool actions in this turn (for reference)
+                if turn.get("actions"):
+                    for action in turn["actions"]:
+                        tool_name = action.get("tool", "unknown")
+                        print(f"      🔧 Expected tool: {tool_name}")
+        
         print(f"{'─'*80}")
         
         try:
@@ -417,6 +454,21 @@ def run_benchmark_on_dataset(
                         print(f"      Error: {inv.get('error')}")
             else:
                 print(f"  Tool calls: 0 (no tools used)")
+            
+            # Print conversation summary for multi-turn tasks
+            if result.get('result') and result['result'].get('conversation'):
+                conversation = result['result']['conversation']
+                print(f"\n  💬 Conversation summary:")
+                print(f"     Total messages: {len(conversation)}")
+                
+                # Show last few messages
+                last_messages = conversation[-3:] if len(conversation) > 3 else conversation
+                for msg in last_messages:
+                    role = msg.get('role', 'unknown')
+                    content = msg.get('content', '')
+                    if content:
+                        preview = content[:80] + "..." if len(content) > 80 else content
+                        print(f"     [{role}]: {preview}")
             
             if result.get('result') and result['result'].get('final_response'):
                 response = result['result']['final_response']
@@ -484,6 +536,16 @@ def main():
     
     # Load environment variables
     load_dotenv()
+    
+    # Set Azure OpenAI environment variables if available from secrets
+    if AZURE_API_KEY:
+        os.environ['AZURE_API_KEY'] = AZURE_API_KEY
+    if AZURE_API_BASE:
+        os.environ['AZURE_API_BASE'] = AZURE_API_BASE
+    if AZURE_API_VERSION:
+        os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
+    if ANTHROPIC_API_KEY:
+        os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
     
     # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [

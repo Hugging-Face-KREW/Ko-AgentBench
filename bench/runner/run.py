@@ -224,10 +224,25 @@ class BenchmarkRunner:
             tool_names = [t.get('function', {}).get('name', 'unknown') for t in tools]
             self.logger.info(f"Tool names in loop: {tool_names}")
         
+        # Log seeded conversation history for multi-turn scenarios
+        seeded_messages_count = len(messages)
+        if seeded_messages_count > 0:
+            self.logger.info(f"🔄 Multi-turn context: {seeded_messages_count} messages seeded")
+            for idx, msg in enumerate(messages):
+                role = msg.get('role', 'unknown')
+                content_preview = msg.get('content', '')[:100]
+                self.logger.info(f"  [{idx+1}] {role}: {content_preview}...")
+        
         for step in range(self.max_steps):
             # Check timeout
             if time.time() - start_time > self.timeout:
                 raise TimeoutError(f"Task exceeded timeout of {self.timeout} seconds")
+            
+            # Log current turn information
+            current_turn = step + 1
+            self.logger.info(f"\n{'='*60}")
+            self.logger.info(f"🔵 Step {current_turn}/{self.max_steps}")
+            self.logger.info(f"{'='*60}")
             
             # Get LLM response
             response = self._call_llm_with_retry(messages, tools)
@@ -242,14 +257,32 @@ class BenchmarkRunner:
             # Handle tool calls
             message = response.get('message', {})
             
+            # Log assistant response
+            assistant_content = message.get('content', '')
+            if assistant_content:
+                self.logger.info(f"💬 Assistant response: {assistant_content[:200]}...")
+            
             # Add assistant message to conversation first
             messages.append(message)
             
             # Then handle tool calls if present
             if 'tool_calls' in message and message['tool_calls']:
-                for tool_call in message['tool_calls']:
+                self.logger.info(f"🔧 Tool calls in this turn: {len(message['tool_calls'])}")
+                for idx, tool_call in enumerate(message['tool_calls'], 1):
+                    tool_name = tool_call.get('function', {}).get('name', 'unknown')
+                    tool_args = tool_call.get('function', {}).get('arguments', '{}')
+                    self.logger.info(f"  [{idx}] Calling: {tool_name}")
+                    self.logger.info(f"      Args: {tool_args[:150]}...")
+                    
                     tool_result = self._execute_tool_call(tool_call)
                     step_data['tool_calls'].append(tool_result)
+                    
+                    # Log tool execution result
+                    if tool_result.get('success'):
+                        result_preview = str(tool_result.get('result', ''))[:150]
+                        self.logger.info(f"      ✅ Success: {result_preview}...")
+                    else:
+                        self.logger.error(f"      ❌ Error: {tool_result.get('error')}")
                     
                     # Add tool result to messages for next turn
                     messages.append({
@@ -257,12 +290,18 @@ class BenchmarkRunner:
                         "tool_call_id": tool_call['id'],
                         "content": json.dumps(tool_result['result'])
                     })
+            else:
+                self.logger.info(f"✅ No tool calls - conversation complete")
             
             steps.append(step_data)
             
             # Check if task is complete (no more tool calls)
             if 'tool_calls' not in message or not message['tool_calls']:
                 break
+        
+        self.logger.info(f"\n{'='*60}")
+        self.logger.info(f"🎯 Conversation completed: {len(steps)} steps taken")
+        self.logger.info(f"{'='*60}\n")
         
         return {
             "steps": steps,
