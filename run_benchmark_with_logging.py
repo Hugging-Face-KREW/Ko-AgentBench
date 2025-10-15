@@ -94,24 +94,33 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
         # Extract required tools from golden_action OR conversation_tracking
         tools_needed = []
         
-        # L7 format: conversation_tracking with turns
-        if "conversation_tracking" in task:
-            print(f"🔍 DEBUG: Processing L7 format task: {task.get('task_id')}")
-            conversation = task["conversation_tracking"]
-            for turn in conversation.get("turns", []):
-                # Extract tools from assistant actions
-                for action in turn.get("actions", []):
-                    tool_name = action.get("tool", "")
-                    if tool_name and tool_name not in tools_needed:
-                        tools_needed.append(tool_name)
-                        print(f"  ✅ Found tool in turn: {tool_name}")
-        
-        # L1-L6 format: golden_action
-        elif "golden_action" in task:
+        # First, try golden_action (L1-L6)
+        if "golden_action" in task:
             for action in task["golden_action"]:
                 tool_name = action.get("tool", "")
                 if tool_name and tool_name not in tools_needed:
                     tools_needed.append(tool_name)
+        
+        # Also check conversation_tracking for additional tools (L6/L7)
+        if "conversation_tracking" in task:
+            print(f"🔍 DEBUG: Processing conversation_tracking for task: {task.get('task_id')}")
+            conversation = task["conversation_tracking"]
+            for turn in conversation.get("turns", []):
+                # L7 format: turn.actions (list)
+                if "actions" in turn:
+                    for action in turn.get("actions", []):
+                        tool_name = action.get("tool", "")
+                        if tool_name and tool_name not in tools_needed:
+                            tools_needed.append(tool_name)
+                            print(f"  ✅ Found tool in turn.actions: {tool_name}")
+                
+                # L6 format: turn.action (single object)
+                if "action" in turn:
+                    action = turn.get("action", {})
+                    tool_name = action.get("tool", "")
+                    if tool_name and tool_name not in tools_needed:
+                        tools_needed.append(tool_name)
+                        print(f"  ✅ Found tool in turn.action: {tool_name}")
         
         # Normalize tool names to match registry keys
         normalized_tools_needed = [normalize_tool_name(t) for t in tools_needed]
@@ -158,7 +167,6 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "error": result.get("error"),
         "expected_tools": result.get("expected_tools", []),
         "golden_action": result.get("golden_action", []),
-        # Include dataset guidance fields
         "minimum_steps": result.get("minimum_steps"),
         "data_flow": result.get("data_flow", []),
     }
@@ -447,7 +455,6 @@ def run_benchmark_on_dataset(
                 result['minimum_steps'] = task.get('minimum_steps')
             if 'data_flow' in task:
                 result['data_flow'] = task.get('data_flow', [])
-            
             all_results.append(result)
             
             # Print summary
