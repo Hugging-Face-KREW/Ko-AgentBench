@@ -1,0 +1,759 @@
+{
+  "summary": {
+    "total_unique_tools": 16,
+    "total_tool_calls": 46,
+    "total_successful_calls": 37,
+    "total_failed_calls": 9
+  },
+  "tool_statistics": {
+    "festival_search": {
+      "total_calls": 4,
+      "successful_calls": 4,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-001",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "eventStartDate": "20251001",
+            "eventEndDate": "20251031",
+            "location": "부산",
+            "num_of_rows": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-003",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "eventStartDate": "20250401",
+            "eventEndDate": "20250531",
+            "location": "제주",
+            "num_of_rows": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-004",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "eventStartDate": "20250901",
+            "eventEndDate": "20251031",
+            "location": "전북",
+            "num_of_rows": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-005",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "eventStartDate": "20250901",
+            "eventEndDate": "20250930",
+            "location": "부산",
+            "num_of_rows": 10
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "_directions": {
+      "total_calls": 3,
+      "successful_calls": 3,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-002",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "start": "127.111217,37.394557",
+            "goal": "127.071707,37.513265"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L1-003",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "start": "127.111217,37.394761",
+            "goal": "127.071005,37.512579",
+            "option": "traavoidtoll"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L1-004",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "start": "126.9707,37.5547",
+            "goal": "126.4525,37.4602",
+            "waypoints": "126.9770,37.5720|126.9242,37.5219",
+            "option": "traavoidtoll"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "StockSearch_ls": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-005",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query_index": "삼성전자"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "MarketIndex_ls": {
+      "total_calls": 2,
+      "successful_calls": 2,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-106",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-005",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CryptoPrice_bithumb": {
+      "total_calls": 3,
+      "successful_calls": 3,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-007",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-006",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-022",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "MarketList_bithumb": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-008",
+          "level": "L1",
+          "success": true,
+          "arguments": {},
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "search_web": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-009",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "search_blog": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-010",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "search_news": {
+      "total_calls": 4,
+      "successful_calls": 4,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-011",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "sort": "sim"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-011",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "북한",
+            "display": 1,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-013",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "퓨리오사AI",
+            "display": 1,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-002",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "최신 반도체 기술",
+            "display": 3,
+            "sort": "date"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "ItemSearch_aladin": {
+      "total_calls": 5,
+      "successful_calls": 5,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-012",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "히가시노 게이고",
+            "query_type": "Author",
+            "sort": "SalesPoint",
+            "max_results": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-004",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "수능 수학 모의고사 문제집 독학",
+            "search_target": "Book",
+            "max_results": 5,
+            "sort": "SalesPoint"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-014",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "인공지능",
+            "start": 1,
+            "max_results": 1,
+            "sort": "Accuracy"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-016",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "한강",
+            "query_type": "Author",
+            "search_target": "Book",
+            "max_results": 5,
+            "sort": "SalesPoint"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-001",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "파이썬 알고리즘 트레이딩",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "max_results": 5,
+            "sort": "Accuracy"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "ItemList_aladin": {
+      "total_calls": 3,
+      "successful_calls": 3,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-013",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "max_results": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-015",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "max_results": 3
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-017",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "max_results": 1
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "WebSearch_daum": {
+      "total_calls": 5,
+      "successful_calls": 5,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L2",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-014",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "손흥민",
+            "size": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-006",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "2024년 개정 부동산 세법"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-007",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "아이폰 17 출시일",
+            "sort": "recency",
+            "size": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-009",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "전기차 충전 요금 인상",
+            "sort": "recency",
+            "page": 1,
+            "size": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-007",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "AI 기술 최신 동향",
+            "sort": "recency",
+            "size": 5
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "VideoSearch_daum": {
+      "total_calls": 4,
+      "successful_calls": 4,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L1",
+        "L2",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-015",
+          "level": "L1",
+          "success": true,
+          "arguments": {
+            "query": "손흥민 헤드트릭",
+            "size": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-003",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "요가 초보자 강의"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-008",
+          "level": "L5",
+          "success": true,
+          "arguments": {
+            "query": "아이유 콘서트 직캠",
+            "sort": "recency",
+            "size": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-003",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "뉴진스",
+            "sort": "recency",
+            "size": 2
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "AddressToCoord_kakao": {
+      "total_calls": 2,
+      "successful_calls": 0,
+      "failed_calls": 2,
+      "success_rate": 0.0,
+      "levels_used": [
+        "L1",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-016",
+          "level": "L1",
+          "success": false,
+          "arguments": {
+            "address": "서울 중구 세종대로 110"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+        },
+        {
+          "task_id": "L5-001",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "address": "서울 중구 세종대로 110"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L1-016",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+        },
+        {
+          "task_id": "L5-001",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+        }
+      ]
+    },
+    "PlaceSearch_kakao": {
+      "total_calls": 6,
+      "successful_calls": 0,
+      "failed_calls": 6,
+      "success_rate": 0.0,
+      "levels_used": [
+        "L1",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-017",
+          "level": "L1",
+          "success": false,
+          "arguments": {
+            "keyword": "강남역 파스타",
+            "size": 1,
+            "sort": "distance"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
+        },
+        {
+          "task_id": "L3-002",
+          "level": "L3",
+          "success": false,
+          "arguments": {
+            "keyword": "대학교",
+            "x": 127.047093,
+            "y": 37.580178,
+            "radius": 2000,
+            "sort": "distance",
+            "size": 1
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000"
+        },
+        {
+          "task_id": "L3-003",
+          "level": "L3",
+          "success": false,
+          "arguments": {
+            "keyword": "교대역 레스토랑",
+            "radius": 500,
+            "sort": "accuracy"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=500"
+        },
+        {
+          "task_id": "L3-005",
+          "level": "L3",
+          "success": false,
+          "arguments": {
+            "keyword": "애플 매장",
+            "x": 127.0276368,
+            "y": 37.497942,
+            "sort": "distance",
+            "size": 3
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942"
+        },
+        {
+          "task_id": "L5-002",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "keyword": "편의점",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 300,
+            "size": 1,
+            "sort": "distance"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300"
+        },
+        {
+          "task_id": "L6-004",
+          "level": "L6",
+          "success": false,
+          "arguments": {
+            "keyword": "시흥시청 맛집"
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%8B%9C%ED%9D%A5%EC%8B%9C%EC%B2%AD+%EB%A7%9B%EC%A7%91&sort=accuracy&page=1&size=15"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L1-017",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
+        },
+        {
+          "task_id": "L3-002",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000"
+        },
+        {
+          "task_id": "L3-003",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=500"
+        },
+        {
+          "task_id": "L3-005",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942"
+        },
+        {
+          "task_id": "L5-002",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300"
+        },
+        {
+          "task_id": "L6-004",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%8B%9C%ED%9D%A5%EC%8B%9C%EC%B2%AD+%EB%A7%9B%EC%A7%91&sort=accuracy&page=1&size=15"
+        }
+      ]
+    },
+    "CategorySearch_kakao": {
+      "total_calls": 1,
+      "successful_calls": 0,
+      "failed_calls": 1,
+      "success_rate": 0.0,
+      "levels_used": [
+        "L1"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L1-018",
+          "level": "L1",
+          "success": false,
+          "arguments": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "size": 1
+          },
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L1-018",
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1"
+        }
+      ]
+    }
+  }
+}
