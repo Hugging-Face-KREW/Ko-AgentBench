@@ -9,6 +9,7 @@ from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
 from .judge import Judge
 from ..observability import observe, get_client, is_enabled
+from ..tools.caching_executor import CachingExecutor
 
 
 class BenchmarkRunner:
@@ -51,7 +52,8 @@ class BenchmarkRunner:
             Task execution result including tool invocation summary
         """
         start_time = time.time()
-        task_id = task.get('task_id', 'unknown')
+        # Accept both 'task_id' and 'id' from upstream converters
+        task_id = task.get('task_id') or task.get('id', 'unknown')
         
         if is_enabled():
             try:
@@ -74,26 +76,53 @@ class BenchmarkRunner:
         self.logger.info(f"Starting task {task_id}")
         
         try:
-            task_description = task.get('instruction') or task.get('description', '')
-            
-            # Initialize conversation with task description
-            messages = [
-                {"role": "system", "content": "You are a helpful assistant that can use tools to complete tasks."},
-                {"role": "user", "content": task_description}
-            ]
+            # Seed conversation messages
+            messages: List[Dict[str, Any]] = []
+            conversation = task.get('conversation_tracking') or task.get('conversation')
+            if isinstance(conversation, dict) and isinstance(conversation.get('turns'), list):
+                # Build messages from provided multi-turn conversation, trimming to the last user turn
+                turns = conversation.get('turns', [])
+                for t in turns:
+                    role = t.get('role')
+                    content = t.get('content', '')
+                    if role in ("user", "assistant") and content:
+                        messages.append({"role": role, "content": content})
+                # Trim trailing assistant messages so the next model output is a response to the last user
+                if messages:
+                    # Find last index of a user message
+                    last_user_idx = None
+                    for idx in range(len(messages) - 1, -1, -1):
+                        if messages[idx].get('role') == 'user':
+                            last_user_idx = idx
+                            break
+                    if last_user_idx is not None:
+                        messages = messages[: last_user_idx + 1]
+                # Fallback if conversation contained no valid user message
+                if not messages:
+                    task_description = task.get('instruction') or task.get('description', '')
+                    messages = [{"role": "user", "content": task_description}]
+            else:
+                # Single-turn fallback
+                task_description = task.get('instruction') or task.get('description', '')
+                messages = [{"role": "user", "content": task_description}]
             
             # Get available tools for this task
-            task_tools = task.get('available_tools', [])
-            
-            # If no available_tools specified, use all registered tools
-            if not task_tools:
-                task_tools = self.tool_registry.get_available_tools()
-            
+            task_tools = task.get('available_tools') or task.get('tools', [])
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
                 if tool:
                     available_tools.append(tool.get_schema())
+                else:
+                    self.logger.warning(f"Tool '{tool_name}' not found in registry")
+            
+            # DEBUG: Log tools being passed to LLM
+            self.logger.info(f"Task tools requested: {task_tools}")
+            self.logger.info(f"Available tools count: {len(available_tools)}")
+            if available_tools:
+                self.logger.info(f"First tool schema keys: {list(available_tools[0].keys())}")
+            else:
+                self.logger.warning("⚠️ NO TOOLS AVAILABLE FOR THIS TASK!")
             
             # Execute LLM-tool loop
             result = self._execute_loop(messages, available_tools, task)
@@ -111,9 +140,6 @@ class BenchmarkRunner:
                         "success": tool_call.get('success'),
                         "error": tool_call.get('error'),
                     })
-            
-            # Add tool_invocations to result before evaluation
-            result['tool_invocations'] = tool_invocations
             
             # Judge the result
             evaluation = self.judge.evaluate(task, result)
@@ -192,10 +218,31 @@ class BenchmarkRunner:
         steps = []
         start_time = time.time()
         
+        # DEBUG: Log tools being used in loop
+        self.logger.info(f"_execute_loop: Received {len(tools)} tools")
+        if tools:
+            tool_names = [t.get('function', {}).get('name', 'unknown') for t in tools]
+            self.logger.info(f"Tool names in loop: {tool_names}")
+        
+        # Log seeded conversation history for multi-turn scenarios
+        seeded_messages_count = len(messages)
+        if seeded_messages_count > 0:
+            self.logger.info(f"🔄 Multi-turn context: {seeded_messages_count} messages seeded")
+            for idx, msg in enumerate(messages):
+                role = msg.get('role', 'unknown')
+                content_preview = msg.get('content', '')[:100]
+                self.logger.info(f"  [{idx+1}] {role}: {content_preview}...")
+        
         for step in range(self.max_steps):
             # Check timeout
             if time.time() - start_time > self.timeout:
                 raise TimeoutError(f"Task exceeded timeout of {self.timeout} seconds")
+            
+            # Log current turn information
+            current_turn = step + 1
+            self.logger.info(f"\n{'='*60}")
+            self.logger.info(f"🔵 Step {current_turn}/{self.max_steps}")
+            self.logger.info(f"{'='*60}")
             
             # Get LLM response
             response = self._call_llm_with_retry(messages, tools)
@@ -210,27 +257,61 @@ class BenchmarkRunner:
             # Handle tool calls
             message = response.get('message', {})
             
+            # Log assistant response
+            assistant_content = message.get('content', '')
+            if assistant_content:
+                self.logger.info(f"💬 Assistant response: {assistant_content[:200]}...")
+            
             # Add assistant message to conversation first
             messages.append(message)
             
             # Then handle tool calls if present
             if 'tool_calls' in message and message['tool_calls']:
-                for tool_call in message['tool_calls']:
-                    tool_result = self._execute_tool_call(tool_call)
+                self.logger.info(f"🔧 Tool calls in this turn: {len(message['tool_calls'])}")
+                for idx, tool_call in enumerate(message['tool_calls'], 1):
+                    tool_name = tool_call.get('function', {}).get('name', 'unknown')
+                    tool_args = tool_call.get('function', {}).get('arguments', '{}')
+                    self.logger.info(f"  [{idx}] Calling: {tool_name}")
+                    self.logger.info(f"      Args: {tool_args[:150]}...")
+                    
+                    tool_result = self._execute_tool_call(tool_call, task)
                     step_data['tool_calls'].append(tool_result)
                     
+                    # Log tool execution result
+                    if tool_result.get('success'):
+                        result_preview = str(tool_result.get('result', ''))[:150]
+                        self.logger.info(f"      ✅ Success: {result_preview}...")
+                    else:
+                        self.logger.error(f"      ❌ Error: {tool_result.get('error')}")
+                    
                     # Add tool result to messages for next turn
+                    # Include error information if tool call failed
+                    if tool_result.get('success'):
+                        content = json.dumps(tool_result['result'])
+                    else:
+                        # Send error information to the model
+                        content = json.dumps({
+                            "error": tool_result.get('error'),
+                            "error_type": tool_result.get('error_type')
+                        })
+                    
                     messages.append({
                         "role": "tool",
                         "tool_call_id": tool_call['id'],
-                        "content": json.dumps(tool_result['result'])
+                        "content": content
                     })
+            else:
+                self.logger.info(f"✅ No tool calls - conversation complete")
             
             steps.append(step_data)
             
             # Check if task is complete (no more tool calls)
             if 'tool_calls' not in message or not message['tool_calls']:
                 break
+        
+        self.logger.info(f"\n{'='*60}")
+        self.logger.info(f"🎯 Conversation completed: {len(steps)} steps taken")
+        self.logger.info(f"{'='*60}\n")
         
         return {
             "steps": steps,
@@ -250,6 +331,9 @@ class BenchmarkRunner:
         Returns:
             LLM response
         """
+        # DEBUG: Log before calling LLM
+        self.logger.debug(f"Calling LLM with {len(tools)} tools")
+        
         last_error = None
         
         for attempt in range(self.max_retries):
@@ -282,11 +366,12 @@ class BenchmarkRunner:
         raise Exception(f"LLM call failed after {self.max_retries} attempts: {str(last_error)}")
     
     @observe(name="execute_tool")
-    def _execute_tool_call(self, tool_call: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a single tool call.
+    def _execute_tool_call(self, tool_call: Dict[str, Any], task: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a single tool call with error injection support for Level 5 tasks.
         
         Args:
             tool_call: Tool call information
+            task: Task definition (for error_injection check)
             
         Returns:
             Tool execution result
@@ -307,6 +392,48 @@ class BenchmarkRunner:
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
             
+            # Check for error injection (Level 5 robustness testing)
+            error_injection = task.get('error_injection')
+            if error_injection and error_injection.get('tool') == tool_name:
+                error_type = error_injection.get('error_type')
+                
+                # Simulate different error types
+                if error_type == 'timeout':
+                    error_message = "Request timeout"
+                elif error_type == 'complete_unavailable':
+                    error_message = "Service completely unavailable"
+                elif error_type == 'data_not_available':
+                    error_message = "No data available"
+                else:
+                    error_message = f"Error: {error_type}"
+                
+                self.logger.warning(f"🔴 Error injection: {tool_name} - {error_type}")
+                
+                # Return error result
+                error_result = {
+                    "tool_call_id": tool_call['id'],
+                    "tool_name": tool_name,
+                    "arguments": arguments,
+                    "result": None,
+                    "success": False,
+                    "error": error_message,
+                    "error_type": error_type  # For judge evaluation
+                }
+                
+                # update current span with injected error
+                if is_enabled():
+                    try:
+                        langfuse = get_client()
+                        langfuse.update_current_span(
+                            output=error_result,
+                            metadata={"error_injection": True, "error_type": error_type}
+                        )
+                    except Exception as e:
+                        self.logger.debug(f"Langfuse update failed: {e}")
+                
+                return error_result
+            
+            # Execute tool normally (may include caching layer under the hood)
             result = self.tool_registry.execute_tool(tool_name, **arguments)
             
             tool_result = {
@@ -322,9 +449,16 @@ class BenchmarkRunner:
             if is_enabled():
                 try:
                     langfuse = get_client()
-                    langfuse.update_current_span(
-                        output=tool_result
-                    )
+                    # Attach cache metadata if available from wrapper
+                    cache_meta = None
+                    try:
+                        # Access underlying caching executor via tool wrapper if present
+                        tool_obj = self.tool_registry.get_tool(tool_name)
+                        if hasattr(tool_obj, "_caching_executor"):
+                            cache_meta = tool_obj._caching_executor.get_last_meta()
+                    except Exception:
+                        cache_meta = None
+                    langfuse.update_current_span(output=tool_result, metadata={"cache": cache_meta})
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
             

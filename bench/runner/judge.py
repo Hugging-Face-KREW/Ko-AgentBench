@@ -3,7 +3,7 @@
 import json
 import re
 import logging
-from typing import Any, Dict, List, Optional, Callable
+from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from ..adapters.base_adapter import BaseAdapter
 from ..observability import observe, get_client, is_enabled
@@ -39,6 +39,7 @@ class EvalContext:
 class Metric:
     """메트릭 기본 클래스"""
     name = "base_metric"
+    level = None  # "common", 1, 2, 3, 4, 5, 6, 7 또는 리스트
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         raise NotImplementedError
@@ -47,6 +48,7 @@ class Metric:
 class SRMetric(Metric):
     """SR(성공률): success_condition 충족 여부"""
     name = "SR"
+    level = "common"
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         # task에서 성공 여부 직접 확인
@@ -62,6 +64,7 @@ class SRMetric(Metric):
 class EPRCVRMetric(Metric):
     """EPR/CVR(유효 호출 비율): accept + schema_valid 비율"""
     name = "EPR_CVR"
+    level = "common"
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         call_logs = ctx.logs.get("tool_invocations", [])
@@ -85,6 +88,7 @@ class EPRCVRMetric(Metric):
 class PassAtKMetric(Metric):
     """pass@k(반복 안정성): k번 반복 시 성공 비율"""
     name = "pass@k"
+    level = "common"
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         repetitions = ctx.task_schema.get("repetitions", 1)
@@ -109,6 +113,7 @@ class PassAtKMetric(Metric):
 class ToolAccMetric(Metric):
     """ToolAcc: 첫번째 예측 툴이 golden_action.tool과 일치하는지"""
     name = "ToolAcc"
+    level = 1
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
 
@@ -135,6 +140,7 @@ class ArgAccMetric(Metric):
     ArgAcc: 도구 인자 정확도. (P/R/F1)
     """
     name = "ArgAcc"
+    level = 1
     DEFAULT_SCORE_KEY = "f1"
 
     @staticmethod
@@ -210,6 +216,7 @@ class ArgAccMetric(Metric):
 class CallEMMetric(Metric):
     """CallEM: 첫 호출이 정답 호출(tool+args)과 완전히 동일한지 (EM)"""
     name = "CallEM"
+    level = 1
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         golden_actions = ctx.task_schema.get("golden_action", [])
@@ -250,6 +257,7 @@ class RespOKMetric(Metric):
     RespOK : actual_output이 resp_schema를 만족하는지 평가
     """
     name = "RespOK"
+    level = 1
 
     @staticmethod
     def _extract_candidate(ctx: EvalContext):
@@ -285,6 +293,7 @@ class RespOKMetric(Metric):
 #레벨2 메트릭
 class SelectAccMetric(Metric):
     name = "SelectAcc"
+    level = 2
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         ga = ctx.task_schema.get("golden_action", [])
@@ -311,6 +320,7 @@ class SelectAccMetric(Metric):
 class FSMMetric(Metric):
     """FSM(Full Sequence Match): 정답 경로와 완전 일치"""
     name = "FSM"
+    level = 3
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         golden_action = ctx.task_schema.get("golden_action", [])
@@ -343,6 +353,7 @@ class FSMMetric(Metric):
 class PSMMetric(Metric):
     """PSM(Partial Sequence Match): 일치한 단계 비율"""
     name = "PSM"
+    level = 3
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         golden_action = ctx.task_schema.get("golden_action", [])
@@ -381,9 +392,16 @@ class PSMMetric(Metric):
 class DeltaStepsNormMetric(Metric):
     """ΔSteps_norm: 최소 경로 대비 효율"""
     name = "ΔSteps_norm"
+    level = 3
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        minimum_steps = ctx.task_schema.get("minimum_steps", 1)
+        minimum_steps = ctx.task_schema.get("minimum_steps")
+        
+        # minimum_steps가 없으면 golden_action 개수로 추정
+        if minimum_steps is None:
+            golden_action = ctx.task_schema.get("golden_action", [])
+            minimum_steps = len(golden_action) if golden_action else 1
+        
         actual_steps = len(ctx.action_trace)
         
         if minimum_steps <= 0:
@@ -407,6 +425,7 @@ class DeltaStepsNormMetric(Metric):
 class ProvAccMetric(Metric):
     """ProvAcc: 다음 호출 인자의 출처 추적 정확도"""
     name = "ProvAcc"
+    level = 3
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         data_flow = ctx.task_schema.get("data_flow", [])
@@ -501,6 +520,7 @@ class CoverageMetric(Metric):
     - golden_action에 명시된 도구들을 모두 사용했는지 확인
     """
     name = "Coverage"
+    level = 4
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         # golden_action에서 필수 도구 추출
@@ -570,6 +590,7 @@ class SourceEPRMetric(Metric):
     - 최종 점수 = 모든 소스의 EPR 평균
     """
     name = "SourceEPR"
+    level = 4
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         # golden_action에서 필수 도구 추출
@@ -646,45 +667,129 @@ class SourceEPRMetric(Metric):
 class ErrorDetectMetric(Metric):
     """
     ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
+    LLM-as-a-Judge로 final_response에서 에러 보고 여부를 판단
     """
     name = "ErrorDetect"
+    level = 5
+
+    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
+        self.llm_adapter = llm_adapter
+
+    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
+        """LLM Judge 호출"""
+        if not self.llm_adapter:
+            return {"error_reported": False, "confidence": 0.0, "reason": "LLM adapter not available"}
+        
+        try:
+            messages = [
+                {"role": "system", "content": "You are an expert evaluator for AI error handling. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            try:
+                result = json.loads(content)
+                return result
+            except json.JSONDecodeError:
+                # JSON 파싱 실패 시 텍스트에서 추출 시도
+                error_reported_match = re.search(r'"error_reported"\s*:\s*(true|false)', content.lower())
+                if error_reported_match:
+                    return {
+                        "error_reported": error_reported_match.group(1) == "true",
+                        "confidence": 0.5,
+                        "reason": "Parsed from text"
+                    }
+                return {"error_reported": False, "confidence": 0.0, "reason": "Failed to parse LLM response"}
+                
+        except Exception as e:
+            return {"error_reported": False, "confidence": 0.0, "reason": f"Error: {str(e)}"}
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         inj = ctx.task_schema.get("error_injection", {}) or {}
         inj_tool = inj.get("tool")
         inj_type = inj.get("error_type")
 
-        actual_pairs = []
+        # 에러 주입이 없으면 평가 불가
+        if not inj_tool or not inj_type:
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No error injection defined",
+                "error_occurred": False,
+                "error_reported": False
+            })
 
-        for e in (ctx.logs.get("errors") or []):
-            if isinstance(e, dict):
-                t = e.get("tool")
-                et = e.get("error_type") or e.get("type")
-                if t == inj_tool and et == inj_type:
-                    actual_pairs.append((t, et))
-
+        # 1단계: 실제로 에러가 발생했는지 확인
+        error_occurred = False
         for inv in (ctx.logs.get("tool_invocations") or []):
             if isinstance(inv, dict) and inv.get("error"):
                 t = inv.get("tool") or inv.get("tool_name")
-                et = inv.get("error_type") or inv.get("type")
+                et = inv.get("error_type")
                 if t == inj_tool and et == inj_type:
-                    actual_pairs.append((t, et))
+                    error_occurred = True
+                    break
 
-        if not actual_pairs:
-            return EvaluationResult(self.name, 0.0, {"ratio": 0.0})
+        if not error_occurred:
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "Error injection did not trigger",
+                "error_occurred": False,
+                "error_reported": False
+            })
 
-        if ctx.logs.get("error_reported"):
-            return EvaluationResult(self.name, 1.0, {"ratio": 1.0})
+        # 2단계: 모델이 에러를 보고했는지 LLM Judge로 판단
+        final_response = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
+        
+        if not final_response or not isinstance(final_response, str):
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No final response to evaluate",
+                "error_occurred": True,
+                "error_reported": False
+            })
 
-        reported_pairs = {
-            (r.get("tool"), r.get("error_type") or r.get("type"))
-            for r in (ctx.logs.get("error_reports") or [])
-            if isinstance(r, dict)
-        }
+        # LLM Judge 프롬프트 구성
+        error_type_korean = {
+            "timeout": "타임아웃/시간 초과",
+            "complete_unavailable": "서비스 완전 불가/이용 불가",
+            "data_not_available": "데이터 없음/조회 불가"
+        }.get(inj_type, inj_type)
 
-        hit = sum(1 for p in actual_pairs if p in reported_pairs)
-        ratio = hit / len(actual_pairs)
-        return EvaluationResult(self.name, ratio, {"ratio": ratio})
+        prompt = f"""다음 AI 응답이 도구 실행 실패/에러를 사용자에게 명확히 보고하고 있는지 판단해주세요.
+
+**주입된 에러 정보:**
+- 도구: {inj_tool}
+- 에러 타입: {inj_type} ({error_type_korean})
+
+**AI의 최종 응답:**
+{final_response}
+
+**판단 기준:**
+1. 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
+2. 서비스를 이용할 수 없다거나 조회에 실패했다고 설명했는가?
+3. 타임아웃, 접속 불가, 데이터 없음 등 구체적인 문제를 언급했는가?
+4. 단순히 결과를 제공하지 못하는 것이 아니라, 문제의 원인을 설명했는가?
+
+**주의사항:**
+- 환각으로 다른 정보를 제공하면서 에러를 숨기는 경우: error_reported = false
+- 에러를 언급하지 않고 "죄송합니다" 정도만 말하는 경우: error_reported = false
+- 명확하게 에러/실패를 설명하는 경우: error_reported = true
+
+**출력 형식 (JSON만):**
+{{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "판단 근거를 한 문장으로"}}"""
+
+        llm_result = self._call_llm_judge(prompt)
+        error_reported = llm_result.get("error_reported", False)
+        confidence = llm_result.get("confidence", 0.0)
+        
+        score = 1.0 if error_reported else 0.0
+        
+        return EvaluationResult(self.name, score, {
+            "error_occurred": True,
+            "error_reported": error_reported,
+            "confidence": confidence,
+            "llm_reason": llm_result.get("reason", "No reason provided"),
+            "injected_tool": inj_tool,
+            "injected_error_type": inj_type
+        })
 
 
 class GracefulFailMetric(Metric):
@@ -692,6 +797,7 @@ class GracefulFailMetric(Metric):
     GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
     """
     name = "GracefulFail"
+    level = 5
 
     @staticmethod
     def _has_output(v: Any) -> bool:
@@ -740,6 +846,7 @@ class FallbackSRMetric(Metric):
     FallbackSR : 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율
     """
     name = "FallbackSR"
+    level = 5
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         # 에러 주입 없는 태스크면 0 (비적용)
@@ -775,6 +882,378 @@ class FallbackSRMetric(Metric):
 
         score = (successes / attempts) if attempts > 0 else 0.0
         return EvaluationResult(self.name, score, {"attempts": attempts, "successes": successes})
+
+#레벨6 메트릭
+class ReuseRateMetric(Metric):
+    """ReuseRate: 재사용 기회 대비 실제 재사용 비율"""
+    name = "ReuseRate"
+    level = 6
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        golden_action = ctx.task_schema.get("golden_action", [])
+        action_trace = ctx.action_trace
+        
+        # 재사용 기회: golden_action에서 "reuse" 도구의 개수
+        reuse_opportunities = sum(
+            1 for action in golden_action 
+            if action.get("tool") == "reuse"
+        )
+        
+        if reuse_opportunities == 0:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reuse_opportunities": 0, "reused": 0, "reason": "No reuse opportunities"}
+            )
+        
+        # 실제 재사용 판단: 동일한 도구를 동일한 파라미터로 재호출하지 않은 경우
+        # 유니크한 (tool_name, args) 조합 개수와 전체 호출 개수 비교
+        tool_call_signatures = []
+        for action in action_trace:
+            if action.get("success"):
+                signature = (
+                    action.get("tool"),
+                    json.dumps(action.get("args", {}), sort_keys=True)
+                )
+                tool_call_signatures.append(signature)
+        
+        unique_calls = len(set(tool_call_signatures))
+        
+        # 재사용된 횟수 = 전체 호출 - 유니크 호출
+        golden_unique_tools = set()
+        for action in golden_action:
+            tool = action.get("tool")
+            if tool != "reuse":
+                golden_unique_tools.add(tool)
+        
+        expected_unique_calls = len(golden_unique_tools)
+
+        # 실제 재사용 비율 계산
+        if expected_unique_calls == 0:
+            reused = 0
+        else:
+            # 재사용했다면 unique_calls == expected_unique_calls
+            # 재사용 안했다면 unique_calls > expected_unique_calls
+            if unique_calls <= expected_unique_calls:
+                reused = reuse_opportunities
+            else:
+                # 부분적으로 재사용
+                excess_calls = unique_calls - expected_unique_calls
+                reused = max(0, reuse_opportunities - excess_calls)
+        
+        score = reused / reuse_opportunities if reuse_opportunities > 0 else 0.0
+        
+        return EvaluationResult(
+            self.name,
+            score,
+            {
+                "reuse_opportunities": reuse_opportunities,
+                "reused": reused,
+                "unique_calls": unique_calls,
+                "expected_unique_calls": expected_unique_calls
+            }
+        )
+
+
+class RedundantCallRateMetric(Metric):
+    """RedundantCallRate: 재사용이 정답인 상황에서 불필요한 API 호출 비율"""
+    name = "RedundantCallRate"
+    level = 6
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        golden_action = ctx.task_schema.get("golden_action", [])
+        action_trace = ctx.action_trace
+        
+        # 재사용 기회: golden_action에서 "reuse" 도구의 개수
+        reuse_opportunities = sum(
+            1 for action in golden_action 
+            if action.get("tool") == "reuse"
+        )
+        
+        if reuse_opportunities == 0:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reuse_opportunities": 0, "redundant_calls": 0, "reason": "No reuse opportunities"}
+            )
+        
+        # 불필요한 호출: 동일한 도구를 동일한 파라미터로 재호출한 경우
+        tool_call_signatures = []
+        redundant_calls = 0
+        
+        for action in action_trace:
+            if action.get("success"):
+                signature = (
+                    action.get("tool"),
+                    json.dumps(action.get("args", {}), sort_keys=True)
+                )
+                if signature in tool_call_signatures:
+                    redundant_calls += 1
+                else:
+                    tool_call_signatures.append(signature)
+        
+        score = redundant_calls / reuse_opportunities if reuse_opportunities > 0 else 0.0
+        
+        return EvaluationResult(
+            self.name,
+            score,
+            {
+                "reuse_opportunities": reuse_opportunities,
+                "redundant_calls": redundant_calls
+            }
+        )
+
+
+class EffScoreMetric(Metric):
+    """EffScore: 성공 시 최소 호출 수 대비 실제 호출 수의 효율"""
+    name = "EffScore"
+    level = 6
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        success = ctx.logs.get("success", False)
+        actual_calls = len(ctx.action_trace)
+        
+        minimum_calls = ctx.task_schema.get("minimum_calls")
+        
+        if minimum_calls is None:
+            golden_action = ctx.task_schema.get("golden_action", [])
+            unique_tools = set()
+            for action in golden_action:
+                tool = action.get("tool")
+                if tool != "reuse":
+                    unique_tools.add(tool)
+            minimum_calls = len(unique_tools) if unique_tools else 1
+        
+        if not success or actual_calls <= 0:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {
+                    "success": success,
+                    "actual_calls": actual_calls,
+                    "minimum_calls": minimum_calls
+                }
+            )
+        
+        score = min(1.0, minimum_calls / actual_calls)
+        
+        return EvaluationResult(
+            self.name,
+            score,
+            {
+                "success": success,
+                "actual_calls": actual_calls,
+                "minimum_calls": minimum_calls
+            }
+        )
+
+#레벨7 메트릭
+class ContextRetentionMetric(Metric):
+    """ContextRetention: LLM-as-a-Judge로 과거 맥락 활용도 평가"""
+    name = "ContextRetention"
+    level = 7
+    
+    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
+        self.llm_adapter = llm_adapter
+    
+    @staticmethod
+    def _format_messages(messages: List[Dict[str, str]]) -> str:
+        """메시지 목록을 읽기 쉬운 형식으로 변환"""
+        formatted = []
+        for i, msg in enumerate(messages, 1):
+            role = msg.get("role", "unknown")
+            content = msg.get("content", "")
+            if role == "user":
+                formatted.append(f"[턴 {i}] 사용자: {content}")
+            elif role == "assistant":
+                formatted.append(f"[턴 {i}] AI: {content[:200]}{'...' if len(content) > 200 else ''}")
+        return "\n".join(formatted)
+    
+    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
+        """LLM Judge 호출"""
+        if not self.llm_adapter:
+            return {"score": 0.0, "reason": "LLM adapter not available"}
+        
+        try:
+            messages = [
+                {"role": "system", "content": "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            try:
+                result = json.loads(content)
+                return result
+            except json.JSONDecodeError:
+                score_match = re.search(r'"score"\s*:\s*([0-9.]+)', content)
+                if score_match:
+                    return {"score": float(score_match.group(1)), "reason": "Parsed from text"}
+                return {"score": 0.0, "reason": "Failed to parse LLM response"}
+                
+        except Exception as e:
+            return {"score": 0.0, "reason": f"Error: {str(e)}"}
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        conv_preview = ctx.logs.get("conversation_preview", {})
+        
+        if not conv_preview:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reason": "No conversation preview available"}
+            )
+        
+        first_messages = conv_preview.get("first_messages", [])
+        last_messages = conv_preview.get("last_messages", [])
+        
+        if len(first_messages) < 2 or len(last_messages) < 2:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reason": "Not enough messages for context evaluation"}
+            )
+        
+        # LLM Judge 프롬프트 구성
+        prompt = f"""다음 대화에서 AI가 이전 맥락을 적절히 유지하고 활용했는지 평가해주세요.
+
+대화 내용:
+{self._format_messages(first_messages + last_messages)}
+
+평가 기준:
+1. AI가 이전 대화의 핵심 정보를 기억하고 있는가?
+2. 사용자가 과거 맥락을 참조할 때("그때", "아까", "전에 말한") 적절히 연결했는가?
+3. 새로운 질문에 이전 정보를 고려하여 답변했는가?
+4. 불필요한 재질문 없이 맥락을 유지했는가?
+
+점수 기준:
+- 1.0: 모든 맥락을 완벽히 유지하고 적절히 활용
+- 0.7-0.9: 대부분의 맥락을 유지하고 활용
+- 0.4-0.6: 일부 맥락만 유지하거나 부분적으로만 활용
+- 0.1-0.3: 맥락 유지가 미흡
+- 0.0: 맥락을 전혀 유지하지 못함
+
+JSON 형식으로만 답변해주세요:
+{{"score": 0.0-1.0, "retained": true/false, "reason": "간단한 이유"}}"""
+
+        llm_result = self._call_llm_judge(prompt)
+        score = float(llm_result.get("score", 0.0))
+        
+        return EvaluationResult(
+            self.name,
+            score,
+            {
+                "retained": llm_result.get("retained", score > 0.5),
+                "reason": llm_result.get("reason", "LLM evaluation"),
+                "total_messages": len(first_messages) + len(last_messages)
+            }
+        )
+
+
+class RefRecallMetric(Metric):
+    """RefRecall: LLM-as-a-Judge로 오래된 정보 회상 능력 평가"""
+    name = "RefRecall"
+    level = 7
+    
+    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
+        self.llm_adapter = llm_adapter
+    
+    @staticmethod
+    def _format_messages(messages: List[Dict[str, str]]) -> str:
+        """메시지 목록을 읽기 쉬운 형식으로 변환"""
+        formatted = []
+        for i, msg in enumerate(messages, 1):
+            role = msg.get("role", "unknown")
+            content = msg.get("content", "")
+            if role == "user":
+                formatted.append(f"[턴 {i}] 사용자: {content}")
+            elif role == "assistant":
+                formatted.append(f"[턴 {i}] AI: {content[:200]}{'...' if len(content) > 200 else ''}")
+        return "\n".join(formatted)
+    
+    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
+        """LLM Judge 호출"""
+        if not self.llm_adapter:
+            return {"score": 0.0, "reason": "LLM adapter not available"}
+        
+        try:
+            messages = [
+                {"role": "system", "content": "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            try:
+                result = json.loads(content)
+                return result
+            except json.JSONDecodeError:
+                score_match = re.search(r'"score"\s*:\s*([0-9.]+)', content)
+                if score_match:
+                    return {"score": float(score_match.group(1)), "reason": "Parsed from text"}
+                return {"score": 0.0, "reason": "Failed to parse LLM response"}
+                
+        except Exception as e:
+            return {"score": 0.0, "reason": f"Error: {str(e)}"}
+    
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        conv_preview = ctx.logs.get("conversation_preview", {})
+        
+        if not conv_preview:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reason": "No conversation preview available"}
+            )
+        
+        first_messages = conv_preview.get("first_messages", [])
+        last_messages = conv_preview.get("last_messages", [])
+        total_messages = conv_preview.get("total_messages", len(first_messages) + len(last_messages))
+        
+        if len(first_messages) < 2 or len(last_messages) < 2:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {"reason": "Not enough messages for recall evaluation"}
+            )
+        
+        # LLM Judge 프롬프트 구성
+        prompt = f"""다음 대화에서 AI가 오래된 정보를 정확히 회상하고 활용했는지 평가해주세요.
+
+대화 내용 (총 {total_messages}개 메시지 중 일부):
+{self._format_messages(first_messages + last_messages)}
+
+평가 기준:
+1. 초반 대화의 구체적 정보(숫자, 이름, 특징 등)를 나중에도 정확히 기억하는가?
+2. 시간이 지난 후에도 이전 정보를 정확하게 참조하는가?
+3. 여러 턴이 지난 후에도 맥락의 연속성을 유지하는가?
+4. 혼동 없이 정확한 정보를 회상하는가?
+
+점수 기준:
+- 1.0: 모든 과거 정보를 정확히 회상
+- 0.7-0.9: 대부분의 정보를 정확히 회상
+- 0.4-0.6: 일부 정보만 회상하거나 부분적으로 정확
+- 0.1-0.3: 회상이 부정확하거나 미흡
+- 0.0: 과거 정보를 전혀 회상하지 못함
+
+JSON 형식으로만 답변해주세요:
+{{"score": 0.0-1.0, "recalled": true/false, "reason": "간단한 이유"}}"""
+
+        llm_result = self._call_llm_judge(prompt)
+        score = float(llm_result.get("score", 0.0))
+        
+        return EvaluationResult(
+            self.name,
+            score,
+            {
+                "recalled": llm_result.get("recalled", score > 0.5),
+                "reason": llm_result.get("reason", "LLM evaluation"),
+                "total_messages": total_messages,
+                "evaluated_messages": len(first_messages) + len(last_messages)
+            }
+        )
     
 
 
@@ -799,11 +1278,42 @@ METRICS = {
     #레벨4 메트릭
     "Coverage": CoverageMetric(),
     "SourceEPR": SourceEPRMetric(),
-    #레벨5 메트릭
-    "ErrorDetect": ErrorDetectMetric(), 
+    #레벨5 메트릭 (ErrorDetect는 LLM adapter 필요)
+    "ErrorDetect": ErrorDetectMetric(llm_adapter=None), 
     "GracefulFail": GracefulFailMetric(),
     "FallbackSR": FallbackSRMetric(),
+    #레벨6 메트릭
+    "ReuseRate": ReuseRateMetric(),
+    "RedundantCallRate": RedundantCallRateMetric(),
+    "EffScore": EffScoreMetric(),
+    #레벨7 메트릭 (LLM adapter는 Judge에서 설정)
+    "ContextRetention": ContextRetentionMetric(llm_adapter=None),
+    "RefRecall": RefRecallMetric(llm_adapter=None),
 }
+
+def get_metrics_for_level(level: int) -> Dict[str, Metric]:
+    """특정 레벨에 해당하는 메트릭들을 반환 (공통 메트릭 포함)
+    
+    Args:
+        level: 레벨 번호 (1-7)
+        
+    Returns:
+        레벨에 맞는 메트릭 딕셔너리
+    """
+    filtered = {}
+    for name, metric in METRICS.items():
+        # 공통 메트릭이거나 해당 레벨의 메트릭인 경우
+        if metric.level == "common" or metric.level == level:
+            filtered[name] = metric
+    return filtered
+
+def get_common_metrics() -> Dict[str, Metric]:
+    """공통 메트릭만 반환"""
+    return {name: metric for name, metric in METRICS.items() if metric.level == "common"}
+
+def get_level_specific_metrics(level: int) -> Dict[str, Metric]:
+    """특정 레벨 전용 메트릭만 반환 (공통 메트릭 제외)"""
+    return {name: metric for name, metric in METRICS.items() if metric.level == level}
 
 class Judge:
     """Judge for evaluating task results with multiple evaluation methods."""
@@ -825,6 +1335,17 @@ class Judge:
             'schema_validation': self._schema_validation,
             'golden_action_match': self._golden_action_match,
         }
+        
+        # LLM adapter가 필요한 메트릭에 설정
+        if llm_adapter:
+            # 레벨5 메트릭
+            if "ErrorDetect" in METRICS:
+                METRICS["ErrorDetect"].llm_adapter = llm_adapter
+            # 레벨7 메트릭
+            if "ContextRetention" in METRICS:
+                METRICS["ContextRetention"].llm_adapter = llm_adapter
+            if "RefRecall" in METRICS:
+                METRICS["RefRecall"].llm_adapter = llm_adapter
     
     @observe(name="evaluate")
     def evaluate(self, task: Dict[str, Any], result: Dict[str, Any]) -> Dict[str, Any]:
@@ -879,6 +1400,7 @@ class Judge:
                     "tool_invocations": result.get("tool_invocations", []),
                     "repetition_results": result.get("repetition_results", []),
                     "actual_output": actual_output,
+                    "final_response": result.get("final_response", ""),  # For ErrorDetect metric
                 }
             )
             
