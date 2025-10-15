@@ -17,7 +17,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 현재 비트코인(BTC/KRW)의 시세는 98,530,000원입니다. 전일 대비 0.5% 상승했네요.",
-          "actions": [
+          "action": 
             {
               "tool": "CryptoPrice_upbit",
               "args": {
@@ -45,7 +45,6 @@
                 "timestamp": 1765434252000
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -56,7 +55,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "이더리움(ETH/KRW)은 현재 4,850,000원으로, 전일 대비 1.2% 하락했습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "CryptoPrice_upbit",
               "args": {
@@ -84,7 +83,6 @@
                 "timestamp": 1765434312000
               }
             }
-          ]
         },
         {
           "turn_number": 5,
@@ -95,7 +93,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 다시 알려드릴게요. 비트코인은 현재 98,550,000원으로, 조금 전보다 약간 올랐습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "CryptoPrice_upbit",
               "args": {
@@ -122,8 +120,7 @@
                 "market": "KRW-BTC",
                 "timestamp": 1765434372000
               }
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -205,7 +202,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "현재 어린이 도서 베스트셀러로는 '흔한남매 15', '추리 텐텐 1' 등이 있습니다. 이 책들로 보여드릴까요?",
-          "actions": [
+          "action": 
             {
               "tool": "ItemSearch_aladin",
               "args": {
@@ -250,7 +247,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 5,
@@ -261,7 +257,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 이전에 말씀하신 매트 헤이그 작가의 어린이 도서 중 현재 구매 가능한 책은 '크리스마스를 구한 소녀'가 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "ItemSearch_aladin",
               "args": {
@@ -292,8 +288,7 @@
                   }
                 ]
               }
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -373,7 +368,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 인공지능 관련 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?",
-          "actions": [
+          "action": 
             {
               "tool": "NewsSearch_naver",
               "args": {
@@ -401,7 +396,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -412,7 +406,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 스포츠 뉴스입니다. 'A팀, 9회말 역전 끝내기 안타로 5연승 질주' 등의 야구 소식이 올라와 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "NewsSearch_naver",
               "args": {
@@ -433,7 +427,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 5,
@@ -451,7 +444,7 @@
               "usage_type": "parameter_filling"
             }
           ],
-          "actions": [
+          "action": 
             {
               "tool": "NewsSearch_naver",
               "args": {
@@ -473,7 +466,6 @@
                 ]
               }
             }
-          ]
         }
       ],
       "evaluation_context": {
@@ -533,7 +525,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 10분 내외의 캠핑 브이로그를 찾아봤어요. '[캠핑로그] 감성 가득했던 10분 순삭 동계캠핑'이라는 영상이 있는데, 어떠세요?",
-          "actions": [
+          "action": 
             {
               "tool": "VideoSearch_daum",
               "args": {
@@ -557,7 +549,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -568,7 +559,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "최신순으로 캠핑 브이로그를 다시 검색해봤어요. '[신상 캠핑장비] 솔로캠핑 브이로그'가 새로 올라왔네요. 확인해 보시겠어요?",
-          "actions": [
+          "action": 
             {
               "tool": "VideoSearch_daum",
               "args": {
@@ -592,8 +583,7 @@
                   }
                 ]
               }
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -660,7 +650,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 현재 업비트 원화 마켓에는 비트코인, 이더리움 등을 포함해 총 195개의 마켓이 있습니다. 특별히 찾으시는 정보가 있으신가요?",
-          "actions": [
+          "action": 
             {
               "tool": "MarketList_upbit",
               "args": {
@@ -705,7 +695,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -716,7 +705,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, USDT 마켓에서는 BTC-USDT, ETH-USDT 등 다양한 마켓을 확인하실 수 있습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "MarketList_upbit",
               "args": {
@@ -751,7 +740,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 5,
@@ -762,7 +750,7 @@
           "turn_number": 6,
           "role": "assistant",
           "content": "네, 처음에 문의하셨던 원화(KRW) 마켓에서 시장 경고 정보를 제외한 목록입니다.",
-          "actions": [
+          "action": 
             {
               "tool": "MarketList_upbit",
               "args": {
@@ -803,8 +791,7 @@
                   }
                 ]
               }
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -866,7 +853,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "강남역 근처에 조용한 카페 몇 군데를 찾아봤어요. '스타벅스 강남R점'이 대표적이네요. 다른 곳도 알려드릴까요?",
-          "actions": [
+          "action": 
             {
               "tool": "PlaceSearch_kakao",
               "args": {
@@ -890,7 +877,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -908,7 +894,7 @@
               "usage_type": "parameter_filling"
             }
           ],
-          "actions": [
+          "action": 
             {
               "tool": "PlaceSearch_kakao",
               "args": {
@@ -932,7 +918,6 @@
                 ]
               }
             }
-          ]
         }
       ],
       "evaluation_context": {
@@ -991,7 +976,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 10월 부산에서는 '부산국제영화제'가 2025년 10월 2일부터 10월 11일까지 열릴 예정입니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1011,7 +996,6 @@
               },
               "timestamp": "2025-09-27T14:01:00Z"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1022,7 +1006,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "서울에서는 '서울세계불꽃축제'가 10월 4일에 개최됩니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1041,8 +1025,7 @@
                 ]
               },
               "timestamp": "2025-09-27T14:02:00Z"
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -1140,7 +1123,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "네, 제주도 애월 근처 맛집에 대한 실제 방문 후기 몇 개를 찾아봤어요. '애월은지금'이라는 식당이 방문객 평이 좋네요. 다른 곳도 더 찾아드릴까요?",
-          "actions": [
+          "action": 
             {
               "tool": "BlogSearch_naver",
               "args": {
@@ -1163,7 +1146,6 @@
               },
               "timestamp": "2025-09-27T10:01:00Z"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1174,7 +1156,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "물론이죠. 아까 말씀하신 애월 근처에 분위기 좋은 카페를 찾아봤어요. '오션뷰카페' 후기가 괜찮아 보이네요. 확인해보시겠어요?",
-          "actions": [
+          "action": 
             {
               "tool": "BlogSearch_naver",
               "args": {
@@ -1196,8 +1178,7 @@
                 ]
               },
               "timestamp": "2025-09-27T10:02:30Z"
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -1268,7 +1249,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "강원도 직접 재배한 나물을 사용하는 '산채향'이라는 한정식집이 있네요. 정갈한 상차림으로 방문객들의 평이 좋습니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_daum",
               "args": {
@@ -1291,7 +1272,6 @@
               },
               "timestamp": "2025-09-27T14:01:00Z"
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1302,7 +1282,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 다시 찾아보니 '강원나물밥'이라는 식당이 검색됩니다. 현대적인 인테리어와 깔끔한 맛으로 인기를 얻고 있다고 합니다.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_daum",
               "args": {
@@ -1325,8 +1305,7 @@
                 ]
               },
               "timestamp": "2025-09-27T14:02:30Z"
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,
@@ -1393,7 +1372,7 @@
           "turn_number": 2,
           "role": "assistant",
           "content": "나이가 있는 강아지는 관절 관리가 중요하죠. 10살 시츄 아이들이 먹기 좋은 관절 영양제를 찾아봤어요. '사이노퀸'이나 '안티놀' 같은 제품들이 인기가 많네요.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1417,7 +1396,6 @@
                 ]
               }
             }
-          ]
         },
         {
           "turn_number": 3,
@@ -1428,7 +1406,7 @@
           "turn_number": 4,
           "role": "assistant",
           "content": "네, 10살이면 활동량이 예전 같지 않으니 너무 딱딱하지 않은 장난감이 좋겠어요. 노령견을 위한 부드러운 바스락 봉제인형 삑삑이 장난감이나, 후각 활동을 돕는 노즈워크 담요 장난감을 추천해 드려요.",
-          "actions": [
+          "action": 
             {
               "tool": "WebSearch_naver",
               "args": {
@@ -1451,8 +1429,7 @@
                   }
                 ]
               }
-            }
-          ],
+            },
           "context_used": [
             {
               "source_turn": 1,

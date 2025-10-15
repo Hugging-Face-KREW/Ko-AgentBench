@@ -767,22 +767,20 @@
   },
   {
     "task_id": "L2-071",
-    "instruction": "2025년 10월 서울에서 하는 축제 정보를 찾아줘",
+    "instruction": "서울 가을 여행지 추천 블로그를 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
-      "FestivalSearch_kto",
+      "BlogSearch_naver",
       "NewsSearch_naver",
       "WebSearch_naver"
     ],
     "golden_action": [
       {
-        "tool": "FestivalSearch_kto",
+        "tool": "BlogSearch_naver",
         "args": {
-          "eventStartDate": "20251001",
-          "eventEndDate": "20251031",
-          "location": "서울",
-          "numOfRows": 10
+          "query": "서울 가을 여행지 추천",
+          "sort": "sim"
         }
       }
     ]
@@ -914,25 +912,22 @@
     ]
   },
   {
-    "task_id": "L2-078",
-    "instruction": "2025년 봄 시즌 제주도 축제 정보를 찾아줘",
+    "task_id": "L2-079",
+    "instruction": "제주도 봄 여행 코스 추천 블로그를 찾아줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
-      "FestivalSearch_kto",
+      "BlogSearch_naver",
       "NewsSearch_naver",
       "WebSearch_naver",
-      "BlogSearch_naver",
       "WebSearch_daum"
     ],
     "golden_action": [
       {
-        "tool": "FestivalSearch_kto",
+        "tool": "BlogSearch_naver",
         "args": {
-          "eventStartDate": "20250301",
-          "eventEndDate": "20250531",
-          "areaCode": "39",
-          "numOfRows": 10
+          "query": "제주도 봄 여행 코스 추천",
+          "sort": "sim"
         }
       }
     ]
