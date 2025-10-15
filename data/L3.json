@@ -104,44 +104,33 @@
   },
   {
     "task_id": "L3-003",
-    "instruction": "교대역 근처에서 소개팅을 할 예정입니다. 교대역 주변의 소개팅하기 좋은 레스토랑을 조사하고, 관련 후기나 데이트 팁을 알아봐주세요.",
+    "instruction": "빗썸의 KRW 마켓에 상장된 모든 암호화폐의 현재가를 조회해주세요.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
       {
         "step": 1,
-        "tool": "PlaceSearch_kakao",
+        "tool": "MarketList_bithumb",
         "args": {
-          "keyword": "교대역 소개팅 식당",
-          "size": 1
+          "isDetails": false
         }
       },
       {
         "step": 2,
-        "tool": "BlogSearch_naver",
+        "tool": "CryptoPrice_bithumb",
         "args": {
-          "query": "{places} 후기",
-          "display": 20
+          "markets": "{markets}"
         }
       }
     ],
     "minimum_steps": 2,
-    "essential_tools": [
-      "PlaceSearch_kakao",
-      "BlogSearch_naver"
-    ],
+    "essential_tools": ["MarketList_bithumb", "CryptoPrice_bithumb"],
     "data_flow": [
       {
-        "to_step": 1,
-        "to_parameter": "places",
-        "from_step": "user_input",
-        "from_output": "교대역 소개팅 식당"
-      },
-      {
         "to_step": 2,
-        "to_parameter": "item",
+        "to_parameter": "markets",
         "from_step": 1,
-        "from_output": "places"
+        "from_output": "market_list"
       }
     ]
   },
@@ -1094,38 +1083,6 @@
                   "to_parameter": "endY",
                   "from_step": 1,
                   "from_output": "places[0].latitude"
-                }
-              ]
-            },
-            {
-              "task_id": "L3-029",
-              "instruction": "빗썸의 KRW 마켓에 상장된 모든 암호화폐의 현재가를 조회해주세요.",
-              "task_level": 3,
-              "task_category": "Multi Tool Sequential",
-              "golden_action": [
-                {
-                  "step": 1,
-                  "tool": "MarketList_bithumb",
-                  "args": {
-                    "isDetails": false
-                  }
-                },
-                {
-                  "step": 2,
-                  "tool": "CryptoPrice_bithumb",
-                  "args": {
-                    "markets": "{markets}"
-                  }
-                }
-              ],
-              "minimum_steps": 2,
-              "essential_tools": ["MarketList_bithumb", "CryptoPrice_bithumb"],
-              "data_flow": [
-                {
-                  "to_step": 2,
-                  "to_parameter": "markets",
-                  "from_step": 1,
-                  "from_output": "market_list"
                 }
               ]
             }
