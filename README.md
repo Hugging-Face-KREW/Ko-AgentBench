@@ -1,5 +1,4 @@
 # Ko-AgentBench
-<img width="227" height="204" alt="스크린샷_2024-06-06_오후_11 29 04-removebg-preview" src="https://github.com/user-attachments/assets/ed666fb8-cd1d-440e-a3d0-6d574fdfd605" />
 
 
 ## 빠른 시작
