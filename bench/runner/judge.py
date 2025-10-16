@@ -1170,7 +1170,10 @@ class EffScoreMetric(Metric):
 
 #레벨7 메트릭
 class ContextRetentionMetric(Metric):
-    """ContextRetention: LLM-as-a-Judge로 과거 맥락 활용도 평가"""
+    """ContextRetention: 멀티턴 대화에서 과거 맥락 활용도
+    
+    LLM-as-a-Judge 방식으로 1-5점 평가 후 0-1 스케일로 정규화
+    """
     name = "ContextRetention"
     level = 7
     
@@ -1187,13 +1190,13 @@ class ContextRetentionMetric(Metric):
             if role == "user":
                 formatted.append(f"[턴 {i}] 사용자: {content}")
             elif role == "assistant":
-                formatted.append(f"[턴 {i}] AI: {content[:200]}{'...' if len(content) > 200 else ''}")
+                formatted.append(f"[턴 {i}] AI: {content[:500]}{'...' if len(content) > 500 else ''}")
         return "\n".join(formatted)
     
     def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
         """LLM Judge 호출"""
         if not self.llm_adapter:
-            return {"score": 0.0, "reason": "LLM adapter not available"}
+            return {"score": 0, "reason": "LLM adapter not available"}
         
         try:
             messages = [
@@ -1208,72 +1211,77 @@ class ContextRetentionMetric(Metric):
                 result = json.loads(content)
                 return result
             except json.JSONDecodeError:
-                score_match = re.search(r'"score"\s*:\s*([0-9.]+)', content)
+                score_match = re.search(r'"score"\s*:\s*([1-5])', content)
                 if score_match:
-                    return {"score": float(score_match.group(1)), "reason": "Parsed from text"}
-                return {"score": 0.0, "reason": "Failed to parse LLM response"}
+                    return {
+                        "score": int(score_match.group(1)),
+                        "reason": "Parsed from text"
+                    }
+                return {"score": 0, "reason": "Failed to parse LLM response"}
                 
         except Exception as e:
-            return {"score": 0.0, "reason": f"Error: {str(e)}"}
+            return {"score": 0, "reason": f"Error: {str(e)}"}
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        conv_preview = ctx.logs.get("conversation_preview", {})
+        conversation_log = ctx.logs.get("conversation_log", {})
         
-        if not conv_preview:
+        if not conversation_log:
             return EvaluationResult(
                 self.name,
                 0.0,
-                {"reason": "No conversation preview available"}
+                {"reason": "No conversation log available"}
             )
         
-        first_messages = conv_preview.get("first_messages", [])
-        last_messages = conv_preview.get("last_messages", [])
-        
-        if len(first_messages) < 2 or len(last_messages) < 2:
-            return EvaluationResult(
-                self.name,
-                0.0,
-                {"reason": "Not enough messages for context evaluation"}
-            )
+        messages = conversation_log.get("messages", [])
+        total_messages = conversation_log.get("total_messages", len(messages))
         
         # LLM Judge 프롬프트 구성
-        prompt = f"""다음 대화에서 AI가 이전 맥락을 적절히 유지하고 활용했는지 평가해주세요.
+        prompt = f"""대화에서 답변 생성의 맥락 유지 능력을 1-5점으로 평가하세요.
 
-대화 내용:
-{self._format_messages(first_messages + last_messages)}
+                    대화 내용:
+                    {self._format_messages(messages)}
 
-평가 기준:
-1. AI가 이전 대화의 핵심 정보를 기억하고 있는가?
-2. 사용자가 과거 맥락을 참조할 때("그때", "아까", "전에 말한") 적절히 연결했는가?
-3. 새로운 질문에 이전 정보를 고려하여 답변했는가?
-4. 불필요한 재질문 없이 맥락을 유지했는가?
+                    평가 기준:
+                    - 이전 대화 정보를 기억하고 활용하는가?
+                    - 사용자의 과거 언급을 적절히 연결하는가?
+                    - 불필요한 재질문 없이 맥락을 이어가는가?
 
-점수 기준:
-- 1.0: 모든 맥락을 완벽히 유지하고 적절히 활용
-- 0.7-0.9: 대부분의 맥락을 유지하고 활용
-- 0.4-0.6: 일부 맥락만 유지하거나 부분적으로만 활용
-- 0.1-0.3: 맥락 유지가 미흡
-- 0.0: 맥락을 전혀 유지하지 못함
+                    점수:
+                    5점: 모든 맥락 완벽 유지 및 활용
+                    4점: 대부분의 맥락 유지
+                    3점: 일부 맥락만 유지
+                    2점: 맥락 유지 미흡
+                    1점: 맥락 유지 실패
 
-JSON 형식으로만 답변해주세요:
-{{"score": 0.0-1.0, "retained": true/false, "reason": "간단한 이유"}}"""
+                    JSON 형식으로만 답변:
+                    {{"score": 1-5, "reason": "간단한 이유"}}
+                    """
 
         llm_result = self._call_llm_judge(prompt)
-        score = float(llm_result.get("score", 0.0))
+        raw_score = int(llm_result.get("score", 0))
+        
+        # 1-5점을 0-1 스케일로 정규화
+        # 1점 -> 0.0, 2점 -> 0.25, 3점 -> 0.5, 4점 -> 0.75, 5점 -> 1.0
+        normalized_score = max(0.0, (raw_score - 1) / 4.0)
         
         return EvaluationResult(
             self.name,
-            score,
+            normalized_score,
             {
-                "retained": llm_result.get("retained", score > 0.5),
-                "reason": llm_result.get("reason", "LLM evaluation"),
-                "total_messages": len(first_messages) + len(last_messages)
+                "raw_score": raw_score,
+                "normalized_score": normalized_score,
+                "reason": llm_result.get("reason", ""),
+                "total_messages": total_messages,
+                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"])
             }
         )
 
 
 class RefRecallMetric(Metric):
-    """RefRecall: LLM-as-a-Judge로 오래된 정보 회상 능력 평가"""
+    """RefRecall: 오래된 정보 회상 능력
+    
+    LLM-as-a-Judge 방식으로 1-5점 평가 후 0-1 스케일로 정규화
+    """
     name = "RefRecall"
     level = 7
     
@@ -1290,13 +1298,13 @@ class RefRecallMetric(Metric):
             if role == "user":
                 formatted.append(f"[턴 {i}] 사용자: {content}")
             elif role == "assistant":
-                formatted.append(f"[턴 {i}] AI: {content[:200]}{'...' if len(content) > 200 else ''}")
+                formatted.append(f"[턴 {i}] AI: {content[:500]}{'...' if len(content) > 500 else ''}")
         return "\n".join(formatted)
     
     def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
         """LLM Judge 호출"""
         if not self.llm_adapter:
-            return {"score": 0.0, "reason": "LLM adapter not available"}
+            return {"score": 0, "reason": "LLM adapter not available"}
         
         try:
             messages = [
@@ -1311,71 +1319,66 @@ class RefRecallMetric(Metric):
                 result = json.loads(content)
                 return result
             except json.JSONDecodeError:
-                score_match = re.search(r'"score"\s*:\s*([0-9.]+)', content)
+                score_match = re.search(r'"score"\s*:\s*([1-5])', content)
                 if score_match:
-                    return {"score": float(score_match.group(1)), "reason": "Parsed from text"}
-                return {"score": 0.0, "reason": "Failed to parse LLM response"}
+                    return {
+                        "score": int(score_match.group(1)),
+                        "reason": "Parsed from text"
+                    }
+                return {"score": 0, "reason": "Failed to parse LLM response"}
                 
         except Exception as e:
-            return {"score": 0.0, "reason": f"Error: {str(e)}"}
+            return {"score": 0, "reason": f"Error: {str(e)}"}
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        conv_preview = ctx.logs.get("conversation_preview", {})
+        conversation_log = ctx.logs.get("conversation_log", {})
         
-        if not conv_preview:
+        if not conversation_log:
             return EvaluationResult(
                 self.name,
                 0.0,
-                {"reason": "No conversation preview available"}
+                {"reason": "No conversation log available"}
             )
         
-        first_messages = conv_preview.get("first_messages", [])
-        last_messages = conv_preview.get("last_messages", [])
-        total_messages = conv_preview.get("total_messages", len(first_messages) + len(last_messages))
-        
-        if len(first_messages) < 2 or len(last_messages) < 2:
-            return EvaluationResult(
-                self.name,
-                0.0,
-                {"reason": "Not enough messages for recall evaluation"}
-            )
+        messages = conversation_log.get("messages", [])
+        total_messages = conversation_log.get("total_messages", len(messages))
         
         # LLM Judge 프롬프트 구성
-        prompt = f"""다음 대화에서 AI가 오래된 정보를 정확히 회상하고 활용했는지 평가해주세요.
+        prompt = f"""대화에서 답변의 과거 정보 회상 능력을 1-5점으로 평가하세요.
 
-대화 내용 (총 {total_messages}개 메시지 중 일부):
-{self._format_messages(first_messages + last_messages)}
+                    대화:
+                    {self._format_messages(messages)}
 
-평가 기준:
-1. 초반 대화의 구체적 정보(숫자, 이름, 특징 등)를 나중에도 정확히 기억하는가?
-2. 시간이 지난 후에도 이전 정보를 정확하게 참조하는가?
-3. 여러 턴이 지난 후에도 맥락의 연속성을 유지하는가?
-4. 혼동 없이 정확한 정보를 회상하는가?
+                    평가 기준:
+                    - 초반 대화의 구체적 정보를 나중에도 정확히 기억하는가?
+                    - 시간이 지나도 이전 정보를 정확히 참조하는가?
+                    - 여러 턴 후에도 맥락 연속성을 유지하는가?
 
-점수 기준:
-- 1.0: 모든 과거 정보를 정확히 회상
-- 0.7-0.9: 대부분의 정보를 정확히 회상
-- 0.4-0.6: 일부 정보만 회상하거나 부분적으로 정확
-- 0.1-0.3: 회상이 부정확하거나 미흡
-- 0.0: 과거 정보를 전혀 회상하지 못함
+                    점수:
+                    5점: 모든 과거 정보 정확히 회상
+                    4점: 대부분의 정보 정확히 회상
+                    3점: 일부 정보만 회상
+                    2점: 회상이 부정확하거나 미흡
+                    1점: 과거 정보 회상 실패
 
-JSON 형식으로만 답변해주세요:
-{{"score": 0.0-1.0, "recalled": true/false, "reason": "간단한 이유"}}"""
+                    JSON 형식으로만 답변:
+                    {{"score": 1-5, "reason": "간단한 이유"}}"""
 
         llm_result = self._call_llm_judge(prompt)
-        score = float(llm_result.get("score", 0.0))
+        raw_score = int(llm_result.get("score", 0))
+        normalized_score = max(0.0, (raw_score - 1) / 4.0)
         
         return EvaluationResult(
             self.name,
-            score,
+            normalized_score,
             {
-                "recalled": llm_result.get("recalled", score > 0.5),
-                "reason": llm_result.get("reason", "LLM evaluation"),
+                "raw_score": raw_score,
+                "normalized_score": normalized_score,
+                "reason": llm_result.get("reason", ""),
                 "total_messages": total_messages,
-                "evaluated_messages": len(first_messages) + len(last_messages)
+                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"])
             }
         )
-    
 
 
 # 메트릭 레지스트리
