@@ -8,7 +8,7 @@
       {
         "tool": "ItemSearch_aladin",
         "args": {
-          "Query": "파이썬으로 배우는 알고리즘 트레이딩"
+          "query": "파이썬으로 배우는 알고리즘 트레이딩"
         }
       },
       {
@@ -17,8 +17,8 @@
       {
         "tool": "ItemSearch_aladin",
         "args": {
-          "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-          "Sort": "SalesPoint"
+          "query": "파이썬으로 배우는 알고리즘 트레이딩",
+          "sort": "SalesPoint"
         }
       },
       {
@@ -42,7 +42,7 @@
           "action": {
               "tool": "ItemSearch_aladin",
               "args": {
-                "Query": "파이썬으로 배우는 알고리즘 트레이딩"
+                "query": "파이썬으로 배우는 알고리즘 트레이딩"
               },
               "result": {
                 "totalResults": 1,
@@ -106,7 +106,7 @@
               "tool": "ItemSearch_aladin",
               "args": {
                 "Query": "파이썬으로 배우는 알고리즘 트레이딩",
-                "Sort": "SalesPoint"
+                "sort": "SalesPoint"
               },
               "result": {
                 "totalResults": 1,
@@ -150,7 +150,7 @@
               "context_used": [
             {
               "source_turn": 6,
-              "info": "item search result for '파이썬으로 배우는 알고리즘 트레이딩' sorted by 'SalesPoint'",
+              "info": "'파이썬으로 배우는 알고리즘 트레이딩' 판매량순 정렬 결과",
               "usage_type": "direct_reference"
             }
             ]
@@ -198,7 +198,7 @@
         {
           "turn_number": 2,
           "role": "assistant",
-          "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
+          "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표",
           "action": 
             {
               "tool": "NewsSearch_naver",
@@ -247,13 +247,13 @@
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야.\n1. 차세대 AI 반도체 개발 동향\n2. 국내 기업, 3나노 공정 수율 안정화 성공\n3. 정부, 시스템 반도체 육성 전략 발표",
+          "content": "응, 방금 찾아준 반도체 기술 관련 뉴스 목록이야. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표",
           "action": 
             {
               "context_used": [
             {
               "source_turn": 2,
-              "info": "NewsSearch_naver(query='반도체 기술', display=3, sort='date')",
+              "info": "'반도체 기술' 검색 결과",
               "usage_type": "direct_reference"
             }
           ]
@@ -378,7 +378,7 @@
               "context_used": [
             {
               "source_turn": 2,
-              "info": "VideoSearch_daum(query='뉴진스', sort='recency', size=2)",
+              "info": "'뉴진스' 최신 영상 2개 검색 결과",
               "usage_type": "direct_reference"
             }
           ]
@@ -487,7 +487,7 @@
               "context_used": [
             {
               "source_turn": 2,
-              "info": "PlaceSearch_kakao(keyword='시흥시청 맛집') result",
+              "info": "'시흥시청 맛집' 검색 결과",
               "usage_type": "direct_reference"
             }
           ]
@@ -603,7 +603,7 @@
               "context_used": [
               {
               "source_turn": 2,
-              "info": "WebSearch_naver(query='2025년 9월 부산 축제') result",
+              "info": "'2025년 9월 부산 축제' 검색 결과",
               "usage_type": "direct_reference"
               }
             ]
@@ -716,7 +716,7 @@
               "context_used": [
               {
                 "source_turn": 2,
-                "info": "BlogSearch_naver(query='겨울 제주도 여행 코스') result",
+                "info": "'겨울 제주도 여행 코스' 검색 결과",
                 "usage_type": "direct_reference"
               }
             ]
@@ -832,7 +832,7 @@
               "context_used": [
               {
                 "source_turn": 2,
-                "info": "WebSearch_daum(query='AI 기술 최신 동향') result",
+                "info": "'AI 기술 최신 동향' 검색 결과",
                 "usage_type": "direct_reference"
               }
               ]
@@ -945,7 +945,7 @@
               "context_used": [
               {
                 "source_turn": 2,
-                "info": "WebSearch_naver(query='기후 변화 원인') result",
+                "info": "'기후 변화 원인' 검색 결과",
                 "usage_type": "direct_reference"
               }
               ]
@@ -1081,7 +1081,7 @@
               "context_used": [
               {
                 "source_turn": 2,
-                "info": "MarketList_upbit(quote='KRW') result",
+                "info": "'업비트 원화 마켓 목록' 검색 결과",
                 "usage_type": "direct_reference"
               }
               ]
@@ -1095,7 +1095,7 @@
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "네, 비트코인(BTC) 마켓에는 이더리움(ETH), 리플(XRP), 이오스(EOS) 등 총 80개의 암호화폐가 거래되고 있습니다.",
+          "content": "네, 비트코인(BTC) 마켓에는 이더리움(ETH), 리플(XRP), 이오스(EOS) 등의 암호화폐가 거래되고 있습니다.",
           "action": 
             {
               "tool": "MarketList_upbit",
@@ -1156,8 +1156,7 @@
         "tool": "StockChart_kis",
         "args": {
           "symbol": "005930",
-          "period": "W",
-          "date": "20250926"
+          "period": "W"
         }
       },
       {
@@ -1167,8 +1166,7 @@
         "tool": "StockChart_kis",
         "args": {
           "symbol": "000660",
-          "period": "W",
-          "date": "20250926"
+          "period": "W"
         }
       }
     ],
@@ -1180,19 +1178,18 @@
         {
           "turn_number": 1,
           "role": "user",
-          "content": "9월 넷째 주 삼성전자 주봉 데이터 알려줘."
+          "content": "삼성전자 주봉 데이터 알려줘."
         },
         {
           "turn_number": 2,
           "role": "assistant",
-          "content": "네, 9월 넷째 주 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다.",
+          "content": "네, 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다.",
           "action": 
             {
               "tool": "StockChart_kis",
               "args": {
                 "symbol": "005930",
-                "period": "W",
-                "date": "20250926"
+                "period": "W"
               },
               "result": {
                 "symbol": "005930",
@@ -1221,13 +1218,13 @@
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "네, 9월 넷째 주 삼성전자 주봉 종가는 81,200원이었습니다.",
+          "content": "네, 삼성전자(005930)의 주봉 종가는 81,200원이었습니다.",
           "action": 
             {
               "context_used": [
               {
                 "source_turn": 2,
-                "info": "StockChart_kis(symbol='005930', period='W') result",
+                "info": "'삼성전자(005930) 주봉 데이터' 검색 결과",
                 "usage_type": "direct_reference"
               }
             ]
@@ -1236,19 +1233,18 @@
         {
           "turn_number": 5,
           "role": "user",
-          "content": "그럼 같은 주 SK하이닉스 주봉은 어땠어?"
+          "content": "그럼 SK하이닉스 주봉은 어땠어?"
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "네, 9월 넷째 주 SK하이닉스(000660)의 주봉 종가는 235,000원이었습니다.",
+          "content": "네, SK하이닉스(000660)의 주봉 종가는 235,000원이었습니다.",
           "action": 
             {
               "tool": "StockChart_kis",
               "args": {
                 "symbol": "000660",
-                "period": "W",
-                "date": "20250926"
+                "period": "W"
               },
               "result": {
                 "symbol": "000660",
@@ -1281,7 +1277,7 @@
     {
       "tool": "ItemSearch_aladin",
       "args": {
-        "Query": "클린 아키텍처"
+        "query": "클린 아키텍처"
       }
     },
     {
@@ -1291,7 +1287,7 @@
   "minimum_calls": 1,
   "freshness_threshold": "24h",
   "conversation_tracking": {
-    "conversation_id": "cln-arch-conv-004",
+    "conversation_id": "conv-KO-AGENT-L6-011",
     "turns": [
       {
         "turn_number": 1,
@@ -1306,7 +1302,7 @@
           {
             "tool": "ItemSearch_aladin",
             "args": {
-              "Query": "클린 아키텍처"
+              "query": "클린 아키텍처"
             },
             "result": {
               "totalResults": 4,
@@ -1379,12 +1375,12 @@
       {
         "turn_number": 4,
         "role": "assistant",
-        "content": "기존 검색 결과를 판매량 순으로 다시 정렬했습니다.\n\n1.  **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (판매지수: 4533)\n2.  **만들면서 배우는 클린 아키텍처** (판매지수: 836)\n3.  **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (판매지수: 821)\n4.  **아키텍처를 알아야 앱 개발이 보인다** (판매지수: 203)",
+        "content": "기존 검색 결과를 판매량 순으로 다시 정렬했습니다. 1.  **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (판매지수: 4533) 2.  **만들면서 배우는 클린 아키텍처** (판매지수: 836) 3.  **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (판매지수: 821) 4.  **아키텍처를 알아야 앱 개발이 보인다** (판매지수: 203)",
         "action": {
           "context_used": [
           {
             "source_turn": 2,
-            "info": "클린 아키텍처 도서 검색 결과",
+            "info": "'클린 아키텍처' 도서 검색 결과",
             "usage_type": "direct_reference"
           }
           ]
@@ -1394,7 +1390,7 @@
   }
   },
   {
-  "task_id": "KO-AGENT-L6-001",
+  "task_id": "KO-AGENT-L6-012",
   "instruction": "아이유 콘서트 최신 직캠 영상 하나만 찾아줘.",
   "task_level": 6,
   "task_category": "Efficiency",
@@ -1414,7 +1410,7 @@
   "minimum_calls": 1,
   "freshness_threshold": "10m",
   "conversation_tracking": {
-    "conversation_id": "iu-concert-fancam-001",
+    "conversation_id": "conv-KO-AGENT-L6-012",
     "turns": [
       {
         "turn_number": 1,
@@ -1497,7 +1493,7 @@
   "minimum_calls": 1,
   "freshness_threshold": "30m",
   "conversation_tracking": {
-    "conversation_id": "hair-trend-conv-001",
+    "conversation_id": "conv-KO-AGENT-L6-013",
     "turns": [
       {
         "turn_number": 1,
@@ -1575,7 +1571,7 @@
       {
         "turn_number": 4,
         "role": "assistant",
-        "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천",
+        "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다. 1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일... 2. 2024년 인기 헤어 스타일링 트렌드 총정리 3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기 4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택 5. 2024년 봄 필수 트렌드 헤어스타일 추천",
         "action": {
           "context_used": [
           {
@@ -1591,7 +1587,7 @@
   },
   {
   "task_id": "KO-AGENT-L6-014",
-  "instruction": "SK하이닉스 주봉 차트 최근 5주치 보여줘.",
+  "instruction": "SK하이닉스 주봉 차트 5주치 보여줘.",
   "task_level": 6,
   "task_category": "Efficiency",
   "golden_action": [
@@ -1610,17 +1606,17 @@
   "minimum_calls": 1,
   "freshness_threshold": "1d",
   "conversation_tracking": {
-    "conversation_id": "sk-hynix-chart-002",
+    "conversation_id": "conv-KO-AGENT-L6-014",
     "turns": [
       {
         "turn_number": 1,
         "role": "user",
-        "content": "SK하이닉스 주봉 차트 최근 5주치 보여줘."
+        "content": "SK하이닉스 주봉 차트 5주치 보여줘."
       },
       {
         "turn_number": 2,
         "role": "assistant",
-        "content": "SK하이닉스의 최근 5주간 주봉 차트 데이터입니다.\n- 2025년 10월 13일 (종가: 415,000원)\n- 2025년 10월 10일 (종가: 428,000원)\n- 2025년 9월 29일 (종가: 395,500원)\n- 2025년 9월 22일 (종가: 336,500원)\n- 2025년 9월 15일 (종가: 353,000원)",
+        "content": "SK하이닉스의 5주간 주봉 차트 데이터입니다. 2025년 10월 13일 (종가: 415,000원) 2025년 10월 10일 (종가: 428,000원) 2025년 9월 29일 (종가: 395,500원) 2025년 9월 22일 (종가: 336,500원) 2025년 9월 15일 (종가: 353,000원)",
         "action": 
           {
             "tool": "StockChart_kis",
@@ -1693,7 +1689,7 @@
           "context_used": [
           {
             "source_turn": 2,
-            "info": "하이닉스 주봉 차트 최근 5주치 검색 결과",
+            "info": "'SK하이닉스 주봉 차트 5주치' 검색 결과",
             "usage_type": "direct_reference"
           }
           ]
@@ -1721,7 +1717,7 @@
   "minimum_calls": 1,
   "freshness_threshold": "1h",
   "conversation_tracking": {
-    "conversation_id": "gangnam-cafe-search-001",
+    "conversation_id": "conv-KO-AGENT-L6-015",
     "turns": [
       {
         "turn_number": 1,
@@ -1795,7 +1791,7 @@
           "context_used": [
           {
             "source_turn": 2,
-            "info": "강남역 카페 검색 결과",
+            "info": "'강남역 디저트 카페' 검색 결과",
             "usage_type": "direct_reference"
           }
         ]
