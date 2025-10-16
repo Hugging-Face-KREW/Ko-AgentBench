@@ -893,10 +893,10 @@ class ReuseRateMetric(Metric):
         golden_action = ctx.task_schema.get("golden_action", [])
         action_trace = ctx.action_trace
         
-        # 재사용 기회: golden_action에서 "reuse" 도구의 개수
+        # 재사용 기회: golden_action에서 "action": "context_used" 카운트
         reuse_opportunities = sum(
             1 for action in golden_action 
-            if action.get("tool") == "reuse"
+            if isinstance(action, dict) and action.get("action") == "context_used"
         )
         
         if reuse_opportunities == 0:
@@ -907,39 +907,91 @@ class ReuseRateMetric(Metric):
             )
         
         # 실제 재사용 판단: 동일한 도구를 동일한 파라미터로 재호출하지 않은 경우
-        # 유니크한 (tool_name, args) 조합 개수와 전체 호출 개수 비교
-        tool_call_signatures = []
+        # golden_action에서 context_used 이전의 도구 호출과 이후 상황 비교
+        
+        # golden_action의 실제 도구 호출 순서 파악
+        golden_tools = []
+        for i, action in enumerate(golden_action):
+            if isinstance(action, dict):
+                if "tool" in action and action.get("tool"):
+                    golden_tools.append({
+                        "index": i,
+                        "tool": action.get("tool"),
+                        "args": action.get("args", {})
+                    })
+                elif action.get("action") == "context_used":
+                    golden_tools.append({
+                        "index": i,
+                        "action": "context_used"
+                    })
+        
+        # 실제 호출된 도구들의 시그니처 생성
+        actual_signatures = []
         for action in action_trace:
             if action.get("success"):
                 signature = (
                     action.get("tool"),
                     json.dumps(action.get("args", {}), sort_keys=True)
                 )
-                tool_call_signatures.append(signature)
+                actual_signatures.append(signature)
         
-        unique_calls = len(set(tool_call_signatures))
+        # 재사용 판단
+        # context_used가 나타나는 위치에서 이전 호출이 재사용되었는지 확인
+        reused = 0
         
-        # 재사용된 횟수 = 전체 호출 - 유니크 호출
-        golden_unique_tools = set()
-        for action in golden_action:
-            tool = action.get("tool")
-            if tool != "reuse":
-                golden_unique_tools.add(tool)
-        
-        expected_unique_calls = len(golden_unique_tools)
-
-        # 실제 재사용 비율 계산
-        if expected_unique_calls == 0:
-            reused = 0
-        else:
-            # 재사용했다면 unique_calls == expected_unique_calls
-            # 재사용 안했다면 unique_calls > expected_unique_calls
-            if unique_calls <= expected_unique_calls:
-                reused = reuse_opportunities
-            else:
-                # 부분적으로 재사용
-                excess_calls = unique_calls - expected_unique_calls
-                reused = max(0, reuse_opportunities - excess_calls)
+        for i, golden_item in enumerate(golden_tools):
+            if golden_item.get("action") == "context_used":
+                # 이전 golden 도구 호출 찾기
+                prev_tool_index = None
+                for j in range(i-1, -1, -1):
+                    if "tool" in golden_tools[j]:
+                        prev_tool_index = j
+                        break
+                
+                if prev_tool_index is not None:
+                    prev_golden = golden_tools[prev_tool_index]
+                    prev_signature = (
+                        prev_golden["tool"],
+                        json.dumps(prev_golden["args"], sort_keys=True)
+                    )
+                    
+                    # 실제 호출에서 이 시그니처가 한 번만 나타났는지 확인
+                    # (재사용했다면 중복 호출이 없어야 함)
+                    signature_count = actual_signatures.count(prev_signature)
+                    
+                    # 다음 golden 도구가 있는지 확인
+                    next_tool_index = None
+                    for j in range(i+1, len(golden_tools)):
+                        if "tool" in golden_tools[j]:
+                            next_tool_index = j
+                            break
+                    
+                    if next_tool_index is not None:
+                        next_golden = golden_tools[next_tool_index]
+                        next_signature = (
+                            next_golden["tool"],
+                            json.dumps(next_golden["args"], sort_keys=True)
+                        )
+                        
+                        # 이전 도구와 다음 도구의 호출 위치 확인
+                        try:
+                            prev_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == prev_signature]
+                            next_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == next_signature]
+                            
+                            # context_used 위치에서 실제로 재호출 없이 진행되었는지 확인
+                            # 이전 호출과 다음 호출 사이에 동일한 이전 호출이 없어야 함
+                            if prev_call_indices and next_call_indices:
+                                # 가장 마지막 prev 호출과 첫 번째 next 호출 사이에
+                                # 추가 prev 호출이 없으면 재사용한 것
+                                last_prev_idx = max(prev_call_indices)
+                                first_next_idx = min([idx for idx in next_call_indices if idx > last_prev_idx], default=None)
+                                
+                                if first_next_idx is not None:
+                                    between_calls = actual_signatures[last_prev_idx+1:first_next_idx]
+                                    if prev_signature not in between_calls:
+                                        reused += 1
+                        except (ValueError, TypeError):
+                            pass
         
         score = reused / reuse_opportunities if reuse_opportunities > 0 else 0.0
         
@@ -949,8 +1001,8 @@ class ReuseRateMetric(Metric):
             {
                 "reuse_opportunities": reuse_opportunities,
                 "reused": reused,
-                "unique_calls": unique_calls,
-                "expected_unique_calls": expected_unique_calls
+                "total_actual_calls": len(actual_signatures),
+                "golden_tools": [g.get("tool") for g in golden_tools if "tool" in g]
             }
         )
 
@@ -964,10 +1016,10 @@ class RedundantCallRateMetric(Metric):
         golden_action = ctx.task_schema.get("golden_action", [])
         action_trace = ctx.action_trace
         
-        # 재사용 기회: golden_action에서 "reuse" 도구의 개수
+        # 재사용 기회: golden_action에서 "action": "context_used" 카운트
         reuse_opportunities = sum(
             1 for action in golden_action 
-            if action.get("tool") == "reuse"
+            if isinstance(action, dict) and action.get("action") == "context_used"
         )
         
         if reuse_opportunities == 0:
@@ -999,29 +1051,95 @@ class RedundantCallRateMetric(Metric):
             score,
             {
                 "reuse_opportunities": reuse_opportunities,
-                "redundant_calls": redundant_calls
+                "redundant_calls": redundant_calls,
+                "total_calls": len(action_trace),
+                "unique_calls": len(tool_call_signatures)
             }
         )
 
 
 class EffScoreMetric(Metric):
-    """EffScore: 성공 시 최소 호출 수 대비 실제 호출 수의 효율"""
+    """EffScore: 성공 시 최소 호출 수 대비 실제 호출 수의 효율
+    LLM-as-a-Judge 방식으로 태스크 성공 여부 판단
+    """
     name = "EffScore"
     level = 6
     
+    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
+        self.llm_adapter = llm_adapter
+    
+    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
+        """LLM Judge 호출"""
+        try:
+            messages = [
+                {"role": "system", "content": "You are an expert evaluator for task completion. Always respond in valid JSON format."},
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            try:
+                result = json.loads(content)
+                return result
+            except json.JSONDecodeError:
+                success_match = re.search(r'"success"\s*:\s*(true|false)', content.lower())
+                if success_match:
+                    return {
+                        "success": success_match.group(1) == "true",
+                        "reason": "Parsed from text"
+                    }
+                return {"success": False, "reason": "Failed to parse LLM response"}
+                
+        except Exception as e:
+            return {"success": False, "reason": f"Error: {str(e)}"}
+    
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        success = ctx.logs.get("success", False)
-        actual_calls = len(ctx.action_trace)
+        query = ctx.task_schema.get("instruction", "")
+        final_answer = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
         
+        tool_calls = []
+        for action in ctx.action_trace:
+            tool_calls.append({
+                "tool": action.get("tool"),
+                "args": action.get("args", {}),
+                "success": action.get("success", False)
+            })
+        
+        # LLM Judge 프롬프트
+        prompt = f"""사용자의 요청을 기반으로 최종답변이 성공적으로 생성되었는지 판단해주세요.
+
+                    사용자 요청: {query}
+
+                    최종 답변: {final_answer}
+
+                    수행한 도구: {json.dumps(tool_calls, ensure_ascii=False, indent=2)}
+
+                    판단 기준:
+                    - 사용자의 요청을 정확히 이해하고 완료했는가?
+                    - 필요한 정보를 모두 제공했는가?
+                    - 도구를 적절히 활용했는가?
+
+                    JSON 형식으로만 답변:
+                    {{"success": true/false, "reason": "간단한 이유"}}
+                    """
+
+        llm_result = self._call_llm_judge(prompt)
+        success = llm_result.get("success", False)
+        
+        actual_calls = len(ctx.action_trace)
         minimum_calls = ctx.task_schema.get("minimum_calls")
         
         if minimum_calls is None:
+            # golden_action에서 실제 tool 호출만 카운트 (context_used 제외)
             golden_action = ctx.task_schema.get("golden_action", [])
             unique_tools = set()
             for action in golden_action:
-                tool = action.get("tool")
-                if tool != "reuse":
-                    unique_tools.add(tool)
+                if isinstance(action, dict):
+                    tool = action.get("tool")
+                    if tool:  # tool이 있는 경우만 (context_used는 제외)
+                        args_str = json.dumps(action.get("args", {}), sort_keys=True)
+                        unique_tools.add((tool, args_str))
             minimum_calls = len(unique_tools) if unique_tools else 1
         
         if not success or actual_calls <= 0:
@@ -1031,7 +1149,8 @@ class EffScoreMetric(Metric):
                 {
                     "success": success,
                     "actual_calls": actual_calls,
-                    "minimum_calls": minimum_calls
+                    "minimum_calls": minimum_calls,
+                    "llm_reason": llm_result.get("reason", "")
                 }
             )
         
@@ -1043,7 +1162,9 @@ class EffScoreMetric(Metric):
             {
                 "success": success,
                 "actual_calls": actual_calls,
-                "minimum_calls": minimum_calls
+                "minimum_calls": minimum_calls,
+                "efficiency": score,
+                "llm_reason": llm_result.get("reason", ""ㄴ)
             }
         )
 
