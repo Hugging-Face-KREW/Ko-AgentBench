@@ -206,11 +206,9 @@
             {
               "tool": "ItemSearch_aladin",
               "args": {
-                "Query": "어린이 베스트셀러",
-                "QueryType": "Keyword",
-                "SearchTarget": "Book",
-                "Sort": "SalesPoint",
-                "CategoryId": 170
+                "query": "어린이 베스트셀러",
+                "query_type": "Keyword",
+                "sort": "SalesPoint"
               },
               "result": {
                 "totalResults": 50,
@@ -251,21 +249,18 @@
         {
           "turn_number": 5,
           "role": "user",
-          "content": "흠... 역시 제가 아까 말했던 작가의 책으로 찾아봐야겠어요. 조카가 좋아할 만한 걸로요. 재고 있는 것만 보여주세요."
+          "content": "흠... 역시 제가 아까 말했던 작가의 책으로 찾아봐야겠어요."
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "네, 이전에 말씀하신 매트 헤이그 작가의 어린이 도서 중 현재 구매 가능한 책은 '크리스마스를 구한 소녀'가 있습니다.",
+          "content": "네, 이전에 말씀하신 매트 헤이그 작가의 도서에는 '크리스마스를 구한 소녀'가 있습니다.",
           "action": 
             {
               "tool": "ItemSearch_aladin",
               "args": {
-                "Query": "매트 헤이그",
-                "QueryType": "Author",
-                "SearchTarget": "Book",
-                "CategoryId": 170,
-                "outofStockFilter": 1
+                "query": "매트 헤이그",
+                "query_type": "Author"
               },
               "result": {
                 "totalResults": 1,
@@ -297,7 +292,7 @@
             },
             {
               "source_turn": 1,
-              "info": "선물 대상: 초등학생 조카 (어린이 도서 카테고리 선택으로 이어짐)",
+              "info": "선물 대상: 초등학생 조카",
               "usage_type": "parameter_filling"
             }
           ]
@@ -309,24 +304,18 @@
             "turn": 1,
             "info": "선호 작가: 매트 헤이그",
             "type": "preference"
-          },
-          {
-            "turn": 1,
-            "info": "선물 대상: 초등학생 조카",
-            "type": "constraint"
           }
         ],
         "context_tests": [
           {
             "turn": 5,
-            "should_remember": "turn 1에서 언급된 선호 작가 '매트 헤이그'와 선물 대상 '초등학생 조카'를 모두 기억하고 API 파라미터에 반영해야 한다.",
-            "trigger": "아까 말했던 작가의 책으로 찾아봐야겠어요. 조카가 좋아할 만한 걸로요.",
+            "should_remember": "turn 1에서 언급된 선호 작가 '매트 헤이그'를 API 파라미터에 반영해야 한다.",
+            "trigger": "아까 말했던 작가의 책으로 찾아봐야겠어요.",
             "expected_action": {
               "tool": "ItemSearch_aladin",
               "args": {
-                "Query": "매트 헤이그",
-                "QueryType": "Author",
-                "CategoryId": 170
+                "query": "매트 헤이그",
+                "query_type": "Author"
               }
             }
           }
@@ -339,14 +328,7 @@
         "info": "선호 작가: 매트 헤이그",
         "test_turn": 5,
         "time_distance": 4,
-        "trigger": "아까 말했던 작가의 책"
-      },
-      {
-        "plant_turn": 1,
-        "info": "선물 대상: 초등학생 조카",
-        "test_turn": 5,
-        "time_distance": 4,
-        "trigger": "조카가 좋아할 만한 걸로요"
+        "trigger": "아까 말했던 작가의 책으로"
       }
     ]
   },
@@ -668,29 +650,17 @@
                   {
                     "market": "KRW-BTC",
                     "korean_name": "비트코인",
-                    "english_name": "Bitcoin",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Bitcoin"
                   },
                   {
                     "market": "KRW-ETH",
                     "korean_name": "이더리움",
-                    "english_name": "Ethereum",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Ethereum"
                   },
                   {
                     "market": "KRW-XRP",
                     "korean_name": "리플",
-                    "english_name": "Ripple",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Ripple"
                   }
                 ]
               }
@@ -722,20 +692,12 @@
                   {
                     "market": "USDT-BTC",
                     "korean_name": "비트코인",
-                    "english_name": "Bitcoin",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Bitcoin"
                   },
                   {
                     "market": "USDT-ETH",
                     "korean_name": "이더리움",
-                    "english_name": "Ethereum",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Ethereum"
                   }
                 ]
               }
@@ -744,12 +706,12 @@
         {
           "turn_number": 5,
           "role": "user",
-          "content": "처음에 말했던 마켓 기준으로, 경고 딱지 붙은 종목은 빼고 다시 알려주세요."
+          "content": "처음에 말했던 마켓 기준으로, 이벤트 마켓 제외하고 다시 알려주세요."
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "네, 처음에 문의하셨던 원화(KRW) 마켓에서 시장 경고 정보를 제외한 목록입니다.",
+          "content": "네, 처음에 문의하셨던 원화(KRW) 마켓에서 이벤트 마켓을 제외한 목록입니다.",
           "action": 
             {
               "tool": "MarketList_upbit",
@@ -774,20 +736,12 @@
                   {
                     "market": "KRW-ETH",
                     "korean_name": "이더리움",
-                    "english_name": "Ethereum",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Ethereum"
                   },
                   {
                     "market": "KRW-XRP",
                     "korean_name": "리플",
-                    "english_name": "Ripple",
-                    "market_event": {
-                      "warning": false,
-                      "caution": false
-                    }
+                    "english_name": "Ripple"
                   }
                 ]
               }
@@ -812,7 +766,7 @@
         "context_tests": [
           {
             "turn": 5,
-            "should_remember": "The user's preferred quote currency is KRW, which was mentioned in turn 1.",
+            "should_remember": "사용자가 선호하는 화폐 종류는 KRW입니다.",
             "trigger": "처음 말했던 마켓 기준으로",
             "expected_action": {
               "tool": "MarketList_upbit",
@@ -1400,7 +1354,7 @@
         {
           "turn_number": 3,
           "role": "user",
-          "content": "감사합니다. 혹시 그때 말했던 우리 애기 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?"
+          "content": "감사합니다. 혹시 아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?"
         },
         {
           "turn_number": 4,
@@ -1450,8 +1404,8 @@
         "context_tests": [
           {
             "turn": 4,
-            "should_remember": "사용자의 반려동물이 10살 된 시츄라는 사실",
-            "trigger": "그때 말했던 우리 애기 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?",
+            "should_remember": "사용자의 강아지가 10살 시츄인 사실",
+            "trigger": "아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?",
             "expected_action": {
               "tool": "WebSearch_naver",
               "args": {
@@ -1465,10 +1419,10 @@
     "long_term_tests": [
       {
         "plant_turn": 1,
-        "info": "사용자의 반려동물은 10살 된 시츄 강아지다.",
+        "info": "사용자의 강아지가 10살 시츄 강아지다.",
         "test_turn": 4,
         "time_distance": 3,
-        "trigger": "그때 말했던 우리 애기 장난감"
+        "trigger": "아까 말했던 우리 강아지 장난감도"
       }
     ]
   }
