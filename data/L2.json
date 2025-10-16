@@ -231,30 +231,7 @@
       {
         "tool": "OrderBook_bithumb",
         "args": {
-          "currency": "ETH",
-          "payment_currency": "KRW"
-        }
-      }
-    ]
-  },
-  {
-    "task_id": "L2-013",
-    "instruction": "반도체 업종 전체 시세를 확인하고 싶어",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "SectorStock_ls",
-      "StockSearch_ls",
-      "MarketIndex_ls",
-      "NewsSearch_naver",
-      "WebSearch_naver"
-    ],
-    "golden_action": [
-      {
-        "tool": "SectorStock_ls",
-        "args": {
-          "sector_code": "WI26",
-          "market": "KOSPI"
+          "markets": "KRW-ETH"
         }
       }
     ]
@@ -275,8 +252,7 @@
       {
         "tool": "MarketIndex_ls",
         "args": {
-          "index_code": "KOSDAQ",
-          "type": "current"
+          "jisu": "KOSDAQ"
         }
       }
     ]
@@ -297,7 +273,7 @@
       {
         "tool": "StockChart_kis",
         "args": {
-          "stock_code": "035420",
+          "symbol": "035420",
           "period": "D",
           "count": 30
         }
@@ -320,8 +296,10 @@
       {
         "tool": "CryptoCandle_upbit",
         "args": {
-          "market": "KRW-XRP",
-          "interval": "minutes/60",
+          "symbol": "XRP",
+          "quote": "KRW",
+          "candle_type": "minutes",
+          "unit": 60,
           "count": 24
         }
       }
@@ -343,8 +321,7 @@
       {
         "tool": "StockTrades_ls",
         "args": {
-          "stock_code": "035720",
-          "count": 30
+          "shcode": "035720"
         }
       }
     ]
@@ -365,9 +342,9 @@
       {
         "tool": "CategorySearch_kakao",
         "args": {
-          "category_group_code": "CE7",
-          "x": "127.027621",
-          "y": "37.498095",
+          "category": "CE7",
+          "x": 127.027621,
+          "y": 37.498095,
           "radius": 500
         }
       }
@@ -375,7 +352,7 @@
   },
   {
     "task_id": "L2-021",
-    "instruction": "광화문에서 경복궁까지 걸어가는 길 안내해줘",
+    "instruction": "광화문(126.9769, 37.5759)에서 경복궁(126.9786, 37.5796)까지 걸어가는 길 안내해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -383,15 +360,16 @@
       "CarRoute_tmap",
       "Directions_naver",
       "PlaceSearch_kakao",
-      "convert_coord_to_address"
+      "CoordToAddress_kakao"
     ],
     "golden_action": [
       {
         "tool": "WalkRoute_tmap",
         "args": {
-          "startName": "광화문",
-          "endName": "경복궁",
-          "searchOption": "0"
+          "startX": 126.9769,
+          "startY": 37.5759,
+          "endX": 126.9786,
+          "endY": 37.5796
         }
       }
     ]
@@ -412,9 +390,7 @@
       {
         "tool": "POISearch_tmap",
         "args": {
-          "searchKeyword": "서울 이마트",
-          "searchType": "all",
-          "searchtypCd": "A"
+          "searchKeyword": "서울 이마트"
         }
       }
     ]
@@ -425,7 +401,7 @@
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
-      "convert_coord_to_address",
+      "CoordToAddress_kakao",
       "AddressToCoord_kakao",
       "Geocoding_tmap",
       "PlaceSearch_kakao",
@@ -433,17 +409,17 @@
     ],
     "golden_action": [
       {
-        "tool": "convert_coord_to_address",
+        "tool": "CoordToAddress_kakao",
         "args": {
-          "x": "126.9780",
-          "y": "37.5665"
+          "latitude": 37.5665,
+          "longitude": 126.9780
         }
       }
     ]
   },
   {
     "task_id": "L2-024",
-    "instruction": "서울역에서 인천국제공항까지 자동차 경로를 알려줘",
+    "instruction": "서울역(126.9708, 37.5547)에서 인천국제공항(126.4407, 37.4691)까지 자동차 경로를 알려줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -457,9 +433,11 @@
       {
         "tool": "CarRoute_tmap",
         "args": {
-          "start": "서울역",
-          "end": "인천국제공항",
-          "option": "trafast"
+          "startX": 126.9708,
+          "startY": 37.5547,
+          "endX": 126.4407,
+          "endY": 37.4691,
+          "searchOption": 0
         }
       }
     ]
@@ -480,9 +458,9 @@
       {
         "tool": "CategorySearch_kakao",
         "args": {
-          "category_group_code": "PM9",
-          "x": "126.9769",
-          "y": "37.5759",
+          "category": "PM9",
+          "x": 126.9769,
+          "y": 37.5759,
           "radius": 800
         }
       }
@@ -504,9 +482,8 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "QueryType": "Bestseller",
-          "CategoryId": "170",
-          "SearchTarget": "Book"
+          "query_type": "Bestseller",
+          "search_target": "Book"
         }
       }
     ]
@@ -527,8 +504,8 @@
       {
         "tool": "ItemLookup_aladin",
         "args": {
-          "ItemId": "9788936434267",
-          "ItemIdType": "ISBN13"
+          "item_id": "9788936434267",
+          "item_id_type": "ISBN13"
         }
       }
     ]
@@ -550,7 +527,7 @@
         "tool": "ItemSearch_aladin",
         "args": {
           "query": "데이터 사이언스 기초",
-          "sort": "accuracy"
+          "sort": "Accuracy"
         }
       }
     ]
@@ -635,10 +612,9 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "queryType": "Bestseller",
-          "categoryId": 0,
-          "searchTarget": "Book",
-          "maxResults": 10
+          "query_type": "Bestseller",
+          "search_target": "Book",
+          "max_results": 10
         }
       }
     ]
@@ -658,7 +634,7 @@
       {
         "tool": "CryptoPrice_bithumb",
         "args": {
-          "market": "KRW-BTC"
+          "markets": "KRW-BTC"
         }
       }
     ]
@@ -677,7 +653,7 @@
       {
         "tool": "OrderBook_bithumb",
         "args": {
-          "market": "KRW-ETH"
+          "markets": "KRW-ETH"
         }
       }
     ]
@@ -718,7 +694,7 @@
         "args": {
           "symbol": "BTC",
           "quote": "KRW",
-          "candleType": "days",
+          "candle_type": "days",
           "count": 30
         }
       }
@@ -747,7 +723,7 @@
   },
   {
     "task_id": "L2-070",
-    "instruction": "카카오(035720) 최근 체결 내역 30개만 보여줘",
+    "instruction": "카카오(035720) 최근 체결 내역을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -759,8 +735,7 @@
       {
         "tool": "StockTrades_ls",
         "args": {
-          "shcode": "035720",
-          "count": 30
+          "shcode": "035720"
         }
       }
     ]
@@ -870,27 +845,6 @@
     ]
   },
   {
-    "task_id": "L2-076",
-    "instruction": "서울시 버스 141번 노선의 도착 정보를 알려줘",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "getArrInfoByRouteAllList",
-      "WebSearch_naver",
-      "PlaceSearch_kakao",
-      "POISearch_tmap"
-    ],
-    "golden_action": [
-      {
-        "tool": "getArrInfoByRouteAllList",
-        "args": {
-          "busRouteId": "100100118",
-          "routeNumber": "141"
-        }
-      }
-    ]
-  },
-  {
     "task_id": "L2-077",
     "instruction": "업비트에서 거래 가능한 모든 암호화폐 목록을 보여줘",
     "task_level": 2,
@@ -905,9 +859,7 @@
     "golden_action": [
       {
         "tool": "MarketList_upbit",
-        "args": {
-          "is_details": false
-        }
+        "args": {}
       }
     ]
   },
@@ -927,7 +879,7 @@
       {
         "tool": "AddressToCoord_kakao",
         "args": {
-          "query": "서울특별시 강남구 테헤란로 152"
+          "address": "서울특별시 강남구 테헤란로 152"
         }
       }
     ]
@@ -982,7 +934,6 @@
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
       "StockSearch_ls",
-      "SectorStock_ls",
       "WebSearch_naver",
       "NewsSearch_naver"
     ],
@@ -990,7 +941,7 @@
       {
         "tool": "StockSearch_ls",
         "args": {
-          "keyword": "배터리"
+          "query_index": "배터리"
         }
       }
     ]
@@ -1012,8 +963,8 @@
         "tool": "CategorySearch_tmap",
         "args": {
           "categories": "CS2",
-          "centerLat": "37.498095",
-          "centerLon": "127.027621",
+          "centerLat": 37.498095,
+          "centerLon": 127.027621,
           "radius": 1
         }
       }
@@ -1043,7 +994,7 @@
   },
   {
     "task_id": "L2-084",
-    "instruction": "서울 마포구 월드컵북로 396 주소의 경위도 좌표를 T맵으로 알려줘",
+    "instruction": "서울 마포구 상암동의 경위도 좌표를 T맵으로 알려줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -1057,7 +1008,9 @@
       {
         "tool": "Geocoding_tmap",
         "args": {
-          "fullAddr": "서울 마포구 월드컵북로 396"
+          "city_do": "서울특별시",
+          "gu_gun": "마포구",
+          "dong": "상암동"
         }
       }
     ]
@@ -1078,10 +1031,224 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "QueryType": "ItemNewAll",
-          "CategoryId": "351",
-          "SearchTarget": "Book",
-          "MaxResults": 10
+          "query_type": "ItemNewAll",
+          "search_target": "Book",
+          "max_results": 10
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-086",
+    "instruction": "강남역 근처에서 가장 평점이 높은 카페를 찾고 싶은데, 그 카페의 블로그 후기를 확인하고 싶어. 먼저 카페를 찾은 다음, 그 카페 이름으로 블로그 후기를 검색해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "PlaceSearch_kakao",
+      "BlogSearch_naver",
+      "CategorySearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "강남역 카페",
+          "sort": "accuracy"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-087",
+    "instruction": "삼성전자 주식의 현재가가 60,000원 이상이면 '매도 고려', 미만이면 '매수 고려'라고 판단하고 싶어. 현재가를 확인해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_ls",
+      "StockPrice_kis",
+      "NewsSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_ls",
+        "args": {
+          "shcode": "005930"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-088",
+    "instruction": "서울 종로구 청와대 근처의 한식당을 찾아줘. 반경 1km 이내로 제한해서 검색해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "FD6",
+          "x": 126.9778,
+          "y": 37.5863,
+          "radius": 1000
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-089",
+    "instruction": "빗썸에서 거래 가능한 모든 암호화폐 목록을 조회한 후, 그 중 비트코인의 현재가를 알려줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "MarketList_bithumb",
+      "CryptoPrice_bithumb",
+      "CryptoPrice_upbit",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "MarketList_bithumb",
+        "args": {}
+      }
+    ]
+  },
+  {
+    "task_id": "L2-090",
+    "instruction": "판교역(127.1117, 37.3946) 근처 주차장을 찾아줘. T맵 카테고리 검색으로 반경 500m 내에서 찾아줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_tmap",
+      "CategorySearch_kakao",
+      "POISearch_tmap",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "parking",
+          "centerLon": 127.1117,
+          "centerLat": 37.3946,
+          "radius": 1
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-091",
+    "instruction": "네이버 주식(035420)과 카카오 주식(035720)의 현재가를 비교하고 싶어. 네이버 주식 현재가를 먼저 확인해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_kis",
+      "StockPrice_ls",
+      "NewsSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "035420"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-092",
+    "instruction": "업비트에서 이더리움(ETH)의 일봉 차트 데이터 50개를 조회해줘. 원화(KRW) 기준으로 확인하고 싶어.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_upbit",
+      "CryptoPrice_upbit",
+      "CryptoCandle_bithumb",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "ETH",
+          "quote": "KRW",
+          "candle_type": "days",
+          "count": 50
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-093",
+    "instruction": "서울 강남구 역삼동의 경위도 좌표를 알려줘. T맵 Geocoding을 사용해서 찾아줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "Geocoding_tmap",
+      "AddressToCoord_kakao",
+      "PlaceSearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "강남구",
+          "dong": "역삼동"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-094",
+    "instruction": "홍대입구역(126.9244, 37.5563)에서 이태원역(126.9944, 37.5344)까지 걸어서 가는 경로를 알려줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WalkRoute_tmap",
+      "CarRoute_tmap",
+      "Directions_naver",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": 126.9244,
+          "startY": 37.5563,
+          "endX": 126.9944,
+          "endY": 37.5344
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-095",
+    "instruction": "알라딘에서 'AI 윤리' 키워드로 책을 검색하고, 정확도순으로 정렬해서 5권만 보여줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemSearch_aladin",
+      "ItemList_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "AI 윤리",
+          "sort": "Accuracy",
+          "max_results": 5
         }
       }
     ]
