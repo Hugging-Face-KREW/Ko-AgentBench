@@ -140,8 +140,16 @@ class BenchmarkRunner:
             else:
                 self.logger.warning("⚠️ NO TOOLS AVAILABLE FOR THIS TASK!")
             
-            # Execute LLM-tool loop
-            result = self._execute_loop(messages, available_tools, task)
+            # Check if this is a multi-turn conversation task (L6/L7)
+            conversation = task.get('conversation_tracking') or task.get('conversation')
+            if isinstance(conversation, dict) and isinstance(conversation.get('turns'), list):
+                # Multi-turn conversation: execute each user turn sequentially
+                result = self._execute_multiturn_conversation(conversation, available_tools, task)
+            else:
+                # Single-turn task: execute once
+                task_description = task.get('instruction') or task.get('description', '')
+                messages = [{"role": "user", "content": task_description}]
+                result = self._execute_loop(messages, available_tools, task)
             
             # Aggregate tool invocation summary
             tool_invocations = []
@@ -220,6 +228,153 @@ class BenchmarkRunner:
                     self.logger.debug(f"Langfuse update failed: {e}")
             
             return error_result
+    
+    @observe(name="execute_multiturn_conversation")
+    def _execute_multiturn_conversation(self, 
+                                       conversation: Dict[str, Any],
+                                       tools: List[Dict], 
+                                       task: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a multi-turn conversation (L6/L7 scenarios).
+        
+        This method processes each user turn sequentially, maintaining conversation context
+        across turns. This is essential for:
+        - L6 (Efficiency): Testing context reuse ("방금 찾아준 책 다시 알려줘")
+        - L7 (Long-term Context): Testing long-term memory ("아까 처음에 물어봤던 코인")
+        
+        Args:
+            conversation: Conversation tracking object with turns
+            tools: Available tools
+            task: Task definition
+            
+        Returns:
+            Execution result with all conversation steps
+        """
+        turns = conversation.get('turns', [])
+        
+        # Initialize conversation (no system prompt as per requirement)
+        messages: List[Dict[str, Any]] = []
+        
+        all_steps = []
+        step_counter = 0
+        
+        self.logger.info(f"\n{'='*80}")
+        self.logger.info(f"🔄 Multi-turn conversation: {len(turns)} turns")
+        self.logger.info(f"{'='*80}\n")
+        
+        # Process each user turn sequentially
+        for turn_idx, turn in enumerate(turns, 1):
+            role = turn.get('role', '')
+            content = turn.get('content', '')
+            
+            # Skip turns without user content (assistant action markers, etc.)
+            if role != 'user' or not content:
+                continue
+            
+            self.logger.info(f"\n{'─'*80}")
+            self.logger.info(f"🔵 Turn {turn_idx}: Processing user message")
+            self.logger.info(f"{'─'*80}")
+            self.logger.info(f"User: {content[:200]}...")
+            
+            # Add user message to conversation
+            messages.append({"role": "user", "content": content})
+            
+            # Call LLM with current context
+            try:
+                response = self._call_llm_with_retry(messages, tools)
+                message = response.get('message', {})
+                
+                step_counter += 1
+                step_data = {
+                    "step": step_counter,
+                    "turn": turn_idx,
+                    "llm_response": response,
+                    "tool_calls": [],
+                    "timestamp": time.time()
+                }
+                
+                # Log assistant response
+                assistant_content = message.get('content', '')
+                if assistant_content:
+                    self.logger.info(f"💬 Assistant: {assistant_content[:200]}...")
+                
+                # Add assistant message to conversation
+                messages.append(message)
+                
+                # Handle tool calls if present
+                if 'tool_calls' in message and message['tool_calls']:
+                    self.logger.info(f"🔧 Tool calls: {len(message['tool_calls'])}")
+                    
+                    for idx, tool_call in enumerate(message['tool_calls'], 1):
+                        tool_name = tool_call.get('function', {}).get('name', 'unknown')
+                        tool_args = tool_call.get('function', {}).get('arguments', '{}')
+                        self.logger.info(f"  [{idx}] {tool_name}")
+                        self.logger.info(f"      Args: {tool_args[:150]}...")
+                        
+                        # Execute tool
+                        tool_result = self._execute_tool_call(tool_call)
+                        step_data['tool_calls'].append(tool_result)
+                        
+                        # Log result
+                        if tool_result.get('success'):
+                            result_preview = str(tool_result.get('result', ''))[:150]
+                            self.logger.info(f"      ✅ Success: {result_preview}...")
+                        else:
+                            self.logger.error(f"      ❌ Error: {tool_result.get('error')}")
+                        
+                        # Add tool result to conversation
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tool_call['id'],
+                            "content": json.dumps(tool_result['result'])
+                        })
+                    
+                    # Get final response after tool execution
+                    self.logger.info(f"🔄 Getting final response after tool execution...")
+                    final_response = self._call_llm_with_retry(messages, tools)
+                    final_message = final_response.get('message', {})
+                    
+                    # Log final response
+                    final_content = final_message.get('content', '')
+                    if final_content:
+                        self.logger.info(f"💬 Final response: {final_content[:200]}...")
+                    
+                    # Add final response to conversation
+                    messages.append(final_message)
+                    
+                    # Update step data with final response
+                    step_counter += 1
+                    step_data_final = {
+                        "step": step_counter,
+                        "turn": turn_idx,
+                        "llm_response": final_response,
+                        "tool_calls": [],
+                        "timestamp": time.time()
+                    }
+                    all_steps.append(step_data_final)
+                
+                all_steps.append(step_data)
+                
+            except Exception as e:
+                self.logger.error(f"❌ Error processing turn {turn_idx}: {e}")
+                # Continue to next turn even if this one fails
+                continue
+        
+        self.logger.info(f"\n{'='*80}")
+        self.logger.info(f"✅ Multi-turn conversation completed: {len(all_steps)} steps")
+        self.logger.info(f"{'='*80}\n")
+        
+        # Get final response from last message
+        final_response_content = ""
+        for msg in reversed(messages):
+            if msg.get('role') == 'assistant' and msg.get('content'):
+                final_response_content = msg.get('content', '')
+                break
+        
+        return {
+            "steps": all_steps,
+            "final_response": final_response_content,
+            "conversation": messages
+        }
     
     @observe(name="execute_loop")
     def _execute_loop(self, messages: List[Dict], 

@@ -1,4 +1,7 @@
 # Ko-AgentBench
+<div align="center">
+<img src="https://github.com/user-attachments/assets/9cde519b-7935-4e0f-bd34-4d8a81e14103" width="200">
+</div>
 
 ## 빠른 시작
 ```bash

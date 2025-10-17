@@ -1,0 +1,78 @@
+====================================================================================================
+TOOL CALL ANALYSIS REPORT
+====================================================================================================
+
+📊 LEVEL SUMMARY
+----------------------------------------------------------------------------------------------------
+Level      Total Tasks     Success    Failed     Success Rate    Tool Calls     
+----------------------------------------------------------------------------------------------------
+L1         18              0          18         0.00            18             
+L2         9               0          9          0.00            2              
+L3         6               0          6          0.00            4              
+L5         24              0          24         0.00            16             
+L6         10              0          10         0.00            6              
+----------------------------------------------------------------------------------------------------
+TOTAL      67              0          67         0.00            46             
+
+
+🔧 TOOL USAGE SUMMARY
+----------------------------------------------------------------------------------------------------
+Tool Name                      Calls      Success    Failed     Success Rate    Levels              
+----------------------------------------------------------------------------------------------------
+PlaceSearch_kakao              6          0          6          0.00            L1, L3, L5, L6      
+ItemSearch_aladin              5          5          0          100.00          L1, L3, L5, L6      
+WebSearch_daum                 5          5          0          100.00          L1, L2, L5, L6      
+festival_search                4          4          0          100.00          L1, L5, L6          
+search_news                    4          4          0          100.00          L1, L5, L6          
+VideoSearch_daum               4          4          0          100.00          L1, L2, L5, L6      
+_directions                    3          3          0          100.00          L1                  
+CryptoPrice_bithumb            3          3          0          100.00          L1, L5              
+ItemList_aladin                3          3          0          100.00          L1, L5              
+MarketIndex_ls                 2          2          0          100.00          L1, L5              
+AddressToCoord_kakao           2          0          2          0.00            L1, L5              
+StockSearch_ls                 1          1          0          100.00          L1                  
+MarketList_bithumb             1          1          0          100.00          L1                  
+search_web                     1          1          0          100.00          L1                  
+search_blog                    1          1          0          100.00          L1                  
+CategorySearch_kakao           1          0          1          0.00            L1                  
+
+
+❌ FAILED TOOL CALLS DETAIL
+----------------------------------------------------------------------------------------------------
+
+PlaceSearch_kakao (Failed: 6/6)
+--------------------------------------------------------------------------------
+  Task: L1-017
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1
+
+  Task: L3-002
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000
+
+  Task: L3-003
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=5...
+
+  Task: L3-005
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942
+
+  Task: L5-002
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300
+
+  ... and 1 more errors
+
+
+AddressToCoord_kakao (Failed: 2/2)
+--------------------------------------------------------------------------------
+  Task: L1-016
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110
+
+  Task: L5-001
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110
+
+
+CategorySearch_kakao (Failed: 1/1)
+--------------------------------------------------------------------------------
+  Task: L1-018
+  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1
+
+
+====================================================================================================

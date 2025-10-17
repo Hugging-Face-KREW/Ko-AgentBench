@@ -344,12 +344,12 @@
       {
         "tool": "ItemSearch_aladin",
         "args": {
-          "Query": "인공지능",
-          "QueryType": "Keyword",
-          "SearchTarget": "Book",
-          "Start": 1,
-          "MaxResults": 10,
-          "Sort": "Accuracy"
+          "query": "인공지능",
+          "query_type": "Keyword",
+          "search_target": "Book",
+          "start": 1,
+          "max_results": 10,
+          "sort": "Accuracy"
         }
       }
     ],
@@ -384,13 +384,13 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "QueryType": "Bestseller",
-          "SearchTarget": "Book",
-          "Year": 2025,
-          "Month": 9,
-          "Week": 1,
-          "Start": 1,
-          "MaxResults": 10
+          "query_type": "Bestseller",
+          "search_target": "Book",
+          "year": 2025,
+          "month": 9,
+          "week": 1,
+          "start": 1,
+          "max_results": 10
         }
       }
     ],
@@ -425,12 +425,12 @@
       {
         "tool": "ItemSearch_aladin",
         "args": {
-          "Query": "한강",
-          "QueryType": "Keyword",
-          "SearchTarget": "Book",
-          "MaxResults": 10,
-          "Start": 1,
-          "Sort": "Accuracy"
+          "query": "한강",
+          "query_type": "Keyword",
+          "search_target": "Book",
+          "max_results": 10,
+          "start": 1,
+          "sort": "Accuracy"
         }
       }
     ],
@@ -464,13 +464,13 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "QueryType": "Bestseller",
-          "SearchTarget": "Book",
-          "Year": 2025,
-          "Month": 9,
-          "Week": 1,
-          "Start": 1,
-          "MaxResults": 10
+          "query_type": "Bestseller",
+          "search_target": "Book",
+          "year": 2025,
+          "month": 9,
+          "week": 1,
+          "start": 1,
+          "max_results": 10
         }
       }
     ],
@@ -669,7 +669,7 @@
     },
     "fallback_options": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "127.027621,37.497942",
           "goal": "126.977022,37.566536",
@@ -701,7 +701,7 @@
     },
     "fallback_options": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "126.450517,37.46019",
           "goal": "127.0592,37.511",
@@ -846,7 +846,7 @@
     "task_category": "Robustness",
     "golden_action": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "127.108882,37.394274",
           "goal": "126.92490,37.52190",
@@ -855,8 +855,7 @@
       }
     ],
     "error_injection": {
-      "tool": "_directions",
-      "error_type": "timeout"
+              "tool": "Directions_naver",      "error_type": "timeout"
     },
     "fallback_options": [
       {
