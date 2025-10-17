@@ -122,7 +122,7 @@ class BenchmarkRunner:
                             task_tools.append(tool_name)
                 
                 if task_tools:
-                    self.logger.info(f"📋 Extracted tools from golden_action: {task_tools}")
+                    self.logger.info(f"[INFO] Extracted tools from golden_action: {task_tools}")
             
             available_tools = []
             for tool_name in task_tools:
@@ -138,7 +138,7 @@ class BenchmarkRunner:
             if available_tools:
                 self.logger.info(f"First tool schema keys: {list(available_tools[0].keys())}")
             else:
-                self.logger.warning("⚠️ NO TOOLS AVAILABLE FOR THIS TASK!")
+                self.logger.warning("[WARNING] NO TOOLS AVAILABLE FOR THIS TASK!")
             
             # Check if this is a multi-turn conversation task (L6/L7)
             conversation = task.get('conversation_tracking') or task.get('conversation')
@@ -258,7 +258,7 @@ class BenchmarkRunner:
         step_counter = 0
         
         self.logger.info(f"\n{'='*80}")
-        self.logger.info(f"🔄 Multi-turn conversation: {len(turns)} turns")
+        self.logger.info(f"[MULTI-TURN] Multi-turn conversation: {len(turns)} turns")
         self.logger.info(f"{'='*80}\n")
         
         # Process each user turn sequentially
@@ -271,7 +271,7 @@ class BenchmarkRunner:
                 continue
             
             self.logger.info(f"\n{'─'*80}")
-            self.logger.info(f"🔵 Turn {turn_idx}: Processing user message")
+            self.logger.info(f"[TURN {turn_idx}] Processing user message")
             self.logger.info(f"{'─'*80}")
             self.logger.info(f"User: {content[:200]}...")
             
@@ -295,14 +295,14 @@ class BenchmarkRunner:
                 # Log assistant response
                 assistant_content = message.get('content', '')
                 if assistant_content:
-                    self.logger.info(f"💬 Assistant: {assistant_content[:200]}...")
+                    self.logger.info(f"[ASSISTANT] {assistant_content[:200]}...")
                 
                 # Add assistant message to conversation
                 messages.append(message)
                 
                 # Handle tool calls if present
                 if 'tool_calls' in message and message['tool_calls']:
-                    self.logger.info(f"🔧 Tool calls: {len(message['tool_calls'])}")
+                    self.logger.info(f"[TOOL] Tool calls: {len(message['tool_calls'])}")
                     
                     for idx, tool_call in enumerate(message['tool_calls'], 1):
                         tool_name = tool_call.get('function', {}).get('name', 'unknown')
@@ -317,9 +317,9 @@ class BenchmarkRunner:
                         # Log result
                         if tool_result.get('success'):
                             result_preview = str(tool_result.get('result', ''))[:150]
-                            self.logger.info(f"      ✅ Success: {result_preview}...")
+                            self.logger.info(f"      [SUCCESS] {result_preview}...")
                         else:
-                            self.logger.error(f"      ❌ Error: {tool_result.get('error')}")
+                            self.logger.error(f"      [ERROR] {tool_result.get('error')}")
                         
                         # Add tool result to conversation
                         messages.append({
@@ -329,14 +329,14 @@ class BenchmarkRunner:
                         })
                     
                     # Get final response after tool execution
-                    self.logger.info(f"🔄 Getting final response after tool execution...")
+                    self.logger.info(f"[INFO] Getting final response after tool execution...")
                     final_response = self._call_llm_with_retry(messages, tools)
                     final_message = final_response.get('message', {})
                     
                     # Log final response
                     final_content = final_message.get('content', '')
                     if final_content:
-                        self.logger.info(f"💬 Final response: {final_content[:200]}...")
+                        self.logger.info(f"[RESPONSE] Final response: {final_content[:200]}...")
                     
                     # Add final response to conversation
                     messages.append(final_message)
@@ -355,12 +355,12 @@ class BenchmarkRunner:
                 all_steps.append(step_data)
                 
             except Exception as e:
-                self.logger.error(f"❌ Error processing turn {turn_idx}: {e}")
+                self.logger.error(f"[ERROR] Error processing turn {turn_idx}: {e}")
                 # Continue to next turn even if this one fails
                 continue
         
         self.logger.info(f"\n{'='*80}")
-        self.logger.info(f"✅ Multi-turn conversation completed: {len(all_steps)} steps")
+        self.logger.info(f"[COMPLETE] Multi-turn conversation completed: {len(all_steps)} steps")
         self.logger.info(f"{'='*80}\n")
         
         # Get final response from last message
@@ -402,7 +402,7 @@ class BenchmarkRunner:
         # Log seeded conversation history for multi-turn scenarios
         seeded_messages_count = len(messages)
         if seeded_messages_count > 0:
-            self.logger.info(f"🔄 Multi-turn context: {seeded_messages_count} messages seeded")
+            self.logger.info(f"[CONTEXT] Multi-turn context: {seeded_messages_count} messages seeded")
             for idx, msg in enumerate(messages):
                 role = msg.get('role', 'unknown')
                 content_preview = msg.get('content', '')[:100]
@@ -416,7 +416,7 @@ class BenchmarkRunner:
             # Log current turn information
             current_turn = step + 1
             self.logger.info(f"\n{'='*60}")
-            self.logger.info(f"🔵 Step {current_turn}/{self.max_steps}")
+            self.logger.info(f"[STEP {current_turn}/{self.max_steps}]")
             self.logger.info(f"{'='*60}")
             
             # Get LLM response
@@ -435,14 +435,14 @@ class BenchmarkRunner:
             # Log assistant response
             assistant_content = message.get('content', '')
             if assistant_content:
-                self.logger.info(f"💬 Assistant response: {assistant_content[:200]}...")
+                self.logger.info(f"[ASSISTANT] Assistant response: {assistant_content[:200]}...")
             
             # Add assistant message to conversation first
             messages.append(message)
             
             # Then handle tool calls if present
             if 'tool_calls' in message and message['tool_calls']:
-                self.logger.info(f"🔧 Tool calls in this turn: {len(message['tool_calls'])}")
+                self.logger.info(f"[TOOL] Tool calls in this turn: {len(message['tool_calls'])}")
                 for idx, tool_call in enumerate(message['tool_calls'], 1):
                     tool_name = tool_call.get('function', {}).get('name', 'unknown')
                     tool_args = tool_call.get('function', {}).get('arguments', '{}')
@@ -455,9 +455,9 @@ class BenchmarkRunner:
                     # Log tool execution result
                     if tool_result.get('success'):
                         result_preview = str(tool_result.get('result', ''))[:150]
-                        self.logger.info(f"      ✅ Success: {result_preview}...")
+                        self.logger.info(f"      [SUCCESS] {result_preview}...")
                     else:
-                        self.logger.error(f"      ❌ Error: {tool_result.get('error')}")
+                        self.logger.error(f"      [ERROR] {tool_result.get('error')}")
                     
                     # Add tool result to messages for next turn
                     # Include error information if tool call failed
@@ -476,7 +476,7 @@ class BenchmarkRunner:
                         "content": content
                     })
             else:
-                self.logger.info(f"✅ No tool calls - conversation complete")
+                self.logger.info(f"[COMPLETE] No tool calls - conversation complete")
             
             steps.append(step_data)
             
@@ -485,7 +485,7 @@ class BenchmarkRunner:
                 break
         
         self.logger.info(f"\n{'='*60}")
-        self.logger.info(f"🎯 Conversation completed: {len(steps)} steps taken")
+        self.logger.info(f"[COMPLETE] Conversation completed: {len(steps)} steps taken")
         self.logger.info(f"{'='*60}\n")
         
         return {
@@ -582,7 +582,7 @@ class BenchmarkRunner:
                 else:
                     error_message = f"Error: {error_type}"
                 
-                self.logger.warning(f"🔴 Error injection: {tool_name} - {error_type}")
+                self.logger.warning(f"[INJECTION] Error injection: {tool_name} - {error_type}")
                 
                 # Return error result
                 error_result = {

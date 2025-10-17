@@ -54,9 +54,9 @@ def load_benchmark_datasets(data_dir: str = "data") -> Dict[str, List[Dict]]:
             with open(filepath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 datasets[level_name] = data
-                print(f"✓ Loaded {level_name}: {len(data)} tasks")
+                print(f"[OK] Loaded {level_name}: {len(data)} tasks")
         except Exception as e:
-            print(f"✗ Failed to load {filepath}: {e}")
+            print(f"[ERROR] Failed to load {filepath}: {e}")
     
     return datasets
 
@@ -88,7 +88,7 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
     for task in dataset_tasks:
         # Skip if task is not a dict
         if not isinstance(task, dict):
-            print(f"⚠ Warning: Skipping non-dict task: {type(task)}")
+            print(f"[WARNING] Skipping non-dict task: {type(task)}")
             continue
             
         # Extract required tools from golden_action OR conversation_tracking
@@ -103,7 +103,7 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
         
         # Also check conversation_tracking for additional tools (L6/L7)
         if "conversation_tracking" in task:
-            print(f"🔍 DEBUG: Processing conversation_tracking for task: {task.get('task_id')}")
+            print(f"[DEBUG] Processing conversation_tracking for task: {task.get('task_id')}")
             conversation = task["conversation_tracking"]
             for turn in conversation.get("turns", []):
                 # L7 format: turn.actions (list)
@@ -112,7 +112,7 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                         tool_name = action.get("tool", "")
                         if tool_name and tool_name not in tools_needed:
                             tools_needed.append(tool_name)
-                            print(f"  ✅ Found tool in turn.actions: {tool_name}")
+                            print(f"  [OK] Found tool in turn.actions: {tool_name}")
                 
                 # L6 format: turn.action (single object)
                 if "action" in turn:
@@ -120,11 +120,11 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                     tool_name = action.get("tool", "")
                     if tool_name and tool_name not in tools_needed:
                         tools_needed.append(tool_name)
-                        print(f"  ✅ Found tool in turn.action: {tool_name}")
+                        print(f"  [OK] Found tool in turn.action: {tool_name}")
         
         # Normalize tool names to match registry keys
         normalized_tools_needed = [normalize_tool_name(t) for t in tools_needed]
-        print(f"  📝 Task {task.get('task_id')}: tools_needed = {tools_needed} → normalized = {normalized_tools_needed}")
+        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed} → normalized = {normalized_tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
@@ -375,13 +375,13 @@ def run_benchmark_on_dataset(
     tool_classes = resolve_tool_classes(all_required_tools)
     missing_tools = [t for t in normalized_tools if t not in TOOL_CATALOG]
     if missing_tools:
-        print(f"⚠ Warning: Missing tools in catalog: {missing_tools}")
+        print(f"[WARNING] Missing tools in catalog: {missing_tools}")
     
     # Setup components
     registry = create_tool_registry(tool_classes)
     
     # DEBUG: Check registered tools and their schemas
-    print(f"\n🔍 DEBUG: Registered tools in registry:")
+    print(f"\n[DEBUG] Registered tools in registry:")
     registered_tool_names = registry.get_available_tools()
     print(f"  Tool names: {registered_tool_names}")
     
@@ -397,14 +397,14 @@ def run_benchmark_on_dataset(
                     print(f"      Function name: {schema['function'].get('name')}")
                     print(f"      Description: {schema['function'].get('description')[:50]}...")
     else:
-        print("  ⚠️ WARNING: No tools registered!")
+        print("  [WARNING] No tools registered!")
     
     # Create adapter based on use_local flag
     if use_local:
-        print(f"\n🖥️  Using TransformersAdapter for local inference")
+        print(f"\n[LOCAL] Using TransformersAdapter for local inference")
         adapter = TransformersAdapter(model_name, **adapter_config)
     else:
-        print(f"\n☁️  Using LiteLLMAdapter for API inference")
+        print(f"\n[API] Using LiteLLMAdapter for API inference")
         adapter = LiteLLMAdapter(model_name, **adapter_config)
     
     judge = Judge(llm_adapter=adapter)
@@ -424,7 +424,7 @@ def run_benchmark_on_dataset(
         if task.get("conversation_tracking") and isinstance(task["conversation_tracking"].get("turns"), list):
             turns = task["conversation_tracking"]["turns"]
             valid_turns = [t for t in turns if t.get("role") in ("user", "assistant") and t.get("content")]
-            print(f"\n📚 Multi-turn conversation context:")
+            print(f"\n[MULTI-TURN] Multi-turn conversation context:")
             print(f"   Total turns to seed: {len(valid_turns)}")
             for idx, turn in enumerate(valid_turns, 1):
                 role = turn.get("role", "unknown")
@@ -436,7 +436,7 @@ def run_benchmark_on_dataset(
                 if turn.get("actions"):
                     for action in turn["actions"]:
                         tool_name = action.get("tool", "unknown")
-                        print(f"      🔧 Expected tool: {tool_name}")
+                        print(f"      [TOOL] Expected tool: {tool_name}")
         
         print(f"{'─'*80}")
         
@@ -458,7 +458,7 @@ def run_benchmark_on_dataset(
             all_results.append(result)
             
             # Print summary
-            print(f"\n✓ Success: {result['success']}")
+            print(f"\n[RESULT] Success: {result['success']}")
             print(f"  Execution time: {result['execution_time']:.2f}s")
             print(f"  Steps taken: {result['steps_taken']}")
             
@@ -478,7 +478,7 @@ def run_benchmark_on_dataset(
             # Print conversation summary for multi-turn tasks
             if result.get('result') and result['result'].get('conversation'):
                 conversation = result['result']['conversation']
-                print(f"\n  💬 Conversation summary:")
+                print(f"\n  [CONVERSATION] Conversation summary:")
                 print(f"     Total messages: {len(conversation)}")
                 
                 # Show last few messages
@@ -496,7 +496,7 @@ def run_benchmark_on_dataset(
                 print(f"  Response: {preview}")
                 
         except Exception as e:
-            print(f"\n✗ Execution failed: {e}")
+            print(f"\n[ERROR] Execution failed: {e}")
             all_results.append({
                 "task_id": task.get('id', 'unknown'),
                 "instruction": task.get('description', ''),
@@ -521,7 +521,7 @@ def run_benchmark_on_dataset(
             print(f"Results saved to: {filepath}")
             print(f"{'='*80}\n")
         except Exception as e:
-            print(f"\n✗ Failed to save results: {e}\n")
+            print(f"\n[ERROR] Failed to save results: {e}\n")
     
     return all_results
 
@@ -580,19 +580,19 @@ def main():
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
-        print("⚠ Warning: No LLM API keys found in environment")
+        print("[WARNING] No LLM API keys found in environment")
     else:
-        print(f"✓ Found API keys: {found_keys}")
+        print(f"[OK] Found API keys: {found_keys}")
     
     # Load datasets
     print("\nLoading benchmark datasets...")
     datasets = load_benchmark_datasets("data")
     
     if not datasets:
-        print("✗ No datasets found in data/ directory")
+        print("[ERROR] No datasets found in data/ directory")
         return
     
-    print(f"\n✓ Loaded {len(datasets)} dataset levels")
+    print(f"\n[OK] Loaded {len(datasets)} dataset levels")
     
     # Select a model compatible with available provider keys
     def _provider_ready(model_id: str) -> bool:
@@ -626,7 +626,7 @@ def main():
         if selected_model is None:
             selected_model = MODEL_IDS[0]
             print(
-                f"⚠ No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
+                f"[WARNING] No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
                 f"  Tip: Set provider keys to match one of: {MODEL_IDS}"
             )
     else:
@@ -683,7 +683,7 @@ def main():
             )
             all_level_results[level_name] = results
         else:
-            print(f"⚠ Warning: {level_name} not found in datasets")
+            print(f"[WARNING] {level_name} not found in datasets")
     
     # Print overall summary
     print("\n" + "="*80)
