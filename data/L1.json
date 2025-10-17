@@ -42,7 +42,7 @@
     "task_category": "Single Tool",
     "golden_action": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "127.108882,37.394274",
           "goal": "127.07190,37.51130",
@@ -86,7 +86,7 @@
     "task_category": "Single Tool",
     "golden_action": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "127.108882,37.394274",
           "goal": "127.07190,37.51130",
@@ -130,7 +130,7 @@
     "task_category": "Single Tool",
     "golden_action": [
       {
-        "tool": "_directions",
+        "tool": "Directions_naver",
         "args": {
           "start": "126.97070,37.55360",
           "goal": "126.45123,37.46349",
@@ -367,16 +367,16 @@
       {
         "tool": "ItemSearch_aladin",
         "args": {
-          "Query": "나미야 잡화점의 기적",
-          "QueryType": "Keyword",
-          "SearchTarget": "Book",
-          "Start": 1,
-          "MaxResults": 1,
-          "Sort": "Accuracy",
-          "Cover": "Mid",
-          "Output": "XML",
+          "query": "나미야 잡화점의 기적",
+          "query_type": "Keyword",
+          "search_target": "Book",
+          "start": 1,
+          "max_results": 1,
+          "sort": "Accuracy",
+          "cover": "Mid",
+          "output": "xml",
           "outofStockFilter": 0,
-          "OptResult": ""
+          "opt_result": ""
         }
       }
     ],
@@ -480,16 +480,16 @@
       {
         "tool": "ItemList_aladin",
         "args": {
-          "QueryType": "Bestseller",
-          "SearchTarget": "Book",
-          "Start": 1,
-          "MaxResults": 1,
-          "Cover": "Mid",
-          "CategoryId": 0,
-          "Year": 2025,
-          "Month": 9,
-          "Week": 1,
-          "Output": "XML",
+          "query_type": "Bestseller",
+          "search_target": "Book",
+          "start": 1,
+          "max_results": 1,
+          "cover": "Mid",
+          "category_id": 0,
+          "year": 2025,
+          "month": 9,
+          "week": 1,
+          "output": "xml",
           "outofStockFilter": 0
         }
       }
