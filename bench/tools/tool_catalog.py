@@ -390,6 +390,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "keyword": {"type": "string", "description": "검색 키워드"},
                 "x": {"type": "number", "description": "중심 경도"},
                 "y": {"type": "number", "description": "중심 위도"},
+                "page": {"type": "integer", "description": "페이지 번호"},
+                "size": {"type": "integer", "description": "검색 결과 개수"},
                 "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "description": "반경(m)"},
                 "sort": {"type": "string", "enum": ["distance", "accuracy"], "default": "accuracy"}
             }, 
@@ -450,18 +452,6 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "K", "description": "거래소 구분 (K: KRX, N: NXT, U: 통합)"}
             },
             "required": ["shcode"]
-        }
-    ),
-
-    # ===== Bithumb (추가) =====
-    "MarketList_bithumb": (
-        BithumbStock,
-        "_marketList_bithumb",
-        "빗썸 거래 가능 마켓 리스트 조회",
-        {
-            "type": "object",
-            "properties": {},
-            "required": []
         }
     ),
 
