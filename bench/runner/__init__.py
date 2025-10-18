@@ -3,9 +3,10 @@
 Contains the main execution logic for running benchmarks including:
 - LLM-tool interaction loops
 - Step limits, timeouts, and retry logic
+- Evaluation metrics
 """
 
 from .run import BenchmarkRunner
-from .judge import Judge
+from . import metrics
 
-__all__ = ['BenchmarkRunner', 'Judge']
+__all__ = ['BenchmarkRunner', 'metrics']

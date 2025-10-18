@@ -18,7 +18,7 @@ from typing import List
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
-from bench.runner import BenchmarkRunner, Judge
+from bench.runner import BenchmarkRunner
 
 
 def main() -> None:
@@ -45,7 +45,6 @@ def main() -> None:
         return
 
     adapter = LiteLLMAdapter(args.model)
-    judge = Judge(llm_adapter=adapter)
 
     for level in args.levels:
         tasks_raw = datasets.get(level)
@@ -65,7 +64,7 @@ def main() -> None:
         for cls in tool_classes:
             registry.register_tool(cls)
 
-        runner = BenchmarkRunner(adapter, registry, judge, max_steps=args.max_steps, timeout=args.timeout)
+        runner = BenchmarkRunner(adapter, registry, max_steps=args.max_steps, timeout=args.timeout)
         print(f"[seed] Running {level} with {len(tasks)} tasks; tools={registry.get_available_tools()}")
         for task in tasks:
             try:

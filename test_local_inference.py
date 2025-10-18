@@ -56,7 +56,7 @@ def test_basic_inference():
         return True
         
     except Exception as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n[FAILED] Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -130,7 +130,7 @@ def test_tool_calling():
         return True
         
     except Exception as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n[FAILED] Test failed: {e}")
         import traceback
         traceback.print_exc()
         return False
@@ -146,10 +146,10 @@ def test_quantized_inference():
     try:
         import torch
         if not torch.cuda.is_available():
-            print("\n⚠️  CUDA not available, skipping quantization test")
+            print("\n[WARNING] CUDA not available, skipping quantization test")
             return True
     except ImportError:
-        print("\n⚠️  torch not available, skipping quantization test")
+        print("\n[WARNING] torch not available, skipping quantization test")
         return True
     
     model_name = "Qwen/Qwen2.5-0.5B-Instruct"
@@ -181,7 +181,7 @@ def test_quantized_inference():
         return True
         
     except Exception as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n[FAILED] Test failed: {e}")
         print("Note: Quantization requires bitsandbytes library and CUDA")
         import traceback
         traceback.print_exc()
@@ -190,9 +190,9 @@ def test_quantized_inference():
 
 def main():
     """Run all tests."""
-    print("\n" + "🚀 "*20)
+    print("\n" + "="*60)
     print("TransformersAdapter Test Suite")
-    print("🚀 "*20 + "\n")
+    print("="*60 + "\n")
     
     results = []
     
@@ -211,7 +211,7 @@ def main():
     print("="*80)
     
     for test_name, passed in results:
-        status = "✅ PASSED" if passed else "❌ FAILED"
+        status = "[PASSED]" if passed else "[FAILED]"
         print(f"{test_name}: {status}")
     
     total = len(results)
