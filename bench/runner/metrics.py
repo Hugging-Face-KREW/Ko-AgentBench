@@ -752,28 +752,28 @@ class ErrorDetectMetric(Metric):
             "data_not_available": "데이터 없음/조회 불가"
         }.get(inj_type, inj_type)
 
-        prompt = f"""다음 AI 응답이 도구 실행 실패/에러를 사용자에게 명확히 보고하고 있는지 판단해주세요.
+        prompt = f"""AI 응답이 도구 실행 실패를 사용자에게 명확히 보고하는지 판단하세요.
 
-**주입된 에러 정보:**
-- 도구: {inj_tool}
-- 에러 타입: {inj_type} ({error_type_korean})
+                    주입된 에러:
+                    - 도구: {inj_tool}
+                    - 에러 타입: {inj_type} ({error_type_korean})
 
-**AI의 최종 응답:**
-{final_response}
+                    AI의 최종 응답:
+                    {final_response}
 
-**판단 기준:**
-1. 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
-2. 서비스를 이용할 수 없다거나 조회에 실패했다고 설명했는가?
-3. 타임아웃, 접속 불가, 데이터 없음 등 구체적인 문제를 언급했는가?
-4. 단순히 결과를 제공하지 못하는 것이 아니라, 문제의 원인을 설명했는가?
+                    판단 기준:
+                    - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
+                    - 서비스 이용 불가나 조회 실패를 설명했는가?
+                    - 타임아웃, 접속 불가 등 구체적 문제를 언급했는가?
+                    - 문제의 원인을 설명했는가?
 
-**주의사항:**
-- 환각으로 다른 정보를 제공하면서 에러를 숨기는 경우: error_reported = false
-- 에러를 언급하지 않고 "죄송합니다" 정도만 말하는 경우: error_reported = false
-- 명확하게 에러/실패를 설명하는 경우: error_reported = true
+                    주의사항:
+                    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: false
+                    - 에러 언급 없이 "죄송합니다"만 말하는 경우: false
+                    - 명확하게 에러/실패를 설명하는 경우: true
 
-**출력 형식 (JSON만):**
-{{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "판단 근거를 한 문장으로"}}"""
+                    JSON 형식으로만 답변:
+                    {{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "간단한 이유"}}"""
 
         llm_result = self._call_llm_judge(prompt)
         error_reported = llm_result.get("error_reported", False)
