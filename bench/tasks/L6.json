@@ -33,12 +33,12 @@
         {
           "turn_number": 1,
           "role": "user",
-          "content": "파이썬으로 배우는 알고리즘 트레이딩 책 찾아줘."
+          "content": "파이썬 알고리즘 트레이딩 책 찾아줘."
         },
         {
           "turn_number": 2,
           "role": "assistant",
-          "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다.",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다.",
           "action": {
               "tool": "ItemSearch_aladin",
               "args": {
@@ -81,12 +81,12 @@
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "네, '파이썬으로 배우는 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
           "action": {
             "context_used": [
             {
               "source_turn": 2,
-              "info": "'파이썬으로 배우는 알고리즘 트레이딩' 검색 결과",
+              "info": "'파이썬 알고리즘 트레이딩' 검색 결과",
               "usage_type": "direct_reference"
             }
           ]
@@ -105,14 +105,14 @@
             {
               "tool": "ItemSearch_aladin",
               "args": {
-                "query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "query": "파이썬 알고리즘 트레이딩",
                 "sort": "SalesPoint"
               },
               "result": {
                 "totalResults": 1,
                 "startIndex": 1,
                 "itemsPerPage": 1,
-                "query": "파이썬으로 배우는 알고리즘 트레이딩",
+                "query": "파이썬 알고리즘 트레이딩",
                 "item": [
                   {
                     "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
@@ -145,12 +145,12 @@
         {
           "turn_number": 8,
           "role": "assistant",
-          "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬으로 배우는 알고리즘 트레이딩(개정판)' 입니다.",
+          "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬 알고리즘 트레이딩(개정판)' 입니다.",
           "action": {
               "context_used": [
             {
               "source_turn": 6,
-              "info": "'파이썬으로 배우는 알고리즘 트레이딩' 판매량순 정렬 결과",
+              "info": "'파이썬 알고리즘 트레이딩' 판매량순 정렬 결과",
               "usage_type": "direct_reference"
             }
             ]
