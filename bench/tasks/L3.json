@@ -823,24 +823,48 @@
   },
   {
     "task_id": "L3-021",
-    "instruction": "이더리움의 현재 시세를 원화로 확인하고, 지난 24시간 동안의 거래량도 함께 알려주세요.",
+    "instruction": "현재 내 위치에서 가장 가까운 영화관을 찾고, 그곳까지 자동차로 가는 경로를 알려주세요.",
     "task_level": 3,
-    "task_category": "Single Tool",
+    "task_category": "Multi Tool Sequential",
     "golden_action": [
       {
         "step": 1,
-        "tool": "CryptoPrice_upbit",
+        "tool": "CategorySearch_kakao",
         "args": {
-          "symbol": "ETH",
-          "quote": "KRW"
+          "category": "CT1",
+          "sort": "distance"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CarRoute_tmap",
+        "args": {
+          "startX": "{current_lon}",
+          "startY": "{current_lat}",
+          "endX": "{places[0].longitude}",
+          "endY": "{places[0].latitude}"
         }
       }
     ],
-    "minimum_steps": 1,
+    "minimum_steps": 2,
     "essential_tools": [
-      "CryptoPrice_upbit"
+      "CategorySearch_kakao",
+      "CarRoute_tmap"
     ],
-    "data_flow": []
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "endX",
+        "from_step": 1,
+        "from_output": "places[0].longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "endY",
+        "from_step": 1,
+        "from_output": "places[0].latitude"
+      }
+    ]
   },
   {
     "task_id": "L3-022",
@@ -1076,50 +1100,5 @@
       "NewsSearch_naver"
     ],
     "data_flow": []
-  },
-  {
-    "task_id": "L3-028",
-    "instruction": "현재 내 위치에서 가장 가까운 영화관을 찾고, 그곳까지 자동차로 가는 경로를 알려주세요.",
-    "task_level": 3,
-    "task_category": "Multi Tool Sequential",
-    "golden_action": [
-      {
-        "step": 1,
-        "tool": "CategorySearch_kakao",
-        "args": {
-          "category": "CT1",
-          "sort": "distance"
-        }
-      },
-      {
-        "step": 2,
-        "tool": "CarRoute_tmap",
-        "args": {
-          "startX": "{current_lon}",
-          "startY": "{current_lat}",
-          "endX": "{places[0].longitude}",
-          "endY": "{places[0].latitude}"
-        }
-      }
-    ],
-    "minimum_steps": 2,
-    "essential_tools": [
-      "CategorySearch_kakao",
-      "CarRoute_tmap"
-    ],
-    "data_flow": [
-      {
-        "to_step": 2,
-        "to_parameter": "endX",
-        "from_step": 1,
-        "from_output": "places[0].longitude"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "endY",
-        "from_step": 1,
-        "from_output": "places[0].latitude"
-      }
-    ]
   }
 ]
