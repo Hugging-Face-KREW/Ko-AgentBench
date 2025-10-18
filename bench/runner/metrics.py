@@ -3,9 +3,55 @@
 import json
 import re
 import logging
+import yaml
+import os
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from ..adapters.base_adapter import BaseAdapter
+
+class PromptLoader:
+    """YAML 파일에서 프롬프트를 로딩하는 클래스"""
+    _instance = None
+    _prompts = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        if self._prompts is None:
+            self._load_prompts()
+    
+    def _load_prompts(self):
+        """prompts.yaml 파일을 로딩"""
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            prompts_path = os.path.join(current_dir, 'prompts.yaml')
+            
+            with open(prompts_path, 'r', encoding='utf-8') as f:
+                self._prompts = yaml.safe_load(f)
+                
+        except Exception as e:
+            logging.warning(f"프롬프트 파일 로딩 실패: {e}")
+            self._prompts = {}
+    
+    def get_prompt(self, metric_name: str, template_type: str = 'template') -> str:
+        """메트릭별 프롬프트 템플릿 반환"""
+        if not self._prompts:
+            return ""
+        
+        metric_prompts = self._prompts.get(metric_name, {})
+        return metric_prompts.get(template_type, "")
+    
+    def get_system_prompt(self, metric_name: str) -> str:
+        """메트릭별 시스템 프롬프트 반환"""
+        return self.get_prompt(metric_name, 'system')
+    
+    def get_error_type_mapping(self, error_type: str) -> str:
+        """에러 타입 한국어 매핑 반환"""
+        mapping = self._prompts.get('error_detect', {}).get('error_type_mapping', {})
+        return mapping.get(error_type, error_type)
 
 @dataclass
 class EvaluationResult:
@@ -673,6 +719,7 @@ class ErrorDetectMetric(Metric):
 
     def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
         self.llm_adapter = llm_adapter
+        self.prompt_loader = PromptLoader()
 
     def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
         """LLM Judge 호출"""
@@ -680,8 +727,9 @@ class ErrorDetectMetric(Metric):
             return {"error_reported": False, "confidence": 0.0, "reason": "LLM adapter not available"}
         
         try:
+            system_prompt = self.prompt_loader.get_system_prompt('error_detect')
             messages = [
-                {"role": "system", "content": "You are an expert evaluator for AI error handling. Always respond in valid JSON format."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ]
             
@@ -746,34 +794,15 @@ class ErrorDetectMetric(Metric):
             })
 
         # LLM Judge 프롬프트 구성
-        error_type_korean = {
-            "timeout": "타임아웃/시간 초과",
-            "complete_unavailable": "서비스 완전 불가/이용 불가",
-            "data_not_available": "데이터 없음/조회 불가"
-        }.get(inj_type, inj_type)
-
-        prompt = f"""AI 응답이 도구 실행 실패를 사용자에게 명확히 보고하는지 판단하세요.
-
-                    주입된 에러:
-                    - 도구: {inj_tool}
-                    - 에러 타입: {inj_type} ({error_type_korean})
-
-                    AI의 최종 응답:
-                    {final_response}
-
-                    판단 기준:
-                    - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
-                    - 서비스 이용 불가나 조회 실패를 설명했는가?
-                    - 타임아웃, 접속 불가 등 구체적 문제를 언급했는가?
-                    - 문제의 원인을 설명했는가?
-
-                    주의사항:
-                    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: false
-                    - 에러 언급 없이 "죄송합니다"만 말하는 경우: false
-                    - 명확하게 에러/실패를 설명하는 경우: true
-
-                    JSON 형식으로만 답변:
-                    {{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "간단한 이유"}}"""
+        error_type_korean = self.prompt_loader.get_error_type_mapping(inj_type)
+        
+        prompt_template = self.prompt_loader.get_prompt('error_detect')
+        prompt = prompt_template.format(
+            injected_tool=inj_tool,
+            injected_error_type=inj_type,
+            error_type_korean=error_type_korean,
+            final_response=final_response
+        )
 
         llm_result = self._call_llm_judge(prompt)
         error_reported = llm_result.get("error_reported", False)
@@ -1066,12 +1095,14 @@ class EffScoreMetric(Metric):
     
     def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
         self.llm_adapter = llm_adapter
+        self.prompt_loader = PromptLoader()
     
     def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
         """LLM Judge 호출"""
         try:
+            system_prompt = self.prompt_loader.get_system_prompt('eff_score')
             messages = [
-                {"role": "system", "content": "You are an expert evaluator for task completion. Always respond in valid JSON format."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ]
             
@@ -1106,22 +1137,12 @@ class EffScoreMetric(Metric):
             })
         
         # LLM Judge 프롬프트
-        prompt = f"""사용자의 요청을 기반으로 최종답변이 성공적으로 생성되었는지 판단해주세요.
-
-                    사용자 요청: {query}
-
-                    최종 답변: {final_answer}
-
-                    수행한 도구: {json.dumps(tool_calls, ensure_ascii=False, indent=2)}
-
-                    판단 기준:
-                    - 사용자의 요청을 정확히 이해하고 완료했는가?
-                    - 필요한 정보를 모두 제공했는가?
-                    - 도구를 적절히 활용했는가?
-
-                    JSON 형식으로만 답변:
-                    {{"success": true/false, "reason": "간단한 이유"}}
-                    """
+        prompt_template = self.prompt_loader.get_prompt('eff_score')
+        prompt = prompt_template.format(
+            query=query,
+            final_answer=final_answer,
+            tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
+        )
 
         llm_result = self._call_llm_judge(prompt)
         success = llm_result.get("success", False)
@@ -1178,6 +1199,7 @@ class ContextRetentionMetric(Metric):
     
     def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
         self.llm_adapter = llm_adapter
+        self.prompt_loader = PromptLoader()
     
     @staticmethod
     def _format_messages(messages: List[Dict[str, str]]) -> str:
@@ -1198,8 +1220,9 @@ class ContextRetentionMetric(Metric):
             return {"score": 0, "reason": "LLM adapter not available"}
         
         try:
+            system_prompt = self.prompt_loader.get_system_prompt('context_retention')
             messages = [
-                {"role": "system", "content": "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ]
             
@@ -1235,26 +1258,10 @@ class ContextRetentionMetric(Metric):
         total_messages = conversation_log.get("total_messages", len(messages))
         
         # LLM Judge 프롬프트 구성
-        prompt = f"""대화에서 답변 생성의 맥락 유지 능력을 1-5점으로 평가하세요.
-
-                    대화 내용:
-                    {self._format_messages(messages)}
-
-                    평가 기준:
-                    - 이전 대화 정보를 기억하고 활용하는가?
-                    - 사용자의 과거 언급을 적절히 연결하는가?
-                    - 불필요한 재질문 없이 맥락을 이어가는가?
-
-                    점수:
-                    5점: 모든 맥락 완벽 유지 및 활용
-                    4점: 대부분의 맥락 유지
-                    3점: 일부 맥락만 유지
-                    2점: 맥락 유지 미흡
-                    1점: 맥락 유지 실패
-
-                    JSON 형식으로만 답변:
-                    {{"score": 1-5, "reason": "간단한 이유"}}
-                    """
+        prompt_template = self.prompt_loader.get_prompt('context_retention')
+        prompt = prompt_template.format(
+            formatted_messages=self._format_messages(messages)
+        )
 
         llm_result = self._call_llm_judge(prompt)
         raw_score = int(llm_result.get("score", 0))
@@ -1286,6 +1293,7 @@ class RefRecallMetric(Metric):
     
     def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
         self.llm_adapter = llm_adapter
+        self.prompt_loader = PromptLoader()
     
     @staticmethod
     def _format_messages(messages: List[Dict[str, str]]) -> str:
@@ -1306,8 +1314,9 @@ class RefRecallMetric(Metric):
             return {"score": 0, "reason": "LLM adapter not available"}
         
         try:
+            system_prompt = self.prompt_loader.get_system_prompt('context_retention')
             messages = [
-                {"role": "system", "content": "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ]
             
@@ -1343,25 +1352,10 @@ class RefRecallMetric(Metric):
         total_messages = conversation_log.get("total_messages", len(messages))
         
         # LLM Judge 프롬프트 구성
-        prompt = f"""대화에서 답변의 과거 정보 회상 능력을 1-5점으로 평가하세요.
-
-                    대화:
-                    {self._format_messages(messages)}
-
-                    평가 기준:
-                    - 초반 대화의 구체적 정보를 나중에도 정확히 기억하는가?
-                    - 시간이 지나도 이전 정보를 정확히 참조하는가?
-                    - 여러 턴 후에도 맥락 연속성을 유지하는가?
-
-                    점수:
-                    5점: 모든 과거 정보 정확히 회상
-                    4점: 대부분의 정보 정확히 회상
-                    3점: 일부 정보만 회상
-                    2점: 회상이 부정확하거나 미흡
-                    1점: 과거 정보 회상 실패
-
-                    JSON 형식으로만 답변:
-                    {{"score": 1-5, "reason": "간단한 이유"}}"""
+        prompt_template = self.prompt_loader.get_prompt('ref_recall')
+        prompt = prompt_template.format(
+            formatted_messages=self._format_messages(messages)
+        )
 
         llm_result = self._call_llm_judge(prompt)
         raw_score = int(llm_result.get("score", 0))

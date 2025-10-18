@@ -1,0 +1,98 @@
+# LLM Judge 프롬프트 템플릿 모음
+# 메트릭별로 분류하여 관리
+
+error_detect:
+  system: "You are an expert evaluator for AI error handling. Always respond in valid JSON format."
+  template: |
+    AI 응답이 도구 실행 실패를 사용자에게 명확히 보고하는지 판단하세요.
+
+    주입된 에러:
+    - 도구: {injected_tool}
+    - 에러 타입: {injected_error_type} ({error_type_korean})
+
+    AI의 최종 응답:
+    {final_response}
+
+    판단 기준:
+    - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
+    - 서비스 이용 불가나 조회 실패를 설명했는가?
+    - 타임아웃, 접속 불가 등 구체적 문제를 언급했는가?
+    - 문제의 원인을 설명했는가?
+
+    주의사항:
+    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: false
+    - 에러 언급 없이 "죄송합니다"만 말하는 경우: false
+    - 명확하게 에러/실패를 설명하는 경우: true
+
+    JSON 형식으로만 답변:
+    {{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "간단한 이유"}}
+  
+  error_type_mapping:
+    timeout: "타임아웃/시간 초과"
+    complete_unavailable: "서비스 완전 불가/이용 불가"
+    data_not_available: "데이터 없음/조회 불가"
+
+eff_score:
+  system: "You are an expert evaluator for task completion. Always respond in valid JSON format."
+  template: |
+    사용자의 요청을 기반으로 최종답변이 성공적으로 생성되었는지 판단해주세요.
+
+    사용자 요청: {query}
+
+    최종 답변: {final_answer}
+
+    수행한 도구: {tool_calls}
+
+    판단 기준:
+    - 사용자의 요청을 정확히 이해하고 완료했는가?
+    - 필요한 정보를 모두 제공했는가?
+    - 도구를 적절히 활용했는가?
+
+    JSON 형식으로만 답변:
+    {{"success": true/false, "reason": "간단한 이유"}}
+
+context_retention:
+  system: "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."
+  template: |
+    대화에서 답변 생성의 맥락 유지 능력을 1-5점으로 평가하세요.
+
+    대화 내용:
+    {formatted_messages}
+
+    평가 기준:
+    - 이전 대화 정보를 기억하고 활용하는가?
+    - 사용자의 과거 언급을 적절히 연결하는가?
+    - 불필요한 재질문 없이 맥락을 이어가는가?
+
+    점수:
+    5점: 모든 맥락 완벽 유지 및 활용
+    4점: 대부분의 맥락 유지
+    3점: 일부 맥락만 유지
+    2점: 맥락 유지 미흡
+    1점: 맥락 유지 실패
+
+    JSON 형식으로만 답변:
+    {{"score": 1-5, "reason": "간단한 이유"}}
+
+ref_recall:
+  system: "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."
+  template: |
+    대화에서 답변의 과거 정보 회상 능력을 1-5점으로 평가하세요.
+
+    대화:
+    {formatted_messages}
+
+    평가 기준:
+    - 초반 대화의 구체적 정보를 나중에도 정확히 기억하는가?
+    - 시간이 지나도 이전 정보를 정확히 참조하는가?
+    - 여러 턴 후에도 맥락 연속성을 유지하는가?
+
+    점수:
+    5점: 모든 과거 정보 정확히 회상
+    4점: 대부분의 정보 정확히 회상
+    3점: 일부 정보만 회상
+    2점: 회상이 부정확하거나 미흡
+    1점: 과거 정보 회상 실패
+
+    JSON 형식으로만 답변:
+    {{"score": 1-5, "reason": "간단한 이유"}}
