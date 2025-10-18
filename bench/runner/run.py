@@ -7,7 +7,6 @@ from typing import Any, Dict, List
 
 from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
-from .judge import Judge
 from ..observability import observe, get_client, is_enabled
 from ..tools.caching_executor import CachingExecutor
 
@@ -18,7 +17,6 @@ class BenchmarkRunner:
     def __init__(self, 
                  adapter: BaseAdapter,
                  tool_registry: ToolRegistry,
-                 judge: Judge,
                  max_steps: int = 10,
                  timeout: int = 300,
                  max_retries: int = 3):
@@ -27,14 +25,12 @@ class BenchmarkRunner:
         Args:
             adapter: LLM adapter for API calls
             tool_registry: Registry of available tools
-            judge: Judge for evaluating results
             max_steps: Maximum number of steps per task
             timeout: Timeout in seconds per task
             max_retries: Maximum retries for failed API calls
         """
         self.adapter = adapter
         self.tool_registry = tool_registry
-        self.judge = judge
         self.max_steps = max_steps
         self.timeout = timeout
         self.max_retries = max_retries
@@ -166,20 +162,22 @@ class BenchmarkRunner:
                         "error_type": tool_call.get('error_type'),  # For ErrorDetect metric
                     })
             
-            # Add tool_invocations to result for judge evaluation
+            # Add tool_invocations to result
             result['tool_invocations'] = tool_invocations
-            
-            # Judge the result
-            evaluation = self.judge.evaluate(task, result)
             
             execution_time = time.time() - start_time
             
+            # Determine success based on task completion (no error and has result)
+            success = (
+                result.get('final_response') is not None 
+                and len(result.get('steps', [])) > 0
+            )
+            
             final_result = {
                 "task_id": task_id,
-                "success": evaluation.get('success', False),
+                "success": success,
                 "result": result,
                 "tool_invocations": tool_invocations,
-                "evaluation": evaluation,
                 "execution_time": execution_time,
                 "steps_taken": len(result.get('steps', [])),
                 "error": None

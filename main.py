@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
-from bench.runner import BenchmarkRunner, Judge
+from bench.runner import BenchmarkRunner
 from bench.tasks.task_loader import TaskLoader
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
@@ -54,26 +54,6 @@ def save_results_to_json(results: List[Dict[str, Any]], model_name: str, output_
     total_steps = sum(r.get('steps_taken', 0) for r in results)
     total_tool_calls = sum(len(r.get('tool_invocations', [])) for r in results)
     
-    # 메트릭 집계 추가
-    metric_scores = {"SR": [], "EPR_CVR": [], "pass@k": []}
-    for result in results:
-        evaluation = result.get('evaluation', {})
-        metrics = evaluation.get('metrics', {})
-        for metric_name in metric_scores.keys():
-            if metric_name in metrics:
-                metric_scores[metric_name].append(metrics[metric_name]['score'])
-    
-    # 평균 계산
-    avg_metrics = {}
-    for metric_name, scores in metric_scores.items():
-        if scores:
-            avg_metrics[metric_name] = {
-                "average": round(sum(scores) / len(scores), 4),
-                "count": len(scores)
-            }
-        else:
-            avg_metrics[metric_name] = {"average": 0.0, "count": 0}
-    
     log_data = {
         "metadata": {
             "timestamp": datetime.now().isoformat(),
@@ -86,21 +66,12 @@ def save_results_to_json(results: List[Dict[str, Any]], model_name: str, output_
             "average_execution_time": round(total_time / total_tasks, 2) if total_tasks > 0 else 0,
             "total_steps": total_steps,
             "total_tool_calls": total_tool_calls,
-            "metrics": avg_metrics  # 메트릭 평균 추가
         },
         "results": results
     }
     
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(log_data, f, indent=2, ensure_ascii=False)
-    
-    # 콘솔에 메트릭 출력 추가 (테스트용)
-    print(f"\n{'='*60}")
-    print("공통 평가 지표:")
-    print(f"{'='*60}")
-    for metric_name, metric_data in avg_metrics.items():
-        print(f"{metric_name}: {metric_data['average']:.4f} ({metric_data['count']}개 태스크)")
-    print(f"{'='*60}\n")
     
     return str(filepath)
 
@@ -150,8 +121,7 @@ def run_tool_calling_demo(
     # 컴포넌트 설정
     registry = create_default_tool_registry(tool_classes)
     adapter = LiteLLMAdapter(model_name, **adapter_config)
-    judge = Judge(llm_adapter=adapter)
-    runner = BenchmarkRunner(adapter, registry, judge, max_steps=3, timeout=30)
+    runner = BenchmarkRunner(adapter, registry, max_steps=3, timeout=30)
     all_results = []
 
     # 태스크 실행

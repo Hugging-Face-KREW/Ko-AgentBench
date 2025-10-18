@@ -21,7 +21,7 @@ except Exception:
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
 from bench.adapters.transformers_adapter import TransformersAdapter
-from bench.runner import BenchmarkRunner, Judge
+from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
@@ -407,8 +407,7 @@ def run_benchmark_on_dataset(
         print(f"\n[API] Using LiteLLMAdapter for API inference")
         adapter = LiteLLMAdapter(model_name, **adapter_config)
     
-    judge = Judge(llm_adapter=adapter)
-    runner = BenchmarkRunner(adapter, registry, judge, max_steps=max_steps, timeout=timeout)
+    runner = BenchmarkRunner(adapter, registry, max_steps=max_steps, timeout=timeout)
     
     all_results = []
     
