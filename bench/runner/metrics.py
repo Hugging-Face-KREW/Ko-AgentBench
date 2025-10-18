@@ -665,8 +665,8 @@ class SourceEPRMetric(Metric):
 #레벨5 메트릭
 class ErrorDetectMetric(Metric):
     """
-    ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
-    LLM-as-a-Judge로 final_response에서 에러 보고 여부를 판단
+ ErrorDetect : 주입된 오류(tool,error_type)를 모델이 올바르게 보고하는지의 비율
+    LLM-as-a-Judge로 final_response에서 에러 보고 여부 및 에러 타입 일치 여부를 판단
     """
     name = "ErrorDetect"
     level = 5
@@ -677,7 +677,12 @@ class ErrorDetectMetric(Metric):
     def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
         """LLM Judge 호출"""
         if not self.llm_adapter:
-            return {"error_reported": False, "confidence": 0.0, "reason": "LLM adapter not available"}
+            return {
+                "error_reported": False, 
+                "reported_error_type": "none",
+                "confidence": 0.0, 
+                "reason": "LLM adapter not available"
+            }
         
         try:
             messages = [
@@ -697,13 +702,24 @@ class ErrorDetectMetric(Metric):
                 if error_reported_match:
                     return {
                         "error_reported": error_reported_match.group(1) == "true",
+                        "reported_error_type": "other",
                         "confidence": 0.5,
                         "reason": "Parsed from text"
                     }
-                return {"error_reported": False, "confidence": 0.0, "reason": "Failed to parse LLM response"}
+                return {
+                    "error_reported": False, 
+                    "reported_error_type": "none",
+                    "confidence": 0.0, 
+                    "reason": "Failed to parse LLM response"
+                }
                 
         except Exception as e:
-            return {"error_reported": False, "confidence": 0.0, "reason": f"Error: {str(e)}"}
+            return {
+                "error_reported": False, 
+                "reported_error_type": "none",
+                "confidence": 0.0, 
+                "reason": f"Error: {str(e)}"
+            }
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         inj = ctx.task_schema.get("error_injection", {}) or {}
@@ -762,28 +778,43 @@ class ErrorDetectMetric(Metric):
                     {final_response}
 
                     판단 기준:
-                    - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
-                    - 서비스 이용 불가나 조회 실패를 설명했는가?
-                    - 타임아웃, 접속 불가 등 구체적 문제를 언급했는가?
-                    - 문제의 원인을 설명했는가?
+
+                    1. 에러를 보고했는가?
+                       - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
+                       - 서비스 이용 불가나 조회 실패를 설명했는가?
+                       - 문제의 원인을 설명했는가?
+
+                    2. 어떤 타입의 에러를 보고했는가?
+                       - timeout: 타임아웃, 시간 초과, 응답 없음, 지연, 연결 시간 초과
+                       - data_not_available: 데이터 없음, 조회 불가, 검색 결과 없음, 정보 없음
+                       - complete_unavailable: 서비스 불가, 접속 불가, 시스템 장애, 이용 불가
+                       - other: 에러는 보고했으나 위 타입에 해당하지 않음
+                       - none: 에러 보고하지 않음
 
                     주의사항:
-                    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: false
-                    - 에러 언급 없이 "죄송합니다"만 말하는 경우: false
-                    - 명확하게 에러/실패를 설명하는 경우: true
+                    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: error_reported=false
+                    - 에러 언급 없이 "죄송합니다"만 말하는 경우: error_reported=false
+                    - 명확하게 에러/실패를 설명하는 경우: error_reported=true
 
                     JSON 형식으로만 답변:
-                    {{"error_reported": true/false, "confidence": 0.0-1.0, "reason": "간단한 이유"}}"""
+                    {{"error_reported": true/false, "reported_error_type": "timeout|data_not_available|complete_unavailable|other|none", "confidence": 0.0-1.0, "reason": "간단한 이유"}}"""
 
         llm_result = self._call_llm_judge(prompt)
         error_reported = llm_result.get("error_reported", False)
+        reported_error_type = llm_result.get("reported_error_type", "none")
         confidence = llm_result.get("confidence", 0.0)
         
-        score = 1.0 if error_reported else 0.0
+        # 에러 타입 일치 여부 비교 
+        type_matches = (reported_error_type == inj_type)
+        
+        # 점수 계산: 에러를 보고하고 타입도 일치해야 만점
+        score = 1.0 if (error_reported and type_matches) else 0.0
         
         return EvaluationResult(self.name, score, {
             "error_occurred": True,
             "error_reported": error_reported,
+            "reported_error_type": reported_error_type,
+            "type_matches": type_matches,
             "confidence": confidence,
             "llm_reason": llm_result.get("reason", "No reason provided"),
             "injected_tool": inj_tool,
