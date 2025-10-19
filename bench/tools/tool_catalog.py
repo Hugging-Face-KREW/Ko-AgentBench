@@ -5,21 +5,21 @@ task-declared tool names, without changing runner logic.
 """
 
 from __future__ import annotations
+
 from typing import Any, Dict, List, Tuple, Type
 
+from .aladin_search import AladinAPI
 from .base_api import BaseTool
+from .bithumb_stock import BithumbStock
+from .daum_search import DaumSearchAPI
+from .kakao_local import KakaoLocal
+from .kis_stock import KISStock
+from .ls_stock import LSStock
 from .method_tool_wrapper import make_method_tool_class
 from .naver_directions import NaverMapsAPI
-from .ls_stock import LSStock
-from .bithumb_stock import BithumbStock
-from .upbit_crypto import UpbitCrypto
 from .naver_search import NaverSearchAPI
-from .daum_search import DaumSearchAPI
-from .aladin_search import AladinAPI
-from .kakao_local import KakaoLocal
-from .tmap_navigation import TmapNavigation 
-from .kis_stock import KISStock 
-
+from .tmap_navigation import TmapNavigation
+from .upbit_crypto import UpbitCrypto
 
 # Catalog entry: tool_name -> (api_class, method_name, description, parameters_schema)
 TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
@@ -28,7 +28,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     # ===== Naver Directions =====
     "Directions_naver": (
         NaverMapsAPI,
-        "Directions_naver",
+        "_directions",
         "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 조회",
         {
             "type": "object",
@@ -45,27 +45,13 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "required": ["start", "goal"],
         },
     ),
-    "_directions": (
-        NaverMapsAPI,
-        "Directions_naver",
-        "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 조회",
-        {
-            "type": "object",
-            "properties": {
-                "start": {"type": "string", "description": "출발지(경도,위도) (예: 127.12345,37.12345)"},
-                "goal": {"type": "string", "description": "도착지 좌표 문자열 (예: '123.45678,34.56789')"},
-                "waypoints": {"type": "string", "description": "경유지 좌표 문자열. '|'로 구분 (최대 5개)"},
-                "option": {
-                    "type": "string",
-                    "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"],
-                    "description": "경로 조회 옵션",
-                },
-            },
-            "required": ["start", "goal"],
-        },
-    ),
-
     # ===== LS Stock =====
+    "StockPrice_ls": (
+        LSStock,
+        "_stock_price",
+        "주식 현재가 조회, LS증권 Open API를 활용합니다.",
+        {"type": "object", "properties": {"shcode": {"type": "string", "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)","pattern": "^[0-9]{6}$"},"exchgubun": {"type": "string", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", "enum": ["K", "N", "U"], "default": "K"}}, "required": ["shcode"]},
+    ),
     "StockSearch_ls": (
         LSStock,
         "_stock_search",
@@ -163,7 +149,10 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         BithumbStock,
         "_cryptoPrice_bithumb",
         "빗썸 암호화폐 현재가 정보 조회",
-        {"type": "object", "properties": {"markets": {"type": "string", "default": "KRW-BTC"}}, "required": ["markets"]},
+    {
+        "type": "object", "properties": {
+            "markets": {"type": "string", "default": "KRW-BTC", "description": "반점으로 구분되는 마켓 코드 (ex. KRW-BTC, BTC-ETH)","pattern": "^[A-Z0-9]+$", "enum": [ "KRW-BTC", "BTC-ETH"]}},
+            "required": ["markets"]},
     ),
     "OrderBook_bithumb": (
         BithumbStock,
@@ -172,7 +161,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "markets": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드 (예: KRW-BTC, BTC-ETH)"}
+                "markets": {"type": "string", "default": "KRW-BTC", "description": "반점으로 구분되는 마켓 코드 (ex. KRW-BTC, BTC-ETH)", "pattern": "^[A-Z0-9]+$", "enum": [ "KRW-BTC", "BTC-ETH"]}
             },
             "required": ["markets"]
         }
@@ -342,7 +331,12 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "query_type": {"type": "string", "enum": ["Keyword", "Title", "Author", "Publisher"], "default": "Keyword"},
                 "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
                 "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"}
+                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"},
+                "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
+                "category_id": {"type": "integer", "description": "카테고리 ID"},
+                "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
+                "out_of_stock_filter": {"type": "integer", "enum": [0, 1], "default": 0, "description": "품절/절판 상품 필터링 여부 (1: 제외)"},
+                "opt_result": {"type": "string", "description": "부가 정보 요청. 쉼표로 구분하여 다중 선택. (예: ebookList, usedList)"}
             }, 
             "required": ["query"]
         }
@@ -354,15 +348,76 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "query_type": {"type": "string", "enum": ["Bestseller", "ItemNewAll", "ItemNewSpecial"], "default": "Bestseller"},
-                "search_target": {"type": "string", "enum": ["Book", "Foreign", "eBook"], "default": "Book"},
-                "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1}
+                "query_type": {
+                    "type": "string",
+                    "enum": ["ItemNewAll", "ItemNewSpecial", "ItemEditorChoice", "Bestseller", "BlogBest"],
+                    "description": "조회할 리스트 종류"
+                },
+                "search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Foreign", "Music", "DVD", "Used", "eBook", "All"],
+                    "description": "조회 대상 Mall, 기본값: Book(도서)",
+                    "default": "Book"
+                },
+                "sub_search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Music", "DVD", ""],
+                    "description": "SearchTarget이 Used(중고)일 경우, 서브 Mall 지정",
+                    "default": ""
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "시작 페이지, 기본값: 1",
+                    "default": 1
+                },
+                "max_results": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "description": "한 페이지에 보여질 상품 수, 기본값: 10",
+                    "default": 10
+                },
+                "cover": {
+                    "type": "string",
+                    "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"],
+                    "description": "표지 이미지 크기, 기본값: Mid",
+                    "default": "Mid"
+                },
+                "category_id": {
+                    "type": "integer",
+                    "description": "분야의 고유 번호로 리스트를 제한합니다. (기본값: 0, 전체)",
+                    "default": 0
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 연도 (생략 시 현재)"
+                },
+                "month": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 월 (생략 시 현재)"
+                },
+                "week": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 주 (생략 시 현재)"
+                },
+                "output": {
+                    "type": "string",
+                    "enum": ["xml", "js"],
+                    "description": "출력 형식, 기본값: js",
+                    "default": "js"
+                },
+                "out_of_stock_filter": {
+                    "type": "integer",
+                    "enum": [0, 1],
+                    "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
+                    "default": 0
+                }
             },
             "required": ["query_type"]
         }
     ),
-    "ItemLookup_aladin": (
+    "Lookup_aladin_item": (
         AladinAPI,
         "_get_item_details",
         "알라딘 상품 상세 정보 조회",
@@ -438,21 +493,6 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             },
             "required": ["latitude", "longitude"],
         },
-    ),
-
-    # ===== LS Stock (추가) =====
-    "StockPrice_ls": (
-        LSStock,
-        "_stock_price",
-        "LS증권 주식 현재가 조회",
-        {
-            "type": "object",
-            "properties": {
-                "shcode": {"type": "string", "description": "주식 종목코드 (6자리)", "pattern": "^[0-9]{6}$"},
-                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "K", "description": "거래소 구분 (K: KRX, N: NXT, U: 통합)"}
-            },
-            "required": ["shcode"]
-        }
     ),
 
     # ===== Tmap Navigation =====

@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
-from bench.runner import BenchmarkRunner, Judge
+from bench.runner import BenchmarkRunner
 from bench.tasks.task_loader import TaskLoader
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
@@ -103,13 +103,13 @@ def run_tool_calling_demo(
     
     # JSONL 샘플 네이버 태스크 로드
     task_loader = TaskLoader()
-    tasks = task_loader.load_tasks("sample_naver_tasks.jsonl")
+    tasks = task_loader.load_tasks("sample_tasks_lv2.jsonl")
     
     # 태스크에 명시된 tools를 기준으로 필요한 툴 클래스를 자동 등록
     if tool_classes is None:
         requested: List[str] = []
         for t in tasks:
-            for name in t.get("tools", []) or []:
+            for name in t.get("available_tools", []) or []:
                 if name not in requested:
                     requested.append(name)
 
@@ -121,14 +121,13 @@ def run_tool_calling_demo(
     # 컴포넌트 설정
     registry = create_default_tool_registry(tool_classes)
     adapter = LiteLLMAdapter(model_name, **adapter_config)
-    judge = Judge(llm_adapter=adapter)
-    runner = BenchmarkRunner(adapter, registry, judge, max_steps=3, timeout=30)
+    runner = BenchmarkRunner(adapter, registry, max_steps=3, timeout=30)
     all_results = []
 
     # 태스크 실행
     for i, task in enumerate(tasks, 1):
-        print(f"\n--- Task {i}/{len(tasks)}: {task['id']} ---")
-        print(f"설명: {task['description']}")
+        print(f"\n--- Task {i}/{len(tasks)}: {task['task_id']} ---")
+        print(f"설명: {task['instruction']}")
         
         try:
             result = runner.run_task(task)
@@ -156,7 +155,7 @@ def run_tool_calling_demo(
         except Exception as e:
             print(f"실행 실패: {e}")
             all_results.append({
-                "task_id": task.get('id', 'unknown'),
+                "task_id": task.get('task_id', 'unknown'),
                 "success": False,
                 "error": str(e),
                 "execution_time": 0,
@@ -195,7 +194,7 @@ def main() -> None:
     # run_tool_calling_demo(model_name="openai/gpt-4o-mini")
     # run_tool_calling_demo(model_name="anthropic/claude-3-5-sonnet")
     # run_tool_calling_demo(model_name="groq/gemma-7b-it")
-    selected_model = MODEL_IDS[-1] if MODEL_IDS else ""
+    selected_model = MODEL_IDS[0] if MODEL_IDS else ""
     if selected_model:
         print(f"선택된 모델: {selected_model}")
         run_tool_calling_demo(
