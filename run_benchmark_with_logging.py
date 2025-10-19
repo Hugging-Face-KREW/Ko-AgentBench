@@ -140,7 +140,8 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
             "arg_schema": task.get("arg_schema", {}),
             # Pass through evaluation helpers if present
             "minimum_steps": task.get("minimum_steps"),
-            "data_flow": task.get("data_flow", [])
+            "data_flow": task.get("data_flow", []),
+            "error_injection": task.get("error_injection")
         }
         converted_tasks.append(converted_task)
     
@@ -169,6 +170,7 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "golden_action": result.get("golden_action", []),
         "minimum_steps": result.get("minimum_steps"),
         "data_flow": result.get("data_flow", []),
+        "error_injection": result.get("error_injection"),
     }
     
     # Extract tool calls in a simplified format with results
@@ -455,6 +457,8 @@ def run_benchmark_on_dataset(
                 result['minimum_steps'] = task.get('minimum_steps')
             if 'data_flow' in task:
                 result['data_flow'] = task.get('data_flow', [])
+            if 'error_injection' in task:
+                result['error_injection'] = task.get('error_injection')
             all_results.append(result)
             
             # Print summary
