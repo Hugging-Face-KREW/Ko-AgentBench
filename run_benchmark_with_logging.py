@@ -36,8 +36,8 @@ from configs.secrets import (
 
 
 
-def load_benchmark_datasets(data_dir: str = "data") -> Dict[str, List[Dict]]:
-    """Load all benchmark datasets from data directory.
+def load_benchmark_datasets(data_dir: str = "bench/tasks") -> Dict[str, List[Dict]]:
+    """Load all benchmark datasets from bench/tasks directory.
     
     Args:
         data_dir: Directory containing L1.json ~ L7.json files
@@ -589,10 +589,10 @@ def main():
     
     # Load datasets
     print("\nLoading benchmark datasets...")
-    datasets = load_benchmark_datasets("data")
+    datasets = load_benchmark_datasets("bench/tasks")
     
     if not datasets:
-        print("[ERROR] No datasets found in data/ directory")
+        print("[ERROR] No datasets found in bench/tasks/ directory")
         return
     
     print(f"\n[OK] Loaded {len(datasets)} dataset levels")
