@@ -70,18 +70,31 @@ class ModelRunEvaluator:
         # 모델명을 파일명 패턴으로 변환 (azure/gpt-4.1 -> azure_gpt-4.1)
         model_pattern = self.model.replace('/', '_')
         
-        # 패턴: L{level}_{model}_{date}*.json
-        pattern = f"L*_{model_pattern}_{self.date}*.json"
+        level_files = {}
         
+        # 기존 패턴: logs/benchmark_results/L{level}_{model}_{date}*.json)
+        pattern = f"L*_{model_pattern}_{self.date}*.json"
         files = list(results_dir.glob(pattern))
         
-        # 레벨별로 정리
-        level_files = {}
         for f in files:
-            # 파일명에서 레벨 추출 (L1, L2, ...)
             level = f.name.split('_')[0]
             if level.startswith('L') and level[1:].isdigit():
                 level_files[level] = f
+        
+        # 변경 패턴: logs/benchmark_results/by_model/{model}/{date_timestamp}/L*.json)
+        if not level_files:
+            by_model_dir = results_dir / 'by_model' / model_pattern
+            
+            if by_model_dir.exists():
+                date_dirs = [d for d in by_model_dir.iterdir() 
+                            if d.is_dir() and d.name.startswith(self.date)]
+                
+                for level_name in ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7']:
+                    for date_dir in date_dirs:
+                        level_file = date_dir / f"{level_name}.json"
+                        if level_file.exists() and level_name not in level_files:
+                            level_files[level_name] = level_file
+                            break
         
         return level_files
     
