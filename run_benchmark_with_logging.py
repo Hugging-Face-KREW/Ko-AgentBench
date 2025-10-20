@@ -671,6 +671,8 @@ def main():
         adapter_config['dtype'] = args.dtype
         if args.quantization:
             adapter_config['quantization'] = args.quantization
+        # Context management is now handled automatically by TransformersAdapter
+        # based on model config (max_position_embeddings, etc.)
     
     # Run benchmarks on each level
     all_level_results = {}

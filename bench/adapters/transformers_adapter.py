@@ -60,10 +60,13 @@ class TransformersAdapter(BaseAdapter):
         self.top_p = config.get('top_p', 0.9)
         self.trust_remote_code = config.get('trust_remote_code', False)
         
-        # Load model and tokenizer
+        # Load model and tokenizer first to get model config
         self.logger.info(f"Loading model: {model_name}")
         self._load_model_and_tokenizer()
         self.logger.info(f"Model loaded successfully on {self.device}")
+        
+        # Context window management - auto-detect from model config
+        self._setup_context_management(config)
     
     def _get_torch_dtype(self, dtype_str: str):
         """Convert dtype string to torch dtype."""
@@ -128,6 +131,77 @@ class TransformersAdapter(BaseAdapter):
         else:
             self.logger.warning(f"[INIT DEBUG] Model does NOT have chat_template attribute")
     
+    def _setup_context_management(self, config: Dict[str, Any]):
+        """Setup context window management based on model config.
+        
+        Auto-detects max_position_embeddings from model config and sets
+        appropriate limits for context and tool results.
+        
+        Args:
+            config: User-provided configuration (can override auto-detection)
+        """
+        # Try to get model's maximum context length from various sources
+        model_max_length = None
+        
+        # Method 1: Check model.config.max_position_embeddings
+        if hasattr(self.model, 'config'):
+            model_max_length = getattr(self.model.config, 'max_position_embeddings', None)
+            if model_max_length:
+                print(f"[CONTEXT CONFIG] Detected max_position_embeddings: {model_max_length}")
+                self.logger.info(f"[CONFIG] Detected max_position_embeddings: {model_max_length}")
+        
+        # Method 2: Check tokenizer.model_max_length
+        if not model_max_length and hasattr(self.tokenizer, 'model_max_length'):
+            tokenizer_max = self.tokenizer.model_max_length
+            # Some tokenizers return very large numbers (1e30) as default
+            if tokenizer_max and tokenizer_max < 1000000:
+                model_max_length = tokenizer_max
+                print(f"[CONTEXT CONFIG] Using tokenizer.model_max_length: {model_max_length}")
+                self.logger.info(f"[CONFIG] Using tokenizer.model_max_length: {model_max_length}")
+        
+        # Method 3: Check model.config.n_positions (GPT-style)
+        if not model_max_length and hasattr(self.model, 'config'):
+            n_positions = getattr(self.model.config, 'n_positions', None)
+            if n_positions:
+                model_max_length = n_positions
+                self.logger.info(f"[CONFIG] Using n_positions: {model_max_length}")
+        
+        # Fallback: Use conservative default
+        if not model_max_length:
+            model_max_length = 8192  # Conservative default for modern models
+            print(f"[CONTEXT CONFIG] Could not detect model max length, using default: {model_max_length}")
+            self.logger.warning(
+                f"[CONFIG] Could not detect model max length, using default: {model_max_length}"
+            )
+        
+        # Calculate max_context_tokens: reserve space for generation
+        # User can override via config
+        if 'max_context_tokens' in config:
+            self.max_context_tokens = config['max_context_tokens']
+            print(f"[CONTEXT CONFIG] Using user-specified max_context_tokens: {self.max_context_tokens}")
+            self.logger.info(f"[CONFIG] Using user-specified max_context_tokens: {self.max_context_tokens}")
+        else:
+            # Auto-calculate: model_max - max_new_tokens - small buffer
+            buffer = 100  # Small buffer for safety
+            self.max_context_tokens = max(512, model_max_length - self.max_new_tokens - buffer)
+            print(
+                f"[CONTEXT CONFIG] Auto-calculated max_context_tokens: {self.max_context_tokens} "
+                f"(model_max={model_max_length}, max_new_tokens={self.max_new_tokens}, buffer={buffer})"
+            )
+            self.logger.info(
+                f"[CONFIG] Auto-calculated max_context_tokens: {self.max_context_tokens} "
+                f"(model_max={model_max_length}, max_new_tokens={self.max_new_tokens}, buffer={buffer})"
+            )
+        
+        print(
+            f"[CONTEXT CONFIG] ✓ Context management configured: "
+            f"max_context_tokens={self.max_context_tokens}"
+        )
+        self.logger.info(
+            f"[CONFIG] Context management configured: "
+            f"max_context_tokens={self.max_context_tokens}"
+        )
+    
     @observe(as_type="generation")
     def chat_completion(self, messages: List[Dict[str, str]], 
                        tools: Optional[List[Dict]] = None,
@@ -147,8 +221,14 @@ class TransformersAdapter(BaseAdapter):
         self.logger.info(f"[CHAT DEBUG] Messages count: {len(messages)}")
         self.logger.info(f"[CHAT DEBUG] Tools count: {len(tools) if tools else 0}")
         
+        # Truncate messages if needed before applying template
+        messages = self._truncate_messages_if_needed(messages, tools)
+        
         # Apply chat template
         prompt = self._apply_chat_template(messages, tools)
+        
+        # Final check and truncate prompt if still too long
+        prompt = self._ensure_prompt_within_limit(prompt)
         
         self.logger.info(f"[CHAT DEBUG] Final prompt length: {len(prompt)} chars")
         self.logger.info(f"[CHAT DEBUG] Prompt preview (last 800 chars):\n{prompt[-800:]}")
@@ -380,6 +460,110 @@ class TransformersAdapter(BaseAdapter):
         
         prompt += "Assistant: "
         return prompt
+    
+    def _truncate_messages_if_needed(self, messages: List[Dict[str, str]], 
+                                     tools: Optional[List[Dict]] = None) -> List[Dict[str, str]]:
+        """Truncate messages to prevent context overflow.
+        
+        Strategy:
+        1. Keep system message (if exists)
+        2. Keep last user message
+        3. Remove older messages if still too long
+        
+        Note: Individual tool results are NOT truncated here.
+        Final prompt-level truncation in _ensure_prompt_within_limit handles overflow.
+        
+        Args:
+            messages: List of chat messages
+            tools: Available tools (for rough size estimation)
+            
+        Returns:
+            Truncated messages list
+        """
+        if not messages:
+            return messages
+        
+        # Make a copy to avoid modifying original
+        messages = [msg.copy() for msg in messages]
+        
+        # Estimate total tokens (rough approximation)
+        # We'll do a more precise check after template application
+        total_chars = sum(len(msg.get('content', '')) for msg in messages)
+        
+        # If roughly within limits, return (4 chars ≈ 1 token rough estimate)
+        if total_chars // 4 < self.max_context_tokens * 0.8:
+            return messages
+        
+        # Need to remove some messages
+        # Keep: system (if exists), last user message
+        # Remove: older messages, starting from oldest
+        
+        system_msg = None
+        if messages and messages[0].get('role') == 'system':
+            system_msg = messages.pop(0)
+        
+        # Keep last user message and subsequent messages
+        last_user_idx = -1
+        for i in range(len(messages) - 1, -1, -1):
+            if messages[i].get('role') == 'user':
+                last_user_idx = i
+                break
+        
+        if last_user_idx > 0:
+            # Remove messages before last user message, keeping some context
+            # Keep at most 5 messages before last user message
+            keep_from = max(0, last_user_idx - 5)
+            messages = messages[keep_from:]
+            self.logger.warning(f"[CONTEXT] Removed {keep_from} older messages to fit context")
+        
+        # Re-add system message at the beginning
+        if system_msg:
+            messages.insert(0, system_msg)
+        
+        return messages
+    
+    def _ensure_prompt_within_limit(self, prompt: str) -> str:
+        """Ensure final prompt is within token limit.
+        
+        Args:
+            prompt: Formatted prompt string
+            
+        Returns:
+            Truncated prompt if necessary
+        """
+        tokens = self.tokenizer.encode(prompt, add_special_tokens=True)
+        
+        if len(tokens) <= self.max_context_tokens:
+            # Within limit, no action needed
+            return prompt
+        
+        # Truncate from the middle, keeping start (system/tools) and end (recent context)
+        self.logger.warning(
+            f"[CONTEXT] Prompt exceeds limit: {len(tokens)} > {self.max_context_tokens}, truncating..."
+        )
+        
+        # Keep first 30% and last 60% of tokens
+        keep_start = int(self.max_context_tokens * 0.3)
+        keep_end = int(self.max_context_tokens * 0.6)
+        
+        truncated_tokens = tokens[:keep_start] + tokens[-(keep_end - 1):]  # -1 for '...' token
+        
+        # Insert truncation marker
+        ellipsis_token = self.tokenizer.encode("...", add_special_tokens=False)
+        truncated_tokens = tokens[:keep_start] + ellipsis_token + tokens[-keep_end:]
+        
+        # Ensure we're still within limit
+        if len(truncated_tokens) > self.max_context_tokens:
+            truncated_tokens = truncated_tokens[:self.max_context_tokens]
+        
+        truncated_prompt = self.tokenizer.decode(truncated_tokens, skip_special_tokens=True)
+        
+        self.logger.warning(
+            f"[CONTEXT] Truncated to {len(truncated_tokens)} tokens "
+            f"(removed ~{len(tokens) - len(truncated_tokens)} tokens)"
+        )
+        
+        return truncated_prompt
     
     def _parse_tool_calls(self, text: str, tools: List[Dict]) -> tuple[Optional[List[Dict]], str]:
         """Parse tool calls from model output.
