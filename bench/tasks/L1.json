@@ -169,29 +169,6 @@
     }
   },
   {
-    "task_id": "L1-005",
-    "instruction": "LS에서 삼성전자 종목코드 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "StockSearch_ls",
-        "args": {
-          "query_index": "삼성전자"
-        }
-      }
-    ],
-    "arg_schema": {
-      "query_index": {
-        "type": "string",
-        "required": true
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
     "task_id": "L1-106",
     "instruction": "LS에서 KOSDAQ 지수의 등락률(%)만 숫자 한 줄로 알려줘.",
     "task_level": 1,

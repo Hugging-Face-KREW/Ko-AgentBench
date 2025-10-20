@@ -306,27 +306,6 @@
     ]
   },
   {
-    "task_id": "L2-017",
-    "instruction": "카카오 주식의 최근 체결 내역을 확인해줘",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "StockTrades_ls",
-      "StockPrice_ls",
-      "StockSearch_ls",
-      "OrderBook_ls",
-      "NewsSearch_naver"
-    ],
-    "golden_action": [
-      {
-        "tool": "StockTrades_ls",
-        "args": {
-          "shcode": "035720"
-        }
-      }
-    ]
-  },
-  {
     "task_id": "L2-020",
     "instruction": "강남역 주변 카페를 찾아줘",
     "task_level": 2,
@@ -923,25 +902,6 @@
         "args": {
           "shcode": "005490",
           "exchgubun": "K"
-        }
-      }
-    ]
-  },
-  {
-    "task_id": "L2-081",
-    "instruction": "LS증권에서 '배터리'로 관련 종목을 검색해줘",
-    "task_level": 2,
-    "task_category": "Tool Retrieval & Selection",
-    "available_tools": [
-      "StockSearch_ls",
-      "WebSearch_naver",
-      "NewsSearch_naver"
-    ],
-    "golden_action": [
-      {
-        "tool": "StockSearch_ls",
-        "args": {
-          "query_index": "배터리"
         }
       }
     ]

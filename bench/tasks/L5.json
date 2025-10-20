@@ -748,41 +748,6 @@
     ]
   },
   {
-    "task_id": "L5-025",
-    "instruction": "LS증권에서 카카오 종목코드 알려줘.",
-    "task_level": 5,
-    "task_category": "Robustness",
-    "golden_action": [
-      {
-        "tool": "StockSearch_ls",
-        "args": {
-          "query_index": "카카오"
-        }
-      }
-    ],
-    "error_injection": {
-      "tool": "StockSearch_ls",
-      "error_type": "complete_unavailable"
-    },
-    "fallback_options": [
-      {
-        "tool": "WebSearch_naver",
-        "args": {
-          "query": "카카오 종목코드",
-          "display": 1
-        }
-      },
-      {
-        "tool": "WebSearch_daum",
-        "args": {
-          "query": "카카오 종목코드",
-          "page": 1,
-          "size": 1
-        }
-      }
-    ]
-  },
-  {
     "task_id": "L5-026",
     "instruction": "네이버에서 '제주도 가을 여행 코스' 블로그 글 하나만 제목 알려줘.",
     "task_level": 5,
