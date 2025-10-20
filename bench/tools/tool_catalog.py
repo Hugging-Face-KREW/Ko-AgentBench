@@ -28,7 +28,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     # ===== Naver Directions =====
     "Directions_naver": (
         NaverMapsAPI,
-        "_directions",
+        "Directions_naver",
         "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 조회",
         {
             "type": "object",
@@ -96,7 +96,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object",
             "properties": {
                 "shcode": {"type": "string", "description": "종목 코드"},
-                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "K", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)"}
+                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "N", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)"}
             },
             "required": ["shcode"]
         }
