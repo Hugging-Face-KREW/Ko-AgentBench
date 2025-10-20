@@ -88,7 +88,153 @@ class Metric:
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         raise NotImplementedError
+
+
+class LLMJudgeMetric(Metric):
+    """LLM Judge를 사용하는 메트릭의 base class"""
     
+    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
+        self.llm_adapter = llm_adapter
+        self.llm_adapters = []  # 복수 judge용
+        self.prompt_loader = PromptLoader()
+    
+    def _parse_json_response(self, content: str, fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
+        """JSON 응답 파싱"""
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError:
+            match = re.search(fallback_pattern, content.lower() if 'true|false' in fallback_pattern else content)
+            if match:
+                if 'true|false' in fallback_pattern:
+                    return {fallback_key: match.group(1) == "true", "reason": "Parsed from text"}
+                else:
+                    return {fallback_key: int(match.group(1)), "reason": "Parsed from text"}
+            return {fallback_key: False if 'true|false' in fallback_pattern else 0, 
+                    "reason": "Failed to parse LLM response"}
+    
+    def _call_single_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
+                          fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
+        """단일 judge 호출"""
+        try:
+            messages = [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ]
+            
+            response = adapter.chat_completion(messages, temperature=0.0)
+            content = response.get("message", {}).get("content", "{}")
+            
+            return self._parse_json_response(content, fallback_pattern, fallback_key)
+            
+        except Exception as e:
+            default_value = False if 'true|false' in fallback_pattern else 0
+            return {fallback_key: default_value, "reason": f"Error: {str(e)}"}
+    
+    def _call_multi_judge_binary(self, prompt: str, metric_key: str, 
+                                 result_key: str = "error_reported") -> Dict[str, Any]:
+        """복수 judge 호출 - 이진 결정 (다수결)
+        
+        Args:
+            prompt: 평가 프롬프트
+            metric_key: 시스템 프롬프트 키 (예: 'error_detect')
+            result_key: 결과 키 (예: 'error_reported', 'success')
+        """
+        if hasattr(self, 'llm_adapters') and self.llm_adapters:
+            judges_to_use = self.llm_adapters
+        elif self.llm_adapter:
+            judges_to_use = [self.llm_adapter]
+        else:
+            return {result_key: False, "confidence": 0.0, "reason": "No LLM adapter available"}
+        
+        system_prompt = self.prompt_loader.get_system_prompt(metric_key)
+        fallback_pattern = f'"{result_key}"\\s*:\\s*(true|false)'
+        
+        all_results = []
+        
+        for idx, adapter in enumerate(judges_to_use, 1):
+            result = self._call_single_judge(adapter, system_prompt, prompt, 
+                                            fallback_pattern, result_key)
+            result['judge_id'] = idx
+            result['judge_model'] = getattr(adapter, 'model_name', 'unknown')
+            all_results.append(result)
+        
+        if not all_results:
+            return {result_key: False, "confidence": 0.0, "reason": "All judges failed"}
+        
+        # 다수결
+        positive_votes = sum(1 for r in all_results if r.get(result_key, False))
+        total_votes = len(all_results)
+        final_decision = positive_votes > (total_votes / 2)
+        
+        # 평균 confidence (있는 경우)
+        avg_confidence = sum(r.get("confidence", 0.0) for r in all_results) / total_votes
+        
+        judge_reasons = [
+            f"Judge {r['judge_id']} ({r.get('judge_model', 'unknown')}): "
+            f"{'Yes' if r.get(result_key) else 'No'}"
+            for r in all_results
+        ]
+        
+        return {
+            result_key: final_decision,
+            "confidence": avg_confidence,
+            "reason": f"Multi-judge vote: {positive_votes}/{total_votes}. " + "; ".join(judge_reasons),
+            "individual_results": all_results,
+            "vote_count": {
+                "positive": positive_votes,
+                "negative": total_votes - positive_votes,
+                "total": total_votes
+            }
+        }
+    
+    def _call_multi_judge_score(self, prompt: str, metric_key: str, 
+                                min_score: int = 1, max_score: int = 5) -> Dict[str, Any]:
+        """복수 judge 호출 - 점수 평가 (평균)
+        
+        Args:
+            prompt: 평가 프롬프트
+            metric_key: 시스템 프롬프트 키
+            min_score: 최소 점수
+            max_score: 최대 점수
+        """
+        if hasattr(self, 'llm_adapters') and self.llm_adapters:
+            judges_to_use = self.llm_adapters
+        elif self.llm_adapter:
+            judges_to_use = [self.llm_adapter]
+        else:
+            return {"score": 0, "reason": "No LLM adapter available"}
+        
+        system_prompt = self.prompt_loader.get_system_prompt(metric_key)
+        fallback_pattern = f'"score"\\s*:\\s*([{min_score}-{max_score}])'
+        
+        all_results = []
+        
+        for idx, adapter in enumerate(judges_to_use, 1):
+            result = self._call_single_judge(adapter, system_prompt, prompt, 
+                                            fallback_pattern, "score")
+            result['judge_id'] = idx
+            result['judge_model'] = getattr(adapter, 'model_name', 'unknown')
+            all_results.append(result)
+        
+        if not all_results:
+            return {"score": 0, "reason": "All judges failed"}
+        
+        # 점수 평균
+        avg_score = sum(r.get("score", 0) for r in all_results) / len(all_results)
+        
+        judge_scores = [
+            f"Judge {r['judge_id']} ({r.get('judge_model', 'unknown')}): {r.get('score', 0)}/{max_score}"
+            for r in all_results
+        ]
+        
+        return {
+            "score": round(avg_score),  # 반올림
+            "average_score": avg_score,  # 정확한 평균
+            "reason": f"Multi-judge average: {avg_score:.2f}/{max_score}. " + "; ".join(judge_scores),
+            "individual_results": all_results
+        }
+
+
 #공통 메트릭
 class SRMetric(Metric):
     """SR(성공률): success_condition 충족 여부"""
@@ -217,13 +363,13 @@ class ArgAccMetric(Metric):
             return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
 
         golden_tool = golden_actions[0].get("tool")
-        golden_args: Dict[str, Any] = golden_actions[0].get("args", {}) or {}
-        arg_schema: Dict[str, Any]   = ctx.task_schema.get("arg_schema", {}) or {}
+        golden_args = golden_actions[0].get("args", {}) or {}
+        arg_schema = ctx.task_schema.get("arg_schema", {}) or {}
 
         if not golden_tool:
             return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
 
-        pred_args: Dict[str, Any] = cls._get_first_pred_args_for_tool(ctx, golden_tool)
+        pred_args = cls._get_first_pred_args_for_tool(ctx, golden_tool)
 
         # TP/FP
         tp = fp = 0
@@ -278,7 +424,7 @@ class CallEMMetric(Metric):
 
         invocations = ctx.logs.get("tool_invocations", []) or []
         first_pred_tool = None
-        first_pred_args: Dict[str, Any] = {}
+        first_pred_args = {}
 
         for inv in invocations:
             tool = inv.get("tool") or inv.get("tool_name")
@@ -717,42 +863,6 @@ class ErrorDetectMetric(Metric):
     name = "ErrorDetect"
     level = 5
 
-    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
-        self.llm_adapter = llm_adapter
-        self.prompt_loader = PromptLoader()
-
-    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
-        """LLM Judge 호출"""
-        if not self.llm_adapter:
-            return {"error_reported": False, "confidence": 0.0, "reason": "LLM adapter not available"}
-        
-        try:
-            system_prompt = self.prompt_loader.get_system_prompt('error_detect')
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ]
-            
-            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
-            content = response.get("message", {}).get("content", "{}")
-            
-            try:
-                result = json.loads(content)
-                return result
-            except json.JSONDecodeError:
-                # JSON 파싱 실패 시 텍스트에서 추출 시도
-                error_reported_match = re.search(r'"error_reported"\s*:\s*(true|false)', content.lower())
-                if error_reported_match:
-                    return {
-                        "error_reported": error_reported_match.group(1) == "true",
-                        "confidence": 0.5,
-                        "reason": "Parsed from text"
-                    }
-                return {"error_reported": False, "confidence": 0.0, "reason": "Failed to parse LLM response"}
-                
-        except Exception as e:
-            return {"error_reported": False, "confidence": 0.0, "reason": f"Error: {str(e)}"}
-
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         inj = ctx.task_schema.get("error_injection", {}) or {}
         inj_tool = inj.get("tool")
@@ -795,7 +905,6 @@ class ErrorDetectMetric(Metric):
 
         # LLM Judge 프롬프트 구성
         error_type_korean = self.prompt_loader.get_error_type_mapping(inj_type)
-        
         prompt_template = self.prompt_loader.get_prompt('error_detect')
         prompt = prompt_template.format(
             injected_tool=inj_tool,
@@ -804,7 +913,8 @@ class ErrorDetectMetric(Metric):
             final_response=final_response
         )
 
-        llm_result = self._call_llm_judge(prompt)
+        # Multi-judge 호출
+        llm_result = self._call_multi_judge_binary(prompt, 'error_detect', 'error_reported')
         error_reported = llm_result.get("error_reported", False)
         confidence = llm_result.get("confidence", 0.0)
         
@@ -816,7 +926,9 @@ class ErrorDetectMetric(Metric):
             "confidence": confidence,
             "llm_reason": llm_result.get("reason", "No reason provided"),
             "injected_tool": inj_tool,
-            "injected_error_type": inj_type
+            "injected_error_type": inj_type,
+            "vote_details": llm_result.get("vote_count"),
+            "individual_judges": llm_result.get("individual_results")
         })
 
 
@@ -983,11 +1095,7 @@ class ReuseRateMetric(Metric):
                         json.dumps(prev_golden["args"], sort_keys=True)
                     )
                     
-                    # 실제 호출에서 이 시그니처가 한 번만 나타났는지 확인
-                    # (재사용했다면 중복 호출이 없어야 함)
-                    signature_count = actual_signatures.count(prev_signature)
-                    
-                    # 다음 golden 도구가 있는지 확인
+                    # 다음 도구 찾기
                     next_tool_index = None
                     for j in range(i+1, len(golden_tools)):
                         if "tool" in golden_tools[j]:
@@ -1001,7 +1109,6 @@ class ReuseRateMetric(Metric):
                             json.dumps(next_golden["args"], sort_keys=True)
                         )
                         
-                        # 이전 도구와 다음 도구의 호출 위치 확인
                         try:
                             prev_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == prev_signature]
                             next_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == next_signature]
@@ -1090,43 +1197,10 @@ class RedundantCallRateMetric(Metric):
         )
 
 
-class EffScoreMetric(Metric):
-    """EffScore: 성공 시 최소 호출 수 대비 실제 호출 수의 효율
-    LLM-as-a-Judge 방식으로 태스크 성공 여부 판단
-    """
+class EffScoreMetric(LLMJudgeMetric):
+    """EffScore: 성공 시 최소 호출 수 대비 실제 호출 수의 효율 (LLM Judge)"""
     name = "EffScore"
     level = 6
-    
-    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
-        self.llm_adapter = llm_adapter
-        self.prompt_loader = PromptLoader()
-    
-    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
-        """LLM Judge 호출"""
-        try:
-            system_prompt = self.prompt_loader.get_system_prompt('eff_score')
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ]
-            
-            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
-            content = response.get("message", {}).get("content", "{}")
-            
-            try:
-                result = json.loads(content)
-                return result
-            except json.JSONDecodeError:
-                success_match = re.search(r'"success"\s*:\s*(true|false)', content.lower())
-                if success_match:
-                    return {
-                        "success": success_match.group(1) == "true",
-                        "reason": "Parsed from text"
-                    }
-                return {"success": False, "reason": "Failed to parse LLM response"}
-                
-        except Exception as e:
-            return {"success": False, "reason": f"Error: {str(e)}"}
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         query = ctx.task_schema.get("instruction", "")
@@ -1148,7 +1222,8 @@ class EffScoreMetric(Metric):
             tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
         )
 
-        llm_result = self._call_llm_judge(prompt)
+        # Multi-judge 호출
+        llm_result = self._call_multi_judge_binary(prompt, 'eff_score', 'success')
         success = llm_result.get("success", False)
         
         actual_calls = len(ctx.action_trace)
@@ -1174,7 +1249,9 @@ class EffScoreMetric(Metric):
                     "success": success,
                     "actual_calls": actual_calls,
                     "minimum_calls": minimum_calls,
-                    "llm_reason": llm_result.get("reason", "")
+                    "llm_reason": llm_result.get("reason", ""),
+                    "vote_details": llm_result.get("vote_count"),
+                    "individual_judges": llm_result.get("individual_results")
                 }
             )
         
@@ -1188,22 +1265,17 @@ class EffScoreMetric(Metric):
                 "actual_calls": actual_calls,
                 "minimum_calls": minimum_calls,
                 "efficiency": score,
-                "llm_reason": llm_result.get("reason", "")
+                "llm_reason": llm_result.get("reason", ""),
+                "vote_details": llm_result.get("vote_count"),
+                "individual_judges": llm_result.get("individual_results")
             }
         )
 
 #레벨7 메트릭
-class ContextRetentionMetric(Metric):
-    """ContextRetention: 멀티턴 대화에서 과거 맥락 활용도
-    
-    LLM-as-a-Judge 방식으로 1-5점 평가 후 0-1 스케일로 정규화
-    """
+class ContextRetentionMetric(LLMJudgeMetric):
+    """ContextRetention: 멀티턴 대화에서 과거 맥락 활용도 (LLM Judge)"""
     name = "ContextRetention"
     level = 7
-    
-    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
-        self.llm_adapter = llm_adapter
-        self.prompt_loader = PromptLoader()
     
     @staticmethod
     def _format_messages(messages: List[Dict[str, str]]) -> str:
@@ -1217,36 +1289,6 @@ class ContextRetentionMetric(Metric):
             elif role == "assistant":
                 formatted.append(f"[턴 {i}] AI: {content[:500]}{'...' if len(content) > 500 else ''}")
         return "\n".join(formatted)
-    
-    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
-        """LLM Judge 호출"""
-        if not self.llm_adapter:
-            return {"score": 0, "reason": "LLM adapter not available"}
-        
-        try:
-            system_prompt = self.prompt_loader.get_system_prompt('context_retention')
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ]
-            
-            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
-            content = response.get("message", {}).get("content", "{}")
-            
-            try:
-                result = json.loads(content)
-                return result
-            except json.JSONDecodeError:
-                score_match = re.search(r'"score"\s*:\s*([1-5])', content)
-                if score_match:
-                    return {
-                        "score": int(score_match.group(1)),
-                        "reason": "Parsed from text"
-                    }
-                return {"score": 0, "reason": "Failed to parse LLM response"}
-                
-        except Exception as e:
-            return {"score": 0, "reason": f"Error: {str(e)}"}
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         conversation_log = ctx.logs.get("conversation_log", {})
@@ -1267,37 +1309,32 @@ class ContextRetentionMetric(Metric):
             formatted_messages=self._format_messages(messages)
         )
 
-        llm_result = self._call_llm_judge(prompt)
-        raw_score = int(llm_result.get("score", 0))
+        # Multi-judge 호출 (점수 평균)
+        llm_result = self._call_multi_judge_score(prompt, 'context_retention', 1, 5)
+        raw_score = llm_result.get("score", 0)
         
         # 1-5점을 0-1 스케일로 정규화
         # 1점 -> 0.0, 2점 -> 0.25, 3점 -> 0.5, 4점 -> 0.75, 5점 -> 1.0
         normalized_score = max(0.0, (raw_score - 1) / 4.0)
         
         return EvaluationResult(
-            self.name,
-            normalized_score,
+            self.name, normalized_score,
             {
                 "raw_score": raw_score,
                 "normalized_score": normalized_score,
+                "average_score": llm_result.get("average_score", 0),
                 "reason": llm_result.get("reason", ""),
                 "total_messages": total_messages,
-                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"])
+                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"]),
+                "individual_judges": llm_result.get("individual_results")
             }
         )
 
 
-class RefRecallMetric(Metric):
-    """RefRecall: 오래된 정보 회상 능력
-    
-    LLM-as-a-Judge 방식으로 1-5점 평가 후 0-1 스케일로 정규화
-    """
+class RefRecallMetric(LLMJudgeMetric):
+    """RefRecall: 오래된 정보 회상 능력 (LLM Judge)"""
     name = "RefRecall"
     level = 7
-    
-    def __init__(self, llm_adapter: Optional[BaseAdapter] = None):
-        self.llm_adapter = llm_adapter
-        self.prompt_loader = PromptLoader()
     
     @staticmethod
     def _format_messages(messages: List[Dict[str, str]]) -> str:
@@ -1311,36 +1348,6 @@ class RefRecallMetric(Metric):
             elif role == "assistant":
                 formatted.append(f"[턴 {i}] AI: {content[:500]}{'...' if len(content) > 500 else ''}")
         return "\n".join(formatted)
-    
-    def _call_llm_judge(self, prompt: str) -> Dict[str, Any]:
-        """LLM Judge 호출"""
-        if not self.llm_adapter:
-            return {"score": 0, "reason": "LLM adapter not available"}
-        
-        try:
-            system_prompt = self.prompt_loader.get_system_prompt('context_retention')
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ]
-            
-            response = self.llm_adapter.chat_completion(messages, temperature=0.0)
-            content = response.get("message", {}).get("content", "{}")
-            
-            try:
-                result = json.loads(content)
-                return result
-            except json.JSONDecodeError:
-                score_match = re.search(r'"score"\s*:\s*([1-5])', content)
-                if score_match:
-                    return {
-                        "score": int(score_match.group(1)),
-                        "reason": "Parsed from text"
-                    }
-                return {"score": 0, "reason": "Failed to parse LLM response"}
-                
-        except Exception as e:
-            return {"score": 0, "reason": f"Error: {str(e)}"}
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         conversation_log = ctx.logs.get("conversation_log", {})
@@ -1361,8 +1368,9 @@ class RefRecallMetric(Metric):
             formatted_messages=self._format_messages(messages)
         )
 
-        llm_result = self._call_llm_judge(prompt)
-        raw_score = int(llm_result.get("score", 0))
+        # Multi-judge 호출 (점수 평균)
+        llm_result = self._call_multi_judge_score(prompt, 'context_retention', 1, 5)
+        raw_score = llm_result.get("score", 0)
         normalized_score = max(0.0, (raw_score - 1) / 4.0)
         
         return EvaluationResult(
@@ -1371,9 +1379,11 @@ class RefRecallMetric(Metric):
             {
                 "raw_score": raw_score,
                 "normalized_score": normalized_score,
+                "average_score": llm_result.get("average_score", 0),
                 "reason": llm_result.get("reason", ""),
                 "total_messages": total_messages,
-                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"])
+                "evaluated_messages": len([m for m in messages if m.get("role") != "tool"]),
+                "individual_judges": llm_result.get("individual_results")
             }
         )
 
@@ -1399,17 +1409,17 @@ METRICS = {
     #레벨4 메트릭
     "Coverage": CoverageMetric(),
     "SourceEPR": SourceEPRMetric(),
-    #레벨5 메트릭 (ErrorDetect는 LLM adapter 필요)
-    "ErrorDetect": ErrorDetectMetric(llm_adapter=None), 
+    #레벨5 메트릭 
+    "ErrorDetect": ErrorDetectMetric(), 
     "GracefulFail": GracefulFailMetric(),
     "FallbackSR": FallbackSRMetric(),
     #레벨6 메트릭
     "ReuseRate": ReuseRateMetric(),
     "RedundantCallRate": RedundantCallRateMetric(),
     "EffScore": EffScoreMetric(),
-    #레벨7 메트릭 (LLM adapter 필요)
-    "ContextRetention": ContextRetentionMetric(llm_adapter=None),
-    "RefRecall": RefRecallMetric(llm_adapter=None),
+    #레벨7 메트릭
+    "ContextRetention": ContextRetentionMetric(),
+    "RefRecall": RefRecallMetric(),
 }
 
 def get_metrics_for_level(level: int) -> Dict[str, Metric]:
