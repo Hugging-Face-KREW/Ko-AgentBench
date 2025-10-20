@@ -1053,7 +1053,7 @@ class RedundantCallRateMetric(Metric):
         if reuse_opportunities == 0:
             return EvaluationResult(
                 self.name,
-                0.0,
+                1.0,  # 재사용 기회가 없으면 만점
                 {"reuse_opportunities": 0, "redundant_calls": 0, "reason": "No reuse opportunities"}
             )
         
@@ -1072,7 +1072,8 @@ class RedundantCallRateMetric(Metric):
                 else:
                     tool_call_signatures.append(signature)
         
-        score = redundant_calls / reuse_opportunities if reuse_opportunities > 0 else 0.0
+        redundant_rate = redundant_calls / reuse_opportunities if reuse_opportunities > 0 else 0.0
+        score = 1.0 - redundant_rate  # 높을수록 좋음
         
         return EvaluationResult(
             self.name,
@@ -1080,8 +1081,11 @@ class RedundantCallRateMetric(Metric):
             {
                 "reuse_opportunities": reuse_opportunities,
                 "redundant_calls": redundant_calls,
+                "non_redundant_calls": reuse_opportunities - redundant_calls,
                 "total_calls": len(action_trace),
-                "unique_calls": len(tool_call_signatures)
+                "unique_calls": len(tool_call_signatures),
+                "redundant_rate": redundant_rate,  # 원래 값도 저장
+                "non_redundant_rate": score  # 반전된 값
             }
         )
 
