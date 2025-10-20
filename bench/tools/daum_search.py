@@ -12,8 +12,12 @@ try:
     from .base_api import BaseAPI
     from .web_crawler import postprocess_with_crawling
 except ImportError:
-    from base_api import BaseAPI
-    from web_crawler import postprocess_with_crawling
+    try:
+        from base_api import BaseAPI
+        from web_crawler import postprocess_with_crawling
+    except ImportError:
+        from bench.tools.base_api import BaseAPI
+        from bench.tools.web_crawler import postprocess_with_crawling
 
 from configs.secrets import DAUM_API_KEY
 
