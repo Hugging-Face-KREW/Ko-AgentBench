@@ -246,7 +246,8 @@ def save_detailed_results(
     results: List[Dict[str, Any]], 
     model_name: str, 
     level_name: str,
-    output_dir: str = "logs/benchmark_results"
+    output_dir: str = "logs/benchmark_results",
+    run_timestamp: str = None
 ) -> str:
     """Save detailed benchmark results including tool call information.
     
@@ -255,16 +256,25 @@ def save_detailed_results(
         model_name: Name of the model used
         level_name: Dataset level (L1, L2, etc.)
         output_dir: Directory to save logs
+        run_timestamp: Timestamp for the run (if None, creates new one)
         
     Returns:
         Path to saved JSON file
     """
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    # Create timestamp for this run if not provided
+    if run_timestamp is None:
+        run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     model_safe_name = model_name.replace("/", "_")
-    filename = f"{level_name}_{model_safe_name}_{timestamp}.json"
-    filepath = Path(output_dir) / filename
+    
+    # Create run-specific folder: logs/benchmark_results/{timestamp}_{model}/
+    run_folder_name = f"{run_timestamp}_{model_safe_name}"
+    run_folder_path = Path(output_dir) / run_folder_name
+    run_folder_path.mkdir(parents=True, exist_ok=True)
+    
+    # Save result file in the run folder
+    filename = f"{level_name}.json"
+    filepath = run_folder_path / filename
     
     # Simplify and flatten results
     simplified_results = [simplify_result(r) for r in results]
@@ -328,6 +338,7 @@ def run_benchmark_on_dataset(
     timeout: int = 60,
     save_logs: bool = True,
     log_dir: str = "logs/benchmark_results",
+    run_timestamp: str = None,
     **adapter_config: Any
 ) -> List[Dict[str, Any]]:
     """Run benchmark on a specific dataset level.
@@ -341,6 +352,7 @@ def run_benchmark_on_dataset(
         timeout: Timeout per task in seconds
         save_logs: Whether to save results to JSON
         log_dir: Directory to save logs
+        run_timestamp: Timestamp for the entire run (shared across levels)
         **adapter_config: Additional adapter configuration
         
     Returns:
@@ -519,7 +531,7 @@ def run_benchmark_on_dataset(
     # Save results
     if save_logs and all_results:
         try:
-            filepath = save_detailed_results(all_results, model_name, level_name, log_dir)
+            filepath = save_detailed_results(all_results, model_name, level_name, log_dir, run_timestamp)
             print(f"\n{'='*80}")
             print(f"Results saved to: {filepath}")
             print(f"{'='*80}\n")
@@ -664,6 +676,9 @@ def main():
     # Run benchmarks on each level
     all_level_results = {}
     
+    # Create a single timestamp for the entire run
+    run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
     # Determine which levels to run
     if args.levels:
         levels_to_run = [lvl.strip() for lvl in args.levels.split(',') if lvl.strip()]
@@ -682,6 +697,7 @@ def main():
                 timeout=args.timeout,
                 save_logs=(not args.no_save_logs),
                 log_dir="logs/benchmark_results",
+                run_timestamp=run_timestamp,
                 **adapter_config
             )
             all_level_results[level_name] = results
