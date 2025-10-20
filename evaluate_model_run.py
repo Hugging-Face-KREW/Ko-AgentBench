@@ -382,7 +382,7 @@ class ModelRunEvaluator:
                 
                 metadata = level_data['metadata']
                 if 'success_rate' in metadata:
-                    f.write(f"- 성공률: {metadata['success_rate']*100:.1f}%\n")
+                    f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
                 
