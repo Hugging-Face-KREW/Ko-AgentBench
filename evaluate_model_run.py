@@ -26,30 +26,37 @@ class ModelRunEvaluator:
         self, 
         date: str, 
         model: str, 
-        judge_model: str,
+        judge_models: List[str],
         sample_size: Optional[int] = None,
         verbose: bool = False
     ):
         self.date = date
         self.model = model
-        self.judge_model = judge_model
+        self.judge_models = judge_models
         self.sample_size = sample_size
         self.verbose = verbose
-        
+        self.judge_adapters = []
+
         # LLM Judge adapter 초기화
-        print(f"[초기화] Judge 모델 로딩: {judge_model}")
-        try:
-            self.judge_adapter = LiteLLMAdapter(judge_model)
+        print(f"[초기화] Judge 모델 로딩: {', '.join(self.judge_models)}")
+
+        for judge_model in self.judge_models:
+            try:
+                adapter = LiteLLMAdapter(judge_model)
+                self.judge_adapters.append(adapter)
+                print(f"{judge_model} 초기화 완료")
+            except Exception as e:
+                print(f"{judge_model} 초기화 실패: {e}")
+        
+        if not self.judge_adapters:
+            print(f"[경고] Judge 모델 초기화 실패")
+        else:
             self._inject_judge_to_metrics()
-            print(f"[OK] Judge 모델 초기화 완료")
-        except Exception as e:
-            print(f"[경고] Judge 모델 초기화 실패: {e}")
-            print(f"      L5, L6, L7 메트릭 중 일부가 동작하지 않을 수 있습니다.")
-            self.judge_adapter = None
+            print(f"[OK] {len(self.judge_adapters)}개 Judge 모델 초기화 완료")
     
     def _inject_judge_to_metrics(self):
         """Judge 모델을 필요한 메트릭에 주입"""
-        if not self.judge_adapter:
+        if not self.judge_adapters:
             return
         
         judge_metrics = [
@@ -60,8 +67,10 @@ class ModelRunEvaluator:
         ]
         
         for metric_name in judge_metrics:
-            if metric_name in METRICS and hasattr(METRICS[metric_name], 'llm_adapter'):
-                METRICS[metric_name].llm_adapter = self.judge_adapter
+            if metric_name in METRICS:
+                if hasattr(METRICS[metric_name], '__dict__'):
+                    METRICS[metric_name].llm_adapters = self.judge_adapters
+                    METRICS[metric_name].llm_adapter = self.judge_adapters[0]
     
     def find_result_files(self) -> Dict[str, Path]:
         """날짜와 모델로 L1~L7 파일 찾기"""
@@ -70,18 +79,31 @@ class ModelRunEvaluator:
         # 모델명을 파일명 패턴으로 변환 (azure/gpt-4.1 -> azure_gpt-4.1)
         model_pattern = self.model.replace('/', '_')
         
-        # 패턴: L{level}_{model}_{date}*.json
-        pattern = f"L*_{model_pattern}_{self.date}*.json"
+        level_files = {}
         
+        # 기존 패턴: logs/benchmark_results/L{level}_{model}_{date}*.json)
+        pattern = f"L*_{model_pattern}_{self.date}*.json"
         files = list(results_dir.glob(pattern))
         
-        # 레벨별로 정리
-        level_files = {}
         for f in files:
-            # 파일명에서 레벨 추출 (L1, L2, ...)
             level = f.name.split('_')[0]
             if level.startswith('L') and level[1:].isdigit():
                 level_files[level] = f
+        
+        # 변경 패턴: logs/benchmark_results/by_model/{model}/{date_timestamp}/L*.json)
+        if not level_files:
+            by_model_dir = results_dir / 'by_model' / model_pattern
+            
+            if by_model_dir.exists():
+                date_dirs = [d for d in by_model_dir.iterdir() 
+                            if d.is_dir() and d.name.startswith(self.date)]
+                
+                for level_name in ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7']:
+                    for date_dir in date_dirs:
+                        level_file = date_dir / f"{level_name}.json"
+                        if level_file.exists() and level_name not in level_files:
+                            level_files[level_name] = level_file
+                            break
         
         return level_files
     
@@ -227,10 +249,7 @@ class ModelRunEvaluator:
         print("Ko-AgentBench 평가")
         print("="*80)
         print(f"평가 대상: {self.model} (실행 날짜: {self.date})")
-        print(f"Judge 모델: {self.judge_model}")
-        if self.judge_model == self.model:
-            print(f"[경고] Judge 모델이 평가 대상과 동일합니다.")
-            print(f"      더 강력한 모델 사용을 권장합니다.")
+        print(f"Judge 모델: {self.judge_models}")
         print(f"발견된 레벨: {', '.join(sorted(files.keys()))}")
         if self.sample_size:
             print(f"샘플링: 레벨당 {self.sample_size}개 태스크")
@@ -259,7 +278,7 @@ class ModelRunEvaluator:
         report = {
             "summary": {
                 "model": self.model,
-                "judge_model": self.judge_model,
+                "judge_model": self.judge_models,
                 "execution_date": self.date,
                 "evaluation_date": datetime.now().isoformat(),
                 "total_levels": len(results),
@@ -369,7 +388,7 @@ class ModelRunEvaluator:
                 
                 metadata = level_data['metadata']
                 if 'success_rate' in metadata:
-                    f.write(f"- 성공률: {metadata['success_rate']*100:.1f}%\n")
+                    f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
                 
@@ -446,8 +465,8 @@ def main():
                        help='평가 대상 모델 (예: azure/gpt-4.1)')
     
     # 평가 설정
-    parser.add_argument('--judge-model', default=None,
-                       help='LLM Judge 모델 (기본: 대상 모델과 동일)')
+    parser.add_argument('--judge-models', nargs='+', default=None,
+                    help='LLM Judge 모델들 (예: gpt-4o, claude-sonnet-4-5, gemini-2.5)')
     parser.add_argument('--sample', type=int, default=None,
                        help='레벨당 평가할 태스크 수 (기본: 전체)')
     parser.add_argument('--quick', action='store_true',
@@ -466,14 +485,22 @@ def main():
     args = parser.parse_args()
     
     # Judge 모델 설정
-    judge_model = args.judge_model or args.model
+    if args.judge_models:
+        judge_models = args.judge_models
+    else:
+        # 기본값: 3개 Judge (변경 가능!)
+        judge_models = [
+            "azure/gpt-4o",
+            "anthropic/claude-sonnet-4-5-20250929",
+            "gemini/gemini-2.5-pro-preview-03-25"
+        ]
     
     # 평가 실행
     try:
         evaluator = ModelRunEvaluator(
             date=args.date,
             model=args.model,
-            judge_model=judge_model,
+            judge_models=judge_models,
             sample_size=1 if args.quick else args.sample,
             verbose=args.verbose
         )
