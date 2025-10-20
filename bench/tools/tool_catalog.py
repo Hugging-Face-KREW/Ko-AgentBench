@@ -52,12 +52,6 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         "주식 현재가 조회, LS증권 Open API를 활용합니다.",
         {"type": "object", "properties": {"shcode": {"type": "string", "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)","pattern": "^[0-9]{6}$"},"exchgubun": {"type": "string", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", "enum": ["K", "N", "U"], "default": "K"}}, "required": ["shcode"]},
     ),
-    "StockSearch_ls": (
-        LSStock,
-        "_stock_search",
-        "종목 검색, LS증권 Open API를 활용합니다.",
-        {"type": "object", "properties": {"query_index": {"type": "string", "description": "검색할 종목명 또는 코드"}}, "required": ["query_index"]},
-    ),
     "MarketIndex_ls": (
         LSStock,
         "_market_index",

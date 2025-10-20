@@ -120,16 +120,6 @@ class LSStock(BaseAPI):
         response = requests.post(URL, headers=header, json=body)
         return response.json()
 
-    def _stock_search(self, query_index: str) -> Dict[str, Any]:
-        """
-        종목 검색 (내부 구현)
-        """
-        # 토큰 유효성 확인 및 필요시 재발급
-        if not self._ensure_token():
-            return {"error": "액세스 토큰 발급 실패"}
-        
-        # TODO: 실제 검색 로직 구현
-        pass
 
     def _sector_stock(self, tmcode: str) -> Dict[str, Any]:
         """
@@ -396,7 +386,6 @@ class LSStock(BaseAPI):
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         tool_map = {
             "StockPrice_ls": self._stock_price,
-            "StockSearch_ls": self._stock_search,
             "SectorStock_ls": self._sector_stock,
             "MarketIndex_ls": self._market_index,
             "OrderBook_ls": self._order_book,
