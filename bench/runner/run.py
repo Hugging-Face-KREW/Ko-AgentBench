@@ -309,7 +309,7 @@ class BenchmarkRunner:
                         self.logger.info(f"      Args: {tool_args[:150]}...")
                         
                         # Execute tool
-                        tool_result = self._execute_tool_call(tool_call)
+                        tool_result = self._execute_tool_call(tool_call, task)
                         step_data['tool_calls'].append(tool_result)
                         
                         # Log result
