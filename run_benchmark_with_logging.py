@@ -549,7 +549,7 @@ def main():
                         help="Quantization method for local models (4bit or 8bit)")
     parser.add_argument("--device", type=str, default="auto",
                         help="Device for local inference (cuda, cpu, auto)")
-    parser.add_argument("--torch-dtype", type=str, default="auto",
+    parser.add_argument("--dtype", type=str, default="auto",
                         choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
                         help="Torch dtype for local models")
 
@@ -651,13 +651,13 @@ def main():
         if args.quantization:
             print(f"Quantization: {args.quantization}")
         print(f"Device: {args.device}")
-        print(f"Torch dtype: {args.torch_dtype}")
+        print(f"Dtype: {args.dtype}")
     
     # Prepare adapter config for local models
     adapter_config = {}
     if args.use_local:
         adapter_config['device'] = args.device
-        adapter_config['torch_dtype'] = args.torch_dtype
+        adapter_config['dtype'] = args.dtype
         if args.quantization:
             adapter_config['quantization'] = args.quantization
     
