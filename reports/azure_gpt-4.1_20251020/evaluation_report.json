@@ -1,9 +1,13 @@
 {
   "summary": {
     "model": "azure/gpt-4.1",
-    "judge_model": "anthropic/claude-sonnet-4-5-20250929",
+    "judge_model": [
+      "azure/gpt-4o",
+      "anthropic/claude-sonnet-4-5-20250929",
+      "gemini/gemini-2.5-pro-preview-03-25"
+    ],
     "execution_date": "20251020",
-    "evaluation_date": "2025-10-20T20:52:57.845449",
+    "evaluation_date": "2025-10-21T00:36:30.159282",
     "total_levels": 7,
     "sample_size": null,
     "total_tasks": 160,
@@ -5201,8 +5205,8 @@
               "score": 0.5,
               "details": {
                 "required_tools": [
-                  "WebSearch_naver",
-                  "StockPrice_ls"
+                  "StockPrice_ls",
+                  "WebSearch_naver"
                 ],
                 "covered_tools": [
                   "WebSearch_naver"
@@ -5218,15 +5222,15 @@
               "score": 0.5,
               "details": {
                 "source_eprs": {
-                  "WebSearch_naver": {
-                    "epr": 1.0,
-                    "total_calls": 1,
-                    "valid_calls": 1
-                  },
                   "StockPrice_ls": {
                     "epr": 0.0,
                     "total_calls": 1,
                     "valid_calls": 0
+                  },
+                  "WebSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
                   }
                 },
                 "average_epr": 0.5,
@@ -5264,13 +5268,13 @@
               "score": 0.0,
               "details": {
                 "required_tools": [
-                  "WebSearch_naver",
-                  "StockPrice_ls"
+                  "StockPrice_ls",
+                  "WebSearch_naver"
                 ],
                 "covered_tools": [],
                 "missing_tools": [
-                  "WebSearch_naver",
-                  "StockPrice_ls"
+                  "StockPrice_ls",
+                  "WebSearch_naver"
                 ],
                 "total_required": 2,
                 "total_covered": 0
@@ -5280,16 +5284,16 @@
               "score": 0.0,
               "details": {
                 "source_eprs": {
+                  "StockPrice_ls": {
+                    "epr": 0.0,
+                    "total_calls": 2,
+                    "valid_calls": 0
+                  },
                   "WebSearch_naver": {
                     "epr": 0.0,
                     "total_calls": 0,
                     "valid_calls": 0,
                     "reason": "도구 미호출"
-                  },
-                  "StockPrice_ls": {
-                    "epr": 0.0,
-                    "total_calls": 2,
-                    "valid_calls": 0
                   }
                 },
                 "average_epr": 0.0,
@@ -5328,8 +5332,8 @@
               "details": {
                 "required_tools": [
                   "WebSearch_naver",
-                  "BlogSearch_naver",
-                  "NewsSearch_naver"
+                  "NewsSearch_naver",
+                  "BlogSearch_naver"
                 ],
                 "covered_tools": [
                   "NewsSearch_naver"
@@ -5352,16 +5356,16 @@
                     "valid_calls": 0,
                     "reason": "도구 미호출"
                   },
+                  "NewsSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
+                  },
                   "BlogSearch_naver": {
                     "epr": 0.0,
                     "total_calls": 0,
                     "valid_calls": 0,
                     "reason": "도구 미호출"
-                  },
-                  "NewsSearch_naver": {
-                    "epr": 1.0,
-                    "total_calls": 1,
-                    "valid_calls": 1
                   }
                 },
                 "average_epr": 0.3333,
@@ -5400,8 +5404,8 @@
               "details": {
                 "required_tools": [
                   "WebSearch_naver",
-                  "BlogSearch_naver",
-                  "NewsSearch_naver"
+                  "NewsSearch_naver",
+                  "BlogSearch_naver"
                 ],
                 "covered_tools": [
                   "WebSearch_naver",
@@ -5423,15 +5427,15 @@
                     "total_calls": 1,
                     "valid_calls": 1
                   },
-                  "BlogSearch_naver": {
-                    "epr": 1.0,
-                    "total_calls": 1,
-                    "valid_calls": 1
-                  },
                   "NewsSearch_naver": {
                     "epr": 0.0,
                     "total_calls": 1,
                     "valid_calls": 0
+                  },
+                  "BlogSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
                   }
                 },
                 "average_epr": 0.6667,
@@ -6739,8 +6743,8 @@
         "EPR_CVR": 1.0,
         "pass@k": 1.0,
         "ReuseRate": 0.3333333333333333,
-        "RedundantCallRate": 0.0,
-        "EffScore": 0.26666666666666666
+        "RedundantCallRate": 1.0,
+        "EffScore": 0.2
       },
       "task_details": [
         {
@@ -6781,12 +6785,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 2,
                 "redundant_calls": 0,
+                "non_redundant_calls": 2,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -6796,7 +6803,32 @@
                 "actual_calls": 2,
                 "minimum_calls": 2,
                 "efficiency": 1.0,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 3/3. Judge 1 (azure/gpt-4o): Yes; Judge 2 (anthropic/claude-sonnet-4-5-20250929): Yes; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): Yes",
+                "vote_details": {
+                  "positive": 3,
+                  "negative": 0,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": true,
+                    "reason": "사용자의 요청에 따라 '파이썬 알고리즘 트레이딩' 관련 도서를 판매량 순으로 정리하여 제공하였으며, 필요한 정보를 모두 포함하고 도구를 적절히 활용하였습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -6839,12 +6871,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -6853,7 +6888,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 '반도체 기술' 관련 최신 뉴스 3개를 요청했으나, 최종 답변은 삼성전자 관련 뉴스 1건만 제공되었고 요청한 주제와 개수에 부합하지 않습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -6895,22 +6955,49 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
-              "score": 1.0,
+              "score": 0.0,
               "details": {
-                "success": true,
+                "success": false,
                 "actual_calls": 1,
                 "minimum_calls": 1,
-                "efficiency": 1.0,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 1/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): Yes; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 1,
+                  "negative": 2,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "최종 답변에 제공된 영상 정보가 2025년 업로드된 것으로 표시되어 있어, 현재 시점(2023년 기준)과 맞지 않아 요청을 정확히 완료하지 못했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -6953,12 +7040,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -6967,7 +7057,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 '시흥시청 맛집'을 요청했으나, 최종 답변은 '오이도역 근처 카페'에 대한 정보만 제공되었습니다. 사용자의 요청과 최종 답변이 일치하지 않으며, 요청한 정보가 제공되지 않았습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7010,12 +7125,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7024,7 +7142,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 2025년 9월 부산에서 열리는 축제를 요청했으나, 최종 답변은 2025년 10월 제주도 축제에 대한 정보를 제공하여 요청을 정확히 이해하고 완료하지 못했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7067,12 +7210,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7081,7 +7227,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자의 요청은 '겨울 제주도 여행 코스'를 찾는 것이었으나, 최종 답변은 '제주공항 근처 맛집'에 대한 정보만 제공되어 요청을 정확히 충족하지 못함.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7124,12 +7295,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7138,7 +7312,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 AI 기술 전반의 최신 동향을 요청했으나, 답변은 양자 컴퓨팅에만 초점을 맞추어 제공되었습니다. 요청 범위를 충분히 충족하지 못했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7181,12 +7380,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7195,7 +7397,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자의 요청은 '기후 변화 원인'에 대한 검색이었으나, 최종 답변은 '탄소중립 실천 방안'에 대한 내용으로 제공되었습니다. 요청을 정확히 이해하지 못했고, 필요한 정보를 제공하지 않았습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7238,12 +7465,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7252,7 +7482,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 업비트 원화마켓(KRW 마켓)에 상장된 코인 목록을 요청했으나, 최종 답변은 BTC 마켓에 상장된 코인 목록을 제공하고 있습니다. 요청과 답변이 일치하지 않습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7295,12 +7550,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 2,
-                "unique_calls": 2
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7309,7 +7567,32 @@
                 "success": false,
                 "actual_calls": 2,
                 "minimum_calls": 2,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7351,12 +7634,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7366,7 +7652,32 @@
                 "actual_calls": 1,
                 "minimum_calls": 1,
                 "efficiency": 1.0,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 3/3. Judge 1 (azure/gpt-4o): Yes; Judge 2 (anthropic/claude-sonnet-4-5-20250929): Yes; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): Yes",
+                "vote_details": {
+                  "positive": 3,
+                  "negative": 0,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": true,
+                    "reason": "사용자의 요청인 '클린 아키텍처 관련 도서 찾기'를 정확히 이해하고, 관련 도서 목록을 판매 포인트 기준으로 정렬하여 상세 정보와 함께 제공했으며, 도구를 적절히 활용하여 요청을 성공적으로 완료했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7408,12 +7719,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7422,7 +7736,32 @@
                 "success": false,
                 "actual_calls": 1,
                 "minimum_calls": 1,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자가 요청한 '아이유 콘서트 최신 직캠 영상'과 관련 없는 콘텐츠를 제공하였으며, 직캠 영상이 아닌 다른 유형의 영상 정보가 포함되어 있습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7464,12 +7803,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7479,7 +7821,32 @@
                 "actual_calls": 1,
                 "minimum_calls": 1,
                 "efficiency": 1.0,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 2/3. Judge 1 (azure/gpt-4o): Yes; Judge 2 (anthropic/claude-sonnet-4-5-20250929): Yes; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 2,
+                  "negative": 1,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": true,
+                    "reason": "사용자의 요청을 정확히 이해하고, 최신 겨울 헤어 트렌드 5가지를 제공했으며, 도구를 적절히 활용하여 정보를 성공적으로 전달했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": true,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7521,12 +7888,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7535,7 +7905,32 @@
                 "success": false,
                 "actual_calls": 1,
                 "minimum_calls": 1,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 SK하이닉스 주봉 차트 5주치를 요청했으나 최종 답변은 차트가 아닌 종가 정보만 제공되었습니다. 요청을 완전히 충족하지 못했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7577,12 +7972,15 @@
               }
             },
             "RedundantCallRate": {
-              "score": 0.0,
+              "score": 1.0,
               "details": {
                 "reuse_opportunities": 1,
                 "redundant_calls": 0,
+                "non_redundant_calls": 1,
                 "total_calls": 1,
-                "unique_calls": 1
+                "unique_calls": 1,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
               }
             },
             "EffScore": {
@@ -7591,7 +7989,32 @@
                 "success": false,
                 "actual_calls": 1,
                 "minimum_calls": 1,
-                "llm_reason": "Parsed from text"
+                "llm_reason": "Multi-judge vote: 0/3. Judge 1 (azure/gpt-4o): No; Judge 2 (anthropic/claude-sonnet-4-5-20250929): No; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): No",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 3,
+                  "total": 3
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "사용자는 '강남역 디저트 카페'를 검색해달라고 요청했으나, 최종 답변은 특정 카페인 '장꼬방'의 주소만 제공되었고, 디저트 카페에 대한 다양한 옵션이 제공되지 않았다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7620,8 +8043,8 @@
         "SR": 1.0,
         "EPR_CVR": 1.0,
         "pass@k": 1.0,
-        "ContextRetention": 0.75,
-        "RefRecall": 0.85
+        "ContextRetention": 0.625,
+        "RefRecall": 0.525
       },
       "task_details": [
         {
@@ -7650,23 +8073,65 @@
               }
             },
             "ContextRetention": {
-              "score": 1.0,
+              "score": 0.5,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 3.3333333333333335,
+                "reason": "Multi-judge average: 3.33/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 12,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI는 이전 대화에서 사용자가 처음에 물어본 비트코인 시세를 기억하고, 추가적인 재질문 없이 정확히 정보를 다시 제공하며 맥락을 완벽히 유지했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.5,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 3.3333333333333335,
+                "reason": "Multi-judge average: 3.33/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 12,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI가 초반에 제공한 비트코인 시세 정보를 나중에도 정확히 회상하며, 변동이 없음을 명확히 전달하여 맥락 연속성을 유지했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7697,23 +8162,65 @@
               }
             },
             "ContextRetention": {
-              "score": 1.0,
+              "score": 0.5,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 2.6666666666666665,
+                "reason": "Multi-judge average: 2.67/5. Judge 1 (azure/gpt-4o): 3/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 10,
-                "evaluated_messages": 8
+                "evaluated_messages": 8,
+                "individual_judges": [
+                  {
+                    "score": 3,
+                    "reason": "AI가 사용자의 초기 언급인 매트 헤이그 작가를 기억하고 관련 책을 제시했으나, 중간에 사용자가 요청한 '어린이 베스트셀러' 검색에 대한 맥락을 충분히 반영하지 못하고, 이후 대화에서 불필요하게 매트 헤이그 작가로 다시 초점을 옮겼습니다. 맥락 유지가 일부 이루어졌지만, 사용자 요청에 대한 일관성이 부족했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.25,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 2,
+                "normalized_score": 0.25,
+                "average_score": 2.3333333333333335,
+                "reason": "Multi-judge average: 2.33/5. Judge 1 (azure/gpt-4o): 2/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 10,
-                "evaluated_messages": 8
+                "evaluated_messages": 8,
+                "individual_judges": [
+                  {
+                    "score": 2,
+                    "reason": "AI는 초반 대화에서 사용자가 매트 헤이그 작가를 좋아한다고 언급한 정보를 기억했으나, 이후 어린이 베스트셀러를 검색한 뒤 맥락을 잃고 초등학생 조카에게 적합한 책을 추천하지 못했습니다. 또한, 매트 헤이그 작가의 책을 검색할 때도 어린이 대상이 아닌 일반 독자 대상의 책을 제시하며 초기 대화의 구체적 요구를 제대로 반영하지 못했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7748,9 +8255,30 @@
               "details": {
                 "raw_score": 5,
                 "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "average_score": 5.0,
+                "reason": "Multi-judge average: 5.00/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 12,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI는 사용자의 초기 요청과 후속 요청을 정확히 기억하고, 관련 정보를 최신순으로 정렬하여 제공하며, 불필요한 재질문 없이 맥락을 완벽히 유지했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
@@ -7758,9 +8286,30 @@
               "details": {
                 "raw_score": 5,
                 "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "average_score": 5.0,
+                "reason": "Multi-judge average: 5.00/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 12,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7795,19 +8344,61 @@
               "details": {
                 "raw_score": 2,
                 "normalized_score": 0.25,
-                "reason": "Parsed from text",
+                "average_score": 1.6666666666666667,
+                "reason": "Multi-judge average: 1.67/5. Judge 1 (azure/gpt-4o): 3/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 2/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 3,
+                    "reason": "AI가 사용자의 요청 조건인 '최신 영상'과 '10분 내외'를 일부 반영했으나, 이전에 추천했던 영상들을 반복적으로 제시하며 새로운 검색 결과를 충분히 제공하지 못함. 또한, 18초짜리 영상은 길이 조건을 충족하지 않아 맥락 유지가 부분적으로 실패함.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.25,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 2,
+                "normalized_score": 0.25,
+                "average_score": 2.3333333333333335,
+                "reason": "Multi-judge average: 2.33/5. Judge 1 (azure/gpt-4o): 2/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 2,
+                    "reason": "AI가 초반 대화에서 언급된 '10분 내외' 조건을 일부 충족했으나, 최신 검색 결과에 여전히 10분을 초과하거나 매우 짧은 영상(18초)을 포함하여 조건을 정확히 따르지 못했다. 또한, 추천된 영상 중 일부는 이전 추천과 동일하여 최신성을 제대로 반영하지 못했다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7842,19 +8433,61 @@
               "details": {
                 "raw_score": 5,
                 "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "average_score": 4.666666666666667,
+                "reason": "Multi-judge average: 4.67/5. Judge 1 (azure/gpt-4o): 4/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 13,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 4,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.75,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 4,
+                "normalized_score": 0.75,
+                "average_score": 4.333333333333333,
+                "reason": "Multi-judge average: 4.33/5. Judge 1 (azure/gpt-4o): 3/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 13,
-                "evaluated_messages": 9
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 3,
+                    "reason": "AI가 초반 대화에서 언급된 원화(KRW) 마켓 정보를 일부 회상했으나, 이벤트 마켓 제외 요청에 대한 구체적 처리와 초기 정보의 완전한 일관성은 부족했습니다. 또한, 일부 코인 목록에서 중복 및 불일치가 발생했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7889,19 +8522,61 @@
               "details": {
                 "raw_score": 5,
                 "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "average_score": 4.666666666666667,
+                "reason": "Multi-judge average: 4.67/5. Judge 1 (azure/gpt-4o): 4/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 4,
+                    "reason": "AI는 사용자의 요청에 따라 강남역 근처의 조용한 카페와 디저트 카페를 각각 제공하며 맥락을 대부분 유지했습니다. 그러나 사용자가 처음에 가기로 한 장소와의 거리나 관련성을 명시적으로 연결하지 않아 약간의 맥락 활용 부족이 있었습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 0.25,
+              "score": 0.5,
               "details": {
-                "raw_score": 2,
-                "normalized_score": 0.25,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 3.3333333333333335,
+                "reason": "Multi-judge average: 3.33/5. Judge 1 (azure/gpt-4o): 3/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 2/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 3,
+                    "reason": "AI가 강남역 근처라는 초기 정보를 기억하고 관련된 장소를 제공했으나, 사용자가 처음에 언급한 '조용한 카페'와 '디저트 카페'라는 구체적 요구를 연결하지 못하고 별개의 검색 결과를 제공하여 맥락 연속성이 일부 부족했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7932,13 +8607,34 @@
               }
             },
             "ContextRetention": {
-              "score": 0.25,
+              "score": 0.75,
               "details": {
-                "raw_score": 2,
-                "normalized_score": 0.25,
-                "reason": "Parsed from text",
+                "raw_score": 4,
+                "normalized_score": 0.75,
+                "average_score": 4.0,
+                "reason": "Multi-judge average: 4.00/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 2/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 10,
-                "evaluated_messages": 8
+                "evaluated_messages": 8,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI는 사용자가 처음에 요청한 부산 축제 정보를 기억하고, 이후 서울 축제 정보를 요청했을 때도 맥락을 잘 이어갔습니다. 마지막으로 다시 부산 축제에 대한 가족 구성원에 맞는 추천을 요청했을 때도 초기 대화 내용을 정확히 반영하며 적절한 답변을 제공했습니다. 불필요한 재질문 없이 대화를 자연스럽게 이어갔습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
@@ -7946,9 +8642,30 @@
               "details": {
                 "raw_score": 5,
                 "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "average_score": 5.0,
+                "reason": "Multi-judge average: 5.00/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 5/5",
                 "total_messages": 10,
-                "evaluated_messages": 8
+                "evaluated_messages": 8,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI는 초반 대화에서 제공된 구체적인 정보(부산, 2025년 10월, 4인 가족 여행)를 정확히 기억하고, 이후에도 이를 기반으로 적절한 추천과 비교를 제공하며 맥락 연속성을 유지했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -7983,19 +8700,61 @@
               "details": {
                 "raw_score": 2,
                 "normalized_score": 0.25,
-                "reason": "Parsed from text",
+                "average_score": 2.0,
+                "reason": "Multi-judge average: 2.00/5. Judge 1 (azure/gpt-4o): 4/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 2/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 4,
+                    "reason": "AI는 사용자의 요청에 따라 제주도 애월 지역의 맛집 후기와 분위기 좋은 카페 후기를 제공하며 맥락을 대부분 유지했습니다. 다만, 일부 카페 정보가 애월 지역과 관련이 없거나 부정확한 점이 있어 완벽한 맥락 유지에는 미흡했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.25,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 2,
+                "normalized_score": 0.25,
+                "average_score": 2.3333333333333335,
+                "reason": "Multi-judge average: 2.33/5. Judge 1 (azure/gpt-4o): 2/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -8026,23 +8785,65 @@
               }
             },
             "ContextRetention": {
-              "score": 0.75,
+              "score": 0.5,
               "details": {
-                "raw_score": 4,
-                "normalized_score": 0.75,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 2.6666666666666665,
+                "reason": "Multi-judge average: 2.67/5. Judge 1 (azure/gpt-4o): 4/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 4/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 4,
+                    "reason": "AI는 사용자의 요청을 기억하고 최신 정보를 제공하며 맥락을 대부분 유지했으나, 이전 검색 결과와 최신 정보 간의 차이를 명확히 비교하거나 설명하지 않아 약간의 연결 부족이 있음.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 4,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
-              "score": 1.0,
+              "score": 0.5,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 3.0,
+                "reason": "Multi-judge average: 3.00/5. Judge 1 (azure/gpt-4o): 4/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 4,
+                    "reason": "AI는 초반 대화에서 제공한 정보를 대부분 정확히 회상하며, 최신 정보로 업데이트된 내용을 제공했습니다. 그러나 일부 세부 사항(예: 특정 식당 이름 및 링크)은 생략되거나 변경되었습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
@@ -8073,13 +8874,34 @@
               }
             },
             "ContextRetention": {
-              "score": 1.0,
+              "score": 0.5,
               "details": {
-                "raw_score": 5,
-                "normalized_score": 1.0,
-                "reason": "Parsed from text",
+                "raw_score": 3,
+                "normalized_score": 0.5,
+                "average_score": 3.3333333333333335,
+                "reason": "Multi-judge average: 3.33/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 5/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI가 사용자의 이전 대화 내용을 정확히 기억하고, 강아지의 나이와 품종을 고려하여 적절한 장난감 추천을 제공하며 맥락을 완벽히 유지했습니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             },
             "RefRecall": {
@@ -8087,9 +8909,30 @@
               "details": {
                 "raw_score": 2,
                 "normalized_score": 0.25,
-                "reason": "Parsed from text",
+                "average_score": 2.3333333333333335,
+                "reason": "Multi-judge average: 2.33/5. Judge 1 (azure/gpt-4o): 5/5; Judge 2 (anthropic/claude-sonnet-4-5-20250929): 2/5; Judge 3 (gemini/gemini-2.5-pro-preview-03-25): 0/5",
                 "total_messages": 8,
-                "evaluated_messages": 6
+                "evaluated_messages": 6,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "AI는 초반 대화에서 언급된 강아지의 나이와 품종(10살 시츄)을 정확히 기억하고, 이후 장난감 추천 시에도 이를 반영하여 적합한 정보를 제공했습니다. 맥락 연속성과 과거 정보 회상이 매우 우수합니다.",
+                    "judge_id": 1,
+                    "judge_model": "azure/gpt-4o"
+                  },
+                  {
+                    "score": 2,
+                    "reason": "Parsed from text",
+                    "judge_id": 2,
+                    "judge_model": "anthropic/claude-sonnet-4-5-20250929"
+                  },
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 3,
+                    "judge_model": "gemini/gemini-2.5-pro-preview-03-25"
+                  }
+                ]
               }
             }
           }
