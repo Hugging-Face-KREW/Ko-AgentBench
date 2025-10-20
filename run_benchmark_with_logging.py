@@ -267,14 +267,13 @@ def save_detailed_results(
     
     model_safe_name = model_name.replace("/", "_")
     
-    # Create run-specific folder: logs/benchmark_results/{timestamp}_{model}/
-    run_folder_name = f"{run_timestamp}_{model_safe_name}"
-    run_folder_path = Path(output_dir) / run_folder_name
-    run_folder_path.mkdir(parents=True, exist_ok=True)
+    # Create by_model structure: logs/benchmark_results/by_model/{model}/{timestamp}/
+    by_model_path = Path(output_dir) / "by_model" / model_safe_name / run_timestamp
+    by_model_path.mkdir(parents=True, exist_ok=True)
     
-    # Save result file in the run folder
+    # Save result file in the by_model folder
     filename = f"{level_name}.json"
-    filepath = run_folder_path / filename
+    filepath = by_model_path / filename
     
     # Simplify and flatten results
     simplified_results = [simplify_result(r) for r in results]
