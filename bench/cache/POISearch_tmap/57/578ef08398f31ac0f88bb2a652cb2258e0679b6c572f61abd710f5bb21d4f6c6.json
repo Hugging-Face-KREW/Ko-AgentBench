@@ -1,0 +1,30 @@
+{
+  "key": "578ef08398f31ac0f88bb2a652cb2258e0679b6c572f61abd710f5bb21d4f6c6",
+  "tool": "POISearch_tmap",
+  "created_at": "2025-10-21T03:56:10.824565",
+  "input_params": {
+    "centerLat": 37.5665,
+    "centerLon": 126.978,
+    "count": 50,
+    "page": 1,
+    "radius": 30000,
+    "searchKeyword": "이마트"
+  },
+  "raw_args": {
+    "searchKeyword": "이마트",
+    "count": 50,
+    "centerLon": 126.978,
+    "centerLat": 37.5665,
+    "radius": 30000,
+    "page": 1
+  },
+  "data": {
+    "success": false,
+    "error_code": "API_REQUEST_FAILED",
+    "error_message": "POI 검색 API 호출 실패: 400 Client Error: Bad Request for url: https://apis.openapi.sk.com/tmap/pois?searchKeyword=%EC%9D%B4%EB%A7%88%ED%8A%B8&count=50&page=1&centerLon=126.978&centerLat=37.5665&radius=30000",
+    "suggested_actions": [
+      "API 키 확인",
+      "네트워크 연결 확인"
+    ]
+  }
+}
