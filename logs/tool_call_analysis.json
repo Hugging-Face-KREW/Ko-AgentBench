@@ -1,20 +1,24 @@
 {
   "summary": {
-    "total_unique_tools": 16,
-    "total_tool_calls": 46,
-    "total_successful_calls": 37,
-    "total_failed_calls": 9
+    "total_unique_tools": 32,
+    "total_tool_calls": 219,
+    "total_successful_calls": 183,
+    "total_failed_calls": 36
   },
   "tool_statistics": {
-    "festival_search": {
-      "total_calls": 4,
-      "successful_calls": 4,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+    "WebSearch_naver": {
+      "total_calls": 25,
+      "successful_calls": 21,
+      "failed_calls": 4,
+      "success_rate": 84.0,
       "levels_used": [
         "L1",
+        "L2",
+        "L3",
+        "L4",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
@@ -22,59 +26,276 @@
           "level": "L1",
           "success": true,
           "arguments": {
-            "eventStartDate": "20251001",
-            "eventEndDate": "20251031",
-            "location": "부산",
-            "num_of_rows": 1
+            "query": "2025년 10월 부산 축제"
           },
           "error": null
         },
         {
-          "task_id": "L5-003",
-          "level": "L5",
+          "task_id": "L1-001",
+          "level": "L1",
           "success": true,
           "arguments": {
-            "eventStartDate": "20250401",
-            "eventEndDate": "20250531",
-            "location": "제주",
-            "num_of_rows": 1
+            "query": "부산국제영화제 BIFF 2025 10월"
           },
           "error": null
         },
         {
-          "task_id": "L5-004",
-          "level": "L5",
+          "task_id": "L1-007",
+          "level": "L1",
           "success": true,
           "arguments": {
-            "eventStartDate": "20250901",
-            "eventEndDate": "20251031",
-            "location": "전북",
-            "num_of_rows": 1
+            "query": "전기차 충전 요금 인상",
+            "display": 1
           },
           "error": null
+        },
+        {
+          "task_id": "L2-007",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "전기차 충전소 설치 비용",
+            "display": 10,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-017",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "나스닥 지수 오늘 현재"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-020",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "오늘의 날씨"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-025",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "오늘 환율 달러 원",
+            "display": 5
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-001",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 겨울 헤어 트렌드",
+            "display": 20,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-001",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 겨울 여자 헤어 트렌드 히피펌 젤리펌",
+            "display": 10,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-001",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 겨울 남자 헤어 트렌드 크롭컷 언더컷",
+            "display": 10,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-002",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2025 여의도 불꽃축제 시간 몇시 일정",
+            "sort": "date",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-003",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "직장인 시간관리 효과적인 방법",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-004",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 봄 메이크업 트렌드",
+            "display": 10,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-007",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2025년 민생지원금 소비쿠폰 효과 평가 분석",
+            "sort": "date",
+            "display": 15
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-008",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 의료진 파업 찬반 의견 해결방안",
+            "display": 20,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-008",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "2025년도 노벨화학상 수상자"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-008",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "2025 노벨화학상"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-009",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "북한 해킹 조직 김수키"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-009",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "김수키 해킹 그룹"
+          },
+          "error": "Request timeout"
         },
         {
           "task_id": "L6-005",
           "level": "L6",
           "success": true,
           "arguments": {
-            "eventStartDate": "20250901",
-            "eventEndDate": "20250930",
-            "location": "부산",
-            "num_of_rows": 10
+            "query": "2025년 9월 부산 축제",
+            "display": 20
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-008",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "기후 변화 원인"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-008",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "탄소중립 실천 방안"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-007",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "2025년 10월 부산 축제 가족 여행",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-010",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "10살 시츄 관절 영양제"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-010",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "10살 시츄 노령견 장난감 추천"
           },
           "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-008",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-008",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-009",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-009",
+          "error": "Request timeout"
+        }
+      ]
     },
-    "_directions": {
-      "total_calls": 3,
-      "successful_calls": 3,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+    "Directions_naver": {
+      "total_calls": 6,
+      "successful_calls": 4,
+      "failed_calls": 2,
+      "success_rate": 66.67,
       "levels_used": [
-        "L1"
+        "L1",
+        "L2",
+        "L5"
       ],
       "tasks_used": [
         {
@@ -82,8 +303,8 @@
           "level": "L1",
           "success": true,
           "arguments": {
-            "start": "127.111217,37.394557",
-            "goal": "127.071707,37.513265"
+            "start": "127.1116,37.3951",
+            "goal": "127.0719,37.5122"
           },
           "error": null
         },
@@ -92,8 +313,8 @@
           "level": "L1",
           "success": true,
           "arguments": {
-            "start": "127.111217,37.394761",
-            "goal": "127.071005,37.512579",
+            "start": "127.1116,37.3947",
+            "goal": "127.0719,37.5122",
             "option": "traavoidtoll"
           },
           "error": null
@@ -103,23 +324,67 @@
           "level": "L1",
           "success": true,
           "arguments": {
-            "start": "126.9707,37.5547",
-            "goal": "126.4525,37.4602",
-            "waypoints": "126.9770,37.5720|126.9242,37.5219",
+            "start": "126.9706,37.5546",
+            "goal": "126.4406,37.4691",
+            "waypoints": "126.9769,37.5759|126.9244,37.5219",
             "option": "traavoidtoll"
           },
           "error": null
+        },
+        {
+          "task_id": "L2-035",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "start": "126.9769,37.5759",
+            "goal": "126.9786,37.5716"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-026",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "start": "127.108882,37.394274",
+            "goal": "126.92490,37.52190",
+            "option": "trafast"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-026",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "start": "127.108882,37.394274",
+            "goal": "126.92490,37.52190",
+            "option": "trafast"
+          },
+          "error": "Request timeout"
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-026",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-026",
+          "error": "Request timeout"
+        }
+      ]
     },
-    "StockSearch_ls": {
-      "total_calls": 1,
-      "successful_calls": 1,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+    "MarketIndex_ls": {
+      "total_calls": 5,
+      "successful_calls": 4,
+      "failed_calls": 1,
+      "success_rate": 80.0,
       "levels_used": [
-        "L1"
+        "L1",
+        "L2",
+        "L3",
+        "L5"
       ],
       "tasks_used": [
         {
@@ -127,26 +392,13 @@
           "level": "L1",
           "success": true,
           "arguments": {
-            "query_index": "삼성전자"
+            "jisu": "KOSDAQ"
           },
           "error": null
-        }
-      ],
-      "error_messages": []
-    },
-    "MarketIndex_ls": {
-      "total_calls": 2,
-      "successful_calls": 2,
-      "failed_calls": 0,
-      "success_rate": 100.0,
-      "levels_used": [
-        "L1",
-        "L5"
-      ],
-      "tasks_used": [
+        },
         {
-          "task_id": "L1-106",
-          "level": "L1",
+          "task_id": "L2-012",
+          "level": "L2",
           "success": true,
           "arguments": {
             "jisu": "KOSDAQ"
@@ -154,29 +406,55 @@
           "error": null
         },
         {
-          "task_id": "L5-005",
-          "level": "L5",
+          "task_id": "L3-015",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "jisu": "KOSPI"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-025",
+          "level": "L3",
           "success": true,
           "arguments": {
             "jisu": "KOSDAQ"
           },
           "error": null
+        },
+        {
+          "task_id": "L5-003",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "error": "Service completely unavailable"
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-003",
+          "error": "Service completely unavailable"
+        }
+      ]
     },
     "CryptoPrice_bithumb": {
-      "total_calls": 3,
-      "successful_calls": 3,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+      "total_calls": 5,
+      "successful_calls": 4,
+      "failed_calls": 1,
+      "success_rate": 80.0,
       "levels_used": [
         "L1",
+        "L2",
+        "L3",
+        "L4",
         "L5"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-007",
+          "task_id": "L1-006",
           "level": "L1",
           "success": true,
           "arguments": {
@@ -185,8 +463,8 @@
           "error": null
         },
         {
-          "task_id": "L5-006",
-          "level": "L5",
+          "task_id": "L2-028",
+          "level": "L2",
           "success": true,
           "arguments": {
             "markets": "KRW-BTC"
@@ -194,69 +472,57 @@
           "error": null
         },
         {
-          "task_id": "L5-022",
-          "level": "L5",
+          "task_id": "L3-003",
+          "level": "L3",
           "success": true,
           "arguments": {
             "markets": "KRW-BTC"
           },
           "error": null
+        },
+        {
+          "task_id": "L4-010",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-004",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "error": "Request timeout"
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-004",
+          "error": "Request timeout"
+        }
+      ]
     },
-    "MarketList_bithumb": {
-      "total_calls": 1,
-      "successful_calls": 1,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+    "BlogSearch_naver": {
+      "total_calls": 21,
+      "successful_calls": 19,
+      "failed_calls": 2,
+      "success_rate": 90.48,
       "levels_used": [
-        "L1"
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
           "task_id": "L1-008",
-          "level": "L1",
-          "success": true,
-          "arguments": {},
-          "error": null
-        }
-      ],
-      "error_messages": []
-    },
-    "search_web": {
-      "total_calls": 1,
-      "successful_calls": 1,
-      "failed_calls": 0,
-      "success_rate": 100.0,
-      "levels_used": [
-        "L1"
-      ],
-      "tasks_used": [
-        {
-          "task_id": "L1-009",
-          "level": "L1",
-          "success": true,
-          "arguments": {
-            "query": "전기차 충전 요금 인상",
-            "display": 1
-          },
-          "error": null
-        }
-      ],
-      "error_messages": []
-    },
-    "search_blog": {
-      "total_calls": 1,
-      "successful_calls": 1,
-      "failed_calls": 0,
-      "success_rate": 100.0,
-      "levels_used": [
-        "L1"
-      ],
-      "tasks_used": [
-        {
-          "task_id": "L1-010",
           "level": "L1",
           "success": true,
           "arguments": {
@@ -264,51 +530,386 @@
             "display": 1
           },
           "error": null
+        },
+        {
+          "task_id": "L2-002",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "제주도 맛집 후기"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-004",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "아이폰 15 프로 실사용 후기",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-025",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "남이섬 겨울 여행 후기"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-034",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "서울 가을 여행지 추천"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-041",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "제주도 봄 여행 코스 추천"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-008",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "인공지능",
+            "display": 5,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-012",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "만리재비스트로 서울역 맛집 리뷰",
+            "display": 5
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-022",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "판교역 환승 공영주차장 요금 후기",
+            "display": 10,
+            "sort": "sim"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-001",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 겨울 헤어 트렌드 인기 스타일",
+            "display": 15,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-003",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "직장인 시간관리 효율적인 방법 팁",
+            "display": 5
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-004",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 봄 메이크업 트렌드 스타일",
+            "display": 10,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-007",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2025년 민생지원금 정책 국민 반응 평가",
+            "sort": "date",
+            "display": 15
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-008",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 의료진 파업 찬반 의견 해결방안",
+            "display": 20,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-010",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "성수동 카페",
+            "display": 1
+          },
+          "error": "No data available"
+        },
+        {
+          "task_id": "L5-024",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "제주도 가을 여행 코스",
+            "display": 1
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L6-006",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "겨울 제주도 여행 코스"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-006",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "제주공항 근처 맛집"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-013",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "2024 겨울 헤어 트렌드",
+            "sort": "date",
+            "display": 5
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-008",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "제주도 애월 맛집 후기",
+            "display": 10,
+            "sort": "sim"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-008",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "제주도 애월 분위기 좋은 카페 후기",
+            "display": 10,
+            "sort": "sim"
+          },
+          "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-010",
+          "error": "No data available"
+        },
+        {
+          "task_id": "L5-024",
+          "error": "Request timeout"
+        }
+      ]
     },
-    "search_news": {
-      "total_calls": 4,
-      "successful_calls": 4,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+    "NewsSearch_naver": {
+      "total_calls": 18,
+      "successful_calls": 17,
+      "failed_calls": 1,
+      "success_rate": 94.44,
       "levels_used": [
         "L1",
+        "L2",
+        "L3",
+        "L4",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-011",
+          "task_id": "L1-009",
           "level": "L1",
           "success": true,
           "arguments": {
             "query": "반도체 수출 전망",
+            "display": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-001",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "반도체 산업",
+            "sort": "date",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-005",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "한국은행 기준금리",
+            "sort": "date",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-008",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "태풍 경로 예측",
+            "sort": "date",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-024",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "반도체 공급망",
+            "display": 5,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-013",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "SK하이닉스",
+            "display": 3,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-020",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "오늘의 날씨",
+            "display": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-027",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "테슬라",
             "display": 1,
-            "sort": "sim"
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-027",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query": "테슬라 TSLA 주가",
+            "display": 1,
+            "sort": "date"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-002",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2025 여의도 불꽃축제 시간 일정",
+            "sort": "date",
+            "display": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-007",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2025년 민생지원금 정책 반응",
+            "sort": "date",
+            "display": 20
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-008",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "query": "2024년 의료진 파업 찬반 의견 해결방안",
+            "display": 20,
+            "sort": "date"
           },
           "error": null
         },
         {
           "task_id": "L5-011",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
-            "query": "북한",
-            "display": 1,
-            "sort": "date"
+            "query": "국산 NPU",
+            "sort": "date",
+            "display": 1
           },
-          "error": null
+          "error": "No data available"
         },
         {
-          "task_id": "L5-013",
-          "level": "L5",
+          "task_id": "L6-002",
+          "level": "L6",
           "success": true,
           "arguments": {
-            "query": "퓨리오사AI",
-            "display": 1,
-            "sort": "date"
+            "query": "반도체 기술",
+            "sort": "date",
+            "display": 3
           },
           "error": null
         },
@@ -317,29 +918,64 @@
           "level": "L6",
           "success": true,
           "arguments": {
-            "query": "최신 반도체 기술",
-            "display": 3,
+            "query": "삼성전자",
+            "sort": "date",
+            "display": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-003",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "IT 인공지능 국내 뉴스"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-003",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "스포츠 야구"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-003",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "IT 인공지능 국내 뉴스",
             "sort": "date"
           },
           "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-011",
+          "error": "No data available"
+        }
+      ]
     },
     "ItemSearch_aladin": {
-      "total_calls": 5,
-      "successful_calls": 5,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+      "total_calls": 13,
+      "successful_calls": 11,
+      "failed_calls": 2,
+      "success_rate": 84.62,
       "levels_used": [
         "L1",
+        "L2",
         "L3",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-012",
+          "task_id": "L1-010",
           "level": "L1",
           "success": true,
           "arguments": {
@@ -351,38 +987,76 @@
           "error": null
         },
         {
+          "task_id": "L2-023",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "데이터 사이언스 기초",
+            "query_type": "Keyword"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-026",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "클린 아키텍처",
+            "query_type": "Keyword"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-056",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "AI 윤리",
+            "sort": "Accuracy",
+            "max_results": 5
+          },
+          "error": null
+        },
+        {
           "task_id": "L3-004",
           "level": "L3",
           "success": true,
           "arguments": {
-            "query": "수능 수학 모의고사 문제집 독학",
-            "search_target": "Book",
-            "max_results": 5,
+            "query": "수능 모의고사 수학 문제집",
+            "max_results": 20,
             "sort": "SalesPoint"
           },
           "error": null
         },
         {
-          "task_id": "L5-014",
+          "task_id": "L5-012",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
             "query": "인공지능",
-            "start": 1,
-            "max_results": 1,
-            "sort": "Accuracy"
+            "max_results": 1
           },
-          "error": null
+          "error": "Request timeout"
         },
         {
-          "task_id": "L5-016",
+          "task_id": "L5-014",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
             "query": "한강",
             "query_type": "Author",
-            "search_target": "Book",
-            "max_results": 5,
+            "sort": "CustomerRating",
+            "max_results": 10
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L6-001",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "파이썬 알고리즘 트레이딩",
+            "max_results": 20,
             "sort": "SalesPoint"
           },
           "error": null
@@ -392,77 +1066,195 @@
           "level": "L6",
           "success": true,
           "arguments": {
+            "max_results": 20,
             "query": "파이썬 알고리즘 트레이딩",
-            "query_type": "Keyword",
-            "search_target": "Book",
-            "max_results": 5,
+            "sort": "SalesPoint"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-011",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "클린 아키텍처",
+            "max_results": 10,
             "sort": "Accuracy"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-002",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "매트 헤이그",
+            "query_type": "Author",
+            "max_results": 20,
+            "sort": "CustomerRating"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-002",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "어린이 베스트셀러",
+            "max_results": 20,
+            "sort": "SalesPoint"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-002",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "max_results": 20,
+            "query_type": "Author",
+            "query": "매트 헤이그",
+            "category_id": 48877,
+            "sort": "CustomerRating"
           },
           "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-012",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-014",
+          "error": "Request timeout"
+        }
+      ]
     },
     "ItemList_aladin": {
-      "total_calls": 3,
-      "successful_calls": 3,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+      "total_calls": 7,
+      "successful_calls": 5,
+      "failed_calls": 2,
+      "success_rate": 71.43,
       "levels_used": [
         "L1",
+        "L2",
+        "L3",
         "L5"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-013",
+          "task_id": "L1-011",
           "level": "L1",
           "success": true,
           "arguments": {
             "query_type": "Bestseller",
-            "search_target": "Book",
-            "max_results": 1
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "max_results": 1,
+            "search_target": "Book"
           },
           "error": null
+        },
+        {
+          "task_id": "L2-021",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller",
+            "category_id": 170,
+            "max_results": 20
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-027",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller",
+            "max_results": 10,
+            "category_id": 0
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-046",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query_type": "ItemNewAll",
+            "category_id": 351,
+            "search_target": "Book",
+            "max_results": 20
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-010",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "query_type": "Bestseller"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-013",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "max_results": 3
+          },
+          "error": "Service completely unavailable"
         },
         {
           "task_id": "L5-015",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
             "query_type": "Bestseller",
             "search_target": "Book",
-            "max_results": 3
-          },
-          "error": null
-        },
-        {
-          "task_id": "L5-017",
-          "level": "L5",
-          "success": true,
-          "arguments": {
-            "query_type": "Bestseller",
-            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
             "max_results": 1
           },
-          "error": null
+          "error": "Service completely unavailable"
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-013",
+          "error": "Service completely unavailable"
+        },
+        {
+          "task_id": "L5-015",
+          "error": "Service completely unavailable"
+        }
+      ]
     },
     "WebSearch_daum": {
-      "total_calls": 5,
-      "successful_calls": 5,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+      "total_calls": 13,
+      "successful_calls": 8,
+      "failed_calls": 5,
+      "success_rate": 61.54,
       "levels_used": [
         "L1",
         "L2",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-014",
+          "task_id": "L1-012",
           "level": "L1",
           "success": true,
           "arguments": {
@@ -476,32 +1268,78 @@
           "level": "L2",
           "success": true,
           "arguments": {
-            "query": "2024년 개정 부동산 세법"
+            "query": "2024년 부동산 세법 개정 내용",
+            "sort": "recency",
+            "size": 15
           },
           "error": null
+        },
+        {
+          "task_id": "L2-006",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "size": 15,
+            "query": "2024년 종합부동산세 양도소득세 취득세 개정 내용",
+            "sort": "recency"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-037",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "종량제 봉투 가격"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-005",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "아이폰 17 출시일"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-005",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "iPhone 17 출시일 2025"
+          },
+          "error": "Request timeout"
         },
         {
           "task_id": "L5-007",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
-            "query": "아이폰 17 출시일",
-            "sort": "recency",
-            "size": 1
+            "query": "2025년 LoL 월드 챔피언십 한국팀 진출 명단",
+            "sort": "recency"
           },
-          "error": null
+          "error": "Request timeout"
         },
         {
-          "task_id": "L5-009",
+          "task_id": "L5-007",
           "level": "L5",
-          "success": true,
+          "success": false,
           "arguments": {
-            "query": "전기차 충전 요금 인상",
-            "sort": "recency",
-            "page": 1,
-            "size": 1
+            "query": "2025 롤드컵 한국 대표팀",
+            "sort": "recency"
           },
-          "error": null
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-007",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "리그오브레전드 2025 월드챔피언십 LCK"
+          },
+          "error": "Request timeout"
         },
         {
           "task_id": "L6-007",
@@ -510,32 +1348,83 @@
           "arguments": {
             "query": "AI 기술 최신 동향",
             "sort": "recency",
-            "size": 5
+            "size": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-007",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "양자 컴퓨팅",
+            "size": 10,
+            "sort": "recency"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-009",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "강원도 직접 키운 나물 한정식 식당"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-009",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "query": "강원도 직접 키운 나물 한정식 식당",
+            "sort": "recency"
           },
           "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-005",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-005",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-007",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-007",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-007",
+          "error": "Request timeout"
+        }
+      ]
     },
     "VideoSearch_daum": {
-      "total_calls": 4,
-      "successful_calls": 4,
-      "failed_calls": 0,
-      "success_rate": 100.0,
+      "total_calls": 7,
+      "successful_calls": 6,
+      "failed_calls": 1,
+      "success_rate": 85.71,
       "levels_used": [
         "L1",
         "L2",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-015",
+          "task_id": "L1-013",
           "level": "L1",
           "success": true,
           "arguments": {
-            "query": "손흥민 헤드트릭",
-            "size": 1
+            "query": "손흥민 헤드트릭"
           },
           "error": null
         },
@@ -549,8 +1438,39 @@
           "error": null
         },
         {
-          "task_id": "L5-008",
+          "task_id": "L2-036",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "query": "요리왕비룡 오프닝"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-006",
           "level": "L5",
+          "success": false,
+          "arguments": {
+            "query": "아이유 콘서트 직캠",
+            "sort": "recency",
+            "size": 1
+          },
+          "error": "Service completely unavailable"
+        },
+        {
+          "task_id": "L6-003",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "query": "뉴진스",
+            "size": 2,
+            "sort": "recency"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-012",
+          "level": "L6",
           "success": true,
           "arguments": {
             "query": "아이유 콘서트 직캠",
@@ -560,37 +1480,80 @@
           "error": null
         },
         {
-          "task_id": "L6-003",
-          "level": "L6",
+          "task_id": "L7-004",
+          "level": "L7",
           "success": true,
           "arguments": {
-            "query": "뉴진스",
-            "sort": "recency",
-            "size": 2
+            "query": "캠핑 브이로그",
+            "size": 15,
+            "sort": "recency"
           },
           "error": null
         }
       ],
-      "error_messages": []
+      "error_messages": [
+        {
+          "task_id": "L5-006",
+          "error": "Service completely unavailable"
+        }
+      ]
     },
     "AddressToCoord_kakao": {
-      "total_calls": 2,
-      "successful_calls": 0,
-      "failed_calls": 2,
-      "success_rate": 0.0,
+      "total_calls": 7,
+      "successful_calls": 4,
+      "failed_calls": 3,
+      "success_rate": 57.14,
       "levels_used": [
         "L1",
+        "L2",
+        "L3",
         "L5"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-016",
+          "task_id": "L1-014",
           "level": "L1",
-          "success": false,
+          "success": true,
           "arguments": {
             "address": "서울 중구 세종대로 110"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+          "error": null
+        },
+        {
+          "task_id": "L2-040",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "address": "서울특별시 강남구 테헤란로 152"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-014",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "address": "부산 해운대구"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-024",
+          "level": "L3",
+          "success": false,
+          "arguments": {
+            "address": "인천국제공항"
+          },
+          "error": "주소 '인천국제공항'를 찾을 수 없습니다"
+        },
+        {
+          "task_id": "L3-024",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "address": "인천광역시 중구 공항로 272"
+          },
+          "error": null
         },
         {
           "task_id": "L5-001",
@@ -599,80 +1562,148 @@
           "arguments": {
             "address": "서울 중구 세종대로 110"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-001",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "address": "서울 중구 세종대로 110"
+          },
+          "error": "Request timeout"
         }
       ],
       "error_messages": [
         {
-          "task_id": "L1-016",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+          "task_id": "L3-024",
+          "error": "주소 '인천국제공항'를 찾을 수 없습니다"
         },
         {
           "task_id": "L5-001",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110"
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-001",
+          "error": "Request timeout"
         }
       ]
     },
     "PlaceSearch_kakao": {
-      "total_calls": 6,
-      "successful_calls": 0,
-      "failed_calls": 6,
-      "success_rate": 0.0,
+      "total_calls": 14,
+      "successful_calls": 12,
+      "failed_calls": 2,
+      "success_rate": 85.71,
       "levels_used": [
         "L1",
+        "L2",
         "L3",
         "L5",
-        "L6"
+        "L6",
+        "L7"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-017",
+          "task_id": "L1-015",
           "level": "L1",
-          "success": false,
+          "success": true,
           "arguments": {
-            "keyword": "강남역 파스타",
-            "size": 1,
-            "sort": "distance"
+            "keyword": "파스타",
+            "x": 127.027926,
+            "y": 37.497952,
+            "size": 1
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
+          "error": null
+        },
+        {
+          "task_id": "L2-047",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "keyword": "강남역 카페",
+            "size": 15,
+            "sort": "accuracy"
+          },
+          "error": null
         },
         {
           "task_id": "L3-002",
           "level": "L3",
-          "success": false,
+          "success": true,
           "arguments": {
-            "keyword": "대학교",
-            "x": 127.047093,
-            "y": 37.580178,
-            "radius": 2000,
-            "sort": "distance",
-            "size": 1
+            "keyword": "청량리역 대학교",
+            "size": 10
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000"
+          "error": null
         },
         {
-          "task_id": "L3-003",
+          "task_id": "L3-002",
           "level": "L3",
-          "success": false,
+          "success": true,
           "arguments": {
-            "keyword": "교대역 레스토랑",
-            "radius": 500,
-            "sort": "accuracy"
+            "keyword": "병원",
+            "x": 127.05173889409078,
+            "y": 37.5971656623384,
+            "radius": 1000,
+            "size": 15,
+            "sort": "distance"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=500"
+          "error": null
+        },
+        {
+          "task_id": "L3-002",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "x": 127.05784829549488,
+            "y": 37.5975430443335,
+            "sort": "distance",
+            "keyword": "병원",
+            "radius": 1000,
+            "size": 15
+          },
+          "error": null
         },
         {
           "task_id": "L3-005",
           "level": "L3",
+          "success": true,
+          "arguments": {
+            "keyword": "강남역 애플 매장",
+            "size": 5
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-012",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "keyword": "서울역 맛집",
+            "size": 10
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-022",
+          "level": "L3",
           "success": false,
           "arguments": {
-            "keyword": "애플 매장",
-            "x": 127.0276368,
-            "y": 37.497942,
-            "sort": "distance",
-            "size": 3
+            "keyword": "판교역 주차장",
+            "size": 15,
+            "sort": "distance"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942"
+          "error": "400 Client Error: Bad Request for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8C%90%EA%B5%90%EC%97%AD+%EC%A3%BC%EC%B0%A8%EC%9E%A5&sort=distance&page=1&size=15"
+        },
+        {
+          "task_id": "L3-022",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "keyword": "판교 주차장",
+            "size": 10
+          },
+          "error": null
         },
         {
           "task_id": "L5-002",
@@ -686,72 +1717,1180 @@
             "size": 1,
             "sort": "distance"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300"
+          "error": "Service completely unavailable"
         },
         {
           "task_id": "L6-004",
           "level": "L6",
-          "success": false,
+          "success": true,
           "arguments": {
             "keyword": "시흥시청 맛집"
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%8B%9C%ED%9D%A5%EC%8B%9C%EC%B2%AD+%EB%A7%9B%EC%A7%91&sort=accuracy&page=1&size=15"
+          "error": null
+        },
+        {
+          "task_id": "L6-004",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "keyword": "오이도역 카페"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-015",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "keyword": "강남역 디저트 카페"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-006",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "keyword": "강남역 근처 조용한 카페"
+          },
+          "error": null
         }
       ],
       "error_messages": [
         {
-          "task_id": "L1-017",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1"
-        },
-        {
-          "task_id": "L3-002",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000"
-        },
-        {
-          "task_id": "L3-003",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=500"
-        },
-        {
-          "task_id": "L3-005",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942"
+          "task_id": "L3-022",
+          "error": "400 Client Error: Bad Request for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8C%90%EA%B5%90%EC%97%AD+%EC%A3%BC%EC%B0%A8%EC%9E%A5&sort=distance&page=1&size=15"
         },
         {
           "task_id": "L5-002",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300"
-        },
-        {
-          "task_id": "L6-004",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%8B%9C%ED%9D%A5%EC%8B%9C%EC%B2%AD+%EB%A7%9B%EC%A7%91&sort=accuracy&page=1&size=15"
+          "error": "Service completely unavailable"
         }
       ]
     },
     "CategorySearch_kakao": {
-      "total_calls": 1,
-      "successful_calls": 0,
-      "failed_calls": 1,
-      "success_rate": 0.0,
+      "total_calls": 7,
+      "successful_calls": 5,
+      "failed_calls": 2,
+      "success_rate": 71.43,
       "levels_used": [
-        "L1"
+        "L1",
+        "L2",
+        "L3",
+        "L5"
       ],
       "tasks_used": [
         {
-          "task_id": "L1-018",
+          "task_id": "L1-016",
           "level": "L1",
-          "success": false,
+          "success": true,
           "arguments": {
             "category": "CE7",
-            "x": 126.9237,
-            "y": 37.5563,
+            "x": 126.9244593,
+            "y": 37.5571515,
             "radius": 500,
             "size": 1
           },
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1"
+          "error": null
+        },
+        {
+          "task_id": "L2-015",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "category": "CE7",
+            "x": 127.027926,
+            "y": 37.497175,
+            "radius": 1000
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-020",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "category": "PM9",
+            "x": 126.9769,
+            "y": 37.5759
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-049",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "category": "FD6",
+            "x": 126.9748,
+            "y": 37.5867,
+            "radius": 1000
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-014",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "category": "AD5",
+            "x": 129.163596084009,
+            "y": 35.1630666685464,
+            "radius": 5000,
+            "size": 15
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-023",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "category": "CS2",
+            "x": 126.9244,
+            "y": 37.5571,
+            "radius": 500,
+            "size": 1
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-023",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "x": 126.9244,
+            "y": 37.5571,
+            "category": "CS2",
+            "radius": 500,
+            "size": 1
+          },
+          "error": "Request timeout"
         }
       ],
       "error_messages": [
         {
-          "task_id": "L1-018",
-          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1"
+          "task_id": "L5-023",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-023",
+          "error": "Request timeout"
+        }
+      ]
+    },
+    "StockPrice_ls": {
+      "total_calls": 7,
+      "successful_calls": 7,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L4"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-009",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "shcode": "051910"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-032",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "shcode": "005930"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-048",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "shcode": "005930"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-015",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "shcode": "005930",
+            "exchgubun": "K"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-006",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "shcode": "035720"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-006",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "shcode": "035420"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L4-010",
+          "level": "L4",
+          "success": true,
+          "arguments": {
+            "shcode": "005380"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "USStockPrice_kis": {
+      "total_calls": 6,
+      "successful_calls": 4,
+      "failed_calls": 2,
+      "success_rate": 66.67,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-010",
+          "level": "L2",
+          "success": false,
+          "arguments": {
+            "symbol": "AAPL"
+          },
+          "error": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+        },
+        {
+          "task_id": "L2-044",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "TSLA"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-007",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "AAPL"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-017",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "AAPL",
+            "exchange": "NASDAQ"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-027",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "TSLA",
+            "exchange": "NASDAQ"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-016",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "symbol": "AAPL"
+          },
+          "error": "Request timeout"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L2-010",
+          "error": "403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP"
+        },
+        {
+          "task_id": "L5-016",
+          "error": "Request timeout"
+        }
+      ]
+    },
+    "StockChart_kis": {
+      "total_calls": 6,
+      "successful_calls": 6,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L6"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-013",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "035420",
+            "period": "D"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-001",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "005930",
+            "period": "D",
+            "count": 30
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-023",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "373220",
+            "period": "D",
+            "count": 30
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-010",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "symbol": "005930",
+            "period": "W"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-010",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "symbol": "000660",
+            "period": "W"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-014",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "symbol": "000660",
+            "period": "W",
+            "count": 5
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CryptoCandle_upbit": {
+      "total_calls": 5,
+      "successful_calls": 4,
+      "failed_calls": 1,
+      "success_rate": 80.0,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-014",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "XRP",
+            "candle_type": "minutes",
+            "unit": 60,
+            "count": 24
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-031",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "BTC",
+            "candle_type": "days",
+            "count": 30
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-053",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "ETH",
+            "candle_type": "days",
+            "count": 50,
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-011",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW",
+            "candle_type": "days",
+            "count": 7
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-019",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "symbol": "ETH",
+            "candle_type": "minutes",
+            "unit": 1,
+            "count": 30
+          },
+          "error": "No data available"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L5-019",
+          "error": "No data available"
+        }
+      ]
+    },
+    "WalkRoute_tmap": {
+      "total_calls": 3,
+      "successful_calls": 3,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L3"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-016",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "startX": 126.9769,
+            "startY": 37.5759,
+            "endX": 126.9786,
+            "endY": 37.5796
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-055",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "startX": 126.9244,
+            "startY": 37.5563,
+            "endX": 126.9944,
+            "endY": 37.5344
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-005",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "startX": 127.027926,
+            "startY": 37.497952,
+            "endX": 127.025310702725,
+            "endY": 37.5036902997713
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "POISearch_tmap": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-017",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "searchKeyword": "서울 이마트",
+            "count": 50
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CoordToAddress_kakao": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-018",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "latitude": 37.5665,
+            "longitude": 126.978
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CarRoute_tmap": {
+      "total_calls": 5,
+      "successful_calls": 3,
+      "failed_calls": 2,
+      "success_rate": 60.0,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-019",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "startX": 126.9708,
+            "startY": 37.5547,
+            "endX": 126.4407,
+            "endY": 37.4691
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-009",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "startX": 127.036978,
+            "startY": 37.500692,
+            "endX": 126.989426,
+            "endY": 37.539354
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-016",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "startX": 127.036978,
+            "startY": 37.500692,
+            "endX": 127.085529,
+            "endY": 37.511914
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-021",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "startX": 127.027621,
+            "startY": 37.497942,
+            "endX": 126.977022,
+            "endY": 37.566536,
+            "searchOption": 0
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-022",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "startX": 126.450517,
+            "startY": 37.46019,
+            "endX": 127.0592,
+            "endY": 37.511
+          },
+          "error": "Service completely unavailable"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L5-021",
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L5-022",
+          "error": "Service completely unavailable"
+        }
+      ]
+    },
+    "ItemLookup_aladin": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-022",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "item_id": "9788936434267",
+            "item_id_type": "ISBN13"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "OrderBook_bithumb": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-029",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "markets": "BTC-ETH"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CryptoPrice_upbit": {
+      "total_calls": 6,
+      "successful_calls": 5,
+      "failed_calls": 1,
+      "success_rate": 83.33,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5",
+        "L7"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-030",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "XRP"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-011",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-018",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          },
+          "error": "Request timeout"
+        },
+        {
+          "task_id": "L7-001",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-001",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "symbol": "ETH",
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-001",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L5-018",
+          "error": "Request timeout"
+        }
+      ]
+    },
+    "StockTrades_ls": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-033",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "shcode": "035720"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CryptoCandle_bithumb": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-038",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "market": "KRW-BTC",
+            "time": "minutes",
+            "unit": 15,
+            "count": 50
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "MarketList_upbit": {
+      "total_calls": 6,
+      "successful_calls": 6,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L6",
+        "L7"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-039",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "quote": "ALL"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-009",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L6-009",
+          "level": "L6",
+          "success": true,
+          "arguments": {
+            "quote": "BTC"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-005",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "quote": "KRW"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-005",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "quote": "USDT"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L7-005",
+          "level": "L7",
+          "success": true,
+          "arguments": {
+            "quote": "KRW",
+            "include_event": false
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "OrderBook_ls": {
+      "total_calls": 1,
+      "successful_calls": 1,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-042",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "shcode": "005490"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "CategorySearch_tmap": {
+      "total_calls": 4,
+      "successful_calls": 4,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L3"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-043",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "categories": "편의점",
+            "centerLon": 127.027926,
+            "centerLat": 37.497175,
+            "radius": 1
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-051",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "categories": "주차장",
+            "centerLon": 127.1117,
+            "centerLat": 37.3946,
+            "radius": 500
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-051",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "categories": "주차",
+            "centerLat": 37.3946,
+            "centerLon": 127.1117,
+            "radius": 500
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-024",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "categories": "약국",
+            "centerLon": 126.427699293474,
+            "centerLat": 37.458350712273,
+            "count": 10,
+            "radius": 5
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "Geocoding_tmap": {
+      "total_calls": 6,
+      "successful_calls": 6,
+      "failed_calls": 0,
+      "success_rate": 100.0,
+      "levels_used": [
+        "L2",
+        "L3"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-045",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "마포구",
+            "dong": "상암동"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L2-054",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-009",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-009",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "용산구",
+            "dong": "이태원동"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-016",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-016",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "송파구",
+            "dong": "잠실동"
+          },
+          "error": null
+        }
+      ],
+      "error_messages": []
+    },
+    "MarketList_bithumb": {
+      "total_calls": 4,
+      "successful_calls": 3,
+      "failed_calls": 1,
+      "success_rate": 75.0,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-050",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "isDetails": true
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-003",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "isDetails": true
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-019",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "isDetails": false
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-025",
+          "level": "L5",
+          "success": false,
+          "arguments": {},
+          "error": "Request timeout"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L5-025",
+          "error": "Request timeout"
+        }
+      ]
+    },
+    "StockPrice_kis": {
+      "total_calls": 6,
+      "successful_calls": 5,
+      "failed_calls": 1,
+      "success_rate": 83.33,
+      "levels_used": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "tasks_used": [
+        {
+          "task_id": "L2-052",
+          "level": "L2",
+          "success": true,
+          "arguments": {
+            "symbol": "035420"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-001",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "005930",
+            "market": "KOSPI"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-007",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "005930"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-013",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "000660",
+            "market": "KOSPI"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L3-023",
+          "level": "L3",
+          "success": true,
+          "arguments": {
+            "symbol": "373220",
+            "market": "KOSPI"
+          },
+          "error": null
+        },
+        {
+          "task_id": "L5-017",
+          "level": "L5",
+          "success": false,
+          "arguments": {
+            "symbol": "005930"
+          },
+          "error": "Request timeout"
+        }
+      ],
+      "error_messages": [
+        {
+          "task_id": "L5-017",
+          "error": "Request timeout"
         }
       ]
     }

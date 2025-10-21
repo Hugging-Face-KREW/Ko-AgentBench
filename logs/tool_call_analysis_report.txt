@@ -6,73 +6,221 @@ TOOL CALL ANALYSIS REPORT
 ----------------------------------------------------------------------------------------------------
 Level      Total Tasks     Success    Failed     Success Rate    Tool Calls     
 ----------------------------------------------------------------------------------------------------
-L1         18              0          18         0.00            18             
-L2         9               0          9          0.00            2              
-L3         6               0          6          0.00            4              
-L5         24              0          24         0.00            16             
-L6         10              0          10         0.00            6              
+L1         16              16         0          100.00          17             
+L2         56              55         1          98.21           57             
+L3         27              27         0          100.00          48             
+L4         10              9          1          90.00           20             
+L5         26              26         0          100.00          33             
+L6         15              15         0          100.00          23             
+L7         10              10         0          100.00          21             
 ----------------------------------------------------------------------------------------------------
-TOTAL      67              0          67         0.00            46             
+TOTAL      160             158        2          98.75           219            
 
 
 🔧 TOOL USAGE SUMMARY
 ----------------------------------------------------------------------------------------------------
 Tool Name                      Calls      Success    Failed     Success Rate    Levels              
 ----------------------------------------------------------------------------------------------------
-PlaceSearch_kakao              6          0          6          0.00            L1, L3, L5, L6      
-ItemSearch_aladin              5          5          0          100.00          L1, L3, L5, L6      
-WebSearch_daum                 5          5          0          100.00          L1, L2, L5, L6      
-festival_search                4          4          0          100.00          L1, L5, L6          
-search_news                    4          4          0          100.00          L1, L5, L6          
-VideoSearch_daum               4          4          0          100.00          L1, L2, L5, L6      
-_directions                    3          3          0          100.00          L1                  
-CryptoPrice_bithumb            3          3          0          100.00          L1, L5              
-ItemList_aladin                3          3          0          100.00          L1, L5              
-MarketIndex_ls                 2          2          0          100.00          L1, L5              
-AddressToCoord_kakao           2          0          2          0.00            L1, L5              
-StockSearch_ls                 1          1          0          100.00          L1                  
-MarketList_bithumb             1          1          0          100.00          L1                  
-search_web                     1          1          0          100.00          L1                  
-search_blog                    1          1          0          100.00          L1                  
-CategorySearch_kakao           1          0          1          0.00            L1                  
+WebSearch_naver                25         21         4          84.00           L1, L2, L3, L4, L5, L6, L7
+BlogSearch_naver               21         19         2          90.48           L1, L2, L3, L4, L5, L6, L7
+NewsSearch_naver               18         17         1          94.44           L1, L2, L3, L4, L5, L6, L7
+PlaceSearch_kakao              14         12         2          85.71           L1, L2, L3, L5, L6, L7
+ItemSearch_aladin              13         11         2          84.62           L1, L2, L3, L5, L6, L7
+WebSearch_daum                 13         8          5          61.54           L1, L2, L5, L6, L7  
+ItemList_aladin                7          5          2          71.43           L1, L2, L3, L5      
+VideoSearch_daum               7          6          1          85.71           L1, L2, L5, L6, L7  
+AddressToCoord_kakao           7          4          3          57.14           L1, L2, L3, L5      
+CategorySearch_kakao           7          5          2          71.43           L1, L2, L3, L5      
+StockPrice_ls                  7          7          0          100.00          L2, L3, L4          
+Directions_naver               6          4          2          66.67           L1, L2, L5          
+USStockPrice_kis               6          4          2          66.67           L2, L3, L5          
+StockChart_kis                 6          6          0          100.00          L2, L3, L6          
+CryptoPrice_upbit              6          5          1          83.33           L2, L3, L5, L7      
+MarketList_upbit               6          6          0          100.00          L2, L6, L7          
+Geocoding_tmap                 6          6          0          100.00          L2, L3              
+StockPrice_kis                 6          5          1          83.33           L2, L3, L5          
+MarketIndex_ls                 5          4          1          80.00           L1, L2, L3, L5      
+CryptoPrice_bithumb            5          4          1          80.00           L1, L2, L3, L4, L5  
+CryptoCandle_upbit             5          4          1          80.00           L2, L3, L5          
+CarRoute_tmap                  5          3          2          60.00           L2, L3, L5          
+CategorySearch_tmap            4          4          0          100.00          L2, L3              
+MarketList_bithumb             4          3          1          75.00           L2, L3, L5          
+WalkRoute_tmap                 3          3          0          100.00          L2, L3              
+POISearch_tmap                 1          1          0          100.00          L2                  
+CoordToAddress_kakao           1          1          0          100.00          L2                  
+ItemLookup_aladin              1          1          0          100.00          L2                  
+OrderBook_bithumb              1          1          0          100.00          L2                  
+StockTrades_ls                 1          1          0          100.00          L2                  
+CryptoCandle_bithumb           1          1          0          100.00          L2                  
+OrderBook_ls                   1          1          0          100.00          L2                  
 
 
 ❌ FAILED TOOL CALLS DETAIL
 ----------------------------------------------------------------------------------------------------
 
-PlaceSearch_kakao (Failed: 6/6)
+WebSearch_daum (Failed: 5/13)
 --------------------------------------------------------------------------------
-  Task: L1-017
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B0%95%EB%82%A8%EC%97%AD+%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1
+  Task: L5-005
+  Error: Request timeout
 
-  Task: L3-002
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EB%8C%80%ED%95%99%EA%B5%90&sort=distance&page=1&size=1&x=127.047093&y=37.580178&radius=2000
+  Task: L5-005
+  Error: Request timeout
 
-  Task: L3-003
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EA%B5%90%EB%8C%80%EC%97%AD+%EB%A0%88%EC%8A%A4%ED%86%A0%EB%9E%91&sort=accuracy&page=1&size=15&radius=5...
+  Task: L5-007
+  Error: Request timeout
 
-  Task: L3-005
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%EC%95%A0%ED%94%8C+%EB%A7%A4%EC%9E%A5&sort=distance&page=1&size=3&x=127.0276368&y=37.497942
+  Task: L5-007
+  Error: Request timeout
 
-  Task: L5-002
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8E%B8%EC%9D%98%EC%A0%90&sort=distance&page=1&size=1&x=127.02758&y=37.49794&radius=300
-
-  ... and 1 more errors
+  Task: L5-007
+  Error: Request timeout
 
 
-AddressToCoord_kakao (Failed: 2/2)
+WebSearch_naver (Failed: 4/25)
 --------------------------------------------------------------------------------
-  Task: L1-016
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110
+  Task: L5-008
+  Error: Request timeout
+
+  Task: L5-008
+  Error: Request timeout
+
+  Task: L5-009
+  Error: Request timeout
+
+  Task: L5-009
+  Error: Request timeout
+
+
+AddressToCoord_kakao (Failed: 3/7)
+--------------------------------------------------------------------------------
+  Task: L3-024
+  Error: 주소 '인천국제공항'를 찾을 수 없습니다
 
   Task: L5-001
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/address.json?query=%EC%84%9C%EC%9A%B8+%EC%A4%91%EA%B5%AC+%EC%84%B8%EC%A2%85%EB%8C%80%EB%A1%9C+110
+  Error: Request timeout
+
+  Task: L5-001
+  Error: Request timeout
 
 
-CategorySearch_kakao (Failed: 1/1)
+Directions_naver (Failed: 2/6)
 --------------------------------------------------------------------------------
-  Task: L1-018
-  Error: 401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1
+  Task: L5-026
+  Error: Request timeout
+
+  Task: L5-026
+  Error: Request timeout
+
+
+BlogSearch_naver (Failed: 2/21)
+--------------------------------------------------------------------------------
+  Task: L5-010
+  Error: No data available
+
+  Task: L5-024
+  Error: Request timeout
+
+
+ItemSearch_aladin (Failed: 2/13)
+--------------------------------------------------------------------------------
+  Task: L5-012
+  Error: Request timeout
+
+  Task: L5-014
+  Error: Request timeout
+
+
+ItemList_aladin (Failed: 2/7)
+--------------------------------------------------------------------------------
+  Task: L5-013
+  Error: Service completely unavailable
+
+  Task: L5-015
+  Error: Service completely unavailable
+
+
+PlaceSearch_kakao (Failed: 2/14)
+--------------------------------------------------------------------------------
+  Task: L3-022
+  Error: 400 Client Error: Bad Request for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8C%90%EA%B5%90%EC%97%AD+%EC%A3%BC%EC%B0%A8%EC%9E%A5&sort=distance&page=1&size=15
+
+  Task: L5-002
+  Error: Service completely unavailable
+
+
+CategorySearch_kakao (Failed: 2/7)
+--------------------------------------------------------------------------------
+  Task: L5-023
+  Error: Request timeout
+
+  Task: L5-023
+  Error: Request timeout
+
+
+USStockPrice_kis (Failed: 2/6)
+--------------------------------------------------------------------------------
+  Task: L2-010
+  Error: 403 Client Error: Forbidden for url: https://openapi.koreainvestment.com:9443/oauth2/tokenP
+
+  Task: L5-016
+  Error: Request timeout
+
+
+CarRoute_tmap (Failed: 2/5)
+--------------------------------------------------------------------------------
+  Task: L5-021
+  Error: Request timeout
+
+  Task: L5-022
+  Error: Service completely unavailable
+
+
+MarketIndex_ls (Failed: 1/5)
+--------------------------------------------------------------------------------
+  Task: L5-003
+  Error: Service completely unavailable
+
+
+CryptoPrice_bithumb (Failed: 1/5)
+--------------------------------------------------------------------------------
+  Task: L5-004
+  Error: Request timeout
+
+
+NewsSearch_naver (Failed: 1/18)
+--------------------------------------------------------------------------------
+  Task: L5-011
+  Error: No data available
+
+
+VideoSearch_daum (Failed: 1/7)
+--------------------------------------------------------------------------------
+  Task: L5-006
+  Error: Service completely unavailable
+
+
+CryptoCandle_upbit (Failed: 1/5)
+--------------------------------------------------------------------------------
+  Task: L5-019
+  Error: No data available
+
+
+CryptoPrice_upbit (Failed: 1/6)
+--------------------------------------------------------------------------------
+  Task: L5-018
+  Error: Request timeout
+
+
+MarketList_bithumb (Failed: 1/4)
+--------------------------------------------------------------------------------
+  Task: L5-025
+  Error: Request timeout
+
+
+StockPrice_kis (Failed: 1/6)
+--------------------------------------------------------------------------------
+  Task: L5-017
+  Error: Request timeout
 
 
 ====================================================================================================

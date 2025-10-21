@@ -15,15 +15,45 @@ from collections import defaultdict
 def load_all_benchmark_results(log_dir: str = "logs/benchmark_results") -> Dict[str, Any]:
     """모든 벤치마크 결과 파일 로드"""
     results = {}
-    json_files = sorted(glob.glob(f"{log_dir}/L*.json"))
     
+    # 새로운 구조: by_model/{model_name}/{timestamp}/L*.json 패턴으로 검색
+    json_files = sorted(glob.glob(f"{log_dir}/by_model/*/*/L*.json"))
+    
+    if not json_files:
+        # 기존 구조도 시도해보기 (하위 호환성)
+        json_files = sorted(glob.glob(f"{log_dir}/L*.json"))
+    
+    # 가장 최신 타임스탬프의 파일들만 사용
+    latest_files = {}
     for filepath in json_files:
         level_name = Path(filepath).stem.split('_')[0]  # L1, L2, etc.
+        
+        # 파일 경로에서 타임스탬프 추출
+        path_parts = Path(filepath).parts
+        if 'by_model' in path_parts:
+            # by_model/{model_name}/{timestamp}/L*.json 구조
+            model_idx = path_parts.index('by_model')
+            if len(path_parts) > model_idx + 2:
+                timestamp = path_parts[model_idx + 2]
+                file_key = (level_name, timestamp)
+                
+                # 더 최신 파일이면 업데이트
+                if level_name not in latest_files or timestamp > latest_files[level_name][1]:
+                    latest_files[level_name] = (filepath, timestamp)
+        else:
+            # 기존 구조의 경우 바로 사용
+            latest_files[level_name] = (filepath, "")
+    
+    # 최신 파일들만 로드
+    for level_name, (filepath, timestamp) in latest_files.items():
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
                 results[level_name] = data
-                print(f"✓ Loaded {filepath}")
+                if timestamp:
+                    print(f"✓ Loaded {level_name} from {timestamp}: {filepath}")
+                else:
+                    print(f"✓ Loaded {filepath}")
         except Exception as e:
             print(f"✗ Failed to load {filepath}: {e}")
     
@@ -47,12 +77,12 @@ def analyze_tool_usage(all_results: Dict[str, Any]) -> Dict[str, Dict[str, Any]]
         
         for task_result in results:
             task_id = task_result.get('task_id', 'unknown')
-            tool_invocations = task_result.get('tool_invocations', [])
+            tool_calls = task_result.get('tool_calls', [])
             
-            for invocation in tool_invocations:
-                tool_name = invocation.get('tool_name', 'unknown')
-                success = invocation.get('success', False)
-                error = invocation.get('error')
+            for tool_call in tool_calls:
+                tool_name = tool_call.get('tool_name', 'unknown')
+                success = tool_call.get('success', False)
+                error = tool_call.get('error')
                 
                 # 통계 업데이트
                 tool_stats[tool_name]['total_calls'] += 1
@@ -61,7 +91,7 @@ def analyze_tool_usage(all_results: Dict[str, Any]) -> Dict[str, Dict[str, Any]]
                     'task_id': task_id,
                     'level': level_name,
                     'success': success,
-                    'arguments': invocation.get('arguments', {}),
+                    'arguments': tool_call.get('arguments', {}),
                     'error': error
                 })
                 
@@ -219,19 +249,84 @@ def save_detailed_analysis(tool_stats: Dict[str, Dict[str, Any]],
     return output_file
 
 
+def load_specific_benchmark_results(model_name: str = None, timestamp: str = None, log_dir: str = "logs/benchmark_results") -> Dict[str, Any]:
+    """특정 모델과 타임스탬프의 벤치마크 결과 로드"""
+    results = {}
+    
+    if model_name and timestamp:
+        # 특정 모델의 특정 타임스탬프 결과 로드
+        target_dir = f"{log_dir}/by_model/{model_name}/{timestamp}"
+        json_files = sorted(glob.glob(f"{target_dir}/L*.json"))
+        
+        for filepath in json_files:
+            level_name = Path(filepath).stem.split('_')[0]
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    results[level_name] = data
+                    print(f"✓ Loaded {level_name}: {filepath}")
+            except Exception as e:
+                print(f"✗ Failed to load {filepath}: {e}")
+    else:
+        # 기본 동작: 가장 최신 결과 로드
+        results = load_all_benchmark_results(log_dir)
+    
+    return results
+
+
+def list_available_results(log_dir: str = "logs/benchmark_results"):
+    """사용 가능한 모델별 결과 목록 출력"""
+    model_dirs = glob.glob(f"{log_dir}/by_model/*")
+    
+    print("Available benchmark results:")
+    print("-" * 60)
+    
+    for model_dir in sorted(model_dirs):
+        model_name = Path(model_dir).name
+        timestamp_dirs = glob.glob(f"{model_dir}/*")
+        
+        print(f"\n📊 Model: {model_name}")
+        for timestamp_dir in sorted(timestamp_dirs, reverse=True):
+            timestamp = Path(timestamp_dir).name
+            json_files = glob.glob(f"{timestamp_dir}/L*.json")
+            levels = [Path(f).stem.split('_')[0] for f in json_files]
+            print(f"  🕐 {timestamp}: {', '.join(sorted(levels))}")
+
+
 def main():
     """메인 실행 함수"""
+    import sys
+    
     print("=" * 100)
     print("Ko-AgentBench Tool Call Analysis")
     print("=" * 100)
     print()
     
+    # 명령행 인수 확인
+    if len(sys.argv) > 1 and sys.argv[1] == "--list":
+        list_available_results()
+        return
+    
+    model_name = None
+    timestamp = None
+    
+    if len(sys.argv) >= 3:
+        model_name = sys.argv[1]
+        timestamp = sys.argv[2]
+        print(f"Analyzing specific results: {model_name} / {timestamp}")
+    else:
+        print("Loading latest benchmark results...")
+        print("(Use --list to see available results, or specify model and timestamp)")
+        print("Usage: python analyze_tool_call_results.py [model_name] [timestamp]")
+        print()
+    
     # 결과 로드
-    print("Loading benchmark results...")
-    all_results = load_all_benchmark_results()
+    all_results = load_specific_benchmark_results(model_name, timestamp)
     
     if not all_results:
         print("✗ No benchmark results found!")
+        if not model_name:
+            print("Try running with --list to see available results")
         return
     
     print(f"\n✓ Loaded {len(all_results)} levels: {', '.join(sorted(all_results.keys()))}")
