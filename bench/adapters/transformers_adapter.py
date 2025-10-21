@@ -236,6 +236,11 @@ class TransformersAdapter(BaseAdapter):
         # Tokenize
         inputs = self.tokenizer(prompt, return_tensors="pt", padding=True)
         
+        # Remove token_type_ids if present (some models don't use it)
+        # This prevents "unused model_kwargs" warnings/errors
+        if 'token_type_ids' in inputs:
+            inputs.pop('token_type_ids')
+        
         # Move to device
         if self.device != 'auto':
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
