@@ -14,10 +14,6 @@ DEFAULT_QUANTIZATION="none"       # 양자화 방법: 4bit | 8bit | none
 DEFAULT_DEVICE="auto"             # 디바이스: auto | cuda | cpu
 DEFAULT_DTYPE="bfloat16"          # 데이터 타입: auto | float16 | bfloat16 | float32
 
-# Git 설정 (커밋 시 사용)
-GIT_USER_NAME="4N3MONE"
-GIT_USER_EMAIL="bbangggo123@gmail.com"
-
 # 실행 대상 설정 (기본값, CLI 인자로 오버라이드 가능)
 DEFAULT_LEVELS=""                 # 비어있으면 전체 레벨 (L1~L7), 예: "L1,L2"
 DEFAULT_MODELS=""                 # 비어있으면 레지스트리 전체, 예: "Qwen/Qwen3-4B,skt/A.X-4.0"
@@ -39,7 +35,6 @@ DTYPE=$DEFAULT_DTYPE
 LEVELS=$DEFAULT_LEVELS
 SPECIFIC_MODELS=$DEFAULT_MODELS
 SKIP_FAILED=false
-NO_COMMIT=false
 EXPERIMENT_ID=""
 
 # 로깅 함수
@@ -66,7 +61,6 @@ OPTIONS:
                         예: --models "Qwen/Qwen3-4B,skt/A.X-4.0"
   
   --skip-failed         실패해도 다음 모델 계속 진행
-  --no-commit           Git 커밋하지 않음
   --experiment-id ID    커스텀 실험 ID
   --help                도움말 표시
 
@@ -74,7 +68,7 @@ EXAMPLES:
   $0                                    # 전체 모델, 전체 레벨
   $0 --levels L1,L2                    # L1, L2만 실행
   $0 --models "Qwen/Qwen3-4B"          # 특정 모델만
-  $0 --skip-failed --no-commit         # 실패 무시, 커밋 안함
+  $0 --skip-failed                     # 실패 무시하고 계속 진행
 EOF
 }
 
@@ -89,7 +83,6 @@ while [[ $# -gt 0 ]]; do
         --dtype) DTYPE="$2"; shift 2 ;;
         --models) SPECIFIC_MODELS="$2"; shift 2 ;;
         --skip-failed) SKIP_FAILED=true; shift ;;
-        --no-commit) NO_COMMIT=true; shift ;;
         --experiment-id) EXPERIMENT_ID="$2"; shift 2 ;;
         --help) print_usage; exit 0 ;;
         *) log_error "Unknown: $1"; print_usage; exit 1 ;;
@@ -100,68 +93,37 @@ get_model_list() {
     uv run python -c "import sys; sys.path.insert(0, '.'); from bench.models import MODEL_IDS; print('\n'.join(MODEL_IDS))"
 }
 
-check_git_status() {
-    git status >/dev/null 2>&1 || { log_error "Not a git repo"; return 1; }
-    [[ -n $(git status --porcelain) ]] && { log_error "Uncommitted changes"; return 1; }
-    git remote get-url origin >/dev/null 2>&1 || { log_error "No origin"; return 1; }
-    return 0
-}
-
-setup_git_config() {
-    git config user.name >/dev/null 2>&1 || git config user.name "$GIT_USER_NAME"
-    git config user.email >/dev/null 2>&1 || git config user.email "$GIT_USER_EMAIL"
-}
-
 run_model_benchmark() {
     local model="$1" start=$(date +%s)
     echo ""; echo "========== MODEL: $model =========="; echo ""
     
-    local levels_arr; [[ -n "$LEVELS" ]] && IFS=',' read -ra levels_arr <<< "$LEVELS" || levels_arr=(L1 L2 L3 L4 L5 L6 L7)
-    local success=true results=()
+    # 모든 레벨을 쉼표로 구분된 하나의 문자열로 만듦
+    local levels_str
+    if [[ -n "$LEVELS" ]]; then
+        levels_str="$LEVELS"
+    else
+        levels_str="L1,L2,L3,L4,L5,L6,L7"
+    fi
     
-    for level in "${levels_arr[@]}"; do
-        echo "--- $model / $level ---"
-        local cmd=(uv run python run_benchmark_with_logging.py --model "$model" --levels "$level" --max-steps "$MAX_STEPS" 
-                   --timeout "$TIMEOUT" --device "$DEVICE" --dtype "$DTYPE" --use-local)
-        [[ -n "$QUANTIZATION" && "$QUANTIZATION" != "none" ]] && cmd+=(--quantization "$QUANTIZATION")
-        
-        local lstart=$(date +%s)
-        if "${cmd[@]}"; then
-            local ltime=$(($(date +%s) - lstart))
-            log_success "$level: ${ltime}s"
-            results+=("$level:success:$ltime")
-        else
-            local code=$? ltime=$(($(date +%s) - lstart))
-            log_error "$level failed: ${ltime}s"
-            results+=("$level:failed:$ltime:$code")
-            success=false
-            [[ "$SKIP_FAILED" != "true" ]] && break
-        fi
-    done
+    echo "--- $model / $levels_str ---"
     
-    local total=$(($(date +%s) - start))
-    [[ "$success" == "true" ]] && log_success "$model done: ${total}s" || log_error "$model had failures: ${total}s"
-    echo "$model:$([ "$success" = true ] && echo success || echo failed):$total:$(IFS=';'; echo "${results[*]}")" >> "$RESULTS_SUMMARY"
-    [[ "$success" == "true" ]] && return 0 || return 1
-}
-
-commit_results() {
-    local id="$1"
-    git add logs/ 2>/dev/null || true
-    [[ -z $(git status --porcelain) ]] && { log_info "No changes"; return 0; }
+    # 모든 레벨을 한 번에 실행
+    local cmd=(uv run python run_benchmark_with_logging.py --model "$model" --levels "$levels_str" --max-steps "$MAX_STEPS" 
+               --timeout "$TIMEOUT" --device "$DEVICE" --dtype "$DTYPE" --use-local)
+    [[ -n "$QUANTIZATION" && "$QUANTIZATION" != "none" ]] && cmd+=(--quantization "$QUANTIZATION")
     
-    local total=0 success=0
-    while IFS=':' read -r model status _; do ((total++)); [[ "$status" == "success" ]] && ((success++)); done < "$RESULTS_SUMMARY"
-    
-    local msg="Ko-AgentBench Experiment: $id
-
-Total: $total, Success: $success, Failed: $((total - success))
-Time: $(date -Iseconds)
-
-$(while IFS=':' read -r m s _; do echo "- $m: $([[ $s == success ]] && echo ✅ || echo ❌)"; done < "$RESULTS_SUMMARY")"
-    
-    git commit -m "$msg" && log_success "Committed" || { log_error "Commit failed"; return 1; }
-    git push && log_success "Pushed" || log_error "Push failed"
+    local success=true
+    if "${cmd[@]}"; then
+        local total=$(($(date +%s) - start))
+        log_success "$model done: ${total}s"
+        echo "$model:success:$total:all_levels" >> "$RESULTS_SUMMARY"
+        return 0
+    else
+        local code=$? total=$(($(date +%s) - start))
+        log_error "$model failed: ${total}s (exit code: $code)"
+        echo "$model:failed:$total:all_levels:$code" >> "$RESULTS_SUMMARY"
+        return 1
+    fi
 }
 
 save_experiment_summary() {
@@ -184,11 +146,8 @@ save_experiment_summary() {
         echo "  Dtype: $DTYPE"
         echo ""
         echo "Results:"
-        while IFS=':' read -r model status time details; do
+        while IFS=':' read -r model status time _; do
             echo "  $model: $status (${time}s)"
-            [[ -n "$details" ]] && IFS=';' read -ra ld <<< "$details" && for l in "${ld[@]}"; do
-                [[ -n "$l" ]] && IFS=':' read -r lv ls lt _ <<< "$l" && echo "    - $lv: $ls (${lt}s)"
-            done
         done < "$RESULTS_SUMMARY"
     } > "$file"
     
@@ -206,10 +165,6 @@ main() {
     [[ ${#models[@]} -eq 0 ]] && { log_error "No models!"; exit 1; }
     log_info "Models: ${#models[@]}, Levels: ${LEVELS:-all}"
     
-    if [[ "$NO_COMMIT" != "true" ]]; then
-        check_git_status && setup_git_config && log_success "Git ready" || { log_error "Git not ready"; [[ "$SKIP_FAILED" != "true" ]] && exit 1; NO_COMMIT=true; }
-    fi
-    
     log "Starting..."
     for i in "${!models[@]}"; do
         echo ""; echo "▶▶▶ Model $((i+1))/${#models[@]}: ${models[$i]} ◀◀◀"
@@ -219,22 +174,13 @@ main() {
     echo ""; echo "========== SUMMARY =========="
     local total=0 success=0 ttime=0
     
-    while IFS=':' read -r m s t d; do
+    while IFS=':' read -r m s t d _; do
         ((total++)); ((ttime += t)); [[ "$s" == "success" ]] && ((success++))
-        echo -n "  $([[ $s == success ]] && echo -e "${GREEN}✅" || echo -e "${RED}❌")${NC} $m (${t}s)"
-        if [[ -n "$d" ]]; then
-            echo ""; IFS=';' read -ra ld <<< "$d"
-            for l in "${ld[@]}"; do
-                [[ -n "$l" ]] && IFS=':' read -r lv ls lt _ <<< "$l" && echo "     └─ $lv: $([[ $ls == success ]] && echo -e "${GREEN}✓" || echo -e "${RED}✗")${NC} (${lt}s)"
-            done
-        else
-            echo ""
-        fi
+        echo "  $([[ $s == success ]] && echo -e "${GREEN}✅" || echo -e "${RED}❌")${NC} $m (${t}s)"
     done < "$RESULTS_SUMMARY"
     
     echo ""; log_info "Total: $total | Success: $success | Time: ${ttime}s ($((ttime/60))m)"
     save_experiment_summary "$EXPERIMENT_ID"
-    [[ "$NO_COMMIT" != "true" && $total -gt 0 ]] && commit_results "$EXPERIMENT_ID"
     rm -f "$RESULTS_SUMMARY"
     echo "========== Done! Results in logs/ =========="
     [[ $success -gt 0 ]] && exit 0 || exit 1
