@@ -1,0 +1,1941 @@
+{
+  "metadata": {
+    "timestamp": "2025-10-21T00:27:24.019984",
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "level": "L5",
+    "total_tasks": 26,
+    "successful_tasks": 26,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 74.18,
+    "average_execution_time": 2.85,
+    "total_steps": 53,
+    "average_steps": 2.04,
+    "total_tool_calls": 27,
+    "average_tool_calls": 1.04
+  },
+  "tool_usage_statistics": {
+    "AddressToCoord_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "PlaceSearch_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "CryptoPrice_bithumb": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "WebSearch_daum": {
+      "count": 3,
+      "success": 0,
+      "failure": 3
+    },
+    "VideoSearch_daum": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "WebSearch_naver": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "BlogSearch_naver": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "NewsSearch_naver": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "ItemSearch_aladin": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "ItemList_aladin": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "USStockPrice_kis": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "StockPrice_kis": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "CryptoPrice_upbit": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "CryptoCandle_upbit": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "CarRoute_tmap": {
+      "count": 2,
+      "success": 0,
+      "failure": 2
+    },
+    "CategorySearch_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "MarketList_bithumb": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "Directions_naver": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    }
+  },
+  "results": [
+    {
+      "task_id": "L5-001",
+      "instruction": "서울 중구 세종대로 110 주소의 좌표를 알려줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.11488676071167,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "AddressToCoord_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "AddressToCoord_kakao",
+          "args": {
+            "address": "서울 중구 세종대로 110"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "AddressToCoord_kakao",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "AddressToCoord_kakao",
+          "arguments": {
+            "address": "서울 중구 세종대로 110"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 주소를 좌표로 변환하는 데 실패했습니다. 다시 시도해 보시거나, 다른 방법으로 도와드릴 수 있는지 알려주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울 중구 세종대로 110 주소의 좌표를 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 주소를 좌표로 변환하는 데 실패했습니다. 다시 시도해 보시거나, 다른 방법으로 도와드릴 수 있는지 알려주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-002",
+      "instruction": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.871607542037964,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "편의점",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 300,
+            "sort": "distance",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "PlaceSearch_kakao",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "편의점",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 300,
+            "size": 1
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 서비스가 이용할 수 없어 요청하신 정보를 제공할 수 없습니다. 이후 다시 시도해 보시기 바랍니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 서비스가 이용할 수 없어 요청하신 정보를 제공할 수 없습니다. 이후 다시 시도해 보시기 바랍니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-003",
+      "instruction": "KOSDAQ 지수 현재 값을 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.6388614177703857,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "MarketIndex_ls",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 서비스가 이용할 수 없어 KOSDAQ 지수를 조회할 수 없습니다. 이후에 다시 시도해 보시기 바랍니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "KOSDAQ 지수 현재 값을 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 서비스가 이용할 수 없어 KOSDAQ 지수를 조회할 수 없습니다. 이후에 다시 시도해 보시기 바랍니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-004",
+      "instruction": "빗썸 KRW-BTC 현재가 숫자만 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.4358854293823242,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CryptoPrice_bithumb",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간이 초과되어 데이터를 가져올 수 없습니다. 다시 시도해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸 KRW-BTC 현재가 숫자만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간이 초과되어 데이터를 가져올 수 없습니다. 다시 시도해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-005",
+      "instruction": "다음에서 아이폰 17 출시일 검색해줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 5.908865213394165,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_daum",
+          "args": {
+            "query": "아이폰 17 출시일",
+            "sort": "recency",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "WebSearch_daum",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_daum",
+          "arguments": {
+            "query": "아이폰 17 출시일",
+            "sort": "recency",
+            "page": 1,
+            "size": 10
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간이 초과되어 결과를 제공하지 못했습니다. 아이폰 17의 출시일에 대해 더 정확한 정보를 얻기 위해 다른 방법을 사용해보겠습니다.\n\n아이폰 17은 아직 공식적으로 발표되지 않았으며, 현재까지는 아이폰 16 시리즈가 가장 최근 출시된 모델입니다. 따라서 아이폰 17의 출시일은 아직 발표되지 않았거나, 공식적으로 공개되지 않은 정보입니다.  \n\n추가로 확인을 원하시면, Apple의 공식 웹사이트나 공식 뉴스를 확인해 보시는 것이 좋습니다. 필요하시면 그에 대한 정보도 도와드릴 수 있습니다!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음에서 아이폰 17 출시일 검색해줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간이 초과되어 결과를 제공하지 못했습니다. 아이폰 17의 출시일에 대해 더 정확한 정보를 얻기 위해 다른 방법을 사용해보겠습니다.\n\n아이폰 17은 아직 공식적으로 발표되지 않았으며, 현재까지는 아이폰 16 시리즈가 가장 최근 출시된 모델입니다. 따라서 아이폰 17의 출시일은 아직 발표되지 않았거나, 공식적으로 공개되지 않은 정보입니다.  \n\n추가로 확인을 원하시면, Apple의 공식 웹사이트나 공식 뉴스를 확인해 보시는 것이 좋습니다. 필요하시면 그에 대한 정보도 도와드릴 수 있습니다!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-006",
+      "instruction": "다음에서 '아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.248122453689575,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "VideoSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "VideoSearch_daum",
+          "args": {
+            "query": "아이유 콘서트 직캠",
+            "sort": "recency",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "VideoSearch_daum",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "VideoSearch_daum",
+          "arguments": {
+            "query": "아이유 콘서트 직캠",
+            "sort": "recency",
+            "page": 1,
+            "size": 10
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 서비스가 이용할 수 없어 요청하신 내용을 처리할 수 없습니다. 이후에 다시 시도해 주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음에서 '아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 서비스가 이용할 수 없어 요청하신 내용을 처리할 수 없습니다. 이후에 다시 시도해 주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-007",
+      "instruction": "다음에서 2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 11.080732583999634,
+      "steps_taken": 3,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_daum",
+          "args": {
+            "query": "2025 LoL 월드 챔피언쉽 한국팀 명단",
+            "sort": "recency",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "WebSearch_daum",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_daum",
+          "arguments": {
+            "query": "2025년 LoL 월드 챔피언십 한국팀 명단",
+            "sort": "recency",
+            "page": 1,
+            "size": 10
+          },
+          "success": false,
+          "error": "Request timeout"
+        },
+        {
+          "step": 2,
+          "tool_name": "WebSearch_daum",
+          "arguments": {
+            "query": "2025년 LoL 월드 챔피언십 한국팀 명단",
+            "sort": "recency",
+            "page": 1,
+            "size": 10
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 두 번의 웹 검색 요청 모두 시간 초과 오류가 발생했습니다. 현재 2025년 LoL 월드 챔피언십이 아직 열리지 않았으며, 관련 정보가 공개되지 않은 상황이므로, 진출한 한국팀의 명단을 정확히 확인하기 어렵습니다.  \n\n2024년 LoL 월드 챔피언십에서 한국이 진출한 팀(예: T1, Gen.G 등)이나, 2025년 예정된 토너먼트에 대한 정보는 아직 공식 발표되지 않았습니다.  \n\n더 정확한 정보를 원하시면, 공식 리그 또는 월드 챔피언십 사이트(예: League of Legends 공식 웹사이트)에서 최신 공지사항을 확인하시기 바랍니다.  \n\n필요하시면, 2024년 토너먼트의 한국팀 명단을 제공해드릴 수 있습니다!",
+      "conversation_log": {
+        "total_messages": 6,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음에서 2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간이 초과되어 결과를 가져올 수 없습니다. 다음 웹 검색을 통해 2025년 LoL 월드 챔피언십에 진출한 한국팀의 명단을 다시 검색해보겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 두 번의 웹 검색 요청 모두 시간 초과 오류가 발생했습니다. 현재 2025년 LoL 월드 챔피언십이 아직 열리지 않았으며, 관련 정보가 공개되지 않은 상황이므로, 진출한 한국팀의 명단을 정확히 확인하기 어렵습니다.  \n\n2024년 LoL 월드 챔피언십에서 한국이 진출한 팀(예: T1, Gen.G 등)이나, 2025년 예정된 토너먼트에 대한 정보는 아직 공식 발표되지 않았습니다.  \n\n더 정확한 정보를 원하시면, 공식 리그 또는 월드 챔피언십 사이트(예: League of Legends 공식 웹사이트)에서 최신 공지사항을 확인하시기 바랍니다.  \n\n필요하시면, 2024년 토너먼트의 한국팀 명단을 제공해드릴 수 있습니다!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-008",
+      "instruction": "네이버에서 2025년도 노벨화학상 수상자를 검색해줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 5.046734094619751,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "2025 노벨화학상 수상자",
+            "display": 10,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "WebSearch_naver",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "2025년도 노벨화학상 수상자",
+            "display": 10,
+            "start": 1,
+            "sort": "date"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 네이버 웹 검색 요청에 실패하여 2025년도 노벨화학상 수상자 정보를 확인할 수 없습니다. 2025년도 노벨상은 아직 발표되지 않았기 때문에, 현재로서는 수상자 정보가 공개되지 않았습니다. 2025년도 수상자 정보는 노벨위원회가 발표할 예정이므로, 이후에 공식 발표를 기다려주시기 바랍니다. 더 궁금한 점이 있거나 다른 도움이 필요하시면 언제든지 알려주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 2025년도 노벨화학상 수상자를 검색해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 네이버 웹 검색 요청에 실패하여 2025년도 노벨화학상 수상자 정보를 확인할 수 없습니다. 2025년도 노벨상은 아직 발표되지 않았기 때문에, 현재로서는 수상자 정보가 공개되지 않았습니다. 2025년도 수상자 정보는 노벨위원회가 발표할 예정이므로, 이후에 공식 발표를 기다려주시기 바랍니다. 더 궁금한 점이 있거나 다른 도움이 필요하시면 언제든지 알려주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-009",
+      "instruction": "네이버에서 북한 해킹 조직 김수키에 대해 검색해줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.9693641662597656,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "북한 해킹 김수키",
+            "display": 10,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "WebSearch_naver",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "북한 해킹 조직 김수키",
+            "display": 10,
+            "start": 1,
+            "sort": "sim"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간이 초과되어 검색 결과를 제공할 수 없습니다. 북한 해킹 조직 김수키에 대한 정보를 더 정확하게 찾기 위해 다른 방법을 사용하거나, 더 구체적인 검색어를 사용해 보시겠어요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 북한 해킹 조직 김수키에 대해 검색해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간이 초과되어 검색 결과를 제공할 수 없습니다. 북한 해킹 조직 김수키에 대한 정보를 더 정확하게 찾기 위해 다른 방법을 사용하거나, 더 구체적인 검색어를 사용해 보시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-010",
+      "instruction": "성수동 카페 소식을 알려주는 블로그 하나만 소개해줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.933751106262207,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "성수동 카페 추천",
+            "display": 10,
+            "start": 1,
+            "sort": "sim"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "BlogSearch_naver",
+        "error_type": "data_not_available"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "성수동 카페",
+            "display": 1,
+            "sort": "date"
+          },
+          "success": false,
+          "error": "No data available"
+        }
+      ],
+      "final_response": "성수동 카페에 대한 최신 소식을 제공할 수 없습니다. 다른 방법으로 도움이 필요하시면 알려주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "성수동 카페 소식을 알려주는 블로그 하나만 소개해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "No data available",
+              "error_type": "data_not_available"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "성수동 카페에 대한 최신 소식을 제공할 수 없습니다. 다른 방법으로 도움이 필요하시면 알려주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-011",
+      "instruction": "네이버에서 국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.196514844894409,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "NewsSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "NewsSearch_naver",
+          "args": {
+            "query": "국산 NPU",
+            "display": 1,
+            "start": 1,
+            "sort": "date"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "NewsSearch_naver",
+        "error_type": "data_not_available"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "NewsSearch_naver",
+          "arguments": {
+            "query": "국산 NPU",
+            "display": 1,
+            "sort": "date"
+          },
+          "success": false,
+          "error": "No data available"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 국산 NPU 관련 최신 뉴스를 찾기 위해 필요한 데이터가 없습니다. 다시 시도하거나 다른 검색어를 사용해 보시겠어요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "No data available",
+              "error_type": "data_not_available"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 국산 NPU 관련 최신 뉴스를 찾기 위해 필요한 데이터가 없습니다. 다시 시도하거나 다른 검색어를 사용해 보시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-012",
+      "instruction": "알라딘에서 '인공지능' 검색해서 맨 위 결과의 제목만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.8902037143707275,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "인공지능",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "start": 1,
+            "max_results": 10,
+            "sort": "Accuracy"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "ItemSearch_aladin",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "인공지능",
+            "query_type": "Keyword",
+            "max_results": 1,
+            "sort": "Accuracy",
+            "opt_result": "title"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "검색 요청에 실패했습니다. 다시 시도해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘에서 '인공지능' 검색해서 맨 위 결과의 제목만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "검색 요청에 실패했습니다. 다시 시도해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-013",
+      "instruction": "2025년 9월 1주차 알라딘 국내도서 베스트셀러 3위 제목만 알려줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.6712605953216553,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemList_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemList_aladin",
+          "args": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "start": 1,
+            "max_results": 10
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "ItemList_aladin",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemList_aladin",
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "max_results": 3,
+            "output": "js"
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 알라딘 서비스가 이용할 수 없습니다. 다시 시도해 보시거나 나중에 다시 요청해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "2025년 9월 1주차 알라딘 국내도서 베스트셀러 3위 제목만 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 알라딘 서비스가 이용할 수 없습니다. 다시 시도해 보시거나 나중에 다시 요청해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-014",
+      "instruction": "알라딘에서 한강 작가의 책 한권 추천해줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 4.072909832000732,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "한강",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "max_results": 10,
+            "start": 1,
+            "sort": "Accuracy"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "ItemSearch_aladin",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "한강",
+            "query_type": "Author",
+            "max_results": 5,
+            "sort": "SalesPoint",
+            "cover": "Big",
+            "opt_result": "ebookList"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간 초과로 인해 처리되지 않았습니다. 한강 작가의 책을 추천받기 위해 다시 시도해 드리겠습니다. 혹시 특정 장르나 책의 특징(예: 소설, 비평, 청소년 소설 등)이 있으신가요? 그 정보를 알려주시면 더 정확한 추천이 가능합니다!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘에서 한강 작가의 책 한권 추천해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간 초과로 인해 처리되지 않았습니다. 한강 작가의 책을 추천받기 위해 다시 시도해 드리겠습니다. 혹시 특정 장르나 책의 특징(예: 소설, 비평, 청소년 소설 등)이 있으신가요? 그 정보를 알려주시면 더 정확한 추천이 가능합니다!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-015",
+      "instruction": "알라딘 25년 9월 첫째주 국내도서 베스트셀러 1위 제목만 알려줘",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.52593994140625,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemList_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemList_aladin",
+          "args": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "start": 1,
+            "max_results": 10
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "ItemList_aladin",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemList_aladin",
+          "arguments": {
+            "query_type": "Bestseller",
+            "search_target": "Book",
+            "year": 2025,
+            "month": 9,
+            "week": 1,
+            "max_results": 1
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 알라딘의 서비스가 이용할 수 없습니다. 다시 시도해 보시거나 나중에 다시 요청해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘 25년 9월 첫째주 국내도서 베스트셀러 1위 제목만 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 알라딘의 서비스가 이용할 수 없습니다. 다시 시도해 보시거나 나중에 다시 요청해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-016",
+      "instruction": "애플(AAPL) 현재가를 숫자만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.3172683715820312,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "USStockPrice_kis"
+      ],
+      "golden_action": [
+        {
+          "tool": "USStockPrice_kis",
+          "args": {
+            "symbol": "AAPL",
+            "exchange": "NASDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "USStockPrice_kis",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "USStockPrice_kis",
+          "arguments": {
+            "symbol": "AAPL",
+            "exchange": "NASDAQ"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "주식 현재가를 조회할 수 없습니다. 다시 시도해주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "애플(AAPL) 현재가를 숫자만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "주식 현재가를 조회할 수 없습니다. 다시 시도해주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-017",
+      "instruction": "삼성전자(005930) 현재가를 숫자만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.3941690921783447,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "StockPrice_kis"
+      ],
+      "golden_action": [
+        {
+          "tool": "StockPrice_kis",
+          "args": {
+            "symbol": "005930",
+            "market": "KOSPI"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "StockPrice_kis",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "StockPrice_kis",
+          "arguments": {
+            "symbol": "005930",
+            "market": "KOSPI"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "조회에 실패했습니다. 다시 시도해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "삼성전자(005930) 현재가를 숫자만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "조회에 실패했습니다. 다시 시도해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-018",
+      "instruction": "비트코인(KRW) 현재가를 숫자만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.4089655876159668,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_upbit"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_upbit",
+          "args": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CryptoPrice_upbit",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_upbit",
+          "arguments": {
+            "symbol": "BTC",
+            "quote": "KRW"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "비트코인(KRW) 현재가를 조회할 수 없습니다. 다시 시도해주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "비트코인(KRW) 현재가를 숫자만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "비트코인(KRW) 현재가를 조회할 수 없습니다. 다시 시도해주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-019",
+      "instruction": "이더리움 1분봉 30개 중 마지막 종가를 숫자만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.5804307460784912,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoCandle_upbit"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoCandle_upbit",
+          "args": {
+            "symbol": "ETH",
+            "quote": "KRW",
+            "candle_type": "minutes",
+            "unit": 1,
+            "count": 30
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CryptoCandle_upbit",
+        "error_type": "data_not_available"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoCandle_upbit",
+          "arguments": {
+            "symbol": "ETH",
+            "quote": "KRW",
+            "candle_type": "minutes",
+            "unit": 1,
+            "count": 30
+          },
+          "success": false,
+          "error": "No data available"
+        }
+      ],
+      "final_response": "데이터가 없습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "이더리움 1분봉 30개 중 마지막 종가를 숫자만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "No data available",
+              "error_type": "data_not_available"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "데이터가 없습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-020",
+      "instruction": "리플(KRW) 현재가를 숫자만 한 줄로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.2570171356201172,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-XRP"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CryptoPrice_bithumb",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-XRP"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "데이터를 가져오지 못했습니다. 다시 시도해 보시겠어요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "리플(KRW) 현재가를 숫자만 한 줄로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "데이터를 가져오지 못했습니다. 다시 시도해 보시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-021",
+      "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 자동차로 가장 빠른 경로 총 소요 시간(초)만 숫자로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 3.583566427230835,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CarRoute_tmap"
+      ],
+      "golden_action": [
+        {
+          "tool": "CarRoute_tmap",
+          "args": {
+            "startX": 127.027621,
+            "startY": 37.497942,
+            "endX": 126.977022,
+            "endY": 37.566536,
+            "searchOption": 2
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CarRoute_tmap",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CarRoute_tmap",
+          "arguments": {
+            "startX": 127.027621,
+            "startY": 37.497942,
+            "endX": 126.977022,
+            "endY": 37.566536,
+            "searchOption": 2
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청에 대한 응답이 timed out하여 결과를 제공할 수 없습니다. 다시 시도해 주시거나, 다른 방법으로 도움을 드릴 수 있는지 알려주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 자동차로 가장 빠른 경로 총 소요 시간(초)만 숫자로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청에 대한 응답이 timed out하여 결과를 제공할 수 없습니다. 다시 시도해 주시거나, 다른 방법으로 도움을 드릴 수 있는지 알려주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-022",
+      "instruction": "인천국제공항(126.450517,37.46019)에서 코엑스(127.0592,37.511)까지 자동차 경로 총 거리(미터)만 숫자로 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.785162925720215,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CarRoute_tmap"
+      ],
+      "golden_action": [
+        {
+          "tool": "CarRoute_tmap",
+          "args": {
+            "startX": 126.450517,
+            "startY": 37.46019,
+            "endX": 127.0592,
+            "endY": 37.511,
+            "searchOption": 0
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CarRoute_tmap",
+        "error_type": "complete_unavailable"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CarRoute_tmap",
+          "arguments": {
+            "startX": 126.450517,
+            "startY": 37.46019,
+            "endX": 127.0592,
+            "endY": 37.511,
+            "searchOption": 2
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 서비스가 이용할 수 없습니다. 다시 시도해 주시기 바랍니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "인천국제공항(126.450517,37.46019)에서 코엑스(127.0592,37.511)까지 자동차 경로 총 거리(미터)만 숫자로 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 서비스가 이용할 수 없습니다. 다시 시도해 주시기 바랍니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-023",
+      "instruction": "홍대입구역 근처 500m 안에서 편의점 하나만 찾아줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 3.4681074619293213,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CS2",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "CategorySearch_kakao",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CategorySearch_kakao",
+          "arguments": {
+            "category": "SE26",
+            "x": 126.9787,
+            "y": 37.6143,
+            "radius": 500,
+            "size": 1
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청 처리 중 오류가 발생했습니다. 홍대입구역 근처 500m 안에서 편의점을 찾는 데 실패했습니다. 다시 시도해보거나, 다른 방법으로 도와드릴 수 있도록 알려주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "홍대입구역 근처 500m 안에서 편의점 하나만 찾아줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청 처리 중 오류가 발생했습니다. 홍대입구역 근처 500m 안에서 편의점을 찾는 데 실패했습니다. 다시 시도해보거나, 다른 방법으로 도와드릴 수 있도록 알려주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-024",
+      "instruction": "네이버에서 '제주도 가을 여행 코스' 블로그 글 하나만 제목 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.380902051925659,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "제주도 가을 여행 코스",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "BlogSearch_naver",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "제주도 가을 여행 코스",
+            "display": 1,
+            "sort": "sim"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간 초과로 인해 처리되지 못했습니다. '제주도 가을 여행 코스' 관련 블로그 제목을 다시 찾아 드리겠습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 '제주도 가을 여행 코스' 블로그 글 하나만 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간 초과로 인해 처리되지 못했습니다. '제주도 가을 여행 코스' 관련 블로그 제목을 다시 찾아 드리겠습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-025",
+      "instruction": "빗썸에서 거래 가능한 마켓 목록 개수 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 1.4544107913970947,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketList_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketList_bithumb",
+          "args": {
+            "isDetails": false
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "MarketList_bithumb",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketList_bithumb",
+          "arguments": {
+            "isDetails": false
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 요청이 시간 초과되어 마켓 리스트를 가져오지 못했습니다. 다시 시도해 보시겠어요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 거래 가능한 마켓 목록 개수 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 요청이 시간 초과되어 마켓 리스트를 가져오지 못했습니다. 다시 시도해 보시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-026",
+      "instruction": "판교역(127.108882,37.394274)에서 여의도(126.92490,37.52190)까지 자차로 가는 최단 경로의 소요 시간 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 2.948176860809326,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "127.108882,37.394274",
+            "goal": "126.92490,37.52190",
+            "option": "trafast"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "Directions_naver",
+        "error_type": "timeout"
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "127.108882,37.394274",
+            "goal": "126.92490,37.52190",
+            "option": "trafast"
+          },
+          "success": false,
+          "error": "Request timeout"
+        }
+      ],
+      "final_response": "죄송합니다. 경로 조회 요청에 실패했습니다. 다시 시도해보거나, 다른 정보를 제공해 주시면 도움을 드리겠습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "판교역(127.108882,37.394274)에서 여의도(126.92490,37.52190)까지 자차로 가는 최단 경로의 소요 시간 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0",
+            "content": {
+              "error": "Request timeout",
+              "error_type": "timeout"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 경로 조회 요청에 실패했습니다. 다시 시도해보거나, 다른 정보를 제공해 주시면 도움을 드리겠습니다."
+          }
+        ]
+      }
+    }
+  ]
+}
