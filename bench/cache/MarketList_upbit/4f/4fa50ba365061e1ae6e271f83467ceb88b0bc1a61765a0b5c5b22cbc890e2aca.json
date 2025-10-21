@@ -1,13 +1,14 @@
 {
   "key": "4fa50ba365061e1ae6e271f83467ceb88b0bc1a61765a0b5c5b22cbc890e2aca",
   "tool": "MarketList_upbit",
-  "created_at": "2025-10-20T02:34:19.751851",
+  "created_at": "2025-10-21T01:25:52.272850",
   "input_params": {
     "include_event": true,
     "quote": "ALL"
   },
   "raw_args": {
-    "quote": "ALL"
+    "quote": "ALL",
+    "include_event": true
   },
   "data": {
     "quote": "ALL",
@@ -363,6 +364,11 @@
         "english_name": "Treehouse"
       },
       {
+        "market": "BTC-BIO",
+        "korean_name": "바이오프로토콜",
+        "english_name": "Bio Protocol"
+      },
+      {
         "market": "USDT-WLD",
         "korean_name": "월드코인",
         "english_name": "Worldcoin"
@@ -476,6 +482,11 @@
         "market": "KRW-UNI",
         "korean_name": "유니스왑",
         "english_name": "Uniswap"
+      },
+      {
+        "market": "KRW-BIO",
+        "korean_name": "바이오프로토콜",
+        "english_name": "Bio Protocol"
       },
       {
         "market": "BTC-SYRUP",
@@ -766,6 +777,11 @@
         "market": "KRW-ARKM",
         "korean_name": "아캄",
         "english_name": "Arkham"
+      },
+      {
+        "market": "USDT-BIO",
+        "korean_name": "바이오프로토콜",
+        "english_name": "Bio Protocol"
       },
       {
         "market": "BTC-USDP",
@@ -3203,6 +3219,6 @@
         "english_name": "Polymesh"
       }
     ],
-    "count": 638
+    "count": 641
   }
 }
