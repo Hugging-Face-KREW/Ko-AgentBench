@@ -217,3 +217,150 @@ class KakaoLocal(BaseAPI):
                 },
             },
         }
+
+    def address_to_coord_tool(self) -> Dict[str, Any]:
+        """AddressToCoord_kakao Tool schema"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "AddressToCoord_kakao",
+                "description": "주소를 위경도 좌표로 변환합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "address": {"type": "string", "description": "검색할 주소 (예: 서울 강남구 역삼동)"},
+                    },
+                    "required": ["address"],
+                },
+            },
+        }
+
+    def place_search_tool(self) -> Dict[str, Any]:
+        """PlaceSearch_kakao Tool schema"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "PlaceSearch_kakao",
+                "description": "키워드로 장소를 검색합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "keyword": {"type": "string", "description": "검색 키워드"},
+                        "x": {"type": "number", "description": "중심 경도 (선택)"},
+                        "y": {"type": "number", "description": "중심 위도 (선택)"},
+                        "radius": {"type": "integer", "description": "반경(m, 최대 20000)"},
+                        "sort": {"type": "string", "description": "정렬 방식 (accuracy|distance)", "default": "accuracy"},
+                        "page": {"type": "integer", "description": "페이지 번호", "default": 1},
+                        "size": {"type": "integer", "description": "한 페이지 결과 수", "default": 15}
+                    },
+                    "required": ["keyword"],
+                },
+            },
+        }
+
+    def category_search_tool(self) -> Dict[str, Any]:
+        """CategorySearch_kakao Tool schema"""
+        return {
+            "type": "function",
+            "function": {
+                "name": "CategorySearch_kakao",
+                "description": "카테고리로 장소를 검색합니다.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "category": {"type": "string", "description": "카테고리 그룹 코드 (MT1, CS2, PS3 등)"},
+                        "x": {"type": "number", "description": "중심 경도"},
+                        "y": {"type": "number", "description": "중심 위도"},
+                        "radius": {"type": "integer", "description": "반경(m, 최대 20000)", "default": 1000},
+                        "page": {"type": "integer", "description": "페이지 번호", "default": 1},
+                        "size": {"type": "integer", "description": "한 페이지 결과 수", "default": 15}
+                    },
+                    "required": ["category", "x", "y"],
+                },
+            },
+        }
+
+
+if __name__ == "__main__":
+    import json
+    
+    print("=" * 60)
+    print("KakaoLocal API 테스트")
+    print("=" * 60)
+    
+    api = KakaoLocal()
+    
+    # 1. API 연결 테스트
+    print("\n[1] API 연결 테스트")
+    if api.test_connection():
+        print("✓ API 연결 성공")
+    else:
+        print("✗ API 연결 실패")
+        exit(1)
+    
+    # 2. 주소 → 좌표 변환 테스트
+    print("\n[2] 주소 → 좌표 변환 (AddressToCoord_kakao)")
+    try:
+        result = api.execute_tool("AddressToCoord_kakao", address="서울 강남구 역삼동 737")
+        print(f"주소: {result['address']}")
+        print(f"위도: {result['latitude']}")
+        print(f"경도: {result['longitude']}")
+        print(f"정확한 주소: {result['address_name']}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 3. 좌표 → 주소 변환 테스트
+    print("\n[3] 좌표 → 주소 변환 (CoordToAddress_kakao)")
+    try:
+        result = api.execute_tool("CoordToAddress_kakao", latitude=37.4979, longitude=127.0276)
+        print(f"좌표: ({result['latitude']}, {result['longitude']})")
+        print(f"도로명 주소: {result['road_address']}")
+        print(f"지번 주소: {result['jibun_address']}")
+        print(f"건물명: {result['building_name']}")
+        print(f"우편번호: {result['zone_no']}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 4. 키워드 장소 검색 테스트
+    print("\n[4] 키워드 장소 검색 (PlaceSearch_kakao)")
+    try:
+        result = api.execute_tool("PlaceSearch_kakao", keyword="카카오프렌즈", size=5)
+        print(f"검색어: {result['keyword']}")
+        print(f"전체 결과 수: {result['total_count']}")
+        print(f"검색된 장소 {len(result['places'])}개:")
+        for i, place in enumerate(result['places'][:3], 1):
+            print(f"  {i}. {place['name']}")
+            print(f"     주소: {place['address']}")
+            print(f"     전화: {place['phone']}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 5. 카테고리 검색 테스트
+    print("\n[5] 카테고리 검색 (CategorySearch_kakao)")
+    try:
+        # 강남역 근처 편의점(CS2) 검색
+        result = api.execute_tool("CategorySearch_kakao", 
+                                 category="CS2", 
+                                 x=127.0276, 
+                                 y=37.4979, 
+                                 radius=500,
+                                 size=5)
+        print(f"카테고리: {result['category']}")
+        print(f"전체 결과 수: {result['total_count']}")
+        print(f"검색된 장소 {len(result['places'])}개:")
+        for i, place in enumerate(result['places'][:3], 1):
+            print(f"  {i}. {place['name']}")
+            print(f"     주소: {place['address']}")
+            print(f"     거리: {place['distance']}m")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 6. Tool 스키마 출력
+    print("\n[6] 사용 가능한 Tool 스키마")
+    schemas = api.get_all_tool_schemas()
+    for schema in schemas:
+        print(f"  - {schema['function']['name']}: {schema['function']['description']}")
+    
+    print("\n" + "=" * 60)
+    print("테스트 완료")
+    print("=" * 60)

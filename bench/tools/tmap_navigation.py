@@ -29,8 +29,13 @@ class TmapNavigation(BaseAPI):
     # ========== 실제 API 호출 메서드들 ==========
 
     def POISearch_tmap(self, searchKeyword: str, count: int = 10, centerLon: float = None,
-                    centerLat: float = None, radius: int = None, page: int = 1) -> Dict[str, Any]:
-        """POI 통합검색 (내부 구현)"""
+                    centerLat: float = None, page: int = 1,
+                    reqCoordType: str = "WGS84GEO", resCoordType: str = "WGS84GEO") -> Dict[str, Any]:
+        """POI 통합검색 (내부 구현)
+        
+        주의: radius 파라미터는 API에서 지원하지 않음
+        centerLon/centerLat만으로 중심점 기반 검색 가능
+        """
         try:
             endpoint = "/tmap/pois"
             url = f"{self.base_url}{endpoint}"
@@ -42,16 +47,16 @@ class TmapNavigation(BaseAPI):
             
             params = {
                 "searchKeyword": searchKeyword,
-                "count": count,
+                "count": min(count, 200),  # 최대 200
                 "page": page,
+                "reqCoordType": reqCoordType,
+                "resCoordType": resCoordType,
             }
             
-            if centerLon is not None:
+            # centerLon과 centerLat은 함께 사용해야 함
+            if centerLon is not None and centerLat is not None:
                 params["centerLon"] = centerLon
-            if centerLat is not None:
                 params["centerLat"] = centerLat
-            if radius is not None:
-                params["radius"] = radius
                 
             response = requests.get(url, headers=headers, params=params, timeout=10)
             response.raise_for_status()
@@ -263,16 +268,35 @@ class TmapNavigation(BaseAPI):
             "type": "function",
             "function": {
                 "name": "POISearch_tmap",
-                "description": "POI 통합 검색 (Tmap)",
+                "description": "T map을 통해 키워드로 전국의 장소(POI)를 검색합니다. 맛집, 병원, 주유소, 관광지 등 150만 건의 POI 데이터를 검색할 수 있습니다. 중심점 기반 검색 시 centerLon, centerLat을 사용하세요 (radius는 지원 안 됨).",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "searchKeyword": {"type": "string", "description": "검색 키워드"},
-                        "count": {"type": "integer", "default": 10, "description": "검색 결과 개수"},
-                        "centerLon": {"type": "number", "description": "중심 경도"},
-                        "centerLat": {"type": "number", "description": "중심 위도"},
-                        "radius": {"type": "integer", "description": "반경(m)"},
-                        "page": {"type": "integer", "default": 1, "description": "페이지 번호"}
+                        "searchKeyword": {
+                            "type": "string",
+                            "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 병원, 부산 맛집, 서울 이마트). 지역명을 포함하여 검색하세요."
+                        },
+                        "count": {
+                            "type": "integer",
+                            "description": "검색 결과 개수 (기본값: 10, 최대: 200)",
+                            "default": 10,
+                            "minimum": 1,
+                            "maximum": 200
+                        },
+                        "centerLon": {
+                            "type": "number",
+                            "description": "검색 중심점 경도 (선택사항, centerLat과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                        },
+                        "centerLat": {
+                            "type": "number",
+                            "description": "검색 중심점 위도 (선택사항, centerLon과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                        },
+                        "page": {
+                            "type": "integer",
+                            "description": "페이지 번호 (더 많은 결과가 필요할 때 사용)",
+                            "default": 1,
+                            "minimum": 1
+                        }
                     },
                     "required": ["searchKeyword"]
                 }
@@ -391,3 +415,161 @@ class TmapNavigation(BaseAPI):
             return res.status_code == 200
         except Exception:
             return False
+
+    def get_all_tool_schemas(self):
+        """모든 tool 스키마 반환"""
+        return [
+            self.poi_search_tool(),
+            self.car_route_tool(),
+            self.walk_route_tool(),
+            self.geocoding_tool(),
+            self.category_search_tool(),
+        ]
+
+
+if __name__ == "__main__":
+    import json
+    
+    print("=" * 60)
+    print("TmapNavigation API 테스트")
+    print("=" * 60)
+    
+    api = TmapNavigation()
+    
+    # 1. API 연결 테스트
+    print("\n[1] API 연결 테스트")
+    if api.test_connection():
+        print("✓ API 연결 성공")
+    else:
+        print("✗ API 연결 실패")
+        exit(1)
+    
+    # 2. POI 검색 테스트
+    print("\n[2] POI 통합 검색 (POISearch_tmap)")
+    try:
+        result = api.execute_tool("POISearch_tmap", searchKeyword="강남역", count=5)
+        if result.get("success") == False:
+            print(f"✗ 오류: {result.get('error_message')}")
+        else:
+            print(f"검색어: 강남역")
+            pois = result.get("searchPoiInfo", {}).get("pois", {}).get("poi", [])
+            print(f"검색된 POI {len(pois)}개:")
+            for i, poi in enumerate(pois[:3], 1):
+                print(f"  {i}. {poi.get('name')}")
+                print(f"     주소: {poi.get('upperAddrName')} {poi.get('middleAddrName')} {poi.get('lowerAddrName')}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 3. 주소 → 좌표 변환 테스트 (Geocoding)
+    print("\n[3] 주소 → 좌표 변환 (Geocoding_tmap)")
+    try:
+        result = api.execute_tool("Geocoding_tmap", 
+                                 city_do="서울특별시",
+                                 gu_gun="강남구",
+                                 dong="역삼동")
+        if result.get("success") == False:
+            print(f"✗ 오류: {result.get('error_message')}")
+        else:
+            coord_info = result.get("coordinateInfo", {})
+            coordinate = coord_info.get("coordinate", [{}])[0]
+            print(f"주소: 서울특별시 강남구 역삼동")
+            print(f"위도: {coordinate.get('lat', coordinate.get('newLat'))}")
+            print(f"경도: {coordinate.get('lon', coordinate.get('newLon'))}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 4. 보행자 경로 안내 테스트
+    print("\n[4] 보행자 경로 안내 (WalkRoute_tmap)")
+    try:
+        # 강남역(127.0276, 37.4979) → 역삼역(127.0366, 37.5006)
+        result = api.execute_tool("WalkRoute_tmap",
+                                 startX=127.0276,
+                                 startY=37.4979,
+                                 endX=127.0366,
+                                 endY=37.5006)
+        if result.get("success") == False:
+            print(f"✗ 오류: {result.get('error_message')}")
+        else:
+            features = result.get("features", [])
+            if features:
+                # 전체 경로 요약 정보 추출
+                total_distance = 0
+                total_time = 0
+                for feature in features:
+                    props = feature.get("properties", {})
+                    total_distance += props.get("distance", 0)
+                    total_time += props.get("time", 0)
+                
+                print(f"출발: (127.0276, 37.4979)")
+                print(f"도착: (127.0366, 37.5006)")
+                print(f"총 거리: {total_distance}m")
+                print(f"예상 시간: {total_time // 60}분 {total_time % 60}초")
+                print(f"경로 구간 수: {len(features)}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 5. 자동차 경로 안내 테스트
+    print("\n[5] 자동차 경로 안내 (CarRoute_tmap)")
+    try:
+        # 강남역 → 역삼역
+        result = api.execute_tool("CarRoute_tmap",
+                                 startX=127.0276,
+                                 startY=37.4979,
+                                 endX=127.0366,
+                                 endY=37.5006,
+                                 searchOption=0)
+        if result.get("success") == False:
+            print(f"✗ 오류: {result.get('error_message')}")
+        else:
+            features = result.get("features", [])
+            if features:
+                # 전체 경로 요약 정보
+                total_distance = 0
+                total_time = 0
+                for feature in features:
+                    props = feature.get("properties", {})
+                    total_distance += props.get("distance", 0)
+                    total_time += props.get("time", 0)
+                
+                print(f"출발: (127.0276, 37.4979)")
+                print(f"도착: (127.0366, 37.5006)")
+                print(f"총 거리: {total_distance / 1000:.2f}km")
+                print(f"예상 시간: {total_time // 60}분")
+                print(f"경로 구간 수: {len(features)}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 6. 카테고리 검색 테스트
+    print("\n[6] 카테고리 검색 (CategorySearch_tmap)")
+    try:
+        # 강남역 근처 카페 검색
+        result = api.execute_tool("CategorySearch_tmap",
+                                 categories="카페",
+                                 centerLon=127.0276,
+                                 centerLat=37.4979,
+                                 radius=1,
+                                 count=5)
+        if result.get("success") == False:
+            print(f"✗ 오류: {result.get('error_message')}")
+        else:
+            print(f"카테고리: 카페")
+            print(f"중심 좌표: (127.0276, 37.4979)")
+            print(f"검색 반경: 1km")
+            pois = result.get("pois", [])
+            print(f"검색된 장소 {len(pois)}개:")
+            for i, poi in enumerate(pois[:3], 1):
+                print(f"  {i}. {poi.get('name')}")
+                print(f"     주소: {poi.get('address')}")
+                print(f"     전화: {poi.get('telNo', '정보없음')}")
+    except Exception as e:
+        print(f"✗ 오류: {e}")
+    
+    # 7. Tool 스키마 출력
+    print("\n[7] 사용 가능한 Tool 스키마")
+    schemas = api.get_all_tool_schemas()
+    for schema in schemas:
+        print(f"  - {schema['function']['name']}: {schema['function']['description']}")
+    
+    print("\n" + "=" * 60)
+    print("테스트 완료")
+    print("=" * 60)

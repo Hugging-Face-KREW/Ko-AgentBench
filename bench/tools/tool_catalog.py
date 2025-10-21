@@ -493,16 +493,35 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     "POISearch_tmap": (
         TmapNavigation,
         "POISearch_tmap",
-        "POI 통합 검색 (Tmap)",
+        "T map을 통해 키워드로 전국의 장소(POI)를 검색합니다. 맛집, 병원, 주유소, 관광지 등 150만 건의 POI 데이터를 검색할 수 있습니다.",
         {
             "type": "object",
             "properties": {
-                "searchKeyword": {"type": "string", "description": "검색 키워드"},
-                "count": {"type": "integer", "default": 10, "description": "검색 결과 개수"},
-                "centerLon": {"type": "number", "description": "중심 경도"},
-                "centerLat": {"type": "number", "description": "중심 위도"},
-                "radius": {"type": "integer", "description": "반경(m)"},
-                "page": {"type": "integer", "default": 1, "description": "페이지 번호"}
+                "searchKeyword": {
+                    "type": "string",
+                    "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 병원, 부산 맛집, 서울 이마트). 지역명을 포함하여 검색하세요."
+                },
+                "count": {
+                    "type": "integer",
+                    "description": "검색 결과 개수 (기본값: 10, 최대: 200)",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 200
+                },
+                "centerLon": {
+                    "type": "number",
+                    "description": "검색 중심점 경도 (선택사항, centerLat과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "centerLat": {
+                    "type": "number",
+                    "description": "검색 중심점 위도 (선택사항, centerLon과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "page": {
+                    "type": "integer",
+                    "description": "페이지 번호 (더 많은 결과가 필요할 때 사용)",
+                    "default": 1,
+                    "minimum": 1
+                }
             },
             "required": ["searchKeyword"]
         }
