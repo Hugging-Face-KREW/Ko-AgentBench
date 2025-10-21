@@ -1,0 +1,30 @@
+{
+  "key": "c6c3ebaf781fa98975beaf774d1991161ec42a5e00fc639c68fe1972bf021e7f",
+  "tool": "ItemList_aladin",
+  "created_at": "2025-10-21T00:00:00.073283",
+  "input_params": {
+    "category_id": 1001,
+    "cover": "Mid",
+    "max_results": 10,
+    "out_of_stock_filter": 0,
+    "output": "js",
+    "query_type": "Bestseller",
+    "search_target": "Book",
+    "start": 1,
+    "sub_search_target": "",
+    "week": 4,
+    "year": 2023
+  },
+  "raw_args": {
+    "query_type": "Bestseller",
+    "search_target": "Book",
+    "category_id": 1001,
+    "year": 2023,
+    "week": 4,
+    "output": "js"
+  },
+  "data": {
+    "errorCode": 21,
+    "errorMessage": "Query가 유효하지 않은 형식입니다. (categoryId가 입력되지 않았거나 존재하지 않음)"
+  }
+}
