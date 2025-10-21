@@ -173,6 +173,18 @@ class BenchmarkRunner:
                 and len(result.get('steps', [])) > 0
             )
             
+            # 토큰 사용량 집계
+            total_prompt_tokens = 0
+            total_completion_tokens = 0
+            total_tokens = 0
+
+            for step in result.get('steps', []):
+                llm_response = step.get('llm_response', {})
+                usage = llm_response.get('usage', {})
+                total_prompt_tokens += usage.get('prompt_tokens', 0)
+                total_completion_tokens += usage.get('completion_tokens', 0)
+                total_tokens += usage.get('total_tokens', 0)
+
             final_result = {
                 "task_id": task_id,
                 "success": success,
@@ -180,9 +192,14 @@ class BenchmarkRunner:
                 "tool_invocations": tool_invocations,
                 "execution_time": execution_time,
                 "steps_taken": len(result.get('steps', [])),
+                "token_usage": {
+                    "prompt_tokens": total_prompt_tokens,
+                    "completion_tokens": total_completion_tokens,
+                    "total_tokens": total_tokens
+                },
                 "error": None
             }
-            
+                        
             # update trace with final result 
             if is_enabled():
                 try:

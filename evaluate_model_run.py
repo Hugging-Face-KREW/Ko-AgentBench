@@ -398,6 +398,15 @@ class ModelRunEvaluator:
                     f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
+                # 토큰 통계 추가
+                if 'average_tokens_per_task' in metadata:
+                    f.write(f"- 평균 토큰 수: {metadata['average_tokens_per_task']:.2f}\n")
+                if 'average_tps' in metadata:
+                    f.write(f"- 평균 TPS: {metadata['average_tps']:.2f} tokens/sec\n")
+                if 'average_prompt_tokens' in metadata:
+                    f.write(f"  - 평균 입력 토큰: {metadata['average_prompt_tokens']:.2f}\n")
+                if 'average_completion_tokens' in metadata:
+                    f.write(f"  - 평균 출력 토큰: {metadata['average_completion_tokens']:.2f}\n")
                 
                 f.write("\n**메트릭 점수:**\n\n")
                 
