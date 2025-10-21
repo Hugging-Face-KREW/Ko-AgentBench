@@ -168,7 +168,12 @@ main() {
     log "Starting..."
     for i in "${!models[@]}"; do
         echo ""; echo "▶▶▶ Model $((i+1))/${#models[@]}: ${models[$i]} ◀◀◀"
-        run_model_benchmark "${models[$i]}" || [[ "$SKIP_FAILED" != "true" ]] && { log_error "Stopped"; break; }
+        if ! run_model_benchmark "${models[$i]}"; then
+            if [[ "$SKIP_FAILED" != "true" ]]; then
+                log_error "Stopped"
+                break
+            fi
+        fi
     done
     
     echo ""; echo "========== SUMMARY =========="
