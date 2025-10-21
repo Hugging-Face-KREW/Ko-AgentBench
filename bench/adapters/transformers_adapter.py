@@ -55,7 +55,7 @@ class TransformersAdapter(BaseAdapter):
         dtype_value = config.get('dtype') or config.get('torch_dtype', 'auto')
         self.dtype = self._get_torch_dtype(dtype_value)
         self.quantization = config.get('quantization', None)
-        self.max_new_tokens = config.get('max_new_tokens', 1024)
+        self.max_new_tokens = config.get('max_new_tokens', 2048)
         self.temperature = config.get('temperature', 0.7)
         self.top_p = config.get('top_p', 0.9)
         self.trust_remote_code = config.get('trust_remote_code', False)
@@ -569,10 +569,11 @@ class TransformersAdapter(BaseAdapter):
         """Parse tool calls from model output.
         
         Supports multiple formats:
-        1. XML-wrapped: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
-        2. Plain JSON with tool_name: {"tool_name": "...", "arguments": {...}}
-        3. Plain JSON with name: {"name": "...", "arguments": {...}}
-        4. Array of tool calls
+        1. XML-wrapped (Qwen): <tool_call>{"name": "...", "arguments": {...}}</tool_call>
+        2. Llama 3.1 style: <function=name>{"param": "value"}</function>
+        3. Plain JSON with tool_name: {"tool_name": "...", "arguments": {...}}
+        4. Plain JSON with name: {"name": "...", "arguments": {...}}
+        5. Array of tool calls
         
         Args:
             text: Generated text from model
@@ -588,17 +589,21 @@ class TransformersAdapter(BaseAdapter):
         # Matches: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
         xml_pattern = r'<tool_call>\s*(\{[^<]+\})\s*</tool_call>'
         
-        # Pattern 2: Single tool call with tool_name
+        # Pattern 2: Llama 3.1 style - <function=name>{arguments}</function>
+        # Matches: <function=search_web>{"query": "weather"}</function>
+        llama_pattern = r'<function=([^>]+)>(\{[^<]+\})</function>'
+        
+        # Pattern 3: Single tool call with tool_name
         single_tool_name_pattern = r'\{"tool_name":\s*"([^"]+)",\s*"arguments":\s*(\{[^}]+\})\}'
         
-        # Pattern 3: Single tool call with name
+        # Pattern 4: Single tool call with name
         single_name_pattern = r'\{"name":\s*"([^"]+)",\s*"arguments":\s*(\{[^}]+\})\}'
         
-        # Pattern 4: Array of tool calls
+        # Pattern 5: Array of tool calls
         array_pattern = r'\[\s*\{[^\]]+\}\s*\]'
         
         try:
-            # Try XML pattern first (most common)
+            # Try XML pattern first (most common for Qwen)
             xml_matches = re.finditer(xml_pattern, text, re.DOTALL)
             xml_found = False
             
@@ -627,6 +632,36 @@ class TransformersAdapter(BaseAdapter):
             if xml_found:
                 # Remove all XML tool call tags from text
                 remaining_text = re.sub(xml_pattern, '', text, flags=re.DOTALL).strip()
+                return (tool_calls if tool_calls else None), remaining_text
+            
+            # Try Llama 3.1 pattern - <function=name>{arguments}</function>
+            llama_matches = re.finditer(llama_pattern, text, re.DOTALL)
+            llama_found = False
+            
+            for match in llama_matches:
+                llama_found = True
+                tool_name = match.group(1)
+                arguments_str = match.group(2)
+                
+                try:
+                    # Parse arguments JSON
+                    arguments = json.loads(arguments_str)
+                    
+                    tool_calls.append({
+                        'id': f'call_{len(tool_calls)}',
+                        'type': 'function',
+                        'function': {
+                            'name': tool_name,
+                            'arguments': json.dumps(arguments) if isinstance(arguments, dict) else arguments_str
+                        }
+                    })
+                except json.JSONDecodeError as e:
+                    self.logger.warning(f"Failed to parse Llama tool call JSON: {e}")
+                    continue
+            
+            if llama_found:
+                # Remove all Llama function tags from text
+                remaining_text = re.sub(llama_pattern, '', text, flags=re.DOTALL).strip()
                 return (tool_calls if tool_calls else None), remaining_text
             
             # Try array pattern
