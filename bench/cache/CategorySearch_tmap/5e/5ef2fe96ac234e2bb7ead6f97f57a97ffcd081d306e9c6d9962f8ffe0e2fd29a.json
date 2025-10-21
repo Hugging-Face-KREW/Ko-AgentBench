@@ -1,0 +1,30 @@
+{
+  "key": "5ef2fe96ac234e2bb7ead6f97f57a97ffcd081d306e9c6d9962f8ffe0e2fd29a",
+  "tool": "CategorySearch_tmap",
+  "created_at": "2025-10-21T07:19:11.436731",
+  "input_params": {
+    "categories": "P",
+    "centerLat": 37.3946,
+    "centerLon": 127.1117,
+    "count": 20,
+    "radius": 500
+  },
+  "raw_args": {
+    "categories": "P",
+    "centerLon": 127.1117,
+    "centerLat": 37.3946,
+    "radius": 500,
+    "count": 20
+  },
+  "data": {
+    "success": false,
+    "error_code": "API_REQUEST_FAILED",
+    "error_message": "카테고리 검색 API 호출 실패: 400 Client Error: Bad Request for url: https://apis.openapi.sk.com/tmap/pois/search/around?version=1&page=1&count=20&categories=P&centerLon=127.1117&centerLat=37.3946&radius=500&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&multiPoint=N&sort=distance",
+    "suggested_actions": [
+      "categories 명칭 확인 (예: 카페, 병원, 주유소 등)",
+      "좌표(centerLon/centerLat) 확인",
+      "반경(radius) 1~33 범위 내 설정",
+      "appKey 권한 확인"
+    ]
+  }
+}

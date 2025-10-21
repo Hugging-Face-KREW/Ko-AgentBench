@@ -411,7 +411,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "required": ["query_type"]
         }
     ),
-    "Lookup_aladin_item": (
+    "ItemLookup_aladin": (
         AladinAPI,
         "_get_item_details",
         "알라딘 상품 상세 정보 조회",

@@ -31,7 +31,8 @@ from configs.secrets import (
     AZURE_API_KEY, 
     AZURE_API_BASE, 
     AZURE_API_VERSION,
-    ANTHROPIC_API_KEY
+    ANTHROPIC_API_KEY,
+    GEMINI_API_KEY
 )
 
 
@@ -573,7 +574,7 @@ def main():
     # Load environment variables
     load_dotenv()
     
-    # Set Azure OpenAI environment variables if available from secrets
+    # Set API keys environment variables if available from secrets
     if AZURE_API_KEY:
         os.environ['AZURE_API_KEY'] = AZURE_API_KEY
     if AZURE_API_BASE:
@@ -582,6 +583,8 @@ def main():
         os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
     if ANTHROPIC_API_KEY:
         os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
+    if GEMINI_API_KEY:
+        os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
     
     # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [
@@ -623,8 +626,8 @@ def main():
             return bool(os.getenv("ANTHROPIC_API_KEY"))
         if provider == "groq":
             return bool(os.getenv("GROQ_API_KEY"))
-        if provider in ("google", "gemini"):
-            return bool(os.getenv("GOOGLE_API_KEY"))
+        if provider == "gemini":
+            return bool(os.getenv("GEMINI_API_KEY"))
         if provider == "huggingface":
             return bool(os.getenv("HUGGINGFACE_API_KEY"))
         return False
@@ -655,7 +658,7 @@ def main():
     # For local inference, model name doesn't need provider prefix
     if args.use_local:
         # Remove provider prefix if present (e.g., "huggingface/Qwen/..." -> "Qwen/...")
-        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "google", "gemini"]:
+        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "gemini"]:
             selected_model = "/".join(selected_model.split("/")[1:])
         print(f"Using local inference mode")
         print(f"Model: {selected_model}")
