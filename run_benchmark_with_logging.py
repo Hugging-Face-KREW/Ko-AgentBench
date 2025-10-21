@@ -25,6 +25,7 @@ from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
+from bench.config import set_cache_mode
 
 # Import API keys from secrets
 from configs.secrets import (
@@ -564,8 +565,15 @@ def main():
     parser.add_argument("--dtype", type=str, default="auto",
                         choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
                         help="Torch dtype for local models")
+    parser.add_argument("--cache-mode", type=str, default="read",
+                        choices=['read', 'write'],
+                        help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
 
     args = parser.parse_args()
+    
+    # Set cache mode from command-line argument
+    set_cache_mode(args.cache_mode)
+    print(f"Cache mode: {args.cache_mode}")
 
     print("="*80)
     print("Ko-AgentBench Dataset Runner with Tool Call Logging")

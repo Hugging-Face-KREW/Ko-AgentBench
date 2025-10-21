@@ -58,7 +58,7 @@ class TransformersAdapter(BaseAdapter):
         self.max_new_tokens = config.get('max_new_tokens', 1024)
         self.temperature = config.get('temperature', 0.7)
         self.top_p = config.get('top_p', 0.9)
-        self.trust_remote_code = config.get('trust_remote_code', False)
+        self.trust_remote_code = config.get('trust_remote_code', True)
         
         # Load model and tokenizer first to get model config
         self.logger.info(f"Loading model: {model_name}")
