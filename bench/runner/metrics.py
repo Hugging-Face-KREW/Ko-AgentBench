@@ -124,11 +124,31 @@ class LLMJudgeMetric(Metric):
             response = adapter.chat_completion(messages, temperature=0.0)
             content = response.get("message", {}).get("content", "{}")
             
-            return self._parse_json_response(content, fallback_pattern, fallback_key)
+            result = self._parse_json_response(content, fallback_pattern, fallback_key)
+            
+            # reported_error_type 추출 (error_detect 메트릭용)
+            if fallback_key == "error_reported":
+                try:
+                    if isinstance(content, str):
+                        import re
+                        error_type_match = re.search(r'"reported_error_type"\s*:\s*"([^"]+)"', content)
+                        if error_type_match:
+                            result["reported_error_type"] = error_type_match.group(1)
+                        else:
+                            result["reported_error_type"] = "none"
+                    else:
+                        result["reported_error_type"] = "none"
+                except:
+                    result["reported_error_type"] = "none"
+            
+            return result
             
         except Exception as e:
             default_value = False if 'true|false' in fallback_pattern else 0
-            return {fallback_key: default_value, "reason": f"Error: {str(e)}"}
+            result = {fallback_key: default_value, "reason": f"Error: {str(e)}"}
+            if fallback_key == "error_reported":
+                result["reported_error_type"] = "none"
+            return result
     
     def _call_multi_judge_binary(self, prompt: str, metric_key: str, 
                                  result_key: str = "error_reported") -> Dict[str, Any]:
@@ -166,17 +186,28 @@ class LLMJudgeMetric(Metric):
         total_votes = len(all_results)
         final_decision = positive_votes > (total_votes / 2)
         
+        # reported_error_type 다수결 (가장 많이 선택된 타입)
+        # error_reported가 True인 judge들의 reported_error_type만 고려
+        positive_error_types = [r.get("reported_error_type", "none") for r in all_results if r.get(result_key, False)]
+        if positive_error_types:
+            from collections import Counter
+            error_type_counts = Counter(positive_error_types)
+            most_common_error_type = error_type_counts.most_common(1)[0][0]
+        else:
+            most_common_error_type = "none"
+        
         # 평균 confidence (있는 경우)
         avg_confidence = sum(r.get("confidence", 0.0) for r in all_results) / total_votes
         
         judge_reasons = [
             f"Judge {r['judge_id']} ({r.get('judge_model', 'unknown')}): "
-            f"{'Yes' if r.get(result_key) else 'No'}"
+            f"{'Yes' if r.get(result_key) else 'No'} (type: {r.get('reported_error_type', 'none')})"
             for r in all_results
         ]
         
         return {
             result_key: final_decision,
+            "reported_error_type": most_common_error_type,
             "confidence": avg_confidence,
             "reason": f"Multi-judge vote: {positive_votes}/{total_votes}. " + "; ".join(judge_reasons),
             "individual_results": all_results,
@@ -855,7 +886,7 @@ class SourceEPRMetric(Metric):
         })
 
 #레벨5 메트릭
-class ErrorDetectMetric(Metric):
+class ErrorDetectMetric(LLMJudgeMetric):
     """
     ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
     LLM-as-a-Judge로 final_response에서 에러 보고 여부를 판단
@@ -878,13 +909,20 @@ class ErrorDetectMetric(Metric):
 
         # 1단계: 실제로 에러가 발생했는지 확인
         error_occurred = False
-        for inv in (ctx.logs.get("tool_invocations") or []):
+        tool_calls = ctx.logs.get("tool_calls") or []
+        
+        for inv in tool_calls:
             if isinstance(inv, dict) and inv.get("error"):
                 t = inv.get("tool") or inv.get("tool_name")
-                et = inv.get("error_type")
-                if t == inj_tool and et == inj_type:
-                    error_occurred = True
-                    break
+                # error 필드에서 에러 타입 추출
+                error_msg = inv.get("error", "")
+                if t == inj_tool and error_msg:
+                    # 에러 메시지에서 타입 매칭 확인
+                    if (inj_type == "timeout" and "timeout" in error_msg.lower()) or \
+                       (inj_type == "complete_unavailable" and "unavailable" in error_msg.lower()) or \
+                       (inj_type == "data_not_available" and "no data" in error_msg.lower()):
+                        error_occurred = True
+                        break
 
         if not error_occurred:
             return EvaluationResult(self.name, 0.0, {
@@ -896,7 +934,14 @@ class ErrorDetectMetric(Metric):
         # 2단계: 모델이 에러를 보고했는지 LLM Judge로 판단
         final_response = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
         
-        if not final_response or not isinstance(final_response, str):
+        # final_response 검증 강화
+        if final_response is None:
+            final_response = ""
+        elif not isinstance(final_response, str):
+            final_response = str(final_response)
+        
+        # 빈 문자열이거나 너무 짧은 경우 처리
+        if not final_response or len(final_response.strip()) < 3:
             return EvaluationResult(self.name, 0.0, {
                 "reason": "No final response to evaluate",
                 "error_occurred": True,
@@ -916,13 +961,27 @@ class ErrorDetectMetric(Metric):
         # Multi-judge 호출
         llm_result = self._call_multi_judge_binary(prompt, 'error_detect', 'error_reported')
         error_reported = llm_result.get("error_reported", False)
+        reported_error_type = llm_result.get("reported_error_type", "none")
         confidence = llm_result.get("confidence", 0.0)
         
-        score = 1.0 if error_reported else 0.0
+        # 에러 타입 일치 여부 비교
+        type_matches = (reported_error_type == inj_type)
+        
+        # 점수 계산: 에러를 보고하고 타입도 일치해야 만점
+        # 단, 다수결에서 실패했지만 reported_error_type이 유효한 경우도 고려
+        if error_reported and type_matches:
+            score = 1.0
+        elif not error_reported and reported_error_type != "none" and type_matches:
+            # 다수결에서 실패했지만 에러 타입이 올바르게 감지된 경우 부분 점수
+            score = 0.5
+        else:
+            score = 0.0
         
         return EvaluationResult(self.name, score, {
             "error_occurred": True,
             "error_reported": error_reported,
+            "reported_error_type": reported_error_type,
+            "type_matches": type_matches,
             "confidence": confidence,
             "llm_reason": llm_result.get("reason", "No reason provided"),
             "injected_tool": inj_tool,
@@ -990,8 +1049,9 @@ class FallbackSRMetric(Metric):
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         # 에러 주입 없는 태스크면 0 (비적용)
-        if not ctx.task_schema.get("error_injection"):
-            return EvaluationResult(self.name, 0.0, {})
+        error_injection = ctx.task_schema.get("error_injection")
+        if not error_injection:
+            return EvaluationResult(self.name, 0.0, {"reason": "No error injection"})
 
         fallback_opts = ctx.task_schema.get("fallback_options") or []
         fallback_tools = {
@@ -999,29 +1059,49 @@ class FallbackSRMetric(Metric):
             if isinstance(opt, dict) and opt.get("tool")
         }
         if not fallback_tools:
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, None, {"reason": "No fallback options - not applicable"})
 
-        invocations = ctx.logs.get("tool_invocations", []) or []
-        attempts, successes = 0, 0
-
+        invocations = ctx.logs.get("tool_calls", []) or []
+        injected_tool = error_injection.get("tool")
+        
+        # 1단계: 에러 주입된 도구가 실패했는지 확인
+        injected_tool_failed = False
+        fallback_attempts = 0
+        fallback_successes = 0
+        
         for call in invocations:
             if not isinstance(call, dict):
                 continue
             tool = call.get("tool") or call.get("tool_name")
-            if tool not in fallback_tools:
-                continue
+            
+            # 에러 주입된 도구가 실패했는지 확인
+            if tool == injected_tool:
+                if call.get("success") is False or call.get("error"):
+                    injected_tool_failed = True
+            
+            # 대체 도구 시도 확인
+            elif tool in fallback_tools:
+                fallback_attempts += 1
+                # 대체 도구 성공 여부 확인
+                if call.get("success") is True and not call.get("error"):
+                    fallback_successes += 1
 
-            attempts += 1
-            ok = (
-                call.get("success") is True
-                or (isinstance(call.get("status_code"), int) and 200 <= call["status_code"] < 300)
-                or (not call.get("error") and any(call.get(k) for k in ("output", "result", "response", "data")))
-            )
-            if ok:
-                successes += 1
+        # 에러 주입된 도구가 실패하지 않았으면 평가 불가
+        if not injected_tool_failed:
+            return EvaluationResult(self.name, 0.0, {"reason": "Injected tool did not fail"})
+        
+        # 대체 도구를 시도하지 않았으면 0점
+        if fallback_attempts == 0:
+            return EvaluationResult(self.name, 0.0, {"reason": "No fallback attempts"})
 
-        score = (successes / attempts) if attempts > 0 else 0.0
-        return EvaluationResult(self.name, score, {"attempts": attempts, "successes": successes})
+        score = (fallback_successes / fallback_attempts) if fallback_attempts > 0 else 0.0
+        return EvaluationResult(self.name, score, {
+            "injected_tool": injected_tool,
+            "injected_tool_failed": injected_tool_failed,
+            "fallback_attempts": fallback_attempts,
+            "fallback_successes": fallback_successes,
+            "fallback_tools": list(fallback_tools)
+        })
 
 #레벨6 메트릭
 class ReuseRateMetric(Metric):

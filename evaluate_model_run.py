@@ -6,6 +6,7 @@
 import argparse
 import json
 import csv
+import os
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
@@ -60,6 +61,7 @@ class ModelRunEvaluator:
             return
         
         judge_metrics = [
+            'ArgAcc',           # L1
             'ErrorDetect',      # L5
             'EffScore',         # L6  
             'ContextRetention', # L7
@@ -71,6 +73,8 @@ class ModelRunEvaluator:
                 if hasattr(METRICS[metric_name], '__dict__'):
                     METRICS[metric_name].llm_adapters = self.judge_adapters
                     METRICS[metric_name].llm_adapter = self.judge_adapters[0]
+        
+    
     
     def find_result_files(self) -> Dict[str, Path]:
         """날짜와 모델로 L1~L7 파일 찾기"""
@@ -173,6 +177,7 @@ class ModelRunEvaluator:
             logs = {
                 "success": task_result.get("success", False),
                 "tool_invocations": task_result.get("tool_calls", []),
+                "tool_calls": task_result.get("tool_calls", []),  # ErrorDetectMetric용
                 "actual_output": task_result.get("final_response", ""),
                 "final_response": task_result.get("final_response", ""),
                 "conversation_log": task_result.get("conversation_log", {}),
@@ -217,8 +222,10 @@ class ModelRunEvaluator:
                 for task in all_evaluations
                 if metric_name in task.get("metrics", {})
             ]
-            if scores:
-                metric_averages[metric_name] = sum(scores) / len(scores)
+            # None 값 필터링
+            valid_scores = [score for score in scores if score is not None]
+            if valid_scores:
+                metric_averages[metric_name] = sum(valid_scores) / len(valid_scores)
             else:
                 metric_averages[metric_name] = 0.0
         
@@ -439,6 +446,8 @@ def main():
     """메인 함수"""
     load_dotenv()
     
+    # Azure API 키는 환경변수에서 로드됨
+    
     parser = argparse.ArgumentParser(
         description='Ko-AgentBench 모델 실행 결과 평가',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -471,6 +480,7 @@ def main():
                        help='레벨당 평가할 태스크 수 (기본: 전체)')
     parser.add_argument('--quick', action='store_true',
                        help='빠른 테스트 (각 레벨당 1개)')
+    parser.add_argument('--log-file', help='특정 로그 파일 경로 (선택사항)')
     
     # 출력 설정
     parser.add_argument('--output', default='reports',
