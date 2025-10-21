@@ -1,6 +1,36 @@
 # LLM Judge 프롬프트 템플릿 모음
 # 메트릭별로 분류하여 관리
+arg_acc:
+  system: "You are an expert evaluator for argument accuracy. You MUST respond with a valid JSON object containing 'score' field (1-5)."
+  template: |
+    도구 호출 시 전달된 인수들이 의미적으로 정확한지 1-5 점수로 평가하세요.
 
+    Golden 인수: {golden_args}
+    Predicted 인수: {predicted_args}
+
+    판단 기준:
+    1. 의미적 동등성: 값이 다르더라도 의미가 동일한지 확인
+       - "25년도" vs "2025년" → 동일 (연도 표현 방식만 다름)
+       - "부산축제" vs "부산 축제" → 동일 (공백 차이)
+       - "10월" vs "10월" → 동일 (완전 일치)
+    
+    2. 숫자 값의 의미적 동등성:
+       - display: 10 vs display: 5 → 다름 (실제 다른 값)
+       - display: 10 vs display: 10 → 동일 (완전 일치)
+    
+    3. 키의 정확성: 모든 키가 정확히 일치하는지 확인
+
+    점수 기준:
+    - 5점: 완전히 동일하거나 의미적으로 동등
+    - 4점: 매우 유사하지만 약간의 차이
+    - 3점: 부분적으로 유사
+    - 2점: 다르지만 관련 있음
+    - 1점: 완전히 다르거나 관련 없음
+
+    반드시 다음 JSON 형식으로만 답변하세요:
+    {{"score": 4, "confidence": 0.8, "reason": "각 인수별 유사도 분석 결과"}}
+
+    
 error_detect:
   system: "You are an expert evaluator for AI error handling. Always respond in valid JSON format."
   template: |
@@ -39,6 +69,7 @@ error_detect:
     timeout: "타임아웃/시간 초과"
     complete_unavailable: "서비스 완전 불가/이용 불가"
     data_not_available: "데이터 없음/조회 불가"
+
 
 eff_score:
   system: "You are an expert evaluator for task completion. Always respond in valid JSON format."

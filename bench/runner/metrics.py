@@ -124,6 +124,7 @@ class LLMJudgeMetric(Metric):
             response = adapter.chat_completion(messages, temperature=0.0)
             content = response.get("message", {}).get("content", "{}")
             
+            
             result = self._parse_json_response(content, fallback_pattern, fallback_key)
             
             # reported_error_type 추출 (error_detect 메트릭용)
@@ -357,9 +358,9 @@ class ToolAccMetric(Metric):
         )
         
         
-class ArgAccMetric(Metric):
+class ArgAccMetric(LLMJudgeMetric):
     """
-    ArgAcc: 도구 인자 정확도. (P/R/F1)
+    ArgAcc: 도구 인자 정확도. (LLM Judge)
     """
     name = "ArgAcc"
     level = 1
@@ -374,7 +375,11 @@ class ArgAccMetric(Metric):
 
     @staticmethod
     def _get_first_pred_args_for_tool(ctx: EvalContext, golden_tool: str) -> Dict[str, Any]:
+        # tool_invocations와 tool_calls 둘 다 확인
         invocations = ctx.logs.get("tool_invocations", []) or []
+        tool_calls = ctx.logs.get("tool_calls", []) or []
+        
+        # tool_invocations에서 먼저 찾기
         for inv in invocations:
             tool = inv.get("tool") or inv.get("tool_name")
             if tool == golden_tool:
@@ -382,6 +387,16 @@ class ArgAccMetric(Metric):
                 if args is None:
                     args = inv.get("args")
                 return args or {}
+        
+        # tool_calls에서 찾기
+        for call in tool_calls:
+            tool = call.get("tool_name")
+            if tool == golden_tool:
+                args = call.get("arguments")
+                if args is None:
+                    args = call.get("args")
+                return args or {}
+        
         return {}
 
     @classmethod
@@ -421,18 +436,53 @@ class ArgAccMetric(Metric):
         return {"ok": True, "precision": precision, "recall": recall, "f1": f1}
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        r = self._compute_prf(ctx)
-        if not r.get("ok"):
+        # 기존 PRF1 계산
+        prf_result = self._compute_prf(ctx)
+        if not prf_result.get("ok"):
             return EvaluationResult(self.name, 0.0, {"ok": False})
 
-        score_key = ctx.task_schema.get("argacc_score_key", self.DEFAULT_SCORE_KEY)
-        if score_key not in ("precision", "recall", "f1"):
-            score_key = self.DEFAULT_SCORE_KEY
+        # LLM Judge를 사용한 의미적 유사성 평가 
+        llm_score = self._evaluate_with_llm_judge(ctx)
 
-        score = float(r[score_key])
+        details = {
+            "ok": True, 
+            "precision": prf_result["precision"], 
+            "recall": prf_result["recall"], 
+            "f1": prf_result["f1"],
+            "llm_judge_score": llm_score
+        }
+        return EvaluationResult(self.name, llm_score, details)
+    
+    def _evaluate_with_llm_judge(self, ctx: EvalContext) -> float:
+        """LLM Judge를 사용하여 인수 유사성 평가"""
+        try:
+            golden_actions = ctx.task_schema.get("golden_action", [])
+            if isinstance(golden_actions, dict):
+                golden_actions = [golden_actions]
 
-        details = {"ok": True, "precision": r["precision"], "recall": r["recall"], "f1": r["f1"]}
-        return EvaluationResult(self.name, score, details)
+            if not golden_actions or not isinstance(golden_actions[0], dict):
+                return 0.0
+
+            golden_tool = golden_actions[0].get("tool")
+            golden_args = golden_actions[0].get("args", {}) or {}
+            pred_args = self._get_first_pred_args_for_tool(ctx, golden_tool)
+
+            if not golden_args or not pred_args:
+                return 0.0
+
+            # LLM Judge 호출 (1-5 점수)
+            prompt = f"Golden 인수: {golden_args}\nPredicted 인수: {pred_args}"
+            result = self._call_multi_judge_score(prompt, 'arg_acc', min_score=1, max_score=5)
+            
+            # 1-5 점수를 0.0-1.0 범위로 변환
+            score = result.get("score", 1)
+            normalized_score = (score - 1) / 4.0  # 1->0.0, 5->1.0
+            
+            return normalized_score
+            
+        except Exception as e:
+            print(f"LLM Judge 평가 중 오류: {e}")
+            return 0.0
 
 
 class CallEMMetric(Metric):
