@@ -1,13 +1,14 @@
 {
   "key": "4fa50ba365061e1ae6e271f83467ceb88b0bc1a61765a0b5c5b22cbc890e2aca",
   "tool": "MarketList_upbit",
-  "created_at": "2025-10-21T05:27:01.337273",
+  "created_at": "2025-10-21T08:28:10.440947",
   "input_params": {
     "include_event": true,
     "quote": "ALL"
   },
   "raw_args": {
-    "quote": "ALL"
+    "quote": "ALL",
+    "include_event": true
   },
   "data": {
     "quote": "ALL",
@@ -836,6 +837,11 @@
         "market": "BTC-OBSR",
         "korean_name": "옵저버",
         "english_name": "Observer"
+      },
+      {
+        "market": "KRW-F",
+        "korean_name": "신퓨처스",
+        "english_name": "SynFutures"
       },
       {
         "market": "KRW-G",
@@ -2198,6 +2204,11 @@
         "english_name": "Adventure Gold"
       },
       {
+        "market": "USDT-F",
+        "korean_name": "신퓨처스",
+        "english_name": "SynFutures"
+      },
+      {
         "market": "BTC-CHR",
         "korean_name": "크로미아",
         "english_name": "Chromia"
@@ -3203,6 +3214,6 @@
         "english_name": "Polymesh"
       }
     ],
-    "count": 638
+    "count": 640
   }
 }
