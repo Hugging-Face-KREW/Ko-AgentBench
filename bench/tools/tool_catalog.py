@@ -254,9 +254,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"}
             }, 
             "required": ["query"]
         }
@@ -269,9 +268,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim", "description": "정렬 방식 (sim: 정확도순, date: 날짜순)"}
             }, 
             "required": ["query"]
         }
@@ -284,9 +283,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim", "description": "정렬 방식 (sim: 정확도순, date: 날짜순)"}
             }, 
             "required": ["query"]
         }
