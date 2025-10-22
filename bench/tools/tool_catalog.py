@@ -1,753 +1,653 @@
+"""Central tool catalog mapping tool names to API methods and schemas.
+
+This minimal catalog enables registering API class methods as tools based on
+task-declared tool names, without changing runner logic.
 """
-Ko-AgentBench 데이터셋 기반 벤치마크 실행 및 Tool Call 로깅 스크립트
 
-data 폴더의 L1~L7 데이터셋을 로드하여 각 질문(instruction)을 실행하고,
-사용된 tool call 정보를 상세하게 기록합니다.
-"""
+from __future__ import annotations
 
-import os
-import argparse
-import json
-import glob
-from datetime import datetime
-from pathlib import Path
-from typing import Any, List, Optional, Type, Dict
-try:
-    from dotenv import load_dotenv  # provided by python-dotenv
-except Exception:
-    def load_dotenv(*args, **kwargs):  # no-op fallback if package not available
-        return False
+from typing import Any, Dict, List, Tuple, Type
 
-from bench.tools.tool_registry import ToolRegistry
-from bench.adapters.litellm_adapter import LiteLLMAdapter
-from bench.adapters.transformers_adapter import TransformersAdapter
-from bench.runner import BenchmarkRunner
-from bench.tools.base_api import BaseTool
-from bench.models import MODEL_IDS
-from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
-from bench.config import set_cache_mode
+from .aladin_search import AladinAPI
+from .base_api import BaseTool
+from .bithumb_stock import BithumbStock
+from .daum_search import DaumSearchAPI
+from .kakao_local import KakaoLocal
+from .kis_stock import KISStock
+from .ls_stock import LSStock
+from .method_tool_wrapper import make_method_tool_class
+from .naver_directions import NaverMapsAPI
+from .naver_search import NaverSearchAPI
+from .tmap_navigation import TmapNavigation
+from .upbit_crypto import UpbitCrypto
 
-# Import API keys from secrets
-from configs.secrets import (
-    AZURE_API_KEY, 
-    AZURE_API_BASE, 
-    AZURE_API_VERSION,
-    ANTHROPIC_API_KEY,
-    GEMINI_API_KEY
-)
+# Catalog entry: tool_name -> (api_class, method_name, description, parameters_schema)
+TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
+    # (삭제됨) Festival Search 도구
 
-
-
-def load_benchmark_datasets(data_dir: str = "bench/tasks") -> Dict[str, List[Dict]]:
-    """Load all benchmark datasets from bench/tasks directory.
-    
-    Args:
-        data_dir: Directory containing L1.json ~ L7.json files
-        
-    Returns:
-        Dictionary mapping level names to task lists
-    """
-    datasets = {}
-    json_files = sorted(glob.glob(os.path.join(data_dir, "L*.json")))
-    
-    for filepath in json_files:
-        level_name = Path(filepath).stem  # L1, L2, etc.
-        try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                datasets[level_name] = data
-                print(f"[OK] Loaded {level_name}: {len(data)} tasks")
-        except Exception as e:
-            print(f"[ERROR] Failed to load {filepath}: {e}")
-    
-    return datasets
-
-
-def create_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = None) -> ToolRegistry:
-    """Create a ToolRegistry and register provided tool classes."""
-    registry = ToolRegistry()
-    if tool_classes:
-        for tool_class in tool_classes:
-            registry.register_tool(tool_class)
-    return registry
-
-
-def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
-    """Convert benchmark dataset format to runner-compatible task format.
-    
-    Args:
-        dataset_tasks: List of tasks from L*.json files
-        
-    Returns:
-        List of tasks in runner format
-    """
-    converted_tasks = []
-    
-    # Handle case where dataset_tasks might be wrapped in an extra list
-    if isinstance(dataset_tasks, list) and len(dataset_tasks) > 0 and isinstance(dataset_tasks[0], list):
-        dataset_tasks = dataset_tasks[0]
-    
-    for task in dataset_tasks:
-        # Skip if task is not a dict
-        if not isinstance(task, dict):
-            print(f"[WARNING] Skipping non-dict task: {type(task)}")
-            continue
-            
-        # Extract required tools from golden_action OR conversation_tracking
-        tools_needed = []
-        
-        # First, try golden_action (L1-L6)
-        if "golden_action" in task:
-            for action in task["golden_action"]:
-                tool_name = action.get("tool", "")
-                if tool_name and tool_name not in tools_needed:
-                    tools_needed.append(tool_name)
-        
-        # Also check conversation_tracking for additional tools (L6/L7)
-        if "conversation_tracking" in task:
-            print(f"[DEBUG] Processing conversation_tracking for task: {task.get('task_id')}")
-            conversation = task["conversation_tracking"]
-            for turn in conversation.get("turns", []):
-                # L7 format: turn.actions (list)
-                if "actions" in turn:
-                    for action in turn.get("actions", []):
-                        tool_name = action.get("tool", "")
-                        if tool_name and tool_name not in tools_needed:
-                            tools_needed.append(tool_name)
-                            print(f"  [OK] Found tool in turn.actions: {tool_name}")
-                
-                # L6 format: turn.action (single object)
-                if "action" in turn:
-                    action = turn.get("action", {})
-                    tool_name = action.get("tool", "")
-                    if tool_name and tool_name not in tools_needed:
-                        tools_needed.append(tool_name)
-                        print(f"  [OK] Found tool in turn.action: {tool_name}")
-        
-    # 선언된 도구 이름을 그대로 사용
-    print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
-        
-        converted_task = {
-            "id": task.get("task_id", "unknown"),
-            "description": task.get("instruction", ""),
-            "expected_output": task.get("resp_schema", {}),
-            "available_tools": tools_needed,
-            # keep backward-compat with runner that expects 'tools'
-            "tools": tools_needed,
-            "level": task.get("task_level", 0),
-            "category": task.get("task_category", "unknown"),
-            "golden_action": task.get("golden_action", []),
-            "conversation_tracking": task.get("conversation_tracking"),
-            "arg_schema": task.get("arg_schema", {}),
-            # Pass through evaluation helpers if present
-            "minimum_steps": task.get("minimum_steps"),
-            "data_flow": task.get("data_flow", []),
-            "error_injection": task.get("error_injection")
-        }
-        converted_tasks.append(converted_task)
-    
-    return converted_tasks
-
-
-def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
-    """Simplify and flatten a single task result for easier analysis.
-    
-    Args:
-        result: Original task result
-        
-    Returns:
-        Simplified, flattened result
-    """
-    simplified = {
-        "task_id": result.get("task_id", "unknown"),
-        "instruction": result.get("instruction", ""),
-        "level": result.get("level", 0),
-        "category": result.get("category", "unknown"),
-        "success": result.get("success", False),
-        "execution_time": result.get("execution_time", 0),
-        "steps_taken": result.get("steps_taken", 0),
-        "error": result.get("error"),
-        "expected_tools": result.get("expected_tools", []),
-        "golden_action": result.get("golden_action", []),
-        "minimum_steps": result.get("minimum_steps"),
-        "data_flow": result.get("data_flow", []),
-        "error_injection": result.get("error_injection"),
-        "token_usage": result.get("token_usage", {
-            "prompt_tokens": 0,
-            "completion_tokens": 0,
-            "total_tokens": 0
-        }),
-    }
-    
-    # Extract tool calls in a simplified format with results
-    tool_calls = []
-    for invocation in result.get("tool_invocations", []):
-        tool_call = {
-            "step": invocation.get("step"),
-            "tool_name": invocation.get("tool_name"),
-            "arguments": invocation.get("arguments"),
-            "success": invocation.get("success"),
-            "error": invocation.get("error")
-        }
-        
-        # Include API result if available and successful
-        if invocation.get("success") and invocation.get("result"):
-            tool_call["result"] = invocation["result"]
-        
-        tool_calls.append(tool_call)
-    
-    simplified["tool_calls"] = tool_calls
-    
-    # Extract final response
-    if result.get("result") and result["result"].get("final_response"):
-        simplified["final_response"] = result["result"]["final_response"]
-    else:
-        simplified["final_response"] = None
-
-    # Store complete conversation log for multi-turn scenarios
-    try:
-        conv = (result.get("result") or {}).get("conversation") or []
-        total_msgs = len(conv)
-        
-        def _format_message(msg):
-            """Format a single message for logging."""
-            role = msg.get("role", "unknown")
-            content = msg.get("content", "")
-            
-            # For tool messages, include tool_call_id
-            if role == "tool":
-                tcid = msg.get("tool_call_id")
-                # Try to parse and format tool result
-                try:
-                    tool_data = json.loads(content) if isinstance(content, str) else content
-                    return {
-                        "role": role,
-                        "tool_call_id": tcid,
-                        "content": tool_data
-                    }
-                except:
-                    return {
-                        "role": role,
-                        "tool_call_id": tcid,
-                        "content": content
-                    }
-            
-            # For user/assistant messages, return as-is
-            return {"role": role, "content": content}
-
-        # Store complete conversation log
-        simplified["conversation_log"] = {
-            "total_messages": total_msgs,
-            "messages": [_format_message(m) for m in conv]
-        }
-            
-    except Exception as e:
-        # Non-fatal: skip conversation logging if structure unexpected
-        simplified["conversation_log_error"] = str(e)
-    
-    return simplified
-
-
-def save_detailed_results(
-    results: List[Dict[str, Any]], 
-    model_name: str, 
-    level_name: str,
-    output_dir: str = "logs/benchmark_results",
-    run_timestamp: str = None
-) -> str:
-    """Save detailed benchmark results including tool call information.
-    
-    Args:
-        results: List of task results with tool call details
-        model_name: Name of the model used
-        level_name: Dataset level (L1, L2, etc.)
-        output_dir: Directory to save logs
-        run_timestamp: Timestamp for the run (if None, creates new one)
-        
-    Returns:
-        Path to saved JSON file
-    """
-    # Create timestamp for this run if not provided
-    if run_timestamp is None:
-        run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    model_safe_name = model_name.replace("/", "_")
-    
-    # Create by_model structure: logs/benchmark_results/by_model/{model}/{timestamp}/
-    by_model_path = Path(output_dir) / "by_model" / model_safe_name / run_timestamp
-    by_model_path.mkdir(parents=True, exist_ok=True)
-    
-    # Save result file in the by_model folder
-    filename = f"{level_name}.json"
-    filepath = by_model_path / filename
-    
-    # Simplify and flatten results
-    simplified_results = [simplify_result(r) for r in results]
-    
-    # Calculate statistics
-    total_tasks = len(simplified_results)
-    successful_tasks = sum(1 for r in simplified_results if r.get('success', False))
-    total_time = sum(r.get('execution_time', 0) for r in simplified_results)
-    total_steps = sum(r.get('steps_taken', 0) for r in simplified_results)
-    total_tool_calls = sum(len(r.get('tool_calls', [])) for r in simplified_results)
-
-    # 토큰 통계 추가
-    total_prompt_tokens = 0
-    total_completion_tokens = 0
-    total_tokens = 0
-
-    for result in simplified_results:
-        token_usage = result.get('token_usage', {})
-        total_prompt_tokens += token_usage.get('prompt_tokens', 0)
-        total_completion_tokens += token_usage.get('completion_tokens', 0)
-        total_tokens += token_usage.get('total_tokens', 0)
-
-    # TPS 계산
-    average_tps = total_tokens / total_time if total_time > 0 else 0
-    
-    # Tool usage statistics
-    tool_usage_stats = {}
-    for result in simplified_results:
-        for tool_call in result.get('tool_calls', []):
-            tool_name = tool_call.get('tool_name', 'unknown')
-            if tool_name not in tool_usage_stats:
-                tool_usage_stats[tool_name] = {
-                    'count': 0,
-                    'success': 0,
-                    'failure': 0
-                }
-            tool_usage_stats[tool_name]['count'] += 1
-            if tool_call.get('success', False):
-                tool_usage_stats[tool_name]['success'] += 1
-            else:
-                tool_usage_stats[tool_name]['failure'] += 1
-    
-    log_data = {
-        "metadata": {
-            "timestamp": datetime.now().isoformat(),
-            "model": model_name,
-            "level": level_name,
-            "total_tasks": total_tasks,
-            "successful_tasks": successful_tasks,
-            "failed_tasks": total_tasks - successful_tasks,
-            "success_rate": round(successful_tasks / total_tasks * 100, 2) if total_tasks > 0 else 0,
-            "total_execution_time": round(total_time, 2),
-            "average_execution_time": round(total_time / total_tasks, 2) if total_tasks > 0 else 0,
-            "total_steps": total_steps,
-            "average_steps": round(total_steps / total_tasks, 2) if total_tasks > 0 else 0,
-            "total_tool_calls": total_tool_calls,
-            "average_tool_calls": round(total_tool_calls / total_tasks, 2) if total_tasks > 0 else 0,
-            "total_tokens": total_tokens,
-            "average_tokens_per_task": round(total_tokens / total_tasks, 2) if total_tasks > 0 else 0,
-            "average_prompt_tokens": round(total_prompt_tokens / total_tasks, 2) if total_tasks > 0 else 0,
-            "average_completion_tokens": round(total_completion_tokens / total_tasks, 2) if total_tasks > 0 else 0,
-            "average_tps": round(average_tps, 2),
+    # ===== Naver Directions =====
+    "Directions_naver": (
+        NaverMapsAPI,
+        "Directions_naver",
+        "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 조회",
+        {
+            "type": "object",
+            "properties": {
+                "start": {"type": "string", "description": "출발지(경도,위도) (예: 127.12345,37.12345)"},
+                "goal": {"type": "string", "description": "도착지 좌표 문자열 (예: '123.45678,34.56789')"},
+                "waypoints": {"type": "string", "description": "경유지 좌표 문자열. '|'로 구분 (최대 5개)"},
+                "option": {
+                    "type": "string",
+                    "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"],
+                    "description": "경로 조회 옵션",
+                },
+            },
+            "required": ["start", "goal"],
         },
-        "tool_usage_statistics": tool_usage_stats,
-        "results": simplified_results
-    }
-    
-    with open(filepath, 'w', encoding='utf-8') as f:
-        json.dump(log_data, f, indent=2, ensure_ascii=False)
-    
-    return str(filepath)
+    ),
+    # ===== LS Stock =====
+    "StockPrice_ls": (
+        LSStock,
+        "_stock_price",
+        "주식 현재가 조회, LS증권 Open API를 활용합니다.",
+        {"type": "object", "properties": {"shcode": {"type": "string", "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)","pattern": "^[0-9]{6}$"},"exchgubun": {"type": "string", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", "enum": ["K", "N", "U"], "default": "K"}}, "required": ["shcode"]},
+    ),
+    "MarketIndex_ls": (
+        LSStock,
+        "_market_index",
+        "시장 지수 조회, LS증권 Open API를 활용합니다.",
+        {"type": "object", "properties": {"jisu": {"type": "string", "enum": ["KOSPI", "KOSPI200", "KRX100", "KOSDAQ"], "default": "KOSPI"}}, "required": ["jisu"]},
+    ),
+    "SectorStock_ls": (
+        LSStock,
+        "_sector_stock",
+        "업종별/테마별 종목 시세 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "tmcode": {"type": "string", "description": "테마 코드"}
+            },
+            "required": ["tmcode"]
+        }
+    ),
+    "OrderBook_ls": (
+        LSStock,
+        "_order_book",
+        "주식 호가 정보 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "shcode": {"type": "string", "description": "종목 코드 (6자리)"}
+            },
+            "required": ["shcode"]
+        }
+    ),
+    "StockTrades_ls": (
+        LSStock,
+        "_stock_trades",
+        "주식 시간대별 체결 내역 조회 (LS증권)",
+        {
+            "type": "object",
+            "properties": {
+                "shcode": {"type": "string", "description": "종목 코드"},
+                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "N", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)"}
+            },
+            "required": ["shcode"]
+        }
+    ),
+
+    # ===== KIS Stock =====
+    "StockPrice_kis": (
+        KISStock,
+        "_stock_price",
+        "한국투자증권 국내 주식 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "종목 코드 (예: 삼성전자 005930)"},
+                "market": {"type": "string", "enum": ["KOSPI", "KOSDAQ"], "default": "KOSPI"},
+            },
+            "required": ["symbol"],
+        },
+    ),
+    "USStockPrice_kis": (
+        KISStock,
+        "_us_stock_price",
+        "한국투자증권 미국 주식 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "종목 심볼 (예: AAPL, TSLA)"},
+                "exchange": {"type": "string", "enum": ["NASDAQ", "NYSE"], "default": "NASDAQ", "description": "거래소"}
+            },
+            "required": ["symbol"]
+        }
+    ),
+    "StockChart_kis": (
+        KISStock,
+        "_stock_chart",
+        "한국투자증권 주식 차트 데이터 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "종목 코드 (예: 005930)"},
+                "period": {"type": "string", "enum": ["D", "W", "M"], "default": "D"},
+                "count": {"type": "integer", "default": 30, "description": "조회할 데이터 개수"},
+            },
+            "required": ["symbol"],
+        },
+    ),
+
+    # ===== Bithumb Crypto =====
+    "CryptoPrice_bithumb": (
+        BithumbStock,
+        "_cryptoPrice_bithumb",
+        "빗썸 암호화폐 현재가 정보 조회",
+    {
+        "type": "object", "properties": {
+            "markets": {
+                "type": "string",
+                "default": "KRW-BTC",
+                "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+            }
+        },
+            "required": ["markets"]},
+    ),
+    "OrderBook_bithumb": (
+        BithumbStock,
+        "_orderBook_bithumb",
+        "빗썸 거래소 호가 정보 조회",
+        {
+            "type": "object",
+            "properties": {
+                "markets": {
+                    "type": "string",
+                    "default": "KRW-BTC",
+                    "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                    "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+                }
+            },
+            "required": ["markets"]
+        }
+    ),
+    "CryptoCandle_bithumb": (
+        BithumbStock,
+        "_cryptoCandle_bithumb",
+        "빗썸 암호화폐 캔들 데이터 조회",
+        {
+            "type": "object",
+            "properties": {
+                "time": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "description": "캔들 단위"},
+                "market": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드"},
+                "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 1, "description": "캔들 개수"},
+                "to": {"type": "string", "description": "마지막 캔들 시각 (yyyy-MM-dd'T'HH:mm:ss'Z')"},
+                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "default": 1, "description": "분 단위 (time이 minutes일 때만 사용)"}
+            },
+            "required": ["time"]
+        }
+    ),
+    "MarketList_bithumb": (
+        BithumbStock,
+        "_marketList_bithumb",
+        "빗썸 거래 가능 마켓 리스트 조회",
+        {
+            "type": "object",
+            "properties": {
+                "isDetails": {"type": "boolean", "default": False, "description": "상세 정보 노출 여부"}
+            },
+            "required": []
+        }
+    ),
+
+    # ===== Upbit Crypto =====
+    "CryptoPrice_upbit": (
+        UpbitCrypto,
+        "_crypto_price",
+        "업비트 암호화폐 현재가 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"}
+            },
+            "required": ["symbol"]
+        }
+    ),
+    "MarketList_upbit": (
+        UpbitCrypto,
+        "_market_list",
+        "업비트 마켓 목록 조회",
+        {
+            "type": "object",
+            "properties": {
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT", "ALL"], "default": "KRW", "description": "기준 통화"},
+                "include_event": {"type": "boolean", "default": True, "description": "이벤트 마켓 포함 여부"}
+            },
+            "required": []
+        }
+    ),
+    "CryptoCandle_upbit": (
+        UpbitCrypto,
+        "_crypto_candle",
+        "업비트 암호화폐 캔들 데이터 조회",
+        {
+            "type": "object",
+            "properties": {
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"},
+                "candle_type": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "default": "days", "description": "캔들 타입"},
+                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
+                "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 30, "description": "조회할 캔들 개수"},
+                "to": {"type": "string", "description": "마지막 캔들 시각 (YYYY-MM-DD HH:mm:ss)"}
+            },
+            "required": ["symbol"]
+        }
+    ),
+
+    # ===== Naver Search =====
+    "WebSearch_naver": (
+        NaverSearchAPI, 
+        "_search_web", 
+        "네이버 웹 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "BlogSearch_naver": (
+        NaverSearchAPI, 
+        "_search_blog", 
+        "네이버 블로그 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "NewsSearch_naver": (
+        NaverSearchAPI, 
+        "_search_news", 
+        "네이버 뉴스 검색 API 호출", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+
+    # ===== Daum Search =====
+    "WebSearch_daum": (
+        DaumSearchAPI,
+        "_search_web",
+        "다음 웹 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "sort": {"type": "string", "enum": ["accuracy", "recency"], "default": "accuracy"},
+                "page": {"type": "integer", "minimum": 1, "default": 1},
+                "size": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10}
+            },
+            "required": ["query"]
+        }
+    ),
+    "VideoSearch_daum": (
+        DaumSearchAPI,
+        "_search_video",
+        "다음 동영상 검색 API 호출",
+        {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "sort": {"type": "string", "enum": ["accuracy", "recency"], "default": "accuracy"},
+                "page": {"type": "integer", "minimum": 1, "default": 1},
+                "size": {"type": "integer", "minimum": 1, "maximum": 30, "default": 10}
+            },
+            "required": ["query"]
+        }
+    ),
+
+    # ===== Aladin =====
+    "ItemSearch_aladin": (
+        AladinAPI, 
+        "_search_item", 
+        "알라딘 상품 검색 API", 
+        {
+            "type": "object", 
+            "properties": {
+                "query": {"type": "string", "description": "검색어"},
+                "query_type": {"type": "string", "enum": ["Keyword", "Title", "Author", "Publisher"], "default": "Keyword"},
+                "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
+                "start": {"type": "integer", "minimum": 1, "default": 1},
+                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"},
+                "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
+                "category_id": {"type": "integer", "description": "카테고리 ID"},
+                "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
+                "out_of_stock_filter": {"type": "integer", "enum": [0, 1], "default": 0, "description": "품절/절판 상품 필터링 여부 (1: 제외)"},
+                "opt_result": {"type": "string", "description": "부가 정보 요청. 쉼표로 구분하여 다중 선택. (예: ebookList, usedList)"}
+            }, 
+            "required": ["query"]
+        }
+    ),
+    "ItemList_aladin": (
+        AladinAPI,
+        "_get_item_list",
+        "알라딘 베스트셀러/신간 리스트 조회",
+        {
+            "type": "object",
+            "properties": {
+                "query_type": {
+                    "type": "string",
+                    "enum": ["ItemNewAll", "ItemNewSpecial", "ItemEditorChoice", "Bestseller", "BlogBest"],
+                    "description": "조회할 리스트 종류"
+                },
+                "search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Foreign", "Music", "DVD", "Used", "eBook", "All"],
+                    "description": "조회 대상 Mall, 기본값: Book(도서)",
+                    "default": "Book"
+                },
+                "sub_search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Music", "DVD", ""],
+                    "description": "SearchTarget이 Used(중고)일 경우, 서브 Mall 지정",
+                    "default": ""
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "시작 페이지, 기본값: 1",
+                    "default": 1
+                },
+                "max_results": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "description": "한 페이지에 보여질 상품 수, 기본값: 10",
+                    "default": 10
+                },
+                "cover": {
+                    "type": "string",
+                    "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"],
+                    "description": "표지 이미지 크기, 기본값: Mid",
+                    "default": "Mid"
+                },
+                "category_id": {
+                    "type": "integer",
+                    "description": "분야의 고유 번호로 리스트를 제한합니다. (기본값: 0, 전체)",
+                    "default": 0
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 연도 (생략 시 현재)"
+                },
+                "month": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 월 (생략 시 현재)"
+                },
+                "week": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 주 (생략 시 현재)"
+                },
+                "output": {
+                    "type": "string",
+                    "enum": ["xml", "js"],
+                    "description": "출력 형식, 기본값: js",
+                    "default": "js"
+                },
+                "out_of_stock_filter": {
+                    "type": "integer",
+                    "enum": [0, 1],
+                    "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
+                    "default": 0
+                }
+            },
+            "required": ["query_type"]
+        }
+    ),
+    "ItemLookup_aladin": (
+        AladinAPI,
+        "_get_item_details",
+        "알라딘 상품 상세 정보 조회",
+        {
+            "type": "object",
+            "properties": {
+                "item_id": {"type": "string", "description": "상품의 고유 ID (ISBN, ISBN13, 또는 알라딘 ItemId)"},
+                "item_id_type": {"type": "string", "enum": ["ISBN", "ISBN13", "ItemId"], "default": "ISBN13", "description": "ItemId의 종류"},
+                "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
+                "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
+                "opt_result": {"type": "string", "default": "", "description": "부가 정보 요청 (Toc, authors, reviewList, etc)"}
+            },
+            "required": ["item_id"]
+        }
+    ),
+
+    # ===== Kakao Local =====
+    "PlaceSearch_kakao": (
+        KakaoLocal, 
+        "_place_search", 
+        "키워드 장소 검색", 
+        {
+            "type": "object", 
+            "properties": {
+                "keyword": {"type": "string", "description": "검색 키워드"},
+                "x": {"type": "number", "description": "중심 경도"},
+                "y": {"type": "number", "description": "중심 위도"},
+                "page": {"type": "integer", "description": "페이지 번호"},
+                "size": {"type": "integer", "description": "검색 결과 개수"},
+                "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "description": "반경(m)"},
+                "sort": {"type": "string", "enum": ["distance", "accuracy"], "default": "accuracy"}
+            }, 
+            "required": ["keyword"]
+        }
+    ),
+    "AddressToCoord_kakao": (
+        KakaoLocal,
+        "_address_to_coord",
+        "주소를 좌표로 변환",
+        {
+            "type": "object",
+            "properties": {
+                "address": {"type": "string", "description": "변환할 주소"}
+            },
+            "required": ["address"]
+        }
+    ),
+    "CategorySearch_kakao": (
+        KakaoLocal,
+        "_category_search",
+        "카테고리별 장소 검색",
+        {
+            "type": "object",
+            "properties": {
+                "category": {"type": "string", "description": "카테고리 코드 (예: CE7=카페)"},
+                "x": {"type": "number", "description": "중심 경도"},
+                "y": {"type": "number", "description": "중심 위도"},
+                "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "default": 1000},
+                "size": {"type": "integer", "minimum": 1, "maximum": 15, "default": 15}
+            },
+            "required": ["category", "x", "y"]
+        }
+    ),
+    "CoordToAddress_kakao": (
+        KakaoLocal,
+        "_coord_to_address",
+        "위경도 좌표를 주소로 변환 (Kakao Local)",
+        {
+            "type": "object",
+            "properties": {
+                "latitude": {"type": "number", "description": "위도 (예: 37.4979)"},
+                "longitude": {"type": "number", "description": "경도 (예: 127.0276)"},
+            },
+            "required": ["latitude", "longitude"],
+        },
+    ),
+
+    # ===== Tmap Navigation =====
+    "POISearch_tmap": (
+        TmapNavigation,
+        "POISearch_tmap",
+        "T map을 통해 키워드로 전국의 장소(POI)를 검색합니다. 맛집, 병원, 주유소, 관광지 등 150만 건의 POI 데이터를 검색할 수 있습니다.",
+        {
+            "type": "object",
+            "properties": {
+                "searchKeyword": {
+                    "type": "string",
+                    "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 병원, 부산 맛집, 서울 이마트). 지역명을 포함하여 검색하세요."
+                },
+                "count": {
+                    "type": "integer",
+                    "description": "검색 결과 개수 (기본값: 10, 최대: 200)",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 200
+                },
+                "centerLon": {
+                    "type": "number",
+                    "description": "검색 중심점 경도 (선택사항, centerLat과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "centerLat": {
+                    "type": "number",
+                    "description": "검색 중심점 위도 (선택사항, centerLon과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "page": {
+                    "type": "integer",
+                    "description": "페이지 번호 (더 많은 결과가 필요할 때 사용)",
+                    "default": 1,
+                    "minimum": 1
+                }
+            },
+            "required": ["searchKeyword"]
+        }
+    ),
+    "CarRoute_tmap": (
+        TmapNavigation,
+        "CarRoute_tmap",
+        "자동차 경로 안내 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "startX": {"type": "number", "description": "출발지 경도"},
+                "startY": {"type": "number", "description": "출발지 위도"},
+                "endX": {"type": "number", "description": "도착지 경도"},
+                "endY": {"type": "number", "description": "도착지 위도"},
+                "searchOption": {"type": "integer", "default": 0, "description": "경로 옵션 (0: 추천, 2: 최단거리 등)"}
+            },
+            "required": ["startX", "startY", "endX", "endY"]
+        }
+    ),
+    "Geocoding_tmap": (
+        TmapNavigation,
+        "Geocoding_tmap",
+        "주소 좌표 변환 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "city_do": {"type": "string", "description": "시/도 (예: 서울특별시)"},
+                "gu_gun": {"type": "string", "description": "구/군 (예: 강남구)"},
+                "dong": {"type": "string", "description": "동 (예: 역삼동)"},
+                "bunji": {"type": "string", "description": "번지 (선택)", "default": ""},
+                "detailAddress": {"type": "string", "description": "상세주소 (선택)", "default": ""}
+            },
+            "required": ["city_do", "gu_gun", "dong"]
+        }
+    ),
+    "WalkRoute_tmap": (
+        TmapNavigation,
+        "WalkRoute_tmap",
+        "보행자 경로 안내 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "startX": {"type": "number"},
+                "startY": {"type": "number"},
+                "endX": {"type": "number"},
+                "endY": {"type": "number"},
+            },
+            "required": ["startX", "startY", "endX", "endY"],
+        },
+    ),
+    "CategorySearch_tmap": (
+        TmapNavigation,
+        "CategorySearch_tmap",
+        "카테고리 장소 검색 (Tmap)",
+        {
+            "type": "object",
+            "properties": {
+                "categories": {"type": "string"},
+                "centerLon": {"type": "number"},
+                "centerLat": {"type": "number"},
+                "radius": {"type": "integer", "default": 1},
+                "count": {"type": "integer", "default": 20},
+            },
+            "required": ["categories", "centerLon", "centerLat"],
+        },
+    ),
+}
 
 
-def run_benchmark_on_dataset(
-    level_name: str,
-    tasks: List[Dict],
-    model_name: str = "gpt-4.1",
-    use_local: bool = False,
-    max_steps: int = 10,  
-    timeout: int = 60,
-    save_logs: bool = True,
-    log_dir: str = "logs/benchmark_results",
-    run_timestamp: str = None,
-    **adapter_config: Any
-) -> List[Dict[str, Any]]:
-    """Run benchmark on a specific dataset level.
     
-    Args:
-        level_name: Dataset level name (L1, L2, etc.)
-        tasks: List of tasks to execute
-        model_name: LLM model identifier
-        use_local: If True, use TransformersAdapter for local inference
-        max_steps: Maximum steps per task
-        timeout: Timeout per task in seconds
-        save_logs: Whether to save results to JSON
-        log_dir: Directory to save logs
-        run_timestamp: Timestamp for the entire run (shared across levels)
-        **adapter_config: Additional adapter configuration
+
+
+def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
+    """Resolve given tool names to concrete BaseTool classes via catalog."""
+    api_instances: Dict[Type[Any], Any] = {}
+    resolved: List[Type[BaseTool]] = []
+    seen: set[str] = set()
+
+    print(f"🔍 DEBUG resolve_tool_classes: Input tool_names = {tool_names}")
+
+    for name in tool_names:
+        if name in seen:
+            print(f"  ⏭️  Skipping duplicate: {name}")
+            continue
         
-    Returns:
-        List of detailed task results
-    """
-    print(f"\n{'='*80}")
-    print(f"Running Benchmark: {level_name} ({len(tasks)} tasks)")
-    print(f"Model: {model_name}")
-    print(f"{'='*80}\n")
-    
-    # Debug: Check tasks type
-    print(f"DEBUG: tasks type = {type(tasks)}")
-    if isinstance(tasks, list) and len(tasks) > 0:
-        print(f"DEBUG: first task type = {type(tasks[0])}")
-    
-    # Convert dataset format to runner format (always use full set)
-    converted_tasks = convert_dataset_to_tasks(tasks)
-    
-    # Collect all required tools
-    all_required_tools = []
-    for task in converted_tasks:
-        for tool in task.get("available_tools", []):
-            if tool not in all_required_tools:
-                all_required_tools.append(tool)
-    
-    print(f"Required tools: {all_required_tools}")
-    
-    # 입력된 이름을 그대로 사용
-    print(f"Tools: {all_required_tools}")
-    
-    # Resolve and register tools
-    tool_classes = resolve_tool_classes(all_required_tools)
-    missing_tools = [t for t in all_required_tools if t not in TOOL_CATALOG]
-    if missing_tools:
-        print(f"[WARNING] Missing tools in catalog: {missing_tools}")
-    
-    # Setup components
-    registry = create_tool_registry(tool_classes)
-    
-    # DEBUG: Check registered tools and their schemas
-    print(f"\n[DEBUG] Registered tools in registry:")
-    registered_tool_names = registry.get_available_tools()
-    print(f"  Tool names: {registered_tool_names}")
-    
-    if registered_tool_names:
-        print(f"\n  Tool schemas:")
-        for tool_name in registered_tool_names[:3]:  # Show first 3
-            tool = registry.get_tool(tool_name)
-            if tool:
-                schema = tool.get_schema()
-                print(f"    - {tool_name}:")
-                print(f"      Schema keys: {list(schema.keys())}")
-                if 'function' in schema:
-                    print(f"      Function name: {schema['function'].get('name')}")
-                    print(f"      Description: {schema['function'].get('description')[:50]}...")
-    else:
-        print("  [WARNING] No tools registered!")
-    
-    # Create adapter based on use_local flag
-    if use_local:
-        print(f"\n[LOCAL] Using TransformersAdapter for local inference")
-        adapter = TransformersAdapter(model_name, **adapter_config)
-    else:
-        print(f"\n[API] Using LiteLLMAdapter for API inference")
-        adapter = LiteLLMAdapter(model_name, **adapter_config)
-    
-    runner = BenchmarkRunner(adapter, registry, max_steps=max_steps, timeout=timeout)
-    
-    all_results = []
-    
-    # Execute tasks
-    for i, task in enumerate(converted_tasks, 1):
-        print(f"\n{'─'*80}")
-        print(f"Task {i}/{len(converted_tasks)}: {task['id']}")
-        print(f"Level: {task['level']} | Category: {task['category']}")
-        print(f"Instruction: {task['description']}")
-        print(f"Expected tools: {task['available_tools']}")
+        # 별칭/정규화 제거: 입력된 이름을 그대로 사용
+        seen.add(name)
+
+        entry = TOOL_CATALOG.get(name)
+        if not entry:
+            print(f"  ❌ Tool '{name}' NOT FOUND in TOOL_CATALOG")
+            print(f"     Available tools: {list(TOOL_CATALOG.keys())[:5]}...")
+            continue
         
-        # Log multi-turn conversation context if present
-        if task.get("conversation_tracking") and isinstance(task["conversation_tracking"].get("turns"), list):
-            turns = task["conversation_tracking"]["turns"]
-            valid_turns = [t for t in turns if t.get("role") in ("user", "assistant") and t.get("content")]
-            print(f"\n[MULTI-TURN] Multi-turn conversation context:")
-            print(f"   Total turns to seed: {len(valid_turns)}")
-            for idx, turn in enumerate(valid_turns, 1):
-                role = turn.get("role", "unknown")
-                content = turn.get("content", "")
-                content_preview = content[:100] + "..." if len(content) > 100 else content
-                print(f"   Turn {idx} [{role}]: {content_preview}")
-                
-                # Log any tool actions in this turn (for reference)
-                if turn.get("actions"):
-                    for action in turn["actions"]:
-                        tool_name = action.get("tool", "unknown")
-                        print(f"      [TOOL] Expected tool: {tool_name}")
-        
-        print(f"{'─'*80}")
-        
-        try:
-            result = runner.run_task(task)
-            
-            # Add original task information
-            result['task_id'] = task['id']
-            result['instruction'] = task['description']
-            result['level'] = task['level']
-            result['category'] = task['category']
-            result['expected_tools'] = task['available_tools']
-            result['golden_action'] = task['golden_action']
-            # Include dataset guidance fields for analysis
-            if 'minimum_steps' in task:
-                result['minimum_steps'] = task.get('minimum_steps')
-            if 'data_flow' in task:
-                result['data_flow'] = task.get('data_flow', [])
-            if 'error_injection' in task:
-                result['error_injection'] = task.get('error_injection')
-            all_results.append(result)
-            
-            # Print summary
-            print(f"\n[RESULT] Success: {result['success']}")
-            print(f"  Execution time: {result['execution_time']:.2f}s")
-            print(f"  Steps taken: {result['steps_taken']}")
-            
-            # Print tool call details
-            tool_invocations = result.get('tool_invocations', [])
-            if tool_invocations:
-                print(f"  Tool calls: {len(tool_invocations)}")
-                for inv in tool_invocations:
-                    print(f"    • Step {inv.get('step')}: {inv.get('tool_name')}")
-                    print(f"      Args: {inv.get('arguments')}")
-                    print(f"      Success: {inv.get('success')}")
-                    if inv.get('error'):
-                        print(f"      Error: {inv.get('error')}")
-            else:
-                print(f"  Tool calls: 0 (no tools used)")
-            
-            # Print conversation summary for multi-turn tasks
-            if result.get('result') and result['result'].get('conversation'):
-                conversation = result['result']['conversation']
-                print(f"\n  [CONVERSATION] Conversation summary:")
-                print(f"     Total messages: {len(conversation)}")
-                
-                # Show last few messages
-                last_messages = conversation[-3:] if len(conversation) > 3 else conversation
-                for msg in last_messages:
-                    role = msg.get('role', 'unknown')
-                    content = msg.get('content', '')
-                    if content:
-                        preview = content[:80] + "..." if len(content) > 80 else content
-                        print(f"     [{role}]: {preview}")
-            
-            if result.get('result') and result['result'].get('final_response'):
-                response = result['result']['final_response']
-                preview = response[:200] + "..." if len(response) > 200 else response
-                print(f"  Response: {preview}")
-                
-        except Exception as e:
-            print(f"\n[ERROR] Execution failed: {e}")
-            all_results.append({
-                "task_id": task.get('id', 'unknown'),
-                "instruction": task.get('description', ''),
-                "level": task.get('level', 0),
-                "category": task.get('category', 'unknown'),
-                "expected_tools": task.get('available_tools', []),
-                "golden_action": task.get('golden_action', []),
-                "minimum_steps": task.get('minimum_steps'),
-                "data_flow": task.get('data_flow', []),
-                "success": False,
-                "error": str(e),
-                "execution_time": 0,
-                "steps_taken": 0,
-                "tool_invocations": []
-            })
-    
-    # Save results
-    if save_logs and all_results:
-        try:
-            filepath = save_detailed_results(all_results, model_name, level_name, log_dir, run_timestamp)
-            print(f"\n{'='*80}")
-            print(f"Results saved to: {filepath}")
-            print(f"{'='*80}\n")
-        except Exception as e:
-            print(f"\n[ERROR] Failed to save results: {e}\n")
-    
-    return all_results
+        print(f"  ✅ Found '{name}' in catalog")
+        api_class, method_name, description, parameters_schema = entry
+
+        if api_class not in api_instances:
+            api_instances[api_class] = api_class()
+            print(f"     Created instance of {api_class.__name__}")
+        api_instance = api_instances[api_class]
+
+        tool_class = make_method_tool_class(
+            name=name,
+            description=description,
+            api_instance=api_instance,
+            method_name=method_name,
+            parameters_schema=parameters_schema,
+        )
+        resolved.append(tool_class)
+        print(f"     ✅ Tool class created for '{name}'")
+
+    print(f"🔍 DEBUG resolve_tool_classes: Resolved {len(resolved)} tools")
+    return resolved
 
 
-def main():
-    """Main execution function."""
-    parser = argparse.ArgumentParser(description="Ko-AgentBench runner with tool-call logging")
-    parser.add_argument("--levels", type=str, default=None,
-                        help="Comma-separated levels to run (e.g., L6,L7). Default: all detected")
-    # removed --limit: always run full level
-    parser.add_argument("--max-steps", type=int, default=10,
-                        help="Maximum steps per task")
-    parser.add_argument("--timeout", type=int, default=60,
-                        help="Timeout (seconds) per task")
-    parser.add_argument("--no-save-logs", action="store_true",
-                        help="Do not save JSON logs to disk")
-    parser.add_argument("--model", type=str, default=None,
-                        help="Explicit model id (overrides auto selection)")
-    parser.add_argument("--use-local", action="store_true",
-                        help="Use local transformers inference instead of API")
-    parser.add_argument("--quantization", type=str, default=None, choices=['4bit', '8bit'],
-                        help="Quantization method for local models (4bit or 8bit)")
-    parser.add_argument("--device", type=str, default="auto",
-                        help="Device for local inference (cuda, cpu, auto)")
-    parser.add_argument("--dtype", type=str, default="auto",
-                        choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
-                        help="Torch dtype for local models")
-    parser.add_argument("--cache-mode", type=str, default="read",
-                        choices=['read', 'write'],
-                        help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
-
-    args = parser.parse_args()
-    
-    # Set cache mode from command-line argument
-    set_cache_mode(args.cache_mode)
-    print(f"Cache mode: {args.cache_mode}")
-
-    print("="*80)
-    print("Ko-AgentBench Dataset Runner with Tool Call Logging")
-    print("="*80)
-    
-    # Load environment variables
-    load_dotenv()
-    
-    # Set API keys environment variables if available from secrets
-    if AZURE_API_KEY:
-        os.environ['AZURE_API_KEY'] = AZURE_API_KEY
-    if AZURE_API_BASE:
-        os.environ['AZURE_API_BASE'] = AZURE_API_BASE
-    if AZURE_API_VERSION:
-        os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
-    if ANTHROPIC_API_KEY:
-        os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
-    if GEMINI_API_KEY:
-        os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
-    
-    # Check API keys (include Azure/Google for better provider detection)
-    provider_keys = [
-        "HUGGINGFACE_API_KEY",
-        "OPENAI_API_KEY",
-        "ANTHROPIC_API_KEY",
-        "GROQ_API_KEY",
-        "AZURE_API_KEY",
-        "GOOGLE_API_KEY",
-    ]
-    found_keys = [k for k in provider_keys if os.getenv(k)]
-    if not found_keys:
-        print("[WARNING] No LLM API keys found in environment")
-    else:
-        print(f"[OK] Found API keys: {found_keys}")
-    
-    # Load datasets
-    print("\nLoading benchmark datasets...")
-    datasets = load_benchmark_datasets("bench/tasks")
-    
-    if not datasets:
-        print("[ERROR] No datasets found in bench/tasks/ directory")
-        return
-    
-    print(f"\n[OK] Loaded {len(datasets)} dataset levels")
-    
-    # Select a model compatible with available provider keys
-    def _provider_ready(model_id: str) -> bool:
-        """Return True if the provider for model_id has required env keys."""
-        # Model id format: "<provider>/<model_name>"
-        if "/" not in model_id:
-            return False
-        provider = model_id.split("/", 1)[0].lower()
-        if provider == "azure":
-            return bool(os.getenv("AZURE_API_KEY") and os.getenv("AZURE_API_BASE") and os.getenv("AZURE_API_VERSION"))
-        if provider == "openai":
-            return bool(os.getenv("OPENAI_API_KEY"))
-        if provider == "anthropic":
-            return bool(os.getenv("ANTHROPIC_API_KEY"))
-        if provider == "groq":
-            return bool(os.getenv("GROQ_API_KEY"))
-        if provider == "gemini":
-            return bool(os.getenv("GEMINI_API_KEY"))
-        if provider == "huggingface":
-            return bool(os.getenv("HUGGINGFACE_API_KEY"))
-        return False
-
-    selected_model = None
-    if MODEL_IDS:
-        # Prefer the first model in MODEL_IDS that matches available keys
-        for m in MODEL_IDS:
-            if _provider_ready(m):
-                selected_model = m
-                break
-        # Fallback: keep existing preference order if none match, but warn
-        if selected_model is None:
-            selected_model = MODEL_IDS[0]
-            print(
-                f"[WARNING] No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
-                f"  Tip: Set provider keys to match one of: {MODEL_IDS}"
-            )
-    else:
-        # Final fallback
-        selected_model = "openai/gpt-4.1" if os.getenv("OPENAI_API_KEY") else "azure/gpt-4.1"
-    
-    # Override model from CLI if provided
-    if args.model:
-        selected_model = args.model
-    print(f"\nSelected model: {selected_model}")
-    
-    # For local inference, model name doesn't need provider prefix
-    if args.use_local:
-        # Remove provider prefix if present (e.g., "huggingface/Qwen/..." -> "Qwen/...")
-        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "gemini"]:
-            selected_model = "/".join(selected_model.split("/")[1:])
-        print(f"Using local inference mode")
-        print(f"Model: {selected_model}")
-        if args.quantization:
-            print(f"Quantization: {args.quantization}")
-        print(f"Device: {args.device}")
-        print(f"Dtype: {args.dtype}")
-    
-    # Prepare adapter config for local models
-    adapter_config = {}
-    if args.use_local:
-        adapter_config['device'] = args.device
-        adapter_config['dtype'] = args.dtype
-        if args.quantization:
-            adapter_config['quantization'] = args.quantization
-        # Context management is now handled automatically by TransformersAdapter
-        # based on model config (max_position_embeddings, etc.)
-    
-    # Run benchmarks on each level
-    all_level_results = {}
-    
-    # Create a single timestamp for the entire run
-    run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
-    # Determine which levels to run
-    if args.levels:
-        levels_to_run = [lvl.strip() for lvl in args.levels.split(',') if lvl.strip()]
-    else:
-        # Default: run all discovered levels (including multi-turn L6/L7)
-        levels_to_run = sorted(list(datasets.keys()))
-    
-    for level_name in levels_to_run:
-        if level_name in datasets:
-            results = run_benchmark_on_dataset(
-                level_name=level_name,
-                tasks=datasets[level_name],
-                model_name=selected_model,
-                use_local=args.use_local,
-                max_steps=args.max_steps,
-                timeout=args.timeout,
-                save_logs=(not args.no_save_logs),
-                log_dir="logs/benchmark_results",
-                run_timestamp=run_timestamp,
-                **adapter_config
-            )
-            all_level_results[level_name] = results
-        else:
-            print(f"[WARNING] {level_name} not found in datasets")
-    
-    # Print overall summary
-    print("\n" + "="*80)
-    print("OVERALL SUMMARY")
-    print("="*80)
-    for level_name, results in all_level_results.items():
-        total = len(results)
-        success = sum(1 for r in results if r.get('success', False))
-        success_rate = (success / total * 100) if total > 0 else 0
-        print(f"{level_name}: {success}/{total} tasks successful ({success_rate:.1f}%)")
-    print("="*80)
-
-
-if __name__ == "__main__":
-    main()
+__all__ = ["TOOL_CATALOG", "resolve_tool_classes"]
