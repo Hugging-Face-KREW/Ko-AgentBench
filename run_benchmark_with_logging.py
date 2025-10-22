@@ -24,20 +24,22 @@ from bench.adapters.transformers_adapter import TransformersAdapter
 from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
-from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
+from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
+from bench.config import set_cache_mode
 
 # Import API keys from secrets
 from configs.secrets import (
     AZURE_API_KEY, 
     AZURE_API_BASE, 
     AZURE_API_VERSION,
-    ANTHROPIC_API_KEY
+    ANTHROPIC_API_KEY,
+    GEMINI_API_KEY
 )
 
 
 
-def load_benchmark_datasets(data_dir: str = "data") -> Dict[str, List[Dict]]:
-    """Load all benchmark datasets from data directory.
+def load_benchmark_datasets(data_dir: str = "bench/tasks") -> Dict[str, List[Dict]]:
+    """Load all benchmark datasets from bench/tasks directory.
     
     Args:
         data_dir: Directory containing L1.json ~ L7.json files
@@ -122,17 +124,16 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                         tools_needed.append(tool_name)
                         print(f"  [OK] Found tool in turn.action: {tool_name}")
         
-        # Normalize tool names to match registry keys
-        normalized_tools_needed = [normalize_tool_name(t) for t in tools_needed]
-        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed} → normalized = {normalized_tools_needed}")
+        # 선언된 도구 이름을 그대로 사용
+        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
             "description": task.get("instruction", ""),
             "expected_output": task.get("resp_schema", {}),
-            "available_tools": normalized_tools_needed,  # normalized for runner compatibility
+            "available_tools": tools_needed,
             # keep backward-compat with runner that expects 'tools'
-            "tools": normalized_tools_needed,
+            "tools": tools_needed,
             "level": task.get("task_level", 0),
             "category": task.get("task_category", "unknown"),
             "golden_action": task.get("golden_action", []),
@@ -140,7 +141,8 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
             "arg_schema": task.get("arg_schema", {}),
             # Pass through evaluation helpers if present
             "minimum_steps": task.get("minimum_steps"),
-            "data_flow": task.get("data_flow", [])
+            "data_flow": task.get("data_flow", []),
+            "error_injection": task.get("error_injection")
         }
         converted_tasks.append(converted_task)
     
@@ -169,6 +171,12 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "golden_action": result.get("golden_action", []),
         "minimum_steps": result.get("minimum_steps"),
         "data_flow": result.get("data_flow", []),
+        "error_injection": result.get("error_injection"),
+        "token_usage": result.get("token_usage", {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0
+        }),
     }
     
     # Extract tool calls in a simplified format with results
@@ -244,7 +252,8 @@ def save_detailed_results(
     results: List[Dict[str, Any]], 
     model_name: str, 
     level_name: str,
-    output_dir: str = "logs/benchmark_results"
+    output_dir: str = "logs/benchmark_results",
+    run_timestamp: str = None
 ) -> str:
     """Save detailed benchmark results including tool call information.
     
@@ -253,16 +262,24 @@ def save_detailed_results(
         model_name: Name of the model used
         level_name: Dataset level (L1, L2, etc.)
         output_dir: Directory to save logs
+        run_timestamp: Timestamp for the run (if None, creates new one)
         
     Returns:
         Path to saved JSON file
     """
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    # Create timestamp for this run if not provided
+    if run_timestamp is None:
+        run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     model_safe_name = model_name.replace("/", "_")
-    filename = f"{level_name}_{model_safe_name}_{timestamp}.json"
-    filepath = Path(output_dir) / filename
+    
+    # Create by_model structure: logs/benchmark_results/by_model/{model}/{timestamp}/
+    by_model_path = Path(output_dir) / "by_model" / model_safe_name / run_timestamp
+    by_model_path.mkdir(parents=True, exist_ok=True)
+    
+    # Save result file in the by_model folder
+    filename = f"{level_name}.json"
+    filepath = by_model_path / filename
     
     # Simplify and flatten results
     simplified_results = [simplify_result(r) for r in results]
@@ -273,6 +290,20 @@ def save_detailed_results(
     total_time = sum(r.get('execution_time', 0) for r in simplified_results)
     total_steps = sum(r.get('steps_taken', 0) for r in simplified_results)
     total_tool_calls = sum(len(r.get('tool_calls', [])) for r in simplified_results)
+
+    # 토큰 통계 추가
+    total_prompt_tokens = 0
+    total_completion_tokens = 0
+    total_tokens = 0
+
+    for result in simplified_results:
+        token_usage = result.get('token_usage', {})
+        total_prompt_tokens += token_usage.get('prompt_tokens', 0)
+        total_completion_tokens += token_usage.get('completion_tokens', 0)
+        total_tokens += token_usage.get('total_tokens', 0)
+
+    # TPS 계산
+    average_tps = total_tokens / total_time if total_time > 0 else 0
     
     # Tool usage statistics
     tool_usage_stats = {}
@@ -306,6 +337,11 @@ def save_detailed_results(
             "average_steps": round(total_steps / total_tasks, 2) if total_tasks > 0 else 0,
             "total_tool_calls": total_tool_calls,
             "average_tool_calls": round(total_tool_calls / total_tasks, 2) if total_tasks > 0 else 0,
+            "total_tokens": total_tokens,
+            "average_tokens_per_task": round(total_tokens / total_tasks, 2) if total_tasks > 0 else 0,
+            "average_prompt_tokens": round(total_prompt_tokens / total_tasks, 2) if total_tasks > 0 else 0,
+            "average_completion_tokens": round(total_completion_tokens / total_tasks, 2) if total_tasks > 0 else 0,
+            "average_tps": round(average_tps, 2),
         },
         "tool_usage_statistics": tool_usage_stats,
         "results": simplified_results
@@ -326,6 +362,7 @@ def run_benchmark_on_dataset(
     timeout: int = 60,
     save_logs: bool = True,
     log_dir: str = "logs/benchmark_results",
+    run_timestamp: str = None,
     **adapter_config: Any
 ) -> List[Dict[str, Any]]:
     """Run benchmark on a specific dataset level.
@@ -339,6 +376,7 @@ def run_benchmark_on_dataset(
         timeout: Timeout per task in seconds
         save_logs: Whether to save results to JSON
         log_dir: Directory to save logs
+        run_timestamp: Timestamp for the entire run (shared across levels)
         **adapter_config: Additional adapter configuration
         
     Returns:
@@ -366,14 +404,12 @@ def run_benchmark_on_dataset(
     
     print(f"Required tools: {all_required_tools}")
     
-    # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
-    # 별칭을 실제 도구 이름으로 변환
-    normalized_tools = [normalize_tool_name(t) for t in all_required_tools]
-    print(f"Normalized tools: {normalized_tools}")
+    # 입력된 이름을 그대로 사용
+    print(f"Tools: {all_required_tools}")
     
     # Resolve and register tools
     tool_classes = resolve_tool_classes(all_required_tools)
-    missing_tools = [t for t in normalized_tools if t not in TOOL_CATALOG]
+    missing_tools = [t for t in all_required_tools if t not in TOOL_CATALOG]
     if missing_tools:
         print(f"[WARNING] Missing tools in catalog: {missing_tools}")
     
@@ -454,6 +490,8 @@ def run_benchmark_on_dataset(
                 result['minimum_steps'] = task.get('minimum_steps')
             if 'data_flow' in task:
                 result['data_flow'] = task.get('data_flow', [])
+            if 'error_injection' in task:
+                result['error_injection'] = task.get('error_injection')
             all_results.append(result)
             
             # Print summary
@@ -515,7 +553,7 @@ def run_benchmark_on_dataset(
     # Save results
     if save_logs and all_results:
         try:
-            filepath = save_detailed_results(all_results, model_name, level_name, log_dir)
+            filepath = save_detailed_results(all_results, model_name, level_name, log_dir, run_timestamp)
             print(f"\n{'='*80}")
             print(f"Results saved to: {filepath}")
             print(f"{'='*80}\n")
@@ -545,11 +583,18 @@ def main():
                         help="Quantization method for local models (4bit or 8bit)")
     parser.add_argument("--device", type=str, default="auto",
                         help="Device for local inference (cuda, cpu, auto)")
-    parser.add_argument("--torch-dtype", type=str, default="auto",
+    parser.add_argument("--dtype", type=str, default="auto",
                         choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
                         help="Torch dtype for local models")
+    parser.add_argument("--cache-mode", type=str, default="read",
+                        choices=['read', 'write'],
+                        help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
 
     args = parser.parse_args()
+    
+    # Set cache mode from command-line argument
+    set_cache_mode(args.cache_mode)
+    print(f"Cache mode: {args.cache_mode}")
 
     print("="*80)
     print("Ko-AgentBench Dataset Runner with Tool Call Logging")
@@ -558,7 +603,7 @@ def main():
     # Load environment variables
     load_dotenv()
     
-    # Set Azure OpenAI environment variables if available from secrets
+    # Set API keys environment variables if available from secrets
     if AZURE_API_KEY:
         os.environ['AZURE_API_KEY'] = AZURE_API_KEY
     if AZURE_API_BASE:
@@ -567,6 +612,8 @@ def main():
         os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
     if ANTHROPIC_API_KEY:
         os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
+    if GEMINI_API_KEY:
+        os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
     
     # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [
@@ -575,7 +622,7 @@ def main():
         "ANTHROPIC_API_KEY",
         "GROQ_API_KEY",
         "AZURE_API_KEY",
-        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
@@ -585,10 +632,10 @@ def main():
     
     # Load datasets
     print("\nLoading benchmark datasets...")
-    datasets = load_benchmark_datasets("data")
+    datasets = load_benchmark_datasets("bench/tasks")
     
     if not datasets:
-        print("[ERROR] No datasets found in data/ directory")
+        print("[ERROR] No datasets found in bench/tasks/ directory")
         return
     
     print(f"\n[OK] Loaded {len(datasets)} dataset levels")
@@ -608,8 +655,8 @@ def main():
             return bool(os.getenv("ANTHROPIC_API_KEY"))
         if provider == "groq":
             return bool(os.getenv("GROQ_API_KEY"))
-        if provider in ("google", "gemini"):
-            return bool(os.getenv("GOOGLE_API_KEY"))
+        if provider == "gemini":
+            return bool(os.getenv("GEMINI_API_KEY"))
         if provider == "huggingface":
             return bool(os.getenv("HUGGINGFACE_API_KEY"))
         return False
@@ -640,25 +687,30 @@ def main():
     # For local inference, model name doesn't need provider prefix
     if args.use_local:
         # Remove provider prefix if present (e.g., "huggingface/Qwen/..." -> "Qwen/...")
-        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "google", "gemini"]:
+        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "gemini"]:
             selected_model = "/".join(selected_model.split("/")[1:])
         print(f"Using local inference mode")
         print(f"Model: {selected_model}")
         if args.quantization:
             print(f"Quantization: {args.quantization}")
         print(f"Device: {args.device}")
-        print(f"Torch dtype: {args.torch_dtype}")
+        print(f"Dtype: {args.dtype}")
     
     # Prepare adapter config for local models
     adapter_config = {}
     if args.use_local:
         adapter_config['device'] = args.device
-        adapter_config['torch_dtype'] = args.torch_dtype
+        adapter_config['dtype'] = args.dtype
         if args.quantization:
             adapter_config['quantization'] = args.quantization
+        # Context management is now handled automatically by TransformersAdapter
+        # based on model config (max_position_embeddings, etc.)
     
     # Run benchmarks on each level
     all_level_results = {}
+    
+    # Create a single timestamp for the entire run
+    run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     # Determine which levels to run
     if args.levels:
@@ -678,6 +730,7 @@ def main():
                 timeout=args.timeout,
                 save_logs=(not args.no_save_logs),
                 log_dir="logs/benchmark_results",
+                run_timestamp=run_timestamp,
                 **adapter_config
             )
             all_level_results[level_name] = results

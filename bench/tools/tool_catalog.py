@@ -5,21 +5,21 @@ task-declared tool names, without changing runner logic.
 """
 
 from __future__ import annotations
+
 from typing import Any, Dict, List, Tuple, Type
 
+from .aladin_search import AladinAPI
 from .base_api import BaseTool
+from .bithumb_stock import BithumbStock
+from .daum_search import DaumSearchAPI
+from .kakao_local import KakaoLocal
+from .kis_stock import KISStock
+from .ls_stock import LSStock
 from .method_tool_wrapper import make_method_tool_class
 from .naver_directions import NaverMapsAPI
-from .ls_stock import LSStock
-from .bithumb_stock import BithumbStock
-from .upbit_crypto import UpbitCrypto
 from .naver_search import NaverSearchAPI
-from .daum_search import DaumSearchAPI
-from .aladin_search import AladinAPI
-from .kakao_local import KakaoLocal
-from .tmap_navigation import TmapNavigation 
-from .kis_stock import KISStock 
-
+from .tmap_navigation import TmapNavigation
+from .upbit_crypto import UpbitCrypto
 
 # Catalog entry: tool_name -> (api_class, method_name, description, parameters_schema)
 TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
@@ -45,32 +45,12 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "required": ["start", "goal"],
         },
     ),
-    "_directions": (
-        NaverMapsAPI,
-        "Directions_naver",
-        "입력 정보(출발지, 경유지, 목적지 등)를 기반으로 자동차 경로 조회",
-        {
-            "type": "object",
-            "properties": {
-                "start": {"type": "string", "description": "출발지(경도,위도) (예: 127.12345,37.12345)"},
-                "goal": {"type": "string", "description": "도착지 좌표 문자열 (예: '123.45678,34.56789')"},
-                "waypoints": {"type": "string", "description": "경유지 좌표 문자열. '|'로 구분 (최대 5개)"},
-                "option": {
-                    "type": "string",
-                    "enum": ["trafast", "tracomfort", "traoptimal", "traavoidtoll", "traavoidcaronly", "trafast:traavoidtoll"],
-                    "description": "경로 조회 옵션",
-                },
-            },
-            "required": ["start", "goal"],
-        },
-    ),
-
     # ===== LS Stock =====
-    "StockSearch_ls": (
+    "StockPrice_ls": (
         LSStock,
-        "_stock_search",
-        "종목 검색, LS증권 Open API를 활용합니다.",
-        {"type": "object", "properties": {"query_index": {"type": "string", "description": "검색할 종목명 또는 코드"}}, "required": ["query_index"]},
+        "_stock_price",
+        "주식 현재가 조회, LS증권 Open API를 활용합니다.",
+        {"type": "object", "properties": {"shcode": {"type": "string", "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)","pattern": "^[0-9]{6}$"},"exchgubun": {"type": "string", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", "enum": ["K", "N", "U"], "default": "K"}}, "required": ["shcode"]},
     ),
     "MarketIndex_ls": (
         LSStock,
@@ -110,7 +90,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object",
             "properties": {
                 "shcode": {"type": "string", "description": "종목 코드"},
-                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "K", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)"}
+                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "N", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)"}
             },
             "required": ["shcode"]
         }
@@ -163,7 +143,16 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         BithumbStock,
         "_cryptoPrice_bithumb",
         "빗썸 암호화폐 현재가 정보 조회",
-        {"type": "object", "properties": {"markets": {"type": "string", "default": "KRW-BTC"}}, "required": ["markets"]},
+    {
+        "type": "object", "properties": {
+            "markets": {
+                "type": "string",
+                "default": "KRW-BTC",
+                "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+            }
+        },
+            "required": ["markets"]},
     ),
     "OrderBook_bithumb": (
         BithumbStock,
@@ -172,7 +161,12 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "markets": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드 (예: KRW-BTC, BTC-ETH)"}
+                "markets": {
+                    "type": "string",
+                    "default": "KRW-BTC",
+                    "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                    "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+                }
             },
             "required": ["markets"]
         }
@@ -260,9 +254,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"}
             }, 
             "required": ["query"]
         }
@@ -275,9 +268,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim", "description": "정렬 방식 (sim: 정확도순, date: 날짜순)"}
             }, 
             "required": ["query"]
         }
@@ -290,9 +283,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object", 
             "properties": {
                 "query": {"type": "string", "description": "검색어"},
-                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim"}
+                "display": {"type": "integer", "minimum": 1, "maximum": 100, "default": 10, "description": "한 번에 표시할 검색 결과 개수"},
+                "start": {"type": "integer", "minimum": 1, "maximum": 1000, "default": 1, "description": "검색 시작 위치"},
+                "sort": {"type": "string", "enum": ["sim", "date"], "default": "sim", "description": "정렬 방식 (sim: 정확도순, date: 날짜순)"}
             }, 
             "required": ["query"]
         }
@@ -342,7 +335,12 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "query_type": {"type": "string", "enum": ["Keyword", "Title", "Author", "Publisher"], "default": "Keyword"},
                 "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
                 "start": {"type": "integer", "minimum": 1, "default": 1},
-                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"}
+                "sort": {"type": "string", "enum": ["Accuracy", "PublishTime", "Title", "SalesPoint", "CustomerRating"], "default": "Accuracy"},
+                "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
+                "category_id": {"type": "integer", "description": "카테고리 ID"},
+                "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
+                "out_of_stock_filter": {"type": "integer", "enum": [0, 1], "default": 0, "description": "품절/절판 상품 필터링 여부 (1: 제외)"},
+                "opt_result": {"type": "string", "description": "부가 정보 요청. 쉼표로 구분하여 다중 선택. (예: ebookList, usedList)"}
             }, 
             "required": ["query"]
         }
@@ -354,10 +352,71 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "query_type": {"type": "string", "enum": ["Bestseller", "ItemNewAll", "ItemNewSpecial"], "default": "Bestseller"},
-                "search_target": {"type": "string", "enum": ["Book", "Foreign", "eBook"], "default": "Book"},
-                "max_results": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
-                "start": {"type": "integer", "minimum": 1, "default": 1}
+                "query_type": {
+                    "type": "string",
+                    "enum": ["ItemNewAll", "ItemNewSpecial", "ItemEditorChoice", "Bestseller", "BlogBest"],
+                    "description": "조회할 리스트 종류"
+                },
+                "search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Foreign", "Music", "DVD", "Used", "eBook", "All"],
+                    "description": "조회 대상 Mall, 기본값: Book(도서)",
+                    "default": "Book"
+                },
+                "sub_search_target": {
+                    "type": "string",
+                    "enum": ["Book", "Music", "DVD", ""],
+                    "description": "SearchTarget이 Used(중고)일 경우, 서브 Mall 지정",
+                    "default": ""
+                },
+                "start": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "시작 페이지, 기본값: 1",
+                    "default": 1
+                },
+                "max_results": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "description": "한 페이지에 보여질 상품 수, 기본값: 10",
+                    "default": 10
+                },
+                "cover": {
+                    "type": "string",
+                    "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"],
+                    "description": "표지 이미지 크기, 기본값: Mid",
+                    "default": "Mid"
+                },
+                "category_id": {
+                    "type": "integer",
+                    "description": "분야의 고유 번호로 리스트를 제한합니다. (기본값: 0, 전체)",
+                    "default": 0
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 연도 (생략 시 현재)"
+                },
+                "month": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 월 (생략 시 현재)"
+                },
+                "week": {
+                    "type": "integer",
+                    "description": "Bestseller 조회 시 기준 주 (생략 시 현재)"
+                },
+                "output": {
+                    "type": "string",
+                    "enum": ["xml", "js"],
+                    "description": "출력 형식, 기본값: js",
+                    "default": "js"
+                },
+                "out_of_stock_filter": {
+                    "type": "integer",
+                    "enum": [0, 1],
+                    "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
+                    "default": 0
+                }
             },
             "required": ["query_type"]
         }
@@ -440,35 +499,39 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         },
     ),
 
-    # ===== LS Stock (추가) =====
-    "StockPrice_ls": (
-        LSStock,
-        "_stock_price",
-        "LS증권 주식 현재가 조회",
-        {
-            "type": "object",
-            "properties": {
-                "shcode": {"type": "string", "description": "주식 종목코드 (6자리)", "pattern": "^[0-9]{6}$"},
-                "exchgubun": {"type": "string", "enum": ["K", "N", "U"], "default": "K", "description": "거래소 구분 (K: KRX, N: NXT, U: 통합)"}
-            },
-            "required": ["shcode"]
-        }
-    ),
-
     # ===== Tmap Navigation =====
     "POISearch_tmap": (
         TmapNavigation,
         "POISearch_tmap",
-        "POI 통합 검색 (Tmap)",
+        "T map을 통해 키워드로 전국의 장소(POI)를 검색합니다. 맛집, 병원, 주유소, 관광지 등 150만 건의 POI 데이터를 검색할 수 있습니다.",
         {
             "type": "object",
             "properties": {
-                "searchKeyword": {"type": "string", "description": "검색 키워드"},
-                "count": {"type": "integer", "default": 10, "description": "검색 결과 개수"},
-                "centerLon": {"type": "number", "description": "중심 경도"},
-                "centerLat": {"type": "number", "description": "중심 위도"},
-                "radius": {"type": "integer", "description": "반경(m)"},
-                "page": {"type": "integer", "default": 1, "description": "페이지 번호"}
+                "searchKeyword": {
+                    "type": "string",
+                    "description": "검색할 장소명 또는 키워드 (예: 스타벅스, 강남역 병원, 부산 맛집, 서울 이마트). 지역명을 포함하여 검색하세요."
+                },
+                "count": {
+                    "type": "integer",
+                    "description": "검색 결과 개수 (기본값: 10, 최대: 200)",
+                    "default": 10,
+                    "minimum": 1,
+                    "maximum": 200
+                },
+                "centerLon": {
+                    "type": "number",
+                    "description": "검색 중심점 경도 (선택사항, centerLat과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "centerLat": {
+                    "type": "number",
+                    "description": "검색 중심점 위도 (선택사항, centerLon과 함께 사용하여 해당 위치 근처 결과 우선 표시)"
+                },
+                "page": {
+                    "type": "integer",
+                    "description": "페이지 번호 (더 많은 결과가 필요할 때 사용)",
+                    "default": 1,
+                    "minimum": 1
+                }
             },
             "required": ["searchKeyword"]
         }
@@ -539,45 +602,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
 }
 
 
-# TODO: 데이터셋 수정 후 삭제 예정
-# 임시 별칭 매핑: 데이터셋의 구 도구 이름 → TOOL_CATALOG 키로 변환
-TOOL_ALIAS_MAP: Dict[str, str] = {
-    # Naver Search 별칭
-    "search_web": "WebSearch_naver",
-    "search_blog": "BlogSearch_naver", 
-    "search_news": "NewsSearch_naver",
     
-    # Daum Search 별칭 (이미 올바른 이름이지만 명시)
-    "WebSearch_daum": "WebSearch_daum",
-    "VideoSearch_daum": "VideoSearch_daum",
-    
-    # Aladin 별칭
-    "ItemList_aladin": "ItemList_aladin",
-    
-    # Kakao 별칭
-    "AddressToCoord_kakao": "AddressToCoord_kakao",
-    "CategorySearch_kakao": "CategorySearch_kakao",
-    
-    # LS Stock 별칭
-    "StockPrice_ls": "StockPrice_ls",
-    
-    # Bithumb 별칭
-    "MarketList_bithumb": "MarketList_bithumb",
-}
-
-
-def normalize_tool_name(tool_name: str) -> str:
-    """정규화된 도구 이름 반환 (별칭 → 실제 이름).
-    
-    TODO: 데이터셋 수정 후 이 함수 삭제 예정
-    
-    Args:
-        tool_name: 원본 도구 이름 (데이터셋에서 온 이름)
-        
-    Returns:
-        TOOL_CATALOG에서 사용하는 실제 이름
-    """
-    return TOOL_ALIAS_MAP.get(tool_name, tool_name)
 
 
 def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
@@ -593,22 +618,16 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
             print(f"  ⏭️  Skipping duplicate: {name}")
             continue
         
-        # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
-        normalized_name = normalize_tool_name(name)
-        print(f"  🔄 Normalizing '{name}' → '{normalized_name}'")
-        
-        if normalized_name in seen:
-            print(f"  ⏭️  Skipping already normalized: {normalized_name}")
-            continue
-        seen.add(normalized_name)
+        # 별칭/정규화 제거: 입력된 이름을 그대로 사용
+        seen.add(name)
 
-        entry = TOOL_CATALOG.get(normalized_name)
+        entry = TOOL_CATALOG.get(name)
         if not entry:
-            print(f"  ❌ Tool '{normalized_name}' NOT FOUND in TOOL_CATALOG")
+            print(f"  ❌ Tool '{name}' NOT FOUND in TOOL_CATALOG")
             print(f"     Available tools: {list(TOOL_CATALOG.keys())[:5]}...")
             continue
         
-        print(f"  ✅ Found '{normalized_name}' in catalog")
+        print(f"  ✅ Found '{name}' in catalog")
         api_class, method_name, description, parameters_schema = entry
 
         if api_class not in api_instances:
@@ -617,17 +636,17 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
         api_instance = api_instances[api_class]
 
         tool_class = make_method_tool_class(
-            name=normalized_name,  # TODO: 데이터셋 수정 후 name으로 변경
+            name=name,
             description=description,
             api_instance=api_instance,
             method_name=method_name,
             parameters_schema=parameters_schema,
         )
         resolved.append(tool_class)
-        print(f"     ✅ Tool class created for '{normalized_name}'")
+        print(f"     ✅ Tool class created for '{name}'")
 
     print(f"🔍 DEBUG resolve_tool_classes: Resolved {len(resolved)} tools")
     return resolved
 
 
-__all__ = ["TOOL_CATALOG", "TOOL_ALIAS_MAP", "normalize_tool_name", "resolve_tool_classes"]
+__all__ = ["TOOL_CATALOG", "resolve_tool_classes"]

@@ -29,6 +29,9 @@ class LiteLLMAdapter(BaseAdapter):
         self.temperature = config.get('temperature', 0.7)
         self.max_tokens = config.get('max_tokens', 1024)
         self.timeout = config.get('timeout', 60)
+        
+        # Drop unsupported parameters for models that don't support them
+        litellm.drop_params = True
     
     @observe(as_type="generation")
     def chat_completion(self, messages: List[Dict[str, str]], 

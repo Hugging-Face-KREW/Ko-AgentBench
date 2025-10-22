@@ -1,6 +1,6 @@
+from typing import Any, Dict, List, Optional
+
 import requests
-import os
-from typing import Dict, List, Any, Optional
 
 # 상대 임포트와 절대 임포트 모두 지원
 try:
@@ -100,6 +100,64 @@ class UpbitCrypto(BaseAPI):
         }
 
     # ========== Tool Calling 스키마 메서드들 ==========
+
+    def crypto_price_tool(self) -> dict:
+        "CryptoPrice_upbit tool 스키마"
+        return {
+            "type": "function",
+            "function": {
+                "name": "CryptoPrice_upbit",
+                "description": "업비트 암호화폐 현재가 조회",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                        "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"}
+                    },
+                    "required": ["symbol"]
+                }
+            }
+        }
+
+    def market_list_tool(self) -> dict:
+        "MarketList_upbit tool 스키마"
+        return {
+            "type": "function",
+            "function": {
+                "name": "MarketList_upbit",
+                "description": "업비트 마켓 목록 조회",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT", "ALL"], "default": "KRW", "description": "기준 통화"},
+                        "include_event": {"type": "boolean", "default": True, "description": "이벤트 마켓 포함 여부"}
+                    },
+                    "required": []
+                }
+            }
+        }
+
+    def crypto_candle_tool(self) -> dict:
+        "CryptoCandle_upbit tool 스키마"
+        return {
+            "type": "function",
+            "function": {
+                "name": "CryptoCandle_upbit",
+                "description": "업비트 암호화폐 캔들 데이터 조회",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
+                        "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"},
+                        "candle_type": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "default": "days", "description": "캔들 타입"},
+                        "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
+                        "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 30, "description": "조회할 캔들 개수"},
+                        "to": {"type": "string", "description": "마지막 캔들 시각 (YYYY-MM-DD HH:mm:ss)"}
+                    },
+                    "required": ["symbol"]
+                }
+            }
+        }
 
     def execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
         """Tool call 실행"""

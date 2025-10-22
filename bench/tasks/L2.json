@@ -1,0 +1,1216 @@
+[
+  {
+    "task_id": "L2-001",
+    "instruction": "최근 반도체 산업 관련 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "BlogSearch_naver",
+      "WebSearch_daum",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "반도체 산업",
+          "sort": "date"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-002",
+    "instruction": "제주도 맛집 후기 블로그를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "BlogSearch_naver",
+      "WebSearch_naver",
+      "NewsSearch_naver",
+      "PlaceSearch_kakao",
+      "CategorySearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "제주도 맛집 후기",
+          "sort": "sim"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-003",
+    "instruction": "요가 초보자 강의 동영상을 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "VideoSearch_daum",
+      "WebSearch_daum",
+      "BlogSearch_naver",
+      "WebSearch_naver",
+      "ItemSearch_aladin"
+    ],
+    "golden_action": [
+      {
+        "tool": "VideoSearch_daum",
+        "args": {
+          "query": "요가 초보자 강의",
+          "sort": "accuracy"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-004",
+    "instruction": "아이폰 15 프로 실사용 후기를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "BlogSearch_naver",
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "아이폰 15 프로 실사용 후기",
+          "sort": "sim"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-005",
+    "instruction": "오늘 발표된 한국은행 기준금리 관련 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum",
+      "BlogSearch_naver",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "한국은행 기준금리",
+          "sort": "date"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-006",
+    "instruction": "2024년 개정된 부동산 세법 정보를 검색해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WebSearch_daum",
+      "WebSearch_naver",
+      "NewsSearch_naver",
+      "BlogSearch_naver",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "2024년 부동산 세법 개정"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-007",
+    "instruction": "전기차 충전소 설치 비용에 대한 정보를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WebSearch_naver",
+      "NewsSearch_naver",
+      "BlogSearch_naver",
+      "WebSearch_daum",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "전기차 충전소 설치 비용"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-008",
+    "instruction": "태풍 경로 예측 관련 최신 뉴스를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum",
+      "BlogSearch_naver",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "태풍 경로 예측",
+          "sort": "date"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-009",
+    "instruction": "LG화학 주식 현재가를 확인해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_kis",
+      "StockPrice_ls",
+      "NewsSearch_naver",
+      "CryptoPrice_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_ls",
+        "args": {
+          "shcode": "051910"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-010",
+    "instruction": "애플 주식 현재 가격 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "USStockPrice_kis",
+      "StockPrice_kis",
+      "WebSearch_naver",
+      "CryptoPrice_bithumb",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "AAPL",
+          "exchange": "NASDAQ"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-011",
+    "instruction": "빗썸에서 이더리움 매수/매도 호가를 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "OrderBook_bithumb",
+      "CryptoPrice_bithumb",
+      "CryptoPrice_upbit",
+      "OrderBook_ls",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "OrderBook_bithumb",
+        "args": {
+          "markets": "KRW-ETH"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-012",
+    "instruction": "코스닥 지수 현재 상황을 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "MarketIndex_ls",
+      "StockPrice_ls",
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "MarketList_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "MarketIndex_ls",
+        "args": {
+          "jisu": "KOSDAQ"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-013",
+    "instruction": "네이버 주식의 일봉 차트 데이터를 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockChart_kis",
+      "StockPrice_kis",
+      "NewsSearch_naver",
+      "CryptoCandle_upbit",
+      "CryptoCandle_bithumb"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockChart_kis",
+        "args": {
+          "symbol": "035420",
+          "period": "D",
+          "count": 30
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-014",
+    "instruction": "리플 최근 1시간봉 차트를 보고 싶어",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_upbit",
+      "CryptoCandle_bithumb",
+      "CryptoPrice_upbit",
+      "StockChart_kis",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "XRP",
+          "quote": "KRW",
+          "candle_type": "minutes",
+          "unit": 60,
+          "count": 24
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-015",
+    "instruction": "강남역 주변 카페를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "CE7",
+          "x": 127.027621,
+          "y": 37.498095,
+          "radius": 500
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-016",
+    "instruction": "광화문(126.9769, 37.5759)에서 경복궁(126.9786, 37.5796)까지 걸어가는 길 안내해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WalkRoute_tmap",
+      "CarRoute_tmap",
+      "Directions_naver",
+      "PlaceSearch_kakao",
+      "CoordToAddress_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": 126.9769,
+          "startY": 37.5759,
+          "endX": 126.9786,
+          "endY": 37.5796
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-017",
+    "instruction": "서울 이마트 지점들을 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "POISearch_tmap",
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap",
+      "WebSearch_naver",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "POISearch_tmap",
+        "args": {
+          "searchKeyword": "서울 이마트"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-018",
+    "instruction": "위도 37.5665, 경도 126.9780 지점의 주소를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CoordToAddress_kakao",
+      "AddressToCoord_kakao",
+      "Geocoding_tmap",
+      "PlaceSearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CoordToAddress_kakao",
+        "args": {
+          "latitude": 37.5665,
+          "longitude": 126.9780
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-019",
+    "instruction": "서울역(126.9708, 37.5547)에서 인천국제공항(126.4407, 37.4691)까지 자동차 경로를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CarRoute_tmap",
+      "Directions_naver",
+      "WalkRoute_tmap",
+      "POISearch_tmap",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "CarRoute_tmap",
+        "args": {
+          "startX": 126.9708,
+          "startY": 37.5547,
+          "endX": 126.4407,
+          "endY": 37.4691,
+          "searchOption": 0
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-020",
+    "instruction": "광화문 인근 약국을 카테고리로 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "PM9",
+          "x": 126.9769,
+          "y": 37.5759,
+          "radius": 800
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-021",
+    "instruction": "이번 주 경제경영 베스트셀러 목록을 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemList_aladin",
+      "ItemSearch_aladin",
+      "BlogSearch_naver",
+      "NewsSearch_naver",
+      "WebSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemList_aladin",
+        "args": {
+          "query_type": "Bestseller",
+          "search_target": "Book"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-022",
+    "instruction": "ISBN 9788936434267 책의 상세 정보를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemLookup_aladin",
+      "ItemSearch_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemLookup_aladin",
+        "args": {
+          "item_id": "9788936434267",
+          "item_id_type": "ISBN13"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-023",
+    "instruction": "데이터 사이언스 기초 서적을 키워드로 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemSearch_aladin",
+      "ItemList_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "데이터 사이언스 기초",
+          "sort": "Accuracy"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-024",
+    "instruction": "‘반도체 공급망’ 관련 최신 뉴스 5건만 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "반도체 공급망",
+          "sort": "date",
+          "display": 5
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-025",
+    "instruction": "남이섬 겨울 여행 후기 블로그를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "BlogSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "남이섬 겨울 여행 후기",
+          "sort": "sim",
+          "display": 10
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-026",
+    "instruction": "‘클린 아키텍처’ 책을 키워드로 검색해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemSearch_aladin",
+      "ItemList_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "클린 아키텍처",
+          "sort": "Accuracy"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-027",
+    "instruction": "이번 주 베스트셀러(전체) 상위 10권만 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemList_aladin",
+      "ItemSearch_aladin",
+      "NewsSearch_naver",
+      "WebSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemList_aladin",
+        "args": {
+          "query_type": "Bestseller",
+          "search_target": "Book",
+          "max_results": 10
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-028",
+    "instruction": "빗썸에서 비트코인(KRW-BTC) 현재가를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoPrice_bithumb",
+      "OrderBook_bithumb",
+      "MarketList_bithumb",
+      "CryptoPrice_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoPrice_bithumb",
+        "args": {
+          "markets": "KRW-BTC"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-029",
+    "instruction": "빗썸에서 이더리움 호가를 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "OrderBook_bithumb",
+      "CryptoPrice_bithumb",
+      "MarketList_bithumb"
+    ],
+    "golden_action": [
+      {
+        "tool": "OrderBook_bithumb",
+        "args": {
+          "markets": "KRW-ETH"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-030",
+    "instruction": "업비트에서 리플(XRP) 현재가 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoPrice_upbit",
+      "CryptoCandle_upbit",
+      "MarketList_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoPrice_upbit",
+        "args": {
+          "symbol": "XRP",
+          "quote": "KRW"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-031",
+    "instruction": "업비트 비트코인 일봉 30개만 조회해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_upbit",
+      "CryptoPrice_upbit",
+      "MarketList_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "BTC",
+          "quote": "KRW",
+          "candle_type": "days",
+          "count": 30
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-032",
+    "instruction": "삼성전자(005930) 현재가를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_ls",
+      "StockTrades_ls",
+      "OrderBook_ls",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_ls",
+        "args": {
+          "shcode": "005930",
+          "exchgubun": "K"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-033",
+    "instruction": "카카오(035720) 최근 체결 내역을 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockTrades_ls",
+      "StockPrice_ls",
+      "OrderBook_ls"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockTrades_ls",
+        "args": {
+          "shcode": "035720"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-034",
+    "instruction": "서울 가을 여행지 추천 블로그를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "BlogSearch_naver",
+      "NewsSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "서울 가을 여행지 추천",
+          "sort": "sim"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-035",
+    "instruction": "광화문(126.9769,37.5759)에서 경복궁(126.9786,37.5716)까지 자동차 경로를 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "Directions_naver",
+      "CarRoute_tmap",
+      "WebSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "Directions_naver",
+        "args": {
+          "start": "126.9769,37.5759",
+          "goal": "126.9786,37.5716",
+          "option": "trafast"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-036",
+    "instruction": "다음에서 ‘요리왕비룡 오프닝’ 동영상을 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "VideoSearch_daum",
+      "WebSearch_daum",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "VideoSearch_daum",
+        "args": {
+          "query": "요리왕비룡 오프닝",
+          "sort": "accuracy",
+          "size": 15
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-037",
+    "instruction": "다음에서 ‘종량제 봉투 가격’ 관련 웹 문서를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WebSearch_daum",
+      "WebSearch_naver",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "종량제 봉투 가격",
+          "sort": "accuracy",
+          "size": 10
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-038",
+    "instruction": "빗썸 비트코인 15분봉 50개만 조회해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_bithumb",
+      "CryptoPrice_bithumb"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_bithumb",
+        "args": {
+          "time": "minutes",
+          "unit": 15,
+          "market": "KRW-BTC",
+          "count": 50
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-039",
+    "instruction": "업비트에서 거래 가능한 모든 암호화폐 목록을 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "MarketList_upbit",
+      "MarketList_bithumb",
+      "CryptoPrice_upbit",
+      "WebSearch_naver",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "MarketList_upbit",
+        "args": {}
+      }
+    ]
+  },
+  {
+    "task_id": "L2-040",
+    "instruction": "서울특별시 강남구 테헤란로 152 주소를 좌표로 변환해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "AddressToCoord_kakao",
+      "Geocoding_tmap",
+      "PlaceSearch_kakao",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "AddressToCoord_kakao",
+        "args": {
+          "address": "서울특별시 강남구 테헤란로 152"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-041",
+    "instruction": "제주도 봄 여행 코스 추천 블로그를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "BlogSearch_naver",
+      "NewsSearch_naver",
+      "WebSearch_naver",
+      "WebSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "제주도 봄 여행 코스 추천",
+          "sort": "sim"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-042",
+    "instruction": "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "OrderBook_ls",
+      "StockPrice_ls",
+      "StockTrades_ls",
+      "OrderBook_bithumb",
+      "CryptoPrice_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "OrderBook_ls",
+        "args": {
+          "shcode": "005490",
+          "exchgubun": "K"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-043",
+    "instruction": "강남역 반경 1km 이내 편의점을 T맵 카테고리로 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_tmap",
+      "CategorySearch_kakao",
+      "POISearch_tmap",
+      "PlaceSearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "CS2",
+          "centerLat": 37.498095,
+          "centerLon": 127.027621,
+          "radius": 1
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-044",
+    "instruction": "테슬라(TSLA) 주가를 확인하고 싶어",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "USStockPrice_kis",
+      "StockPrice_kis",
+      "StockPrice_ls",
+      "StockChart_kis",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "TSLA",
+          "exchange": "NASDAQ"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-045",
+    "instruction": "서울 마포구 상암동의 경위도 좌표를 T맵으로 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "Geocoding_tmap",
+      "AddressToCoord_kakao",
+      "PlaceSearch_kakao",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "마포구",
+          "dong": "상암동"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-046",
+    "instruction": "이번 주 IT/컴퓨터 분야 신간 도서 목록을 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemList_aladin",
+      "ItemSearch_aladin",
+      "NewsSearch_naver",
+      "BlogSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemList_aladin",
+        "args": {
+          "query_type": "ItemNewAll",
+          "search_target": "Book",
+          "max_results": 10
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-047",
+    "instruction": "강남역 근처에서 가장 평점이 높은 카페를 찾고 싶은데, 그 카페의 블로그 후기를 확인하고 싶어. 먼저 카페를 찾은 다음, 그 카페 이름으로 블로그 후기를 검색해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "PlaceSearch_kakao",
+      "BlogSearch_naver",
+      "CategorySearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "강남역 카페",
+          "sort": "accuracy"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-048",
+    "instruction": "삼성전자 주식의 현재가가 60,000원 이상이면 '매도 고려', 미만이면 '매수 고려'라고 판단하고 싶어. 현재가를 확인해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_ls",
+      "StockPrice_kis",
+      "NewsSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_ls",
+        "args": {
+          "shcode": "005930"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-049",
+    "instruction": "서울 종로구 청와대 근처의 한식당을 찾아줘. 반경 1km 이내로 제한해서 검색해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "FD6",
+          "x": 126.9778,
+          "y": 37.5863,
+          "radius": 1000
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-050",
+    "instruction": "빗썸에서 거래 가능한 모든 암호화폐 목록을 조회한 후, 그 중 비트코인의 현재가를 알려줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "MarketList_bithumb",
+      "CryptoPrice_bithumb",
+      "CryptoPrice_upbit",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "MarketList_bithumb",
+        "args": {}
+      }
+    ]
+  },
+  {
+    "task_id": "L2-051",
+    "instruction": "판교역(127.1117, 37.3946) 근처 주차장을 찾아줘. T맵 카테고리 검색으로 반경 500m 내에서 찾아줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_tmap",
+      "CategorySearch_kakao",
+      "POISearch_tmap",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "parking",
+          "centerLon": 127.1117,
+          "centerLat": 37.3946,
+          "radius": 1
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-052",
+    "instruction": "네이버 주식(035420)과 카카오 주식(035720)의 현재가를 비교하고 싶어. 네이버 주식 현재가를 먼저 확인해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "StockPrice_kis",
+      "StockPrice_ls",
+      "NewsSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "035420"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-053",
+    "instruction": "업비트에서 이더리움(ETH)의 일봉 차트 데이터 50개를 조회해줘. 원화(KRW) 기준으로 확인하고 싶어.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_upbit",
+      "CryptoPrice_upbit",
+      "CryptoCandle_bithumb",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "ETH",
+          "quote": "KRW",
+          "candle_type": "days",
+          "count": 50
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-054",
+    "instruction": "서울 강남구 역삼동의 경위도 좌표를 알려줘. T맵 Geocoding을 사용해서 찾아줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "Geocoding_tmap",
+      "AddressToCoord_kakao",
+      "PlaceSearch_kakao",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "강남구",
+          "dong": "역삼동"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-055",
+    "instruction": "홍대입구역(126.9244, 37.5563)에서 이태원역(126.9944, 37.5344)까지 걸어서 가는 경로를 알려줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WalkRoute_tmap",
+      "CarRoute_tmap",
+      "Directions_naver",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": 126.9244,
+          "startY": 37.5563,
+          "endX": 126.9944,
+          "endY": 37.5344
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-056",
+    "instruction": "알라딘에서 'AI 윤리' 키워드로 책을 검색하고, 정확도순으로 정렬해서 5권만 보여줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemSearch_aladin",
+      "ItemList_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "AI 윤리",
+          "sort": "Accuracy",
+          "max_results": 5
+        }
+      }
+    ]
+  }
+]

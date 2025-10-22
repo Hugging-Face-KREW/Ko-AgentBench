@@ -1,0 +1,1104 @@
+[
+  {
+    "task_id": "L3-001",
+    "instruction": "삼성전자 투자를 검토하고 있습니다. 현재 주가 정보를 확인한 후, 이번달 차트 데이터를 분석해서 종합 정보를 제공해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "삼성전자 종목 코드",
+          "display": 10,
+          "sort": "date"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "005930"
+        }
+      },
+      {
+        "step": 3,
+        "tool": "StockChart_kis",
+        "args": {
+          "symbol": "005930",
+          "period": "M"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "WebSearch_naver",
+      "StockPrice_kis",
+      "StockChart_kis"
+    ],
+    "data_flow": [
+      {
+        "to_step": 1,
+        "to_parameter": "query",
+        "from_step": "user_input",
+        "from_output": "삼성전자 종목코드"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "symbol",
+        "from_step": 1,
+        "from_output": "symbol"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "symbol",
+        "from_step": 1,
+        "from_output": "symbol"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-002",
+    "instruction": "청량리역 근처로 이사를 고려하고 있습니다. 해당 지역에 가장 가까운 대학교를 알아보고, 그 근처에 병원이 몇개 있는지 조사해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "청량리역 근처 대학교",
+          "size": 1
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "병원",
+          "centerLon": "127.059028",
+          "centerLat": "37.583917",
+          "radius": 10
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "centerLat",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "centerLon",
+        "from_step": 1,
+        "from_output": "longtitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-003",
+    "instruction": "빗썸의 KRW 마켓에 상장된 모든 암호화폐의 현재가를 조회해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "MarketList_bithumb",
+        "args": {
+          "isDetails": false
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CryptoPrice_bithumb",
+        "args": {
+          "markets": "{markets}"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "MarketList_bithumb",
+      "CryptoPrice_bithumb"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "markets",
+        "from_step": 1,
+        "from_output": "market_list"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-004",
+    "instruction": "독학하기 좋은 수능 모의고사 수학 문제집을 조사해주고, 가격도 알려줘.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "수능 수학 모의고사 문제집 추천 독학",
+          "display": 20,
+          "sort": "sim"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "{book_title}"
+        }
+      }
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "query",
+        "from_step": 1,
+        "from_output": "book_title"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-005",
+    "instruction": "강남역에서 가장 가까운 애플 매장까지 걸어서 얼마나 걸리는지 알려줘.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "강남역",
+          "size": 1,
+          "sort": "accuracy"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "애플 매장",
+          "x": "{x}",
+          "y": "{y}",
+          "sort": "accuracy",
+          "size": 1
+        }
+      },
+      {
+        "step": 3,
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": "{startX}",
+          "startY": "{startY}",
+          "endX": "{endX}",
+          "endY": "{endY}"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "WalkRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "x",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "y",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startX",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startY",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endX",
+        "from_step": 2,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endY",
+        "from_step": 2,
+        "from_output": "latitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-006",
+    "instruction": "현재 주가 정보를 확인한 후, 차트 데이터를 분석해서 투자 결정에 도움이 되는 종합 정보를 제공해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "카카오 종목 코드",
+          "display": 10,
+          "sort": "date"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "035720"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "WebSearch_naver",
+      "StockPrice_kis"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "current_price",
+        "from_step": 1,
+        "from_output": "symbol"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-007",
+    "instruction": "삼성전자랑 애플 주가 비교해줘",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "삼성 종목 코드"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "애플 종목 코드"
+        }
+      },
+      {
+        "step": 3,
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "035720"
+        }
+      },
+      {
+        "step": 4,
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "AAPL"
+        }
+      }
+    ],
+    "minimum_steps": 4,
+    "essential_tools": [
+      "WebSearch_naver",
+      "StockPrice_kis",
+      "USStockPrice_kis"
+    ],
+    "data_flow": [
+      {
+        "to_step": 3,
+        "to_parameter": "symbol",
+        "from_step": 1,
+        "from_output": "symbol"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "symbol",
+        "from_step": 2,
+        "from_output": "symbol"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-008",
+    "instruction": "'인공지능'에 대한 최신 블로그 포스트 5개를 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Single Tool",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "인공지능",
+          "display": 5,
+          "sort": "date"
+        }
+      }
+    ],
+    "minimum_steps": 1,
+    "essential_tools": [
+      "BlogSearch_naver"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-009",
+    "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "강남구",
+          "dong": "역삼동"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "용산구",
+          "dong": "이태원동"
+        }
+      },
+      {
+        "step": 3,
+        "tool": "CarRoute_tmap",
+        "args": {
+          "startX": "{startX}",
+          "startY": "{startY}",
+          "endX": "{endX}",
+          "endY": "{endY}",
+          "searchOption": 0
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "Geocoding_tmap",
+      "CarRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 3,
+        "to_parameter": "startX",
+        "from_step": 1,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startY",
+        "from_step": 1,
+        "from_output": "lat"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endX",
+        "from_step": 2,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endY",
+        "from_step": 2,
+        "from_output": "lat"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-010",
+    "instruction": "이번주 베스트 셀러 조회해서 가격 얼마인지 알려줘",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "ItemList_aladin",
+        "args": {
+          "query_type": "Bestseller",
+          "max_results": 1
+        }
+      },
+      {
+        "step": 2,
+        "tool": "Lookup_aladin_item",
+        "args": {
+          "item_id": "{isbn13}",
+          "opt_result": "reviewList"
+        }
+      }
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "itemId",
+        "from_step": 1,
+        "from_output": "isbn13"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-011",
+    "instruction": "현재 비트코인 가격을 확인하고, 지난 한 주간의 가격 변동을 차트로 보여주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "CryptoPrice_upbit",
+        "args": {
+          "symbol": "BTC"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "BTC",
+          "candle_type": "weeks",
+          "count": 1
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "CryptoPrice_upbit",
+      "CryptoCandle_upbit"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-012",
+    "instruction": "서울역 근처에 있는 맛집을 추천해주고, 그 중 한 곳의 블로그 리뷰를 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "서울역 맛집",
+          "size": 5
+        }
+      },
+      {
+        "step": 2,
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "{places[0].name} 후기"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "BlogSearch_naver"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "query",
+        "from_step": 1,
+        "from_output": "places[0].name"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-013",
+    "instruction": "SK하이닉스의 현재 주가를 확인하고, 관련 뉴스를 3개 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "000660"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "SK하이닉스",
+          "display": 3
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "StockPrice_kis",
+      "NewsSearch_naver"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-014",
+    "instruction": "부산 해운대구의 주소를 좌표로 변환하고, 그 좌표를 중심으로 반경 5km 내에 있는 호텔을 검색해주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "AddressToCoord_kakao",
+        "args": {
+          "address": "부산광역시 해운대구"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "AD5",
+          "x": "{longitude}",
+          "y": "{latitude}",
+          "radius": 5000
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "AddressToCoord_kakao",
+      "CategorySearch_kakao"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "x",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "y",
+        "from_step": 1,
+        "from_output": "latitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-015",
+    "instruction": "코스피 지수를 확인하고, 삼성전자의 현재가를 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Parallel",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "MarketIndex_ls",
+        "args": {
+          "jisu": "KOSPI"
+        }
+      },
+      {
+        "step": 1,
+        "tool": "StockPrice_ls",
+        "args": {
+          "shcode": "005930"
+        }
+      }
+    ],
+    "minimum_steps": 1,
+    "essential_tools": [
+      "MarketIndex_ls",
+      "StockPrice_ls"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-016",
+    "instruction": "강남역에서 잠실역까지 자동차로 가는 경로와 예상 시간을 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "강남구",
+          "dong": "역삼동"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "송파구",
+          "dong": "잠실동"
+        }
+      },
+      {
+        "step": 3,
+        "tool": "CarRoute_tmap",
+        "args": {
+          "startX": "{step1.lon}",
+          "startY": "{step1.lat}",
+          "endX": "{step2.lon}",
+          "endY": "{step2.lat}"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "Geocoding_tmap",
+      "CarRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 3,
+        "to_parameter": "startX",
+        "from_step": 1,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startY",
+        "from_step": 1,
+        "from_output": "lat"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endX",
+        "from_step": 2,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endY",
+        "from_step": 2,
+        "from_output": "lat"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-017",
+    "instruction": "오늘의 미국 나스닥 지수를 확인하고, 애플의 현재 주가를 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "나스닥 지수"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "AAPL"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "MarketIndex_ls",
+      "USStockPrice_kis"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-018",
+    "instruction": "현재 위치에서 가장 가까운 스타벅스를 찾아주고, 걸어서 얼마나 걸리는지 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "스타벅스",
+          "sort": "distance"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": "{current_lon}",
+          "startY": "{current_lat}",
+          "endX": "{places[0].longitude}",
+          "endY": "{places[0].latitude}"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "WalkRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "endX",
+        "from_step": 1,
+        "from_output": "places[0].longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "endY",
+        "from_step": 1,
+        "from_output": "places[0].latitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-019",
+    "instruction": "빗썸에서 거래 가능한 모든 암호화폐 목록을 보여주세요.",
+    "task_level": 3,
+    "task_category": "Single Tool",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "MarketList_bithumb",
+        "args": {
+          "isDetails": true
+        }
+      }
+    ],
+    "minimum_steps": 1,
+    "essential_tools": [
+      "MarketList_bithumb"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-020",
+    "instruction": "네이버에서 '오늘의 날씨'를 검색하고, 관련 뉴스 기사를 1개 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "오늘의 날씨"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "날씨",
+          "display": 1
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "WebSearch_naver",
+      "NewsSearch_naver"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-021",
+    "instruction": "현재 내 위치에서 가장 가까운 영화관을 찾고, 그곳까지 자동차로 가는 경로를 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "CT1",
+          "sort": "distance"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CarRoute_tmap",
+        "args": {
+          "startX": "{current_lon}",
+          "startY": "{current_lat}",
+          "endX": "{places[0].longitude}",
+          "endY": "{places[0].latitude}"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "CategorySearch_kakao",
+      "CarRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "endX",
+        "from_step": 1,
+        "from_output": "places[0].longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "endY",
+        "from_step": 1,
+        "from_output": "places[0].latitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-022",
+    "instruction": "판교역 주변의 주차장 정보를 검색하고, 그 중 가장 저렴한 주차장의 블로그 후기를 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "판교역 주차장",
+          "sort": "distance",
+          "size": 5
+        }
+      },
+      {
+        "step": 2,
+        "tool": "BlogSearch_naver",
+        "args": {
+          "query": "{places[0].name} 가격 후기"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "PlaceSearch_kakao",
+      "BlogSearch_naver"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "query",
+        "from_step": 1,
+        "from_output": "places[0].name"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-023",
+    "instruction": "LG에너지솔루션의 최근 한 달간의 주가 변동을 차트로 보여주고, 오늘 종가를 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "StockChart_kis",
+        "args": {
+          "symbol": "373220",
+          "period": "M"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "StockPrice_kis",
+        "args": {
+          "symbol": "373220"
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "StockChart_kis",
+      "StockPrice_kis"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-024",
+    "instruction": "인천국제공항의 주소를 좌표로 변환하고, 공항에서 가장 가까운 약국을 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "AddressToCoord_kakao",
+        "args": {
+          "address": "인천광역시 중구 공항로 272"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "약국",
+          "centerLon": "{longitude}",
+          "centerLat": "{latitude}",
+          "radius": 2000
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "AddressToCoord_kakao",
+      "CategorySearch_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 2,
+        "to_parameter": "centerLon",
+        "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "centerLat",
+        "from_step": 1,
+        "from_output": "latitude"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-025",
+    "instruction": "코스닥 지수와 오늘의 환율 정보를 동시에 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Parallel",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "MarketIndex_ls",
+        "args": {
+          "jisu": "KOSDAQ"
+        }
+      },
+      {
+        "step": 1,
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "오늘 환율"
+        }
+      }
+    ],
+    "minimum_steps": 1,
+    "essential_tools": [
+      "MarketIndex_ls",
+      "WebSearch_naver"
+    ],
+    "data_flow": []
+  },
+  {
+    "task_id": "L3-026",
+    "instruction": "홍대입구역에서 서울숲까지 대중교통 경로를 검색하고, 예상 소요 시간을 알려주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "마포구",
+          "dong": "동교동"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "Geocoding_tmap",
+        "args": {
+          "city_do": "서울특별시",
+          "gu_gun": "성동구",
+          "dong": "성수동1가"
+        }
+      },
+      {
+        "step": 3,
+        "tool": "WalkRoute_tmap",
+        "args": {
+          "startX": "{step1.lon}",
+          "startY": "{step1.lat}",
+          "endX": "{step2.lon}",
+          "endY": "{step2.lat}"
+        }
+      }
+    ],
+    "minimum_steps": 3,
+    "essential_tools": [
+      "Geocoding_tmap",
+      "WalkRoute_tmap"
+    ],
+    "data_flow": [
+      {
+        "to_step": 3,
+        "to_parameter": "startX",
+        "from_step": 1,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "startY",
+        "from_step": 1,
+        "from_output": "lat"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endX",
+        "from_step": 2,
+        "from_output": "lon"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "endY",
+        "from_step": 2,
+        "from_output": "lat"
+      }
+    ]
+  },
+  {
+    "task_id": "L3-027",
+    "instruction": "테슬라의 현재 주가를 확인하고, 관련 최신 뉴스를 1개만 찾아주세요.",
+    "task_level": 3,
+    "task_category": "Multi Tool Sequential",
+    "golden_action": [
+      {
+        "step": 1,
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "TSLA",
+          "exchange": "NASDAQ"
+        }
+      },
+      {
+        "step": 2,
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "테슬라",
+          "display": 1
+        }
+      }
+    ],
+    "minimum_steps": 2,
+    "essential_tools": [
+      "USStockPrice_kis",
+      "NewsSearch_naver"
+    ],
+    "data_flow": []
+  }
+]
