@@ -145,7 +145,13 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         "빗썸 암호화폐 현재가 정보 조회",
     {
         "type": "object", "properties": {
-            "markets": {"type": "string", "default": "KRW-BTC", "description": "반점으로 구분되는 마켓 코드 (ex. KRW-BTC, BTC-ETH)","pattern": "^[A-Z0-9]+$", "enum": [ "KRW-BTC", "BTC-ETH"]}},
+            "markets": {
+                "type": "string",
+                "default": "KRW-BTC",
+                "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+            }
+        },
             "required": ["markets"]},
     ),
     "OrderBook_bithumb": (
@@ -155,7 +161,12 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "markets": {"type": "string", "default": "KRW-BTC", "description": "반점으로 구분되는 마켓 코드 (ex. KRW-BTC, BTC-ETH)", "pattern": "^[A-Z0-9]+$", "enum": [ "KRW-BTC", "BTC-ETH"]}
+                "markets": {
+                    "type": "string",
+                    "default": "KRW-BTC",
+                    "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                    "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
+                }
             },
             "required": ["markets"]
         }
