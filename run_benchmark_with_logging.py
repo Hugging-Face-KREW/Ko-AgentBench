@@ -124,17 +124,16 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                         tools_needed.append(tool_name)
                         print(f"  [OK] Found tool in turn.action: {tool_name}")
         
-    # 별칭/정규화 제거: 선언된 도구 이름을 그대로 사용
-    normalized_tools_needed = tools_needed
+    # 선언된 도구 이름을 그대로 사용
     print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
             "description": task.get("instruction", ""),
             "expected_output": task.get("resp_schema", {}),
-            "available_tools": normalized_tools_needed,  # normalized for runner compatibility
+            "available_tools": tools_needed,
             # keep backward-compat with runner that expects 'tools'
-            "tools": normalized_tools_needed,
+            "tools": tools_needed,
             "level": task.get("task_level", 0),
             "category": task.get("task_category", "unknown"),
             "golden_action": task.get("golden_action", []),
@@ -405,13 +404,12 @@ def run_benchmark_on_dataset(
     
     print(f"Required tools: {all_required_tools}")
     
-    # 별칭/정규화 제거: 입력된 이름을 그대로 사용
-    normalized_tools = all_required_tools
-    print(f"Tools: {normalized_tools}")
+    # 입력된 이름을 그대로 사용
+    print(f"Tools: {all_required_tools}")
     
     # Resolve and register tools
     tool_classes = resolve_tool_classes(all_required_tools)
-    missing_tools = [t for t in normalized_tools if t not in TOOL_CATALOG]
+    missing_tools = [t for t in all_required_tools if t not in TOOL_CATALOG]
     if missing_tools:
         print(f"[WARNING] Missing tools in catalog: {missing_tools}")
     
