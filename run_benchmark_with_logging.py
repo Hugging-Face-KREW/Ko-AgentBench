@@ -33,7 +33,7 @@ from configs.secrets import (
     AZURE_API_BASE, 
     AZURE_API_VERSION,
     ANTHROPIC_API_KEY,
-    GOOGLE_API_KEY
+    GEMINI_API_KEY
 )
 
 
@@ -612,8 +612,8 @@ def main():
         os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
     if ANTHROPIC_API_KEY:
         os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
-    if GOOGLE_API_KEY:
-        os.environ['GOOGLE_API_KEY'] = GOOGLE_API_KEY
+    if GEMINI_API_KEY:
+        os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
     
     # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [
@@ -622,7 +622,7 @@ def main():
         "ANTHROPIC_API_KEY",
         "GROQ_API_KEY",
         "AZURE_API_KEY",
-        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
@@ -656,7 +656,7 @@ def main():
         if provider == "groq":
             return bool(os.getenv("GROQ_API_KEY"))
         if provider == "gemini":
-            return bool(os.getenv("GOOGLE_API_KEY"))
+            return bool(os.getenv("GEMINI_API_KEY"))
         if provider == "huggingface":
             return bool(os.getenv("HUGGINGFACE_API_KEY"))
         return False
