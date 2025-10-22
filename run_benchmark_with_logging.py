@@ -24,7 +24,7 @@ from bench.adapters.transformers_adapter import TransformersAdapter
 from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
-from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG, normalize_tool_name
+from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.config import set_cache_mode
 
 # Import API keys from secrets
@@ -124,9 +124,9 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                         tools_needed.append(tool_name)
                         print(f"  [OK] Found tool in turn.action: {tool_name}")
         
-        # Normalize tool names to match registry keys
-        normalized_tools_needed = [normalize_tool_name(t) for t in tools_needed]
-        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed} → normalized = {normalized_tools_needed}")
+    # 별칭/정규화 제거: 선언된 도구 이름을 그대로 사용
+    normalized_tools_needed = tools_needed
+    print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
@@ -405,10 +405,9 @@ def run_benchmark_on_dataset(
     
     print(f"Required tools: {all_required_tools}")
     
-    # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
-    # 별칭을 실제 도구 이름으로 변환
-    normalized_tools = [normalize_tool_name(t) for t in all_required_tools]
-    print(f"Normalized tools: {normalized_tools}")
+    # 별칭/정규화 제거: 입력된 이름을 그대로 사용
+    normalized_tools = all_required_tools
+    print(f"Tools: {normalized_tools}")
     
     # Resolve and register tools
     tool_classes = resolve_tool_classes(all_required_tools)

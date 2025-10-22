@@ -603,45 +603,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
 }
 
 
-# TODO: 데이터셋 수정 후 삭제 예정
-# 임시 별칭 매핑: 데이터셋의 구 도구 이름 → TOOL_CATALOG 키로 변환
-TOOL_ALIAS_MAP: Dict[str, str] = {
-    # Naver Search 별칭
-    "search_web": "WebSearch_naver",
-    "search_blog": "BlogSearch_naver", 
-    "search_news": "NewsSearch_naver",
     
-    # Daum Search 별칭 (이미 올바른 이름이지만 명시)
-    "WebSearch_daum": "WebSearch_daum",
-    "VideoSearch_daum": "VideoSearch_daum",
-    
-    # Aladin 별칭
-    "ItemList_aladin": "ItemList_aladin",
-    
-    # Kakao 별칭
-    "AddressToCoord_kakao": "AddressToCoord_kakao",
-    "CategorySearch_kakao": "CategorySearch_kakao",
-    
-    # LS Stock 별칭
-    "StockPrice_ls": "StockPrice_ls",
-    
-    # Bithumb 별칭
-    "MarketList_bithumb": "MarketList_bithumb",
-}
-
-
-def normalize_tool_name(tool_name: str) -> str:
-    """정규화된 도구 이름 반환 (별칭 → 실제 이름).
-    
-    TODO: 데이터셋 수정 후 이 함수 삭제 예정
-    
-    Args:
-        tool_name: 원본 도구 이름 (데이터셋에서 온 이름)
-        
-    Returns:
-        TOOL_CATALOG에서 사용하는 실제 이름
-    """
-    return TOOL_ALIAS_MAP.get(tool_name, tool_name)
 
 
 def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
@@ -657,22 +619,16 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
             print(f"  ⏭️  Skipping duplicate: {name}")
             continue
         
-        # TODO: 데이터셋 수정 후 이 정규화 로직 삭제
-        normalized_name = normalize_tool_name(name)
-        print(f"  🔄 Normalizing '{name}' → '{normalized_name}'")
-        
-        if normalized_name in seen:
-            print(f"  ⏭️  Skipping already normalized: {normalized_name}")
-            continue
-        seen.add(normalized_name)
+        # 별칭/정규화 제거: 입력된 이름을 그대로 사용
+        seen.add(name)
 
-        entry = TOOL_CATALOG.get(normalized_name)
+        entry = TOOL_CATALOG.get(name)
         if not entry:
-            print(f"  ❌ Tool '{normalized_name}' NOT FOUND in TOOL_CATALOG")
+            print(f"  ❌ Tool '{name}' NOT FOUND in TOOL_CATALOG")
             print(f"     Available tools: {list(TOOL_CATALOG.keys())[:5]}...")
             continue
         
-        print(f"  ✅ Found '{normalized_name}' in catalog")
+        print(f"  ✅ Found '{name}' in catalog")
         api_class, method_name, description, parameters_schema = entry
 
         if api_class not in api_instances:
@@ -681,17 +637,17 @@ def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
         api_instance = api_instances[api_class]
 
         tool_class = make_method_tool_class(
-            name=normalized_name,  # TODO: 데이터셋 수정 후 name으로 변경
+            name=name,
             description=description,
             api_instance=api_instance,
             method_name=method_name,
             parameters_schema=parameters_schema,
         )
         resolved.append(tool_class)
-        print(f"     ✅ Tool class created for '{normalized_name}'")
+        print(f"     ✅ Tool class created for '{name}'")
 
     print(f"🔍 DEBUG resolve_tool_classes: Resolved {len(resolved)} tools")
     return resolved
 
 
-__all__ = ["TOOL_CATALOG", "TOOL_ALIAS_MAP", "normalize_tool_name", "resolve_tool_classes"]
+__all__ = ["TOOL_CATALOG", "resolve_tool_classes"]
