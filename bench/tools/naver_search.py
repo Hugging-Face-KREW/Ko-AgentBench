@@ -28,14 +28,13 @@ class NaverSearchAPI(BaseAPI):
     
     # ========== 실제 API 호출 메서드들 (비즈니스 로직) ==========
     
-    def _search_web(self, query: str, display: int = 10, start: int = 1, sort: str = "sim") -> dict:
+    def _search_web(self, query: str, display: int = 10, start: int = 1) -> dict:
         """네이버 웹 검색 API 호출 (내부 구현)
         
         Args:
             query: 검색어
             display: 한 번에 표시할 검색 결과 개수 (기본값: 10, 최대값: 100)
             start: 검색 시작 위치 (기본값: 1, 최대값: 1000)
-            sort: 검색 결과 정렬 방법 (sim: 정확도순, date: 날짜순)
             
         Returns:
             검색 결과를 포함한 딕셔너리
@@ -48,8 +47,7 @@ class NaverSearchAPI(BaseAPI):
         params = {
             "query": query,
             "display": display,
-            "start": start,
-            "sort": sort
+            "start": start
         }
         
         response = requests.get(url, headers=headers, params=params)
@@ -315,7 +313,7 @@ class NaverSearchAPI(BaseAPI):
                 }
                 params = {
                     "query": "김치볶음밥 만드는 법",  # 간단한 테스트 쿼리
-                    "display": 1  # 최소한의 결과만 요청
+                    "display": 1,  # 최소한의 결과만 요청
                 }
                 
                 response = requests.get(url, headers=headers, params=params, timeout=10)

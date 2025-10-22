@@ -622,7 +622,7 @@ def main():
         "ANTHROPIC_API_KEY",
         "GROQ_API_KEY",
         "AZURE_API_KEY",
-        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
