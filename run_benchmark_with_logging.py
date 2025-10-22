@@ -124,8 +124,8 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
                         tools_needed.append(tool_name)
                         print(f"  [OK] Found tool in turn.action: {tool_name}")
         
-    # 선언된 도구 이름을 그대로 사용
-    print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
+        # 선언된 도구 이름을 그대로 사용
+        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
         
         converted_task = {
             "id": task.get("task_id", "unknown"),
