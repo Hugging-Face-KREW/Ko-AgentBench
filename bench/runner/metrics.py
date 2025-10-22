@@ -139,7 +139,7 @@ class LLMJudgeMetric(Metric):
                             result["reported_error_type"] = "none"
                     else:
                         result["reported_error_type"] = "none"
-                except:
+                except Exception:
                     result["reported_error_type"] = "none"
             
             return result
@@ -267,7 +267,7 @@ class LLMJudgeMetric(Metric):
         }
 
 
-#공통 메트릭
+# 공통 메트릭
 class SRMetric(Metric):
     """SR(성공률): success_condition 충족 여부"""
     name = "SR"
@@ -331,19 +331,18 @@ class PassAtKMetric(Metric):
             "actual_repetitions": actual_reps,
             "success_count": success_count
         })
-        
-#레벨1 메트릭
+
+# 레벨1 메트릭
 class ToolAccMetric(Metric):
     """ToolAcc: 첫번째 예측 툴이 golden_action.tool과 일치하는지"""
     name = "ToolAcc"
     level = 1
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-
-        golden = ctx.task_schema.get("golden_action", [])
-        if isinstance(golden, dict):
-            golden = [golden]
-        golden_tool = next((g["tool"] for g in golden if isinstance(g, dict) and "tool" in g), None)
+        golden_action = ctx.task_schema.get("golden_action", [])
+        if isinstance(golden_action, dict):
+            golden_action = [golden_action]
+        golden_tool = next((g["tool"] for g in golden_action if isinstance(g, dict) and "tool" in g), None)
 
         invocations = ctx.logs.get("tool_invocations", []) or []
         first_pred_tool = next((inv.get("tool") or inv.get("tool_name") for inv in invocations if inv.get("tool") or inv.get("tool_name")), None)
@@ -354,14 +353,12 @@ class ToolAccMetric(Metric):
         return EvaluationResult(
             self.name,
             score,
-            {"matched": matched}  
+            {"matched": matched}
         )
-        
-        
+
+
 class ArgAccMetric(LLMJudgeMetric):
-    """
-    ArgAcc: 도구 인자 정확도. (LLM Judge)
-    """
+    """ArgAcc: 도구 인자 정확도 (LLM Judge)"""
     name = "ArgAcc"
     level = 1
     DEFAULT_SCORE_KEY = "f1"
@@ -406,14 +403,26 @@ class ArgAccMetric(LLMJudgeMetric):
             golden_actions = [golden_actions]
 
         if not golden_actions or not isinstance(golden_actions[0], dict):
-            return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
+            return {
+                "ok": False,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "reason": "No valid golden_action"
+            }
 
         golden_tool = golden_actions[0].get("tool")
         golden_args = golden_actions[0].get("args", {}) or {}
         arg_schema = ctx.task_schema.get("arg_schema", {}) or {}
 
         if not golden_tool:
-            return {"ok": False, "precision": 0.0, "recall": 0.0, "f1": 0.0}
+            return {
+                "ok": False,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "reason": "No golden_tool specified"
+            }
 
         pred_args = cls._get_first_pred_args_for_tool(ctx, golden_tool)
 
@@ -439,7 +448,10 @@ class ArgAccMetric(LLMJudgeMetric):
         # 기존 PRF1 계산
         prf_result = self._compute_prf(ctx)
         if not prf_result.get("ok"):
-            return EvaluationResult(self.name, 0.0, {"ok": False})
+            return EvaluationResult(self.name, 0.0, {
+                "ok": False,
+                "reason": prf_result.get("reason", "Failed to compute PRF")
+            })
 
         # LLM Judge를 사용한 의미적 유사성 평가 
         llm_score = self._evaluate_with_llm_judge(ctx)
@@ -495,24 +507,28 @@ class CallEMMetric(Metric):
         if isinstance(golden_actions, dict):
             golden_actions = [golden_actions]
         if not golden_actions or not isinstance(golden_actions[0], dict):
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No valid golden_action found"
+            })
 
         golden_tool = golden_actions[0].get("tool")
         golden_args = golden_actions[0].get("args", {}) or {}
         if not golden_tool:
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No golden_tool specified"
+            })
 
 
         invocations = ctx.logs.get("tool_invocations", []) or []
         first_pred_tool = None
         first_pred_args = {}
 
-        for inv in invocations:
-            tool = inv.get("tool") or inv.get("tool_name")
+        for invocation in invocations:
+            tool = invocation.get("tool") or invocation.get("tool_name")
             if tool:
                 first_pred_tool = tool
                 # 표준 키: "arguments"
-                first_pred_args = inv.get("arguments") or {}
+                first_pred_args = invocation.get("arguments") or {}
                 break
 
         matched = (
@@ -522,12 +538,14 @@ class CallEMMetric(Metric):
         )
         score = 1.0 if matched else 0.0
 
-        return EvaluationResult(self.name, score, {})
+        return EvaluationResult(self.name, score, {
+            "matched": matched,
+            "golden_tool": golden_tool,
+            "pred_tool": first_pred_tool
+        })
 
 class RespOKMetric(Metric):
-    """
-    RespOK : actual_output이 resp_schema를 만족하는지 평가
-    """
+    """RespOK: actual_output이 resp_schema를 만족하는지 평가"""
     name = "RespOK"
     level = 1
 
@@ -542,45 +560,60 @@ class RespOKMetric(Metric):
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
         schema = ctx.task_schema.get("resp_schema")
         if not isinstance(schema, dict):
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No resp_schema defined"
+            })
 
         candidate = self._extract_candidate(ctx)
         if candidate is None:
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No actual_output found"
+            })
 
         # jsonschema가 있으면 
         try:
             import jsonschema
             jsonschema.validate(instance=candidate, schema=schema)
-            return EvaluationResult(self.name, 1.0, {})
+            return EvaluationResult(self.name, 1.0, {
+                "valid": True,
+                "schema_type": schema.get("type")
+            })
         except ImportError:
 
             expected_type = schema.get("type")
             ok = (expected_type == "string" and isinstance(candidate, str))
-            return EvaluationResult(self.name, 1.0 if ok else 0.0, {})
-        except Exception:
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 1.0 if ok else 0.0, {
+                "valid": ok,
+                "expected_type": expected_type,
+                "actual_type": type(candidate).__name__
+            })
+        except Exception as error:
+            return EvaluationResult(self.name, 0.0, {
+                "valid": False,
+                "error": str(error)
+            })
 
 
-#레벨2 메트릭
+# 레벨2 메트릭
 class SelectAccMetric(Metric):
+    """SelectAcc: 도구 선택 정확도"""
     name = "SelectAcc"
     level = 2
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        ga = ctx.task_schema.get("golden_action", [])
-        if isinstance(ga, dict):
-            ga = [ga]
-        golden_tool = ga[0].get("tool") if (ga and isinstance(ga[0], dict)) else None
+        golden_action = ctx.task_schema.get("golden_action", [])
+        if isinstance(golden_action, dict):
+            golden_action = [golden_action]
+        golden_tool = golden_action[0].get("tool") if (golden_action and isinstance(golden_action[0], dict)) else None
 
         pred_tool = ctx.logs.get("selected_tool")
         if not isinstance(pred_tool, str) or not pred_tool:
-            inv = ctx.logs.get("tool_invocations", []) or []
-            for call in inv:
+            invocations = ctx.logs.get("tool_invocations", []) or []
+            for call in invocations:
                 if isinstance(call, dict):
-                    t = call.get("tool") or call.get("tool_name")
-                    if isinstance(t, str) and t:
-                        pred_tool = t
+                    tool_name = call.get("tool") or call.get("tool_name")
+                    if isinstance(tool_name, str) and tool_name:
+                        pred_tool = tool_name
                         break
 
         success = (golden_tool is not None and pred_tool == golden_tool)
@@ -588,7 +621,7 @@ class SelectAccMetric(Metric):
 
         return EvaluationResult(self.name, score, {"success": success})
 
-#레벨3 메트릭   
+# 레벨3 메트릭
 class FSMMetric(Metric):
     """FSM(Full Sequence Match): 정답 경로와 완전 일치"""
     name = "FSM"
@@ -785,12 +818,10 @@ class ProvAccMetric(Metric):
             "total_flows": total_flows,
             "flow_details": flow_details
         })
-        
-#레벨4 메트릭
+
+# 레벨4 메트릭
 class CoverageMetric(Metric):
-    """Coverage: 필수 소스를 모두 성공적으로 조회했는지 비율
-    - golden_action에 명시된 도구들을 모두 사용했는지 확인
-    """
+    """Coverage: 필수 소스를 모두 성공적으로 조회했는지 비율"""
     name = "Coverage"
     level = 4
     
@@ -935,22 +966,19 @@ class SourceEPRMetric(Metric):
             "total_sources": len(unique_tools)
         })
 
-#레벨5 메트릭
+# 레벨5 메트릭
 class ErrorDetectMetric(LLMJudgeMetric):
-    """
- ErrorDetect : 주입된 오류(tool,error_type)를 모델이 올바르게 보고하는지의 비율
-    LLM-as-a-Judge로 final_response에서 에러 보고 여부 및 에러 타입 일치 여부를 판단
-    """
+    """ErrorDetect: 주입된 오류(tool, error_type)를 모델이 올바르게 보고하는지의 비율 (LLM Judge)"""
     name = "ErrorDetect"
     level = 5
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        inj = ctx.task_schema.get("error_injection", {}) or {}
-        inj_tool = inj.get("tool")
-        inj_type = inj.get("error_type")
+        error_injection = ctx.task_schema.get("error_injection", {}) or {}
+        injected_tool = error_injection.get("tool")
+        injected_error_type = error_injection.get("error_type")
 
         # 에러 주입이 없으면 평가 불가
-        if not inj_tool or not inj_type:
+        if not injected_tool or not injected_error_type:
             return EvaluationResult(self.name, 0.0, {
                 "reason": "No error injection defined",
                 "error_occurred": False,
@@ -961,16 +989,16 @@ class ErrorDetectMetric(LLMJudgeMetric):
         error_occurred = False
         tool_calls = ctx.logs.get("tool_calls") or []
         
-        for inv in tool_calls:
-            if isinstance(inv, dict) and inv.get("error"):
-                t = inv.get("tool") or inv.get("tool_name")
+        for invocation in tool_calls:
+            if isinstance(invocation, dict) and invocation.get("error"):
+                tool_name = invocation.get("tool") or invocation.get("tool_name")
                 # error 필드에서 에러 타입 추출
-                error_msg = inv.get("error", "")
-                if t == inj_tool and error_msg:
+                error_msg = invocation.get("error", "")
+                if tool_name == injected_tool and error_msg:
                     # 에러 메시지에서 타입 매칭 확인
-                    if (inj_type == "timeout" and "timeout" in error_msg.lower()) or \
-                       (inj_type == "complete_unavailable" and "unavailable" in error_msg.lower()) or \
-                       (inj_type == "data_not_available" and "no data" in error_msg.lower()):
+                    if (injected_error_type == "timeout" and "timeout" in error_msg.lower()) or \
+                       (injected_error_type == "complete_unavailable" and "unavailable" in error_msg.lower()) or \
+                       (injected_error_type == "data_not_available" and "no data" in error_msg.lower()):
                         error_occurred = True
                         break
 
@@ -999,11 +1027,11 @@ class ErrorDetectMetric(LLMJudgeMetric):
             })
 
         # LLM Judge 프롬프트 구성
-        error_type_korean = self.prompt_loader.get_error_type_mapping(inj_type)
+        error_type_korean = self.prompt_loader.get_error_type_mapping(injected_error_type)
         prompt_template = self.prompt_loader.get_prompt('error_detect')
         prompt = prompt_template.format(
-            injected_tool=inj_tool,
-            injected_error_type=inj_type,
+            injected_tool=injected_tool,
+            injected_error_type=injected_error_type,
             error_type_korean=error_type_korean,
             final_response=final_response
         )
@@ -1015,7 +1043,7 @@ class ErrorDetectMetric(LLMJudgeMetric):
         confidence = llm_result.get("confidence", 0.0)
         
         # 에러 타입 일치 여부 비교
-        type_matches = (reported_error_type == inj_type)
+        type_matches = (reported_error_type == injected_error_type)
         
         # 점수 계산: 에러를 보고하고 타입도 일치해야 만점
         # 단, 다수결에서 실패했지만 reported_error_type이 유효한 경우도 고려
@@ -1034,17 +1062,15 @@ class ErrorDetectMetric(LLMJudgeMetric):
             "type_matches": type_matches,
             "confidence": confidence,
             "llm_reason": llm_result.get("reason", "No reason provided"),
-            "injected_tool": inj_tool,
-            "injected_error_type": inj_type,
+            "injected_tool": injected_tool,
+            "injected_error_type": injected_error_type,
             "vote_details": llm_result.get("vote_count"),
             "individual_judges": llm_result.get("individual_results")
         })
 
 
 class GracefulFailMetric(Metric):
-    """
-    GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
-    """
+    """GracefulFail: 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율"""
     name = "GracefulFail"
     level = 5
 
@@ -1060,56 +1086,55 @@ class GracefulFailMetric(Metric):
         return True
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-
-        inj = ctx.task_schema.get("error_injection")
-        if not isinstance(inj, dict) or not inj:
-            return EvaluationResult(self.name, 0.0, {})
+        error_injection = ctx.task_schema.get("error_injection")
+        if not isinstance(error_injection, dict) or not error_injection:
+            return EvaluationResult(self.name, 0.0, {"reason": "No error injection"})
 
         # 반복 실행 결과가 있는 경우
-        reps = ctx.logs.get("repetition_results")
-        if isinstance(reps, list) and reps and isinstance(reps[0], dict):
-            total_fail = sum(1 for r in reps if not bool(r.get("success", False)))
+        repetition_results = ctx.logs.get("repetition_results")
+        if isinstance(repetition_results, list) and repetition_results and isinstance(repetition_results[0], dict):
+            total_fail = sum(1 for result in repetition_results if not bool(result.get("success", False)))
             graceful_fail = sum(
-                1 for r in reps
-                if (not bool(r.get("success", False))) and (not self._has_output(r.get("actual_output")))
+                1 for result in repetition_results
+                if (not bool(result.get("success", False))) and (not self._has_output(result.get("actual_output")))
             )
             score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
             return EvaluationResult(self.name, score, {
                 "total_fail": total_fail,
                 "graceful_fail": graceful_fail,
-                "repetitions": len(reps)
+                "repetitions": len(repetition_results)
             })
 
         # 반복 정보 없으면 단일 시도
         success = bool(ctx.logs.get("success", False))
         if success:
-            return EvaluationResult(self.name, 0.0, {})
+            return EvaluationResult(self.name, 0.0, {"reason": "Task succeeded"})
         
-        out = ctx.logs.get("actual_output", None)
-        graceful = not self._has_output(out)
-        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {})
+        actual_output = ctx.logs.get("actual_output", None)
+        graceful = not self._has_output(actual_output)
+        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {"graceful": graceful})
     
 
 class FallbackSRMetric(Metric):
-    """
-    FallbackSR : 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율
-    """
+    """FallbackSR: 주 도구 실패(에러 주입) 시 대체 도구/경로 시도 중 성공 비율"""
     name = "FallbackSR"
     level = 5
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        # 에러 주입 없는 태스크면 0 (비적용)
+        # 에러 주입이 없으면 평가 불가
         error_injection = ctx.task_schema.get("error_injection")
         if not error_injection:
-            return EvaluationResult(self.name, 0.0, {"reason": "No error injection"})
+            return EvaluationResult(self.name, 0.0, {"reason": "No error injection defined"})
 
-        fallback_opts = ctx.task_schema.get("fallback_options") or []
+        fallback_options = ctx.task_schema.get("fallback_options") or []
         fallback_tools = {
-            opt.get("tool") for opt in fallback_opts
-            if isinstance(opt, dict) and opt.get("tool")
+            option.get("tool") for option in fallback_options
+            if isinstance(option, dict) and option.get("tool")
         }
         if not fallback_tools:
-            return EvaluationResult(self.name, None, {"reason": "No fallback options - not applicable"})
+            return EvaluationResult(self.name, None, {
+                "reason": "No fallback options - not applicable"
+            })
 
         invocations = ctx.logs.get("tool_calls", []) or []
         injected_tool = error_injection.get("tool")
@@ -1138,11 +1163,16 @@ class FallbackSRMetric(Metric):
 
         # 에러 주입된 도구가 실패하지 않았으면 평가 불가
         if not injected_tool_failed:
-            return EvaluationResult(self.name, 0.0, {"reason": "Injected tool did not fail"})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "Injected tool did not fail"
+            })
         
         # 대체 도구를 시도하지 않았으면 0점
         if fallback_attempts == 0:
-            return EvaluationResult(self.name, 0.0, {"reason": "No fallback attempts"})
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No fallback attempts",
+                "injected_tool": injected_tool
+            })
 
         score = (fallback_successes / fallback_attempts) if fallback_attempts > 0 else 0.0
         return EvaluationResult(self.name, score, {
@@ -1153,7 +1183,7 @@ class FallbackSRMetric(Metric):
             "fallback_tools": list(fallback_tools)
         })
 
-#레벨6 메트릭
+# 레벨6 메트릭
 class ReuseRateMetric(Metric):
     """ReuseRate: 재사용 기회 대비 실제 재사용 비율"""
     name = "ReuseRate"
@@ -1173,7 +1203,11 @@ class ReuseRateMetric(Metric):
             return EvaluationResult(
                 self.name,
                 0.0,
-                {"reuse_opportunities": 0, "reused": 0, "reason": "No reuse opportunities"}
+                {
+                    "reuse_opportunities": 0,
+                    "reused": 0,
+                    "reason": "No reuse opportunities"
+                }
             )
         
         # 실제 재사용 판단: 동일한 도구를 동일한 파라미터로 재호출하지 않은 경우
@@ -1291,7 +1325,11 @@ class RedundantCallRateMetric(Metric):
             return EvaluationResult(
                 self.name,
                 1.0,  # 재사용 기회가 없으면 만점
-                {"reuse_opportunities": 0, "redundant_calls": 0, "reason": "No reuse opportunities"}
+                {
+                    "reuse_opportunities": 0,
+                    "redundant_calls": 0,
+                    "reason": "No reuse opportunities"
+                }
             )
         
         # 불필요한 호출: 동일한 도구를 동일한 파라미터로 재호출한 경우
@@ -1401,7 +1439,7 @@ class EffScoreMetric(LLMJudgeMetric):
             }
         )
 
-#레벨7 메트릭
+# 레벨7 메트릭
 class ContextRetentionMetric(LLMJudgeMetric):
     """ContextRetention: 멀티턴 대화에서 과거 맥락 활용도 (LLM Judge)"""
     name = "ContextRetention"
