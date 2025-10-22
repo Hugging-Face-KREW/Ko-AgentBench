@@ -313,7 +313,7 @@ class NaverSearchAPI(BaseAPI):
                 }
                 params = {
                     "query": "김치볶음밥 만드는 법",  # 간단한 테스트 쿼리
-                    "display": 1,  # 최소한의 결과만 요청,
+                    "display": 1,  # 최소한의 결과만 요청
                 }
                 
                 response = requests.get(url, headers=headers, params=params, timeout=10)
