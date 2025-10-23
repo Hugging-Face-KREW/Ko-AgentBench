@@ -101,40 +101,17 @@ class LLMJudgeMetric(Metric):
     def _parse_json_response(self, content: str, fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
         """JSON 응답 파싱"""
 
-        if "```json" in content:
-            content = content.split("```json")[1].split("```")[0].strip()
-        elif "```" in content:
-            content = content.split("```")[1].split("```")[0].strip()
-        
         try:
             return json.loads(content)
         except json.JSONDecodeError:
-            pass
-        
-        try:
-            # { ... } 패턴 찾기
-            import re
-            json_match = re.search(r'\{[^{}]*\}', content)
-            if json_match:
-                return json.loads(json_match.group(0))
-        except:
-            pass
-        
-        try:
             match = re.search(fallback_pattern, content.lower() if 'true|false' in fallback_pattern else content)
             if match:
                 if 'true|false' in fallback_pattern:
                     return {fallback_key: match.group(1) == "true", "reason": "Parsed from text"}
                 else:
                     return {fallback_key: int(match.group(1)), "reason": "Parsed from text"}
-        except:
-            pass
-        
-        default_value = False if 'true|false' in fallback_pattern else 3  # 점수는 중간값 3
-        return {
-            fallback_key: default_value, 
-            "reason": f"Failed to parse LLM response. Raw: {content[:100]}"
-        }
+            return {fallback_key: False if 'true|false' in fallback_pattern else 0, 
+                    "reason": "Failed to parse LLM response"}
     
     def _call_single_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
                           fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
