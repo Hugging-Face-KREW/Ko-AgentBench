@@ -28,6 +28,34 @@
     }
   },
   {
+    "task_id": "L4-002",
+    "instruction": "2025 여의도 불꽃축제 몇시부터 몇시까지야?",
+    "task_level": 4,
+    "task_category": "Multi Tool Parallel",
+    "golden_action": [
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "2025 여의도 불꽃축제 운영시간",
+          "display": 10
+        }
+      },
+      {
+        "tool": "NewsSearch_naver",
+        "args": {
+          "query": "2025 여의도 불꽃축제 운영시간",
+          "display": 10
+        }
+      }
+    ],
+    "minimum_sources": 2,
+    "decision": {
+      "decision_type": "multi_criteria",
+      "criteria": "웹 검색을 통해 여의도 불꽃축제 시간 비교분석",
+      "primary_criteria": "최신데이터 검색 가능성"
+    }
+  },
+  {
     "task_id": "L4-003",
     "instruction": "카카오(035720)와 비트코인 두 가격 어떻게 돼?",
     "task_level": 4,
