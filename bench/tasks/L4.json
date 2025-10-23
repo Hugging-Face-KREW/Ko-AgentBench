@@ -253,21 +253,21 @@
   },
   {
     "task_id": "L4-009",
-    "instruction": "세종대왕이 사용한 스마트폰을 연도별로 정리해줘",
+    "instruction": "제니가 사용한 스마트폰을 연도별로 정리해줘",
     "task_level": 4,
     "task_category": "Multi Tool Parallel",
     "golden_action": [
       {
         "tool": "WebSearch_naver",
         "args": {
-          "query": "세종대왕 스마트폰 사용 기록",
+          "query": "제니가 사용한 스마트폰 사용 기록",
           "display": 10
         }
       },
       {
         "tool": "BlogSearch_naver",
         "args": {
-          "query": "세종대왕 스마트폰 사용 기록",
+          "query": "제니가 사용한 스마트폰 사용 기록",
           "display": 10
         }
       }
@@ -275,8 +275,8 @@
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
-      "criteria": "세종대왕 스마트폰 사용 기록에 대한 거짓정보 반응도 분석",
-      "primary_criteria": "거짓정보 반응도 분석"
+      "criteria": "제니가 사용한 스마트폰 사용 기록에 대한 정보 분석",
+      "primary_criteria": "정보 분석"
     }
   },
   {
