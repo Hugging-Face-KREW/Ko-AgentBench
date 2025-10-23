@@ -100,17 +100,41 @@ class LLMJudgeMetric(Metric):
     
     def _parse_json_response(self, content: str, fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
         """JSON 응답 파싱"""
+
+        if "```json" in content:
+            content = content.split("```json")[1].split("```")[0].strip()
+        elif "```" in content:
+            content = content.split("```")[1].split("```")[0].strip()
+        
         try:
             return json.loads(content)
         except json.JSONDecodeError:
+            pass
+        
+        try:
+            # { ... } 패턴 찾기
+            import re
+            json_match = re.search(r'\{[^{}]*\}', content)
+            if json_match:
+                return json.loads(json_match.group(0))
+        except:
+            pass
+        
+        try:
             match = re.search(fallback_pattern, content.lower() if 'true|false' in fallback_pattern else content)
             if match:
                 if 'true|false' in fallback_pattern:
                     return {fallback_key: match.group(1) == "true", "reason": "Parsed from text"}
                 else:
                     return {fallback_key: int(match.group(1)), "reason": "Parsed from text"}
-            return {fallback_key: False if 'true|false' in fallback_pattern else 0, 
-                    "reason": "Failed to parse LLM response"}
+        except:
+            pass
+        
+        default_value = False if 'true|false' in fallback_pattern else 3  # 점수는 중간값 3
+        return {
+            fallback_key: default_value, 
+            "reason": f"Failed to parse LLM response. Raw: {content[:100]}"
+        }
     
     def _call_single_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
                           fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
@@ -268,20 +292,76 @@ class LLMJudgeMetric(Metric):
 
 
 #공통 메트릭
-class SRMetric(Metric):
-    """SR(성공률): success_condition 충족 여부"""
+class SRMetric(LLMJudgeMetric):
+    """SR(성공률): LLM Judge로 태스크 완수 여부 평가 (1-5점 척도)"""
     name = "SR"
     level = "common"
     
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        # task에서 성공 여부 직접 확인
-        success = ctx.logs.get("success", False)
-        score = 1.0 if success else 0.0
+        """LLM Judge를 사용하여 태스크 완수 여부 평가"""
+        
+        # 필요한 정보 추출
+        instruction = ctx.task_schema.get("instruction", "")
+        final_response = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
+        
+        # final_response 검증
+        if final_response is None:
+            final_response = ""
+        elif not isinstance(final_response, str):
+            final_response = str(final_response)
+        
+        # 빈 응답 체크
+        if not final_response or len(final_response.strip()) < 3:
+            return EvaluationResult(
+                self.name,
+                0.0,
+                {
+                    "score": 1,
+                    "normalized_score": 0.0,
+                    "reason": "응답이 생성되지 않음",
+                    "success": False
+                }
+            )
+        
+        # 도구 호출 정보 수집
+        tool_calls = []
+        for action in ctx.action_trace:
+            tool_calls.append({
+                "tool": action.get("tool"),
+                "args": action.get("args", {}),
+                "success": action.get("success", False),
+                "result_preview": str(action.get("result", ""))[:100]
+            })
+        
+        # LLM Judge 프롬프트 구성
+        prompt_template = self.prompt_loader.get_prompt('sr')
+        prompt = prompt_template.format(
+            instruction=instruction,
+            final_response=final_response,
+            tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
+        )
+        
+        # Multi-judge 호출 (점수 평가)
+        llm_result = self._call_multi_judge_score(prompt, 'sr', min_score=1, max_score=5)
+        raw_score = llm_result.get("score", 1)
+        
+        # 1-5점을 0.0-1.0 스케일로 정규화
+        normalized_score = max(0.0, (raw_score - 1) / 4.0)
+        
+        # 성공 여부 판단 (3점 이상이면 성공으로 간주)
+        success = raw_score >= 3
         
         return EvaluationResult(
-            self.name, 
-            score, 
-            {"success": success}
+            self.name,
+            normalized_score,
+            {
+                "score": raw_score,
+                "normalized_score": normalized_score,
+                "average_score": llm_result.get("average_score", 0),
+                "success": success,
+                "reason": llm_result.get("reason", ""),
+                "individual_judges": llm_result.get("individual_results", [])
+            }
         )
 
 class EPRCVRMetric(Metric):

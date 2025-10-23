@@ -98,6 +98,7 @@ class ModelRunEvaluator:
             return
 
         judge_metrics = [
+            'SR',               # 공통
             'ArgAcc',           # L1
             'ErrorDetect',      # L5
             'EffScore',         # L6
@@ -370,7 +371,7 @@ class ModelRunEvaluator:
             writer = csv.writer(f)
 
             # 헤더
-            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Success_Rate', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
+            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Execution_Rate', 'Task_Success_Rate(SR)', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
             writer.writerow(header)
 
             # 각 레벨 데이터
@@ -382,15 +383,17 @@ class ModelRunEvaluator:
                     level,
                     level_data['total_tasks'],
                     level_data['evaluated_tasks'],
-                    f"{metadata.get('success_rate', 0):.2f}%",
+                    f"{metadata.get('success_rate', 0):.2f}%",  # 실행 완료율
+                    f"{level_data['metrics'].get('SR', 0) * 100:.2f}%",  # 태스크 완수율
                     f"{metadata.get('average_execution_time', 0):.2f}",
                     f"{metadata.get('average_tokens_per_task', 0):.2f}",
                     f"{metadata.get('average_tps', 0):.2f}",
                     f"{metadata.get('ttft', {}).get('average', 0):.4f}",
                 ]
                 for metric in sorted(all_metrics):
-                    score = level_data['metrics'].get(metric, 0.0)
-                    row.append(f"{score:.4f}")
+                    if metric != 'SR':  # SR 중복 제거
+                        score = level_data['metrics'].get(metric, 0.0)
+                        row.append(f"{score:.4f}")
                 writer.writerow(row)
 
         print(f"[저장] CSV: {output_file}")
@@ -417,8 +420,8 @@ class ModelRunEvaluator:
 
             # 📊 성능 요약 테이블 추가
             f.write("## 📊 성능 요약\n\n")
-            f.write("| Level | 태스크 수 | 성공률 | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
-            f.write("| --- | --- | --- | --- | --- | --- | --- |\n")
+            f.write("| Level | 태스크 수 | 실행 완료율 | 태스크 완수율(SR) | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
+            f.write("| --- | --- | --- | --- | --- | --- | --- | --- |\n")
 
             # 각 레벨의 핵심 메트릭 매핑
             key_metrics = {
@@ -437,7 +440,12 @@ class ModelRunEvaluator:
                 metrics = level_data['metrics']
 
                 task_count = f"{level_data['evaluated_tasks']}/{level_data['total_tasks']}"
-                sr = f"{metadata.get('success_rate', 0):.1f}%" if 'success_rate' in metadata else "N/A"
+                
+                execution_rate = f"{metadata.get('success_rate', 0):.1f}%" if 'success_rate' in metadata else "N/A"
+                
+                sr_score = metrics.get('SR', 0)
+                sr_percentage = f"{sr_score * 100:.1f}%" if sr_score is not None else "N/A"
+                
                 exec_time = f"{metadata.get('average_execution_time', 0):.1f}초" if 'average_execution_time' in metadata else "N/A"
                 tps = f"{metadata.get('average_tps', 0):.0f}" if 'average_tps' in metadata else "N/A"
                 ttft = f"{metadata.get('ttft', {}).get('average', 0):.3f}초" if 'ttft' in metadata else "N/A"
@@ -449,7 +457,7 @@ class ModelRunEvaluator:
                         key_metric_strs.append(f"{km}: {metrics[km]:.3f}")
                 key_metric_str = ", ".join(key_metric_strs) if key_metric_strs else "N/A"
 
-                f.write(f"| **{level}** | {task_count} | {sr} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
+                f.write(f"| **{level}** | {task_count} | {execution_rate} | {sr_percentage} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
 
             f.write("\n")
 
@@ -480,7 +488,13 @@ class ModelRunEvaluator:
 
                 metadata = level_data.get('metadata', {})
                 if 'success_rate' in metadata:
-                    f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
+                    f.write(f"- 실행 완료율: {metadata['success_rate']:.1f}% (에러 없이 완료)\n")
+
+                # SR 메트릭 추가
+                sr_score = level_data['metrics'].get('SR')
+                if sr_score is not None:
+                    f.write(f"- 태스크 완수율: {sr_score * 100:.1f}% (LLM Judge 평가)\n")
+
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
 
