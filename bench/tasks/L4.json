@@ -57,49 +57,48 @@
   },
   {
     "task_id": "L4-003",
-    "instruction": "직장인인데, 어떻게 하면 효과적으로 시간을 관리할 수 있을까?",
+    "instruction": "카카오(035720)와 비트코인 두 가격 어떻게 돼?",
     "task_level": 4,
     "task_category": "Multi Tool Parallel",
     "golden_action": [
       {
-        "tool": "WebSearch_naver",
+        "tool": "StockPrice_ls",
         "args": {
-          "query": "효과적인 시간관리 방법",
-          "display": 10
+          "shcode": "035720",
+          "exchgubun": "K"
         }
       },
       {
-        "tool": "BlogSearch_naver",
+        "tool": "CryptoPrice_bithumb",
         "args": {
-          "query": "효과적인 시간관리 방법",
-          "display": 10
+          "markets": "KRW-BTC"
         }
       }
     ],
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
-      "criteria": "효과적인 시간관리 방법 검색 후 비교후 통합",
-      "primary_criteria": "효과적인 시간관리 방법 검색 후 비교후 통합"
+      "criteria": "카카오 주가와 비트코인 시세의 과거 수익률, 변동성, 시장 트렌드, 리스크 대비 수익률을 종합적으로 분석하여 투자 수익성을 비교 평가",
+      "primary_criteria": "수익률 비교"
     }
   },
   {
     "task_id": "L4-004",
-    "instruction": "2024년 봄 메이크업 트렌드는 어떤 스타일이야?",
+    "instruction": "2025년 봄 메이크업 트렌드는 어떤 스타일이야?",
     "task_level": 4,
     "task_category": "Multi Tool Parallel",
     "golden_action": [
       {
         "tool": "WebSearch_naver",
         "args": {
-          "query": "2024 봄 메이크업 트렌드",
+          "query": "2025 봄 메이크업 트렌드",
           "display": 10
         }
       },
       {
         "tool": "BlogSearch_naver",
         "args": {
-          "query": "2024 봄 메이크업 트렌드",
+          "query": "2025 봄 메이크업 트렌드",
           "display": 10
         }
       }
