@@ -151,6 +151,31 @@
     ]
   },
   {
+    "task_id": "L2-008",
+    "instruction": "리플 최근 1시간봉 차트를 보고 싶어",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoCandle_upbit",
+      "CryptoCandle_bithumb",
+      "CryptoPrice_upbit",
+      "StockChart_kis",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "args": {
+          "symbol": "XRP",
+          "quote": "KRW",
+          "candle_type": "minutes",
+          "unit": 60,
+          "count": 24
+        }
+      }
+    ]
+  },
+  {
     "task_id": "L2-009",
     "instruction": "강남역 주변 카페를 찾아줘",
     "task_level": 2,
@@ -219,6 +244,28 @@
     ]
   },
   {
+    "task_id": "L2-012",
+    "instruction": "애플 주식 현재 가격 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "USStockPrice_kis",
+      "StockPrice_kis",
+      "WebSearch_naver",
+      "CryptoPrice_bithumb",
+      "NewsSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "USStockPrice_kis",
+        "args": {
+          "symbol": "AAPL",
+          "exchange": "NASDAQ"
+        }
+      }
+    ]
+  },
+  {
     "task_id": "L2-013",
     "instruction": "이번 주 경제경영 베스트셀러 목록을 보여줘",
     "task_level": 2,
@@ -236,6 +283,30 @@
         "args": {
           "query_type": "Bestseller",
           "search_target": "Book"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-014",
+    "instruction": "광화문 인근 약국을 카테고리로 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "CategorySearch_tmap",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "PM9",
+          "x": 126.9769,
+          "y": 37.5759,
+          "radius": 800
         }
       }
     ]
@@ -266,7 +337,7 @@
   },
   {
     "task_id": "L2-016",
-    "instruction": "업비트에서 거래 가능한 암호화폐 목록을 10개만 보여줘",
+    "instruction": "업비트에서 거래 가능한 모든 암호화폐 목록을 보여줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -322,6 +393,29 @@
           "city_do": "서울특별시",
           "gu_gun": "강남구",
           "dong": "역삼동"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-019",
+    "instruction": "판교역(127.1117, 37.3946) 근처 주차장을 찾아줘. T맵 카테고리 검색으로 반경 500m 내에서 찾아줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_tmap",
+      "CategorySearch_kakao",
+      "POISearch_tmap",
+      "PlaceSearch_kakao"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_tmap",
+        "args": {
+          "categories": "parking",
+          "centerLon": 127.1117,
+          "centerLat": 37.3946,
+          "radius": 1
         }
       }
     ]
@@ -453,8 +547,31 @@
     ]
   },
   {
+    "task_id": "L2-026",
+    "instruction": "이번 주 IT/컴퓨터 분야 신간 도서 목록을 보여줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemList_aladin",
+      "ItemSearch_aladin",
+      "NewsSearch_naver",
+      "BlogSearch_naver",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemList_aladin",
+        "args": {
+          "query_type": "ItemNewAll",
+          "search_target": "Book",
+          "max_results": 10
+        }
+      }
+    ]
+  },
+  {
     "task_id": "L2-027",
-    "instruction": "LG화학(051910) 주식 현재가를 확인해줘",
+    "instruction": "LG화학 주식 현재가를 확인해줘",
     "task_level": 2,
     "task_category": "Tool Retrieval & Selection",
     "available_tools": [
@@ -468,6 +585,26 @@
         "tool": "StockPrice_ls",
         "args": {
           "shcode": "051910"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-028",
+    "instruction": "업비트에서 리플(XRP) 현재가 알려줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CryptoPrice_upbit",
+      "CryptoCandle_upbit",
+      "MarketList_upbit"
+    ],
+    "golden_action": [
+      {
+        "tool": "CryptoPrice_upbit",
+        "args": {
+          "symbol": "XRP",
+          "quote": "KRW"
         }
       }
     ]
@@ -534,6 +671,50 @@
         "args": {
           "query": "제주도 맛집 후기",
           "sort": "sim"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-032",
+    "instruction": "서울 종로구 청와대 근처의 한식당을 찾아줘. 반경 1km 이내로 제한해서 검색해줘.",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "CategorySearch_kakao",
+      "PlaceSearch_kakao",
+      "POISearch_tmap",
+      "WebSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "CategorySearch_kakao",
+        "args": {
+          "category": "FD6",
+          "x": 126.9778,
+          "y": 37.5863,
+          "radius": 1000
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-033",
+    "instruction": "‘클린 아키텍처’ 책을 키워드로 검색해줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "ItemSearch_aladin",
+      "ItemList_aladin",
+      "WebSearch_naver",
+      "BlogSearch_naver"
+    ],
+    "golden_action": [
+      {
+        "tool": "ItemSearch_aladin",
+        "args": {
+          "query": "클린 아키텍처",
+          "sort": "Accuracy"
         }
       }
     ]
@@ -643,6 +824,27 @@
         "tool": "WebSearch_daum",
         "args": {
           "query": "2024년 부동산 세법 개정"
+        }
+      }
+    ]
+  },
+  {
+    "task_id": "L2-039",
+    "instruction": "전기차 충전소 설치 비용에 대한 정보를 찾아줘",
+    "task_level": 2,
+    "task_category": "Tool Retrieval & Selection",
+    "available_tools": [
+      "WebSearch_naver",
+      "NewsSearch_naver",
+      "BlogSearch_naver",
+      "WebSearch_daum",
+      "VideoSearch_daum"
+    ],
+    "golden_action": [
+      {
+        "tool": "WebSearch_naver",
+        "args": {
+          "query": "전기차 충전소 설치 비용"
         }
       }
     ]
