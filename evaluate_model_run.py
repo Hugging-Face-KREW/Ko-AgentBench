@@ -370,16 +370,23 @@ class ModelRunEvaluator:
             writer = csv.writer(f)
 
             # 헤더
-            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks'] + sorted(all_metrics)
+            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Success_Rate', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
             writer.writerow(header)
 
             # 각 레벨 데이터
             for level in sorted(report['by_level'].keys()):
                 level_data = report['by_level'][level]
+                metadata = level_data.get('metadata', {})
+                
                 row = [
                     level,
                     level_data['total_tasks'],
-                    level_data['evaluated_tasks']
+                    level_data['evaluated_tasks'],
+                    f"{metadata.get('success_rate', 0):.2f}%",
+                    f"{metadata.get('average_execution_time', 0):.2f}",
+                    f"{metadata.get('average_tokens_per_task', 0):.2f}",
+                    f"{metadata.get('average_tps', 0):.2f}",
+                    f"{metadata.get('ttft', {}).get('average', 0):.4f}",
                 ]
                 for metric in sorted(all_metrics):
                     score = level_data['metrics'].get(metric, 0.0)
@@ -410,8 +417,8 @@ class ModelRunEvaluator:
 
             # 📊 성능 요약 테이블 추가
             f.write("## 📊 성능 요약\n\n")
-            f.write("| Level | 태스크 수 | 성공률 | 평균 실행시간 | 주요 지표 |\n")
-            f.write("| --- | --- | --- | --- | --- |\n")
+            f.write("| Level | 태스크 수 | 성공률 | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
+            f.write("| --- | --- | --- | --- | --- | --- | --- |\n")
 
             # 각 레벨의 핵심 메트릭 매핑
             key_metrics = {
@@ -426,12 +433,14 @@ class ModelRunEvaluator:
 
             for level in sorted(report['by_level'].keys()):
                 level_data = report['by_level'][level]
-                metadata = level_data['metadata']
+                metadata = level_data.get('metadata', {})
                 metrics = level_data['metrics']
 
                 task_count = f"{level_data['evaluated_tasks']}/{level_data['total_tasks']}"
                 sr = f"{metadata.get('success_rate', 0):.1f}%" if 'success_rate' in metadata else "N/A"
                 exec_time = f"{metadata.get('average_execution_time', 0):.1f}초" if 'average_execution_time' in metadata else "N/A"
+                tps = f"{metadata.get('average_tps', 0):.0f}" if 'average_tps' in metadata else "N/A"
+                ttft = f"{metadata.get('ttft', {}).get('average', 0):.3f}초" if 'ttft' in metadata else "N/A"
 
                 # 핵심 메트릭 표시
                 key_metric_strs = []
@@ -440,7 +449,7 @@ class ModelRunEvaluator:
                         key_metric_strs.append(f"{km}: {metrics[km]:.3f}")
                 key_metric_str = ", ".join(key_metric_strs) if key_metric_strs else "N/A"
 
-                f.write(f"| **{level}** | {task_count} | {sr} | {exec_time} | {key_metric_str} |\n")
+                f.write(f"| **{level}** | {task_count} | {sr} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
 
             f.write("\n")
 
@@ -469,7 +478,7 @@ class ModelRunEvaluator:
 
                 f.write(f"- 태스크 수: {level_data['evaluated_tasks']}/{level_data['total_tasks']}\n")
 
-                metadata = level_data['metadata']
+                metadata = level_data.get('metadata', {})
                 if 'success_rate' in metadata:
                     f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
                 if 'average_execution_time' in metadata:
@@ -489,10 +498,59 @@ class ModelRunEvaluator:
 
                 f.write("\n")
 
-            # 토큰 사용량 섹션 (채원님 작업 예정)
-            f.write("## 토큰 사용량\n\n")
-            f.write("*[채원님 Langfuse 데이터 추가 예정]*\n\n")
-
+            # 토큰 사용량 및 성능 지표 섹션
+            f.write("## 토큰 사용량 및 성능 지표\n\n")
+            
+            total_tokens = 0
+            total_time = 0
+            total_tasks = 0
+            all_ttft_values = []
+            
+            for level_data in report['by_level'].values():
+                metadata = level_data.get('metadata', {})
+                tasks = level_data.get('evaluated_tasks', 0)
+                total_tasks += tasks
+                total_tokens += metadata.get('total_tokens', 0)
+                total_time += metadata.get('total_execution_time', 0)
+                
+                ttft_avg = metadata.get('ttft', {}).get('average', 0)
+                if ttft_avg > 0:
+                    all_ttft_values.extend([ttft_avg] * tasks)
+            
+            # 전체 평균 계산
+            overall_tps = total_tokens / total_time if total_time > 0 else 0
+            overall_avg_ttft = sum(all_ttft_values) / len(all_ttft_values) if all_ttft_values else 0
+            
+            f.write("### 전체 요약\n\n")
+            f.write(f"- **총 처리 토큰**: {total_tokens:,}개\n")
+            f.write(f"- **총 실행 시간**: {total_time:.2f}초\n")
+            f.write(f"- **전체 평균 TPS**: {overall_tps:.2f} tokens/sec\n")
+            f.write(f"- **전체 평균 TTFT**: {overall_avg_ttft:.4f}초\n\n")
+            
+            f.write("### 레벨별 상세\n\n")
+            f.write("| Level | 평균 토큰 수 | 입력 토큰 | 출력 토큰 | TPS | TTFT (평균) | TTFT (최소/최대) |\n")
+            f.write("| --- | --- | --- | --- | --- | --- | --- |\n")
+            
+            for level in sorted(report['by_level'].keys()):
+                level_data = report['by_level'][level]
+                metadata = level_data.get('metadata', {})
+                
+                avg_tokens = metadata.get('average_tokens_per_task', 0)
+                avg_prompt = metadata.get('average_prompt_tokens', 0)
+                avg_completion = metadata.get('average_completion_tokens', 0)
+                tps = metadata.get('average_tps', 0)
+                
+                ttft_data = metadata.get('ttft', {})
+                ttft_avg = ttft_data.get('average', 0)
+                ttft_min = ttft_data.get('min', 0)
+                ttft_max = ttft_data.get('max', 0)
+                ttft_range = f"{ttft_min:.4f} / {ttft_max:.4f}" if ttft_min > 0 else "N/A"
+                
+                f.write(f"| **{level}** | {avg_tokens:.0f} | {avg_prompt:.0f} | {avg_completion:.0f} | "
+                    f"{tps:.0f} | {ttft_avg:.4f}초 | {ttft_range} |\n")
+            
+            f.write("\n")
+            
         print(f"[저장] Markdown: {output_file}")
 
     def export(self, report: Dict[str, Any], output_dir: str, formats: List[str]):
