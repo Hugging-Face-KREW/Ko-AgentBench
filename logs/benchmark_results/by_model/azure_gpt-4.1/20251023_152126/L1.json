@@ -1,0 +1,957 @@
+{
+  "metadata": {
+    "timestamp": "2025-10-23T15:21:55.918892",
+    "model": "azure/gpt-4.1",
+    "level": "L1",
+    "total_tasks": 11,
+    "successful_tasks": 11,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 29.43,
+    "average_execution_time": 2.68,
+    "total_steps": 23,
+    "average_steps": 2.09,
+    "total_tool_calls": 12,
+    "average_tool_calls": 1.09,
+    "total_tokens": 7277,
+    "average_tokens_per_task": 661.55,
+    "average_prompt_tokens": 552.36,
+    "average_completion_tokens": 109.18,
+    "average_tps": 247.31
+  },
+  "tool_usage_statistics": {
+    "Directions_naver": {
+      "count": 2,
+      "success": 2,
+      "failure": 0
+    },
+    "CryptoPrice_bithumb": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "WebSearch_naver": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "BlogSearch_naver": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "NewsSearch_naver": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "ItemSearch_aladin": {
+      "count": 2,
+      "success": 2,
+      "failure": 0
+    },
+    "VideoSearch_daum": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "PlaceSearch_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "CategorySearch_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    }
+  },
+  "results": [
+    {
+      "task_id": "L1-001",
+      "instruction": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 6.211372137069702,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "127.108882,37.394274",
+            "goal": "127.07190,37.51130",
+            "option": "traoptimal"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 574,
+        "completion_tokens": 171,
+        "total_tokens": 745
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "127.111221,37.395441",
+            "goal": "127.071707,37.514085",
+            "option": "trafast"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "error": "401 Client Error: Unauthorized for url: https://maps.apigw.ntruss.com/map-direction/v1/driving?start=127.111221%2C37.395441&goal=127.071707%2C37.514085&option=t%3Ar%3Aa%3Af%3Aa%3As%3At",
+            "status": "error"
+          }
+        }
+      ],
+      "final_response": "죄송합니다. 현재 경로 정보를 불러오는 데 문제가 발생했습니다. 잠시 후 다시 시도해 주시거나, 네이버 지도와 같은 경로 안내 서비스를 이용하시면 판교역에서 잠실야구장까지 자차로 소요되는 시간을 확인하실 수 있습니다.\n\n일반적으로 판교역에서 잠실야구장까지는 교통 상황에 따라 약 30~50분 정도 소요됩니다. (평일 출퇴근 시간대에는 더 오래 걸릴 수 있습니다.) 정확한 소요시간은 실시간 교통 상황에 따라 달라질 수 있습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_bGk1qYMKbPgAhTI2TMrX5JWO",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://maps.apigw.ntruss.com/map-direction/v1/driving?start=127.111221%2C37.395441&goal=127.071707%2C37.514085&option=t%3Ar%3Aa%3Af%3Aa%3As%3At",
+              "status": "error"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 경로 정보를 불러오는 데 문제가 발생했습니다. 잠시 후 다시 시도해 주시거나, 네이버 지도와 같은 경로 안내 서비스를 이용하시면 판교역에서 잠실야구장까지 자차로 소요되는 시간을 확인하실 수 있습니다.\n\n일반적으로 판교역에서 잠실야구장까지는 교통 상황에 따라 약 30~50분 정도 소요됩니다. (평일 출퇴근 시간대에는 더 오래 걸릴 수 있습니다.) 정확한 소요시간은 실시간 교통 상황에 따라 달라질 수 있습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-002",
+      "instruction": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.40902042388916,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 851,
+        "completion_tokens": 257,
+        "total_tokens": 1108
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "error": "401 Client Error: Unauthorized for url: https://maps.apigw.ntruss.com/map-direction/v1/driving?start=126.97070%2C37.55360&goal=126.45123%2C37.46349&waypoints=1%7C2%7C6%7C.%7C9%7C7%7C6%7C8%7C8%7C%2C%7C3%7C7%7C.%7C5%7C7%7C5%7C9%7C4%7C%7C%7C1%7C2%7C6%7C.%7C9%7C2%7C4%7C9%7C0%7C%2C%7C3%7C7%7C.%7C5%7C2%7C1%7C9%7C0&option=t%3Ar%3Aa%3Aa%3Av%3Ao%3Ai%3Ad%3At%3Ao%3Al%3Al",
+            "status": "error"
+          }
+        }
+      ],
+      "final_response": "경로 조회에 문제가 발생하여 예상 소요 시간을 바로 알 수 없습니다.\n\n혹시 다시 시도하거나, 경유지 및 조건을 확인해주실 수 있을까요?  \n입력하신 출발지, 경유지, 목적지 좌표는 아래와 같습니다.\n\n- 출발지: 서울역 (126.97070, 37.55360)\n- 경유지1: 광화문 (126.97688, 37.57594)\n- 경유지2: 여의도 (126.92490, 37.52190)\n- 목적지: 인천공항 제1터미널 (126.45123, 37.46349)\n- 조건: 유료도로 회피\n\n조건이나 경유지 좌표에 오류가 있다면 수정해 주세요.  \n정상적인 조회를 위해 잠시 후 다시 시도하실 수도 있습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_Ceop3mxTfBOGZUK8dNJrJHXl",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://maps.apigw.ntruss.com/map-direction/v1/driving?start=126.97070%2C37.55360&goal=126.45123%2C37.46349&waypoints=1%7C2%7C6%7C.%7C9%7C7%7C6%7C8%7C8%7C%2C%7C3%7C7%7C.%7C5%7C7%7C5%7C9%7C4%7C%7C%7C1%7C2%7C6%7C.%7C9%7C2%7C4%7C9%7C0%7C%2C%7C3%7C7%7C.%7C5%7C2%7C1%7C9%7C0&option=t%3Ar%3Aa%3Aa%3Av%3Ao%3Ai%3Ad%3At%3Ao%3Al%3Al",
+              "status": "error"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "경로 조회에 문제가 발생하여 예상 소요 시간을 바로 알 수 없습니다.\n\n혹시 다시 시도하거나, 경유지 및 조건을 확인해주실 수 있을까요?  \n입력하신 출발지, 경유지, 목적지 좌표는 아래와 같습니다.\n\n- 출발지: 서울역 (126.97070, 37.55360)\n- 경유지1: 광화문 (126.97688, 37.57594)\n- 경유지2: 여의도 (126.92490, 37.52190)\n- 목적지: 인천공항 제1터미널 (126.45123, 37.46349)\n- 조건: 유료도로 회피\n\n조건이나 경유지 좌표에 오류가 있다면 수정해 주세요.  \n정상적인 조회를 위해 잠시 후 다시 시도하실 수도 있습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-003",
+      "instruction": "빗썸에서 비트코인 원화 현재가 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 1.5666887760162354,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 596,
+        "completion_tokens": 62,
+        "total_tokens": 658
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "trade_date": "20251023",
+              "trade_time": "062144",
+              "trade_date_kst": "20251023",
+              "trade_time_kst": "152144",
+              "trade_timestamp": 1761232904597,
+              "opening_price": 164397000,
+              "high_price": 165236000,
+              "low_price": 162500000,
+              "trade_price": 165049000,
+              "prev_closing_price": 164397000,
+              "change": "RISE",
+              "change_price": 652000,
+              "change_rate": 0.004,
+              "signed_change_price": 652000,
+              "signed_change_rate": 0.004,
+              "trade_volume": 0.00480945,
+              "acc_trade_price": 33835496117.8283,
+              "acc_trade_price_24h": 67148629396.15728,
+              "acc_trade_volume": 206.94105686,
+              "acc_trade_volume_24h": 411.19409273,
+              "highest_52_week_price": 179734000,
+              "highest_52_week_date": "2025-10-10",
+              "lowest_52_week_price": 92401000,
+              "lowest_52_week_date": "2024-10-27",
+              "timestamp": 1761232904597
+            }
+          ]
+        }
+      ],
+      "final_response": "빗썸에서 비트코인(BTC)의 현재 원화 가격은 165,049,000원입니다.\n\n(2025년 10월 23일 기준)",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 비트코인 원화 현재가 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_3TylUXBsEq6HByQfgXQy0unV",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "trade_date": "20251023",
+                "trade_time": "062144",
+                "trade_date_kst": "20251023",
+                "trade_time_kst": "152144",
+                "trade_timestamp": 1761232904597,
+                "opening_price": 164397000,
+                "high_price": 165236000,
+                "low_price": 162500000,
+                "trade_price": 165049000,
+                "prev_closing_price": 164397000,
+                "change": "RISE",
+                "change_price": 652000,
+                "change_rate": 0.004,
+                "signed_change_price": 652000,
+                "signed_change_rate": 0.004,
+                "trade_volume": 0.00480945,
+                "acc_trade_price": 33835496117.8283,
+                "acc_trade_price_24h": 67148629396.15728,
+                "acc_trade_volume": 206.94105686,
+                "acc_trade_volume_24h": 411.19409273,
+                "highest_52_week_price": 179734000,
+                "highest_52_week_date": "2025-10-10",
+                "lowest_52_week_price": 92401000,
+                "lowest_52_week_date": "2024-10-27",
+                "timestamp": 1761232904597
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": "빗썸에서 비트코인(BTC)의 현재 원화 가격은 165,049,000원입니다.\n\n(2025년 10월 23일 기준)"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-004",
+      "instruction": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 1.4941411018371582,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 288,
+        "completion_tokens": 65,
+        "total_tokens": 353
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "error": "액세스 토큰 발급 실패"
+          }
+        }
+      ],
+      "final_response": "죄송합니다. 현재 LS증권 API를 통해 KOSDAQ 지수 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주시거나, 다른 방법으로 확인해보시기 바랍니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_0j9eQVsAsv8izhX8uhkwbdEW",
+            "content": {
+              "error": "액세스 토큰 발급 실패"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 LS증권 API를 통해 KOSDAQ 지수 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주시거나, 다른 방법으로 확인해보시기 바랍니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-005",
+      "instruction": "네이버에서 ‘전기차 충전 요금 인상’ 검색해서 첫 번째 결과 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 2.0078539848327637,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 399,
+        "completion_tokens": 78,
+        "total_tokens": 477
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/webkr.json?query=%EC%A0%84%EA%B8%B0%EC%B0%A8+%EC%B6%A9%EC%A0%84+%EC%9A%94%EA%B8%88+%EC%9D%B8%EC%83%81&display=1&start=1"
+        }
+      ],
+      "final_response": "죄송합니다. 네이버 검색 결과를 바로 가져오는 데 문제가 발생했습니다. 대신 원하시는 정보를 요약해서 제공하거나, 궁금하신 점에 대해 설명드릴 수 있습니다. 필요하시면 말씀해주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 ‘전기차 충전 요금 인상’ 검색해서 첫 번째 결과 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_GEODd10TTnPyumeMG0SQNXen",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/webkr.json?query=%EC%A0%84%EA%B8%B0%EC%B0%A8+%EC%B6%A9%EC%A0%84+%EC%9A%94%EA%B8%88+%EC%9D%B8%EC%83%81&display=1&start=1",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 네이버 검색 결과를 바로 가져오는 데 문제가 발생했습니다. 대신 원하시는 정보를 요약해서 제공하거나, 궁금하신 점에 대해 설명드릴 수 있습니다. 필요하시면 말씀해주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-006",
+      "instruction": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 2.252720355987549,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 489,
+        "completion_tokens": 68,
+        "total_tokens": 557
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1,
+            "start": 1,
+            "sort": "sim"
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/blog.json?query=%EC%A0%9C%EC%A3%BC+%EA%B0%80%EC%9D%84+%EC%97%AC%ED%96%89+%EC%BD%94%EC%8A%A4+%ED%9B%84%EA%B8%B0&display=1&start=1&sort=sim"
+        }
+      ],
+      "final_response": "네이버 블로그 검색에서 오류가 발생하여 결과를 가져올 수 없습니다. 혹시 다른 방법이나 질문이 있으신가요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_o3N7kh0KMSe4M29DFqqwj5ZH",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/blog.json?query=%EC%A0%9C%EC%A3%BC+%EA%B0%80%EC%9D%84+%EC%97%AC%ED%96%89+%EC%BD%94%EC%8A%A4+%ED%9B%84%EA%B8%B0&display=1&start=1&sort=sim",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "네이버 블로그 검색에서 오류가 발생하여 결과를 가져올 수 없습니다. 혹시 다른 방법이나 질문이 있으신가요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-007",
+      "instruction": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 2.054694652557373,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "NewsSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "NewsSearch_naver",
+          "args": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 451,
+        "completion_tokens": 88,
+        "total_tokens": 539
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "NewsSearch_naver",
+          "arguments": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "sort": "sim"
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/news.json?query=%EB%B0%98%EB%8F%84%EC%B2%B4+%EC%88%98%EC%B6%9C+%EC%A0%84%EB%A7%9D&display=1&start=1&sort=sim"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 네이버 뉴스 검색 API에 접근할 수 없어 최신 기사를 바로 제공해 드릴 수 없습니다. 혹시 다른 방식으로 반도체 수출 전망 관련 정보를 원하시나요? 또는 추가적인 주제나 요청이 있으신가요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_bemVR9EARdDfz1XZEPNFu7tM",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://openapi.naver.com/v1/search/news.json?query=%EB%B0%98%EB%8F%84%EC%B2%B4+%EC%88%98%EC%B6%9C+%EC%A0%84%EB%A7%9D&display=1&start=1&sort=sim",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 네이버 뉴스 검색 API에 접근할 수 없어 최신 기사를 바로 제공해 드릴 수 없습니다. 혹시 다른 방식으로 반도체 수출 전망 관련 정보를 원하시나요? 또는 추가적인 주제나 요청이 있으신가요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-008",
+      "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.5231945514678955,
+      "steps_taken": 3,
+      "error": null,
+      "expected_tools": [
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "나미야 잡화점의 기적",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "start": 1,
+            "max_results": 1,
+            "sort": "Accuracy",
+            "cover": "Mid",
+            "output": "xml",
+            "outofStockFilter": 0,
+            "opt_result": ""
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 1193,
+        "completion_tokens": 189,
+        "total_tokens": 1382
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "히가시노 게이고",
+            "query_type": "Author",
+            "max_results": 1,
+            "sort": "SalesPoint"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "errorCode": 1,
+            "errorMessage": "키를 입력해 주세요"
+          }
+        },
+        {
+          "step": 2,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "히가시노 게이고",
+            "query_type": "Author",
+            "max_results": 1,
+            "sort": "SalesPoint"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "errorCode": 1,
+            "errorMessage": "키를 입력해 주세요"
+          }
+        }
+      ],
+      "final_response": "죄송합니다. 현재 알라딘에서 히가시노 게이고 작품을 검색할 때 API 키 오류가 발생하고 있어, 결과를 제공해드릴 수 없습니다.\n\n원하신다면, 최신 인기 히가시노 게이고 작품을 다른 방법으로 안내해드릴 수 있습니다. 필요하시다면 말씀해주세요!",
+      "conversation_log": {
+        "total_messages": 6,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_eF90CB2wYVbRVbTsefJ4395K",
+            "content": {
+              "errorCode": 1,
+              "errorMessage": "키를 입력해 주세요"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "알라딘 API에서 검색을 위해 키가 필요하다고 나옵니다. 잠시 오류가 발생했으니, 다시 시도해보겠습니다. 조금만 기다려주세요."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_nfF3OLLP6EOUDT3PMJPEurHb",
+            "content": {
+              "errorCode": 1,
+              "errorMessage": "키를 입력해 주세요"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 알라딘에서 히가시노 게이고 작품을 검색할 때 API 키 오류가 발생하고 있어, 결과를 제공해드릴 수 없습니다.\n\n원하신다면, 최신 인기 히가시노 게이고 작품을 다른 방법으로 안내해드릴 수 있습니다. 필요하시다면 말씀해주세요!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-009",
+      "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 1.6791372299194336,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "VideoSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "VideoSearch_daum",
+          "args": {
+            "query": "손흥민 헤드트릭",
+            "sort": "accuracy",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 372,
+        "completion_tokens": 72,
+        "total_tokens": 444
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "VideoSearch_daum",
+          "arguments": {
+            "query": "손흥민 헤드트릭",
+            "size": 1
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/search/vclip?query=%EC%86%90%ED%9D%A5%EB%AF%BC+%ED%97%A4%EB%93%9C%ED%8A%B8%EB%A6%AD&sort=accuracy&page=1&size=1"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 다음 동영상 검색 서비스에 접근할 수 없어 첫 영상 제목을 알려드릴 수 없습니다. 추가로 궁금한 점이나 다른 요청이 있으시면 도와드리겠습니다!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_jiPcPVoOxqBqHM7mGes7Yqdo",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/search/vclip?query=%EC%86%90%ED%9D%A5%EB%AF%BC+%ED%97%A4%EB%93%9C%ED%8A%B8%EB%A6%AD&sort=accuracy&page=1&size=1",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 다음 동영상 검색 서비스에 접근할 수 없어 첫 영상 제목을 알려드릴 수 없습니다. 추가로 궁금한 점이나 다른 요청이 있으시면 도와드리겠습니다!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-010",
+      "instruction": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 2.27250599861145,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 1000,
+            "sort": "distance",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 440,
+        "completion_tokens": 85,
+        "total_tokens": 525
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.4979,
+            "size": 1,
+            "sort": "distance"
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1&x=127.02758&y=37.4979"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 카카오맵 검색에 문제가 발생하여 강남역 근처의 '파스타' 가게 정보를 확인할 수 없습니다. 다른 방법이나 정보를 원하시면 말씀해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_ucnDvf7b5FxKOlQw5FwiXNJP",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/keyword.json?query=%ED%8C%8C%EC%8A%A4%ED%83%80&sort=distance&page=1&size=1&x=127.02758&y=37.4979",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 카카오맵 검색에 문제가 발생하여 강남역 근처의 '파스타' 가게 정보를 확인할 수 없습니다. 다른 방법이나 정보를 원하시면 말씀해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-011",
+      "instruction": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 1.9537951946258545,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "token_usage": {
+        "prompt_tokens": 423,
+        "completion_tokens": 66,
+        "total_tokens": 489
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CategorySearch_kakao",
+          "arguments": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "size": 1
+          },
+          "success": false,
+          "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1"
+        }
+      ],
+      "final_response": "죄송합니다. 현재 카페 정보를 조회할 수 없습니다. 다른 방법이나 정보를 원하시면 말씀해 주세요!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_4F7gCGGzxOczhsxkYyK2einP",
+            "content": {
+              "error": "401 Client Error: Unauthorized for url: https://dapi.kakao.com/v2/local/search/category.json?category_group_code=CE7&x=126.9237&y=37.5563&radius=500&page=1&size=1",
+              "error_type": null
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "죄송합니다. 현재 카페 정보를 조회할 수 없습니다. 다른 방법이나 정보를 원하시면 말씀해 주세요!"
+          }
+        ]
+      }
+    }
+  ]
+}

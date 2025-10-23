@@ -1,6 +1,8 @@
 import os
 import warnings
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # 네이버 검색 API
 # https://developers.naver.com/products/search/
