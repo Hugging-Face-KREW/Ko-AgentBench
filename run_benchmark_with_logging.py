@@ -177,6 +177,12 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
             "completion_tokens": 0,
             "total_tokens": 0
         }),
+        "ttft_stats": result.get("ttft_stats", { 
+            "average": 0,
+            "min": 0,
+            "max": 0,
+            "count": 0
+        }),
     }
     
     # Extract tool calls in a simplified format with results
@@ -290,20 +296,32 @@ def save_detailed_results(
     total_time = sum(r.get('execution_time', 0) for r in simplified_results)
     total_steps = sum(r.get('steps_taken', 0) for r in simplified_results)
     total_tool_calls = sum(len(r.get('tool_calls', [])) for r in simplified_results)
-
+   
     # 토큰 통계 추가
     total_prompt_tokens = 0
     total_completion_tokens = 0
     total_tokens = 0
+
+    # TTFT 통계 수집
+    all_ttft_values = []
 
     for result in simplified_results:
         token_usage = result.get('token_usage', {})
         total_prompt_tokens += token_usage.get('prompt_tokens', 0)
         total_completion_tokens += token_usage.get('completion_tokens', 0)
         total_tokens += token_usage.get('total_tokens', 0)
+        
+        ttft_stats = result.get('ttft_stats', {})
+        avg_ttft = ttft_stats.get('average', 0)
+        if avg_ttft > 0:
+            all_ttft_values.append(avg_ttft)
 
     # TPS 계산
     average_tps = total_tokens / total_time if total_time > 0 else 0
+
+    average_ttft = sum(all_ttft_values) / len(all_ttft_values) if all_ttft_values else 0
+    min_ttft = min(all_ttft_values) if all_ttft_values else 0
+    max_ttft = max(all_ttft_values) if all_ttft_values else 0
     
     # Tool usage statistics
     tool_usage_stats = {}
@@ -342,6 +360,12 @@ def save_detailed_results(
             "average_prompt_tokens": round(total_prompt_tokens / total_tasks, 2) if total_tasks > 0 else 0,
             "average_completion_tokens": round(total_completion_tokens / total_tasks, 2) if total_tasks > 0 else 0,
             "average_tps": round(average_tps, 2),
+            "ttft": {
+                "average": round(average_ttft, 4),
+                "min": round(min_ttft, 4),
+                "max": round(max_ttft, 4),
+                "unit": "seconds"
+            },
         },
         "tool_usage_statistics": tool_usage_stats,
         "results": simplified_results
