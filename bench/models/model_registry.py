@@ -6,8 +6,23 @@ LiteLLM에서 인식 가능한 형식을 사용하세요 (예: 'openai/...', 'an
 from typing import List
 
 MODEL_IDS: List[str] = [
+    # Local HuggingFace models
     "huggingface/Qwen/Qwen3-4B-Instruct-2507",
-    "azure/gpt-4.1"
+    "huggingface/Qwen/Qwen3-8B",
+    "huggingface/skt/A.X-4.0-Light",
+    "huggingface/K-intelligence/Midm-2.0-Base-Instruct",
+    "huggingface/KORMo-Team/KORMo-10B-sft",
+    "huggingface/kakaocorp/kanana-1.5-8b-instruct-2505",
+    "huggingface/dnotitia/DNA-2.0-14B",
+    "huggingface/trillionlabs/Tri-7B",
+
+    # Cloud models
+    "azure/gpt-5",
+    "azure/gpt-4.1",
+    "anthropic/claude-sonnet-4",
+    "anthropic/claude-sonnet-4-20250514",
+    "gemini/gemini-2.5-pro",
+    "gemini/gemini-2.5-flash"
 ]
 
 __all__ = ["MODEL_IDS"]
