@@ -29,21 +29,21 @@
   },
   {
     "task_id": "L4-002",
-    "instruction": "2025 여의도 불꽃축제 몇시부터 몇시까지야?",
+    "instruction": "2024 여의도 불꽃축제 몇시부터 몇시까지야?",
     "task_level": 4,
     "task_category": "Multi Tool Parallel",
     "golden_action": [
       {
         "tool": "WebSearch_naver",
         "args": {
-          "query": "2025 여의도 불꽃축제 운영시간",
+          "query": "2024 여의도 불꽃축제 운영시간",
           "display": 10
         }
       },
       {
         "tool": "NewsSearch_naver",
         "args": {
-          "query": "2025 여의도 불꽃축제 운영시간",
+          "query": "2024 여의도 불꽃축제 운영시간",
           "display": 10
         }
       }
