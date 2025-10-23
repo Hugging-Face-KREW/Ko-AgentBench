@@ -72,89 +72,45 @@
               },
               "timestamp": "2025-09-27T14:00:00Z"
             }
-          },
+        },
         {
           "turn_number": 3,
           "role": "user",
-          "content": "방금 찾아준 책 다시 알려줘."
+          "content": "이 책 괜찮아 보이네. 알고리즘 트레이딩이 뭐야?"
         },
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'은 조대표 외 2인이 저술했으며, 위키북스 출판사의 책입니다.",
-          "action": {
-            "context_used": [
-            {
-              "source_turn": 2,
-              "info": "'파이썬 알고리즘 트레이딩' 검색 결과",
-              "usage_type": "direct_reference"
-            }
-          ]
-          } 
+          "content": "알고리즘 트레이딩은 컴퓨터 프로그램을 이용해 미리 설정한 규칙에 따라 자동으로 주식이나 암호화폐를 매매하는 방식입니다. 사람의 감정 개입 없이 일관되게 거래할 수 있어요."
         },
         {
           "turn_number": 5,
           "role": "user",
-          "content": "그럼 이번엔 판매량순으로 정렬해서 다시 찾아줘."
+          "content": "초보자도 할 수 있어?"
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "네, 판매량순으로 정렬했을 때도 '파이썬 알고리즘 트레이딩(개정판)'이 가장 상위에 검색됩니다.",
-          "action":
-            {
-              "tool": "ItemSearch_aladin",
-              "args": {
-                "query": "파이썬 알고리즘 트레이딩",
-                "sort": "SalesPoint"
-              },
-              "result": {
-                "totalResults": 1,
-                "startIndex": 1,
-                "itemsPerPage": 1,
-                "query": "파이썬 알고리즘 트레이딩",
-                "item": [
-                  {
-                    "title": "파이썬으로 배우는 알고리즘 트레이딩(개정판)",
-                    "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=288219920",
-                    "author": "조대표, 김형준, 이준혁",
-                    "pubDate": "2022-01-20",
-                    "description": "최신 시장 상황과 라이브러리 변경 사항을 반영한 개정판! 파이썬 기초부터 자동매매 전략 구현까지, 이 책 한 권으로 끝낸다.",
-                    "isbn13": "9791158393339",
-                    "itemId": 288219920,
-                    "priceSales": 34200,
-                    "priceStandard": 38000,
-                    "stockStatus": "보통",
-                    "mileage": 1900,
-                    "cover": "https://image.aladin.co.kr/product/28821/99/cover/k362734136_1.jpg",
-                    "publisher": "위키북스",
-                    "salesPoint": 54321,
-                    "customerReviewRank": 9.8,
-                    "adult": false
-                  }
-                ]
-              },
-              "timestamp": "2025-09-27T14:02:00Z"
-            }
+          "content": "네, 파이썬 기초만 알면 충분히 시작할 수 있습니다. 아까 찾아드린 책도 파이썬 기초부터 다루고 있어서 초보자에게 적합해요."
         },
         {
           "turn_number": 7,
           "role": "user",
-          "content": "판매량순으로 정렬한 거 다시 보여줘."
+          "content": "그럼 아까 찾아준 책 정보 다시 알려줘."
         },
         {
           "turn_number": 8,
           "role": "assistant",
-          "content": "네, 판매량 순으로 정렬한 검색 결과는 '파이썬 알고리즘 트레이딩(개정판)' 입니다.",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'은 조대표, 김형준, 이준혁 저자가 집필했고 위키북스에서 출판했습니다. 가격은 34,200원이고 평점은 9.8점입니다.",
           "action": {
-              "context_used": [
-            {
-              "source_turn": 6,
-              "info": "'파이썬 알고리즘 트레이딩' 판매량순 정렬 결과",
-              "usage_type": "direct_reference"
-            }
+            "context_used": [
+              {
+                "source_turn": 2,
+                "info": "'파이썬 알고리즘 트레이딩' 검색 결과",
+                "usage_type": "direct_reference"
+              }
             ]
-            }
+          }
         }
       ]
     }
