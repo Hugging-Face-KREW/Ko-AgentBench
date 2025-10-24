@@ -81,7 +81,7 @@
   },
   {
     "task_id": "L3-003",
-    "instruction": "독학하기 좋은 수능 모의고사 수학 문제집 이름 조사해주고, 알라딘에서 그 책 가격 알려줘.",
+    "instruction": "정보처리기사 독학 책 후기 블로그 글 검색하고, 그 책 가격 알려줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -89,7 +89,7 @@
         "step": 1,
         "tool": "BlogSearch_naver",
         "args": {
-          "query": "수능 수학 모의고사 문제집 추천 독학",
+          "query": "정보처리기사 독학 책 추천",
           "display": 20,
           "sort": "sim"
         }
@@ -293,21 +293,31 @@
   },
   {
     "task_id": "L3-007",
-    "instruction": "서울역 근처 맛집 추천해주고, 그 중 한 곳의 블로그 리뷰 찾아줘.",
+    "instruction": "안국역 근처 맛집 추천해주고, 후기 영상 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
       {
         "step": 1,
-        "tool": "PlaceSearch_kakao",
+        "tool": "AddressToCoord_kakao",
         "args": {
-          "keyword": "서울역 맛집",
+          "keyword": "안국역",
           "size": 5
         }
       },
       {
         "step": 2,
-        "tool": "BlogSearch_naver",
+        "tool": "PlaceSearch_kakao",
+        "args": {
+          "keyword": "맛집",
+          "x": 126.984932,
+          "y": 37.576477,
+          "size": 5
+        }
+      },
+      {
+        "step": 3,
+        "tool": "VideoSearch_daum",
         "args": {
           "query": "{places[0].name} 후기"
         }
@@ -315,21 +325,40 @@
     ],
     "minimum_steps": 2,
     "essential_tools": [
+      "AddressToCoord_kakao",
       "PlaceSearch_kakao",
-      "BlogSearch_naver"
+      "VideoSearch_daum"
     ],
     "data_flow": [
       {
         "to_step": 2,
-        "to_parameter": "query",
+        "to_parameter": "x",
         "from_step": 1,
+        "from_output": "longitude"
+      },
+      {
+        "to_step": 2,
+        "to_parameter": "y",
+        "from_step": 1,
+        "from_output": "latitude"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "query",
+        "from_step": 2,
+        "from_output": "places[0].name"
+      },
+      {
+        "to_step": 3,
+        "to_parameter": "query",
+        "from_step": 2,
         "from_output": "places[0].name"
       }
     ]
   },
   {
     "task_id": "L3-008",
-    "instruction": "부산 해운대구의 주소를 좌표로 변환하고, 그 좌표를 중심으로 반경 500m 내에 있는 편의점들 찾아줘.",
+    "instruction": "부산 해운대구 근처 편의점 중에 걸어서 10분내에 갈 수 있는 곳 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -354,7 +383,8 @@
     "minimum_steps": 2,
     "essential_tools": [
       "AddressToCoord_kakao",
-      "CategorySearch_kakao"
+      "CategorySearch_kakao",
+      "WalkRoute_tmap"
     ],
     "data_flow": [
       {
@@ -372,7 +402,7 @@
     ]
   },
   {
-    "task_id": "L3-010",
+    "task_id": "L3-009",
     "instruction": "강남역에서 잠실역까지 자동차로 가는 경로와 예상 시간을 알려주세요.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
@@ -439,8 +469,8 @@
     ]
   },
   {
-    "task_id": "L3-011",
-    "instruction": "판교역 주변의 주차장 정보를 검색하고, 그 중 가장 저렴한 주차장의 블로그 후기를 찾아주세요.",
+    "task_id": "L3-010",
+    "instruction": "판교역 주변의 주차장들 중 가장 저렴한 주차장의 블로그 후기를 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -472,117 +502,6 @@
         "to_parameter": "query",
         "from_step": 1,
         "from_output": "places[0].name"
-      }
-    ]
-  },
-  {
-    "task_id": "L3-012",
-    "instruction": "인천국제공항의 주소를 좌표로 변환하고, 공항에서 가장 가까운 병원을 찾아주세요.",
-    "task_level": 3,
-    "task_category": "Multi Tool Sequential",
-    "golden_action": [
-      {
-        "step": 1,
-        "tool": "AddressToCoord_kakao",
-        "args": {
-          "address": "인천광역시 중구 공항로 272"
-        }
-      },
-      {
-        "step": 2,
-        "tool": "CategorySearch_tmap",
-        "args": {
-          "categories": "HP8",
-          "centerLon": 126.427699293474,
-          "centerLat": 37.458350712273,
-          "radius": 2000
-        }
-      }
-    ],
-    "minimum_steps": 2,
-    "essential_tools": [
-      "AddressToCoord_kakao",
-      "CategorySearch_tmap"
-    ],
-    "data_flow": [
-      {
-        "to_step": 2,
-        "to_parameter": "centerLon",
-        "from_step": 1,
-        "from_output": "longitude"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "centerLat",
-        "from_step": 1,
-        "from_output": "latitude"
-      }
-    ]
-  },
-  {
-    "task_id": "L3-013",
-    "instruction": "동교동에서 성수동까지 대중교통 경로를 검색하고, 예상 소요 시간을 알려주세요.",
-    "task_level": 3,
-    "task_category": "Multi Tool Sequential",
-    "golden_action": [
-      {
-        "step": 1,
-        "tool": "Geocoding_tmap",
-        "args": {
-          "city_do": "서울특별시",
-          "gu_gun": "마포구",
-          "dong": "동교동"
-        }
-      },
-      {
-        "step": 1,
-        "tool": "Geocoding_tmap",
-        "args": {
-          "city_do": "서울특별시",
-          "gu_gun": "성동구",
-          "dong": "성수동1가"
-        }
-      },
-      {
-        "step": 2,
-        "tool": "WalkRoute_tmap",
-        "args": {
-          "startX": "{step1.lon}",
-          "startY": "{step1.lat}",
-          "endX": "{step2.lon}",
-          "endY": "{step2.lat}"
-        }
-      }
-    ],
-    "minimum_steps": 2,
-    "essential_tools": [
-      "Geocoding_tmap",
-      "WalkRoute_tmap"
-    ],
-    "data_flow": [
-      {
-        "to_step": 2,
-        "to_parameter": "startX",
-        "from_step": 1,
-        "from_output": "lon"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "startY",
-        "from_step": 1,
-        "from_output": "lat"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "endX",
-        "from_step": 1,
-        "from_output": "lon"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "endY",
-        "from_step": 1,
-        "from_output": "lat"
       }
     ]
   }
