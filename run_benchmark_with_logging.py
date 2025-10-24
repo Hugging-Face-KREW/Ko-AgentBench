@@ -174,6 +174,8 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "data_flow": result.get("data_flow", []),
         "error_injection": result.get("error_injection"),
         "fallback_options": result.get("fallback_options", []),
+        "resp_schema": result.get("resp_schema", {}),
+        "arg_schema": result.get("arg_schema", {}),
         "token_usage": result.get("token_usage", {
             "prompt_tokens": 0,
             "completion_tokens": 0,
@@ -505,6 +507,11 @@ def run_benchmark_on_dataset(
             # Include fallback_options for L5 tasks
             if 'fallback_options' in task:
                 result['fallback_options'] = task.get('fallback_options')
+            # Include resp_schema and arg_schema for evaluation
+            if 'expected_output' in task:
+                result['resp_schema'] = task.get('expected_output', {})
+            if 'arg_schema' in task:
+                result['arg_schema'] = task.get('arg_schema', {})
             all_results.append(result)
             
             # Print summary
