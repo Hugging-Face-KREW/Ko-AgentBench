@@ -362,15 +362,9 @@
       },
       {
         "action": "context_used"
-      },
-      {
-        "tool": "PlaceSearch_kakao",
-        "args": {
-          "keyword": "오이도역 카페"
-        }
       }
     ],
-    "minimum_calls": 2,
+    "minimum_calls": 1,
     "freshness_threshold": "24h",
     "conversation_tracking": {
       "conversation_id": "conv-L6-004",
@@ -552,197 +546,42 @@
         {
           "turn_number": 3,
           "role": "user",
-          "content": "방금 찾아준 맛집 목록 다시 알려줘."
+          "content": "중식이랑 한식 중에 뭐가 더 많아?"
         },
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "네, 시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등을 찾아드렸습니다.",
-          "action":
-            {
-              "context_used": [
-            {
-              "source_turn": 2,
-              "info": "'시흥시청 맛집' 검색 결과",
-              "usage_type": "direct_reference"
-            }
-          ]
-            }          
+          "content": "아까 검색한 결과를 보면 한식 맛집이 더 많았어요. 순대, 족발, 생태탕 등 다양한 한식 전문점들이 있었습니다."
         },
         {
           "turn_number": 5,
           "role": "user",
-          "content": "고마워. 그럼 이번에는 '오이도역 카페'로 검색해줘."
+          "content": "그럼 주차는 편해?"
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "오이도역 근처 카페를 추천해드릴게요!\n\n1. 나우커피 시흥오이도역점  \n   - 경기 시흥시 정왕동 1877-3 (역전로 427)\n\n2. 카페적정온도  \n   - 경기 시흥시 정왕동 1877-5 (함송로 61)  \n   - 0504-2543-9820\n\n3. 메가MGC커피 시흥함송점  \n   - 경기 시흥시 정왕동 1881-9 (함송로 21)  \n   - 031-499-7332\n\n4. 엔그리고  \n   - 경기 시흥시 정왕동 1874-1 (오구천동로 456)  \n   - 010-7785-9565\n\n5. 짱이의슈가키친  \n   - 경기 시흥시 정왕동 1876-3 (오구천동로 449)\n\n6. 커피에반하다 시흥함송로점  \n   - 경기 시흥시 정왕동 1882-2 (함송로 18)  \n   - 031-488-9772\n\n7. 우즈커피 시흥함송점  \n   - 경기 시흥시 정왕동 1881-11 (함송로 15)  \n   - 031-432-0624\n\n8. 고망고 시흥정왕점  \n   - 경기 시흥시 정왕동 1882-4 (함송로 24)\n\n9. 더150 무인카페 시흥정왕점  \n   - 경기 시흥시 정왕동 1876-2 (함송로 38)\n\n10. 커피베이 시흥정왕점  \n    - 경기 시흥시 정왕동 1885-6 (함송로14번길 13-10)\n\n특정 카페의 메뉴나 분위기, 위치 등 자세한 정보가 궁금하시면 말씀해주세요!",
-          "action": 
+          "content": "시청 근처라 공영주차장이 있어서 주차는 괜찮은 편이에요. 다만 점심시간에는 약간 혼잡할 수 있습니다."
+        },
+        {
+          "turn_number": 7,
+          "role": "user",
+          "content": "아까 찾아준 맛집 목록 다시 알려줘."
+        },
+        {
+          "turn_number": 8,
+          "role": "assistant",
+          "content": "네, 시흥시청 근처 맛집으로 '오 왕서방짬뽕', '삼형제시골순대', '가마솥한식뷔페' 등이 검색되었습니다.",
+          "action":
             {
-              "tool": "PlaceSearch_kakao",
-              "args": {
-                "keyword": "오이도역 카페"
-              },
-              "result": {
-                "keyword": "오이도역 카페",
-                "total_count": 42,
-                "places": [
-                  {
-                    "name": "나우커피 시흥오이도역점",
-                    "latitude": 37.3627695477833,
-                    "longitude": 126.736796886831,
-                    "address": "경기 시흥시 정왕동 1877-3",
-                    "road_address": "경기 시흥시 역전로 427",
-                    "phone": "",
-                    "category": "음식점 > 카페",
-                    "distance": ""
-                  },
+              "context_used": [
                 {
-                "name": "카페적정온도",
-                "latitude": 37.3615247263337,
-                "longitude": 126.734153041999,
-                "address": "경기 시흥시 정왕동 1877-5",
-                "road_address": "경기 시흥시 함송로 61",
-                "phone": "0504-2543-9820",
-                "category": "음식점 > 카페 > 테마카페 > 무인카페",
-                "distance": ""
-              },
-              {
-                "name": "메가MGC커피 시흥함송점",
-                "latitude": 37.363746673001444,
-                "longitude": 126.73057805344703,
-                "address": "경기 시흥시 정왕동 1881-9",
-                "road_address": "경기 시흥시 함송로 21",
-                "phone": "031-499-7332",
-                "category": "음식점 > 카페 > 커피전문점 > 메가MGC커피",
-                "distance": ""
-              },
-              {
-                "name": "엔그리고",
-                "latitude": 37.36069089166835,
-                "longitude": 126.73398101944865,
-                "address": "경기 시흥시 정왕동 1874-1",
-                "road_address": "경기 시흥시 옥구천동로 456",
-                "phone": "010-7785-9565",
-                "category": "음식점 > 카페 > 테마카페 > 디저트카페",
-                "distance": ""
-              },
-              {
-                "name": "쟁이의슈가키친",
-                "latitude": 37.3603634906374,
-                "longitude": 126.733035116638,
-                "address": "경기 시흥시 정왕동 1876-3",
-                "road_address": "경기 시흥시 옥구천동로 449",
-                "phone": "",
-                "category": "음식점 > 카페 > 테마카페 > 디저트카페",
-                "distance": ""
-              },
-              {
-                "name": "커피에반하다 시흥함송로점",
-                "latitude": 37.36357854844455,
-                "longitude": 126.72994876047584,
-                "address": "경기 시흥시 정왕동 1882-2",
-                "road_address": "경기 시흥시 함송로 18",
-                "phone": "031-488-9772",
-                "category": "음식점 > 카페 > 커피전문점 > 커피에반하다",
-                "distance": ""
-              },
-              {
-                "name": "우지커피 시흥함송점",
-                "latitude": 37.36393335899992,
-                "longitude": 126.73025905093428,
-                "address": "경기 시흥시 정왕동 1881-11",
-                "road_address": "경기 시흥시 함송로 15",
-                "phone": "031-432-0624",
-                "category": "음식점 > 카페 > 커피전문점 > 우지커피",
-                "distance": ""
-              },
-              {
-                "name": "고망고 시흥정왕점",
-                "latitude": 37.36320429934339,
-                "longitude": 126.73059692510522,
-                "address": "경기 시흥시 정왕동 1882-4",
-                "road_address": "경기 시흥시 함송로 24",
-                "phone": "",
-                "category": "음식점 > 카페 > 생과일전문점 > 고망고",
-                "distance": ""
-              },
-              {
-                "name": "그린앤코",
-                "latitude": 37.3682051140735,
-                "longitude": 126.730654682301,
-                "address": "경기 시흥시 배곧동 204",
-                "road_address": "경기 시흥시 서울대학로278번길 61",
-                "phone": "",
-                "category": "음식점 > 카페 > 테마카페",
-                "distance": ""
-              },
-              {
-                "name": "더150 무인카페 시흥정왕점",
-                "latitude": 37.362389061328486,
-                "longitude": 126.73186976716278,
-                "address": "경기 시흥시 정왕동 1876-2",
-                "road_address": "경기 시흥시 함송로 38",
-                "phone": "",
-                "category": "음식점 > 카페",
-                "distance": ""
-              },
-              {
-                "name": "빽다방 시흥세종프라자점",
-                "latitude": 37.363145650956746,
-                "longitude": 126.73056101202062,
-                "address": "경기 시흥시 정왕동 1882-5",
-                "road_address": "경기 시흥시 함송로 24",
-                "phone": "0507-1371-0218",
-                "category": "음식점 > 카페 > 커피전문점 > 빽다방",
-                "distance": ""
-              },
-              {
-                "name": "카페이사칠",
-                "latitude": 37.3665417531057,
-                "longitude": 126.729439172794,
-                "address": "경기 시흥시 배곧동 233",
-                "road_address": "경기 시흥시 서울대학로264번길 50",
-                "phone": "0507-1366-9648",
-                "category": "음식점 > 카페 > 테마카페 > 무인카페",
-                "distance": ""
-              },
-              {
-                "name": "스타벅스 배곧신도시점",
-                "latitude": 37.369267657267656,
-                "longitude": 126.73036300723687,
-                "address": "경기 시흥시 배곧동 200-1",
-                "road_address": "경기 시흥시 서울대학로278번길 43-13",
-                "phone": "",
-                "category": "음식점 > 카페 > 커피전문점 > 스타벅스",
-                "distance": ""
-              },
-              {
-                "name": "커피베이 시흥정왕점",
-                "latitude": 37.3626125217599,
-                "longitude": 126.729104472488,
-                "address": "경기 시흥시 정왕동 1885-6",
-                "road_address": "경기 시흥시 함송로14번길 13-10",
-                "phone": "",
-                "category": "음식점 > 카페 > 커피전문점 > 커피베이",
-                "distance": ""
-              },
-              {
-                "name": "남영댁커피24 정왕점",
-                "latitude": 37.3629814988162,
-                "longitude": 126.730093133049,
-                "address": "경기 시흥시 정왕동 1884-6",
-                "road_address": "경기 시흥시 함송로14번길 5-10",
-                "phone": "",
-                "category": "음식점 > 카페 > 테마카페 > 무인카페",
-                "distance": ""
-              }
-                ]
-              },
-              "timestamp": "2025-09-28T08:52:00+09:00"
+                  "source_turn": 2,
+                  "info": "'시흥시청 맛집' 검색 결과",
+                  "usage_type": "direct_reference"
+                }
+              ]
             }
-          
         }
       ]
     }
@@ -761,15 +600,9 @@
       },
       {
         "action": "context_used"
-      },
-      {
-        "tool": "WebSearch_naver",
-        "args": {
-          "query": "2025년 10월 제주도 축제"
-        }
       }
     ],
-    "minimum_calls": 2,
+    "minimum_calls": 1,
     "freshness_threshold": "24h",
     "conversation_tracking": {
       "conversation_id": "conv-L6-005",
@@ -807,51 +640,41 @@
         {
           "turn_number": 3,
           "role": "user",
-          "content": "아까 알려준 9월 부산 축제 다시 말해줘."
+          "content": "부산국제영화제는 언제야?"
         },
         {
           "turn_number": 4,
           "role": "assistant",
-          "content": "네, 9월에 부산에서 열리는 축제는 '부산국제영화제'입니다.",
-          "action": 
-            {
-              "context_used": [
-              {
-              "source_turn": 2,
-              "info": "'2025년 9월 부산 축제' 검색 결과",
-              "usage_type": "direct_reference"
-              }
-            ]
-            }
+          "content": "부산국제영화제(BIFF)는 보통 10월 초에 개최됩니다. 정확한 일정은 매년 조금씩 다를 수 있어요."
         },
         {
           "turn_number": 5,
           "role": "user",
-          "content": "그럼 25년 10월에 제주도에서 하는 축제는 없어?"
+          "content": "페스티벌시월은 어디서 해?"
         },
         {
           "turn_number": 6,
           "role": "assistant",
-          "content": "10월 제주도 축제로는 '탐라문화제'가 있습니다.",
+          "content": "페스티벌시월은 부산 벡스코(BEXCO)에서 열립니다. 보건의료 분야의 다양한 행사와 전시가 진행되는 축제예요."
+        },
+        {
+          "turn_number": 7,
+          "role": "user",
+          "content": "아까 알려준 9월 부산 축제 다시 말해줘."
+        },
+        {
+          "turn_number": 8,
+          "role": "assistant",
+          "content": "네, 9월에 부산에서 열리는 축제는 '페스티벌시월'입니다. 시민과 함께하는 보건의료 축제로 벡스코에서 개최됩니다.",
           "action": 
             {
-              "tool": "WebSearch_naver",
-              "args": {
-                "query": "2025년 10월 제주도 축제"
-              },
-              "result": {
-                "total": 856,
-                "start": 1,
-                "display": 10,
-                "items": [
-                  {
-                    "title": "제주도 10월 가을여행 Top 5! 축제일정부터 명소 코스",
-                    "link": "https://blog.naver.com/realplan01/224013983394",
-                    "description": "제64회 탐라문화제 – 제주 최대 전통문화 축제 일정: 2025년 10월 10일(금) ~ 10월 14일(화), 사전행사 10월 8일(수) 장소: 제주시 탐라문화광장, 산지천, 해변공연장, 서귀포 칠십리야외공연장 등 운영 시간: 본행사 13:00 ~ 22:00 / 사전행사 10:0..."
-                  }
-                ]
-              },
-              "timestamp": "2025-09-28T09:17:00+09:00"
+              "context_used": [
+                {
+                  "source_turn": 2,
+                  "info": "'2025년 9월 부산 축제' 검색 결과",
+                  "usage_type": "direct_reference"
+                }
+              ]
             }
         }
       ]
