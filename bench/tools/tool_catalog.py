@@ -50,13 +50,39 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         LSStock,
         "_stock_price",
         "주식 현재가 조회, LS증권 Open API를 활용합니다.",
-        {"type": "object", "properties": {"shcode": {"type": "string", "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)","pattern": "^[0-9]{6}$"},"exchgubun": {"type": "string", "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", "enum": ["K", "N", "U"], "default": "K"}}, "required": ["shcode"]},
+        {
+            "type": "object", 
+            "properties": {
+                "shcode": {
+                    "type": "string", 
+                    "description": "주식 종목코드 (6자리, 예: 005930=삼성전자, 000660=SK하이닉스)",
+                    "pattern": "^[0-9]{6}$"},
+                    "exchgubun": {
+                        "type": "string", 
+                        "description": "거래소구분코드(K:KRX,N:NXT,U:통합)", 
+                        "enum": ["K", "N", "U"], 
+                        "default": "K"
+                        }
+                    },
+            "required": ["shcode"]
+        },
     ),
     "MarketIndex_ls": (
         LSStock,
         "_market_index",
         "시장 지수 조회, LS증권 Open API를 활용합니다.",
-        {"type": "object", "properties": {"jisu": {"type": "string", "enum": ["KOSPI", "KOSPI200", "KRX100", "KOSDAQ"], "default": "KOSPI"}}, "required": ["jisu"]},
+        {
+            "type": "object", 
+            "properties": {
+                "jisu": {
+                    "type": "string", 
+                    "enum": ["KOSPI", "KOSPI200", "KRX100", "KOSDAQ"], 
+                    "default": "KOSPI",
+                    "description" : "시장 지수명 (코스피 : KOSPI, 코스피200 : KOSPI200, KRX100, 코스닥 : KOSDAQ)"
+                    }
+                }, 
+            "required": ["jisu"]
+            },
     ),
     "SectorStock_ls": (
         LSStock,
