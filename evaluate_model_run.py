@@ -22,14 +22,51 @@ from bench.adapters.litellm_adapter import LiteLLMAdapter
 
 class ModelRunEvaluator:
     """모델 실행 결과 평가 클래스"""
-    
+
+    # Level별 태스크 의도 설명
+    LEVEL_DESCRIPTIONS = {
+        '1': '가장 기본적인 API 호출 능력 검증. 주어진 단일 도구를 정확한 파라미터로 호출할 수 있는지 확인',
+        '2': '여러 후보 도구 중 최적의 API를 선택하는 능력 검증. 주어진 도구 목록 중 가장 적합한 도구를 선택할 수 있는지 확인',
+        '3': '여러 도구를 순차적으로 호출하고, 한 도구의 결과를 다음 도구의 입력으로 사용하여 복잡한 문제를 해결하는 능력 검증',
+        '4': '여러 도구를 병렬적으로 호출하여 얻은 정보를 종합하고, 비교·분석하여 최종 결론을 도출하는 능력 검증',
+        '5': '정보가 부족하거나 API 호출이 실패하는 등 예외적인 상황에 대처하는 능력 검증',
+        '6': '이전 대화에서 얻은 Tool 호출 결과를 기억하고, 불필요한 API 재호출 없이 효율적으로 답변하는 능력 검증',
+        '7': '여러 턴에 걸친 대화의 핵심 맥락을 기억하고, 이를 새로운 질문과 연결하여 정확한 Tool calling을 수행하는 능력 검증'
+    }
+
+    # Metric별 상세 설명
+    METRIC_DESCRIPTIONS = {
+        'ArgAcc': '인자 정확도. 도구 호출 시 전달한 인자들이 정답과 일치하는지 평가',
+        'CallEM': '호출 완전 일치. 도구명과 모든 인자가 정답과 완벽하게 일치하는지 평가',
+        'EPR_CVR': '유효 호출 비율. 생성한 도구 호출이 스키마상 유효하고 실행 가능한지 평가',
+        'RespOK': '응답 파싱 성공. 도구 실행 결과를 성공적으로 파싱했는지 평가',
+        'SR': '성공률. 주어진 태스크를 최종적으로 성공했는지 여부',
+        'ToolAcc': '도구 선택 정확도. 정답 도구를 정확하게 선택했는지 평가',
+        'pass@k': '반복 안정성. 태스크를 k번 반복 수행했을 때 최소 한 번 이상 성공하는 비율',
+        'SelectAcc': '최종 선택 도구 정확도. 여러 후보군 중에서 최종적으로 올바른 도구를 선택했는지 평가',
+        'FSM': '정답 경로 완전 일치. 정해진 도구 호출 순서와 완벽하게 일치하는지 평가',
+        'PSM': '정답 경로 부분 일치. 정답 경로의 일부를 얼마나 포함하고 있는지 평가',
+        'ProvAcc': '데이터 출처 추적 정확도. 이전 단계의 출력값을 다음 단계의 입력값으로 정확히 연결했는지 평가',
+        'ΔSteps_norm': '최소 경로 대비 효율. 이론적인 최소 호출 횟수 대비 얼마나 효율적인 경로를 생성했는지 평가',
+        'Coverage': '소스 커버리지. 정보를 수집해야 하는 여러 소스를 누락 없이 호출했는지 평가',
+        'SourceEPR': '소스별 유효 호출 비율. 병렬적으로 호출한 각 도구가 유효했는지 개별적으로 평가',
+        'ErrorDetect': '오류 탐지율. API 호출 실패와 같은 오류 상황을 정확하게 인지하는지 평가',
+        'FallbackSR': '대체 경로 성공률. 특정 도구 실패 시 다른 도구를 활용해 성공하는 비율',
+        'GracefulFail': '안전한 실패 비율. 오류 발생 시 환각 없이 실패를 인정하거나 사용자에게 알리는지 평가',
+        'EffScore': '효율 점수. 이론적 최소 호출 수와 재사용률을 종합하여 효율성을 점수화',
+        'RedundantCallRate': '불필요 호출 비율. 정보를 이미 알고 있음에도 불필요하게 도구를 다시 호출하는 비율',
+        'ReuseRate': '재사용 비율. 이전에 호출했던 결과를 재호출 없이 효율적으로 재사용하는 비율',
+        'ContextRetention': '맥락 유지율. 여러 턴에 걸친 대화의 핵심 맥락을 답변에 올바르게 유지하는지 평가',
+        'RefRecall': '장기 회상 비율. 대화 초반의 정보를 마지막 턴에서 다시 질문했을 때 정확히 기억해내는지 평가'
+    }
+
     def __init__(
-        self, 
-        date: str, 
-        model: str, 
-        judge_models: List[str],
-        sample_size: Optional[int] = None,
-        verbose: bool = False
+            self,
+            date: str,
+            model: str,
+            judge_models: List[str],
+            sample_size: Optional[int] = None,
+            verbose: bool = False
     ):
         self.date = date
         self.model = model
@@ -48,84 +85,84 @@ class ModelRunEvaluator:
                 print(f"{judge_model} 초기화 완료")
             except Exception as e:
                 print(f"{judge_model} 초기화 실패: {e}")
-        
+
         if not self.judge_adapters:
             print(f"[경고] Judge 모델 초기화 실패")
         else:
             self._inject_judge_to_metrics()
             print(f"[OK] {len(self.judge_adapters)}개 Judge 모델 초기화 완료")
-    
+
     def _inject_judge_to_metrics(self):
         """Judge 모델을 필요한 메트릭에 주입"""
         if not self.judge_adapters:
             return
-        
+
         judge_metrics = [
             'ArgAcc',           # L1
             'ErrorDetect',      # L5
-            'EffScore',         # L6  
+            'EffScore',         # L6
             'ContextRetention', # L7
             'RefRecall'         # L7
         ]
-        
+
         for metric_name in judge_metrics:
             if metric_name in METRICS:
                 if hasattr(METRICS[metric_name], '__dict__'):
                     METRICS[metric_name].llm_adapters = self.judge_adapters
                     METRICS[metric_name].llm_adapter = self.judge_adapters[0]
-        
-    
-    
+
+
+
     def find_result_files(self) -> Dict[str, Path]:
         """날짜와 모델로 L1~L7 파일 찾기"""
         results_dir = Path('logs/benchmark_results')
-        
+
         # 모델명을 파일명 패턴으로 변환 (azure/gpt-4.1 -> azure_gpt-4.1)
         model_pattern = self.model.replace('/', '_')
-        
+
         level_files = {}
-        
+
         # 기존 패턴: logs/benchmark_results/L{level}_{model}_{date}*.json)
         pattern = f"L*_{model_pattern}_{self.date}*.json"
         files = list(results_dir.glob(pattern))
-        
+
         for f in files:
             level = f.name.split('_')[0]
             if level.startswith('L') and level[1:].isdigit():
                 level_files[level] = f
-        
+
         # 변경 패턴: logs/benchmark_results/by_model/{model}/{date_timestamp}/L*.json)
         if not level_files:
             by_model_dir = results_dir / 'by_model' / model_pattern
-            
+
             if by_model_dir.exists():
-                date_dirs = [d for d in by_model_dir.iterdir() 
-                            if d.is_dir() and d.name.startswith(self.date)]
-                
+                date_dirs = [d for d in by_model_dir.iterdir()
+                             if d.is_dir() and d.name.startswith(self.date)]
+
                 for level_name in ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7']:
                     for date_dir in date_dirs:
                         level_file = date_dir / f"{level_name}.json"
                         if level_file.exists() and level_name not in level_files:
                             level_files[level_name] = level_file
                             break
-        
+
         return level_files
-    
+
     def evaluate_level(self, file_path: Path, level: str) -> Dict[str, Any]:
         """특정 레벨의 결과 파일 평가"""
         level_num = int(level[1])  # "L1" -> 1
-        
+
         # 결과 파일 로드
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
+
         metadata = data.get("metadata", {})
         tasks = data.get("results", [])
-        
+
         if self.verbose:
             print(f"  파일: {file_path.name}")
             print(f"  전체 태스크: {len(tasks)}")
-        
+
         if not tasks:
             print(f"  [경고] 평가할 태스크가 없습니다.")
             return {
@@ -137,7 +174,7 @@ class ModelRunEvaluator:
                 "metric_averages": {},
                 "task_evaluations": []
             }
-        
+
         # 샘플링
         if self.sample_size:
             tasks_to_evaluate = tasks[:self.sample_size]
@@ -145,19 +182,19 @@ class ModelRunEvaluator:
                 print(f"  샘플링: {len(tasks_to_evaluate)}개 태스크")
         else:
             tasks_to_evaluate = tasks
-        
+
         # 해당 레벨의 메트릭 가져오기
         metrics = get_metrics_for_level(level_num)
-        
+
         # 각 태스크 평가
         all_evaluations = []
-        
+
         for idx, task_result in enumerate(tasks_to_evaluate, 1):
             task_id = task_result.get("task_id", f"unknown_{idx}")
-            
+
             if self.verbose:
                 print(f"  [{idx}/{len(tasks_to_evaluate)}] {task_id}")
-            
+
             # task_schema 구성
             task_schema = {
                 "task_id": task_result.get("task_id"),
@@ -172,7 +209,7 @@ class ModelRunEvaluator:
                 "fallback_options": task_result.get("fallback_options", []),
                 "resp_schema": task_result.get("resp_schema"),
             }
-            
+
             # logs 구성
             logs = {
                 "success": task_result.get("success", False),
@@ -182,17 +219,17 @@ class ModelRunEvaluator:
                 "final_response": task_result.get("final_response", ""),
                 "conversation_log": task_result.get("conversation_log", {}),
             }
-            
+
             # EvalContext 생성 및 메트릭 평가
             try:
                 ctx = EvalContext(task_schema=task_schema, logs=logs)
-                
+
                 task_evaluation = {
                     "task_id": task_id,
                     "success": task_result.get("success", False),
                     "metrics": {}
                 }
-                
+
                 for metric_name, metric in metrics.items():
                     try:
                         result = metric.evaluate(ctx)
@@ -207,13 +244,13 @@ class ModelRunEvaluator:
                             "score": 0.0,
                             "error": str(e)
                         }
-                
+
                 all_evaluations.append(task_evaluation)
-                
+
             except Exception as e:
                 print(f"  [오류] {task_id} 평가 실패: {e}")
                 continue
-        
+
         # 메트릭별 평균 계산
         metric_averages = {}
         for metric_name in metrics.keys():
@@ -228,7 +265,7 @@ class ModelRunEvaluator:
                 metric_averages[metric_name] = sum(valid_scores) / len(valid_scores)
             else:
                 metric_averages[metric_name] = 0.0
-        
+
         return {
             "level": level_num,
             "file": file_path.name,
@@ -238,106 +275,104 @@ class ModelRunEvaluator:
             "metric_averages": metric_averages,
             "task_evaluations": all_evaluations
         }
-    
+
     def evaluate(self) -> Dict[str, Any]:
         """전체 평가 실행"""
-        files = self.find_result_files()
-        
-        if not files:
-            raise FileNotFoundError(
-                f"결과 파일을 찾을 수 없습니다.\n"
-                f"  날짜: {self.date}\n"
-                f"  모델: {self.model}\n"
-                f"  디렉토리: logs/benchmark_results/"
-            )
-        
-        # 헤더 출력
-        print("\n" + "="*80)
-        print("Ko-AgentBench 평가")
-        print("="*80)
-        print(f"평가 대상: {self.model} (실행 날짜: {self.date})")
-        print(f"Judge 모델: {self.judge_models}")
-        print(f"발견된 레벨: {', '.join(sorted(files.keys()))}")
+        print(f"\n{'='*80}")
+        print(f"평가 시작")
+        print(f"{'='*80}")
+        print(f"모델: {self.model}")
+        print(f"날짜: {self.date}")
         if self.sample_size:
-            print(f"샘플링: 레벨당 {self.sample_size}개 태스크")
-        print("="*80 + "\n")
-        
+            print(f"샘플링: 레벨당 {self.sample_size}개")
+        print(f"{'='*80}\n")
+
+        # 결과 파일 찾기
+        level_files = self.find_result_files()
+
+        if not level_files:
+            raise FileNotFoundError(
+                f"날짜 {self.date}, 모델 {self.model}에 해당하는 결과 파일을 찾을 수 없습니다."
+            )
+
+        print(f"발견된 파일:")
+        for level, path in sorted(level_files.items()):
+            print(f"  {level}: {path.name}")
+        print()
+
         # 각 레벨 평가
-        results = {}
-        for level in sorted(files.keys()):
-            print(f"\n[{level}] 평가 시작")
-            print("-" * 80)
-            result = self.evaluate_level(files[level], level)
-            results[level] = result
-            
-            # 간단한 요약 출력
-            print(f"  평가 완료: {result['evaluated_tasks']}/{result['total_tasks']} 태스크")
-            if result['metric_averages']:
-                print(f"  주요 메트릭:")
-                for metric_name, score in list(result['metric_averages'].items())[:5]:
-                    print(f"    {metric_name}: {score:.3f}")
-        
-        # 종합 보고서 생성
-        return self.generate_report(results)
-    
-    def generate_report(self, results: Dict[str, Any]) -> Dict[str, Any]:
-        """종합 보고서 생성"""
+        by_level = {}
+        total_tasks = 0
+        evaluated_tasks = 0
+
+        for level in sorted(level_files.keys()):
+            print(f"[{level}] 평가 중...")
+            level_result = self.evaluate_level(level_files[level], level)
+
+            by_level[level] = {
+                "file": level_result["file"],
+                "total_tasks": level_result["total_tasks"],
+                "evaluated_tasks": level_result["evaluated_tasks"],
+                "metrics": level_result["metric_averages"],
+                "metadata": level_result["metadata"],
+                "task_evaluations": level_result["task_evaluations"]
+            }
+
+            total_tasks += level_result["total_tasks"]
+            evaluated_tasks += level_result["evaluated_tasks"]
+
+            print(f"  완료: {level_result['evaluated_tasks']}개 태스크 평가\n")
+
+        # 종합 리포트
         report = {
             "summary": {
                 "model": self.model,
-                "judge_model": self.judge_models,
+                "judge_model": ", ".join(self.judge_models),
                 "execution_date": self.date,
                 "evaluation_date": datetime.now().isoformat(),
-                "total_levels": len(results),
+                "total_tasks": total_tasks,
+                "evaluated_tasks": evaluated_tasks,
                 "sample_size": self.sample_size,
+                "levels_evaluated": len(by_level)
             },
-            "by_level": {}
+            "by_level": by_level
         }
-        
-        total_tasks = 0
-        total_evaluated = 0
-        
-        for level, level_result in results.items():
-            total_tasks += level_result['total_tasks']
-            total_evaluated += level_result['evaluated_tasks']
-            
-            report["by_level"][level] = {
-                "metadata": level_result['metadata'],
-                "total_tasks": level_result['total_tasks'],
-                "evaluated_tasks": level_result['evaluated_tasks'],
-                "metrics": level_result['metric_averages'],
-                "task_details": level_result['task_evaluations']
-            }
-        
-        report["summary"]["total_tasks"] = total_tasks
-        report["summary"]["evaluated_tasks"] = total_evaluated
-        
+
+        print(f"{'='*80}")
+        print(f"평가 완료")
+        print(f"{'='*80}")
+        print(f"총 레벨: {len(by_level)}")
+        print(f"총 태스크: {evaluated_tasks}/{total_tasks}")
+        print(f"{'='*80}\n")
+
         return report
-    
+
     def export_json(self, report: Dict[str, Any], output_dir: Path):
-        """JSON 형식으로 저장"""
+        """JSON 리포트 생성"""
         output_file = output_dir / "evaluation_report.json"
+
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(report, f, indent=2, ensure_ascii=False)
+            json.dump(report, f, ensure_ascii=False, indent=2)
+
         print(f"[저장] JSON: {output_file}")
-    
+
     def export_csv(self, report: Dict[str, Any], output_dir: Path):
-        """CSV 형식으로 저장 (메트릭 요약)"""
-        output_file = output_dir / "metrics_by_level.csv"
-        
+        """CSV 리포트 생성"""
+        output_file = output_dir / "evaluation_summary.csv"
+
         # 모든 메트릭 이름 수집
         all_metrics = set()
         for level_data in report['by_level'].values():
             all_metrics.update(level_data['metrics'].keys())
-        
+
         # CSV 작성
         with open(output_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            
+
             # 헤더
             header = ['Level', 'Total_Tasks', 'Evaluated_Tasks'] + sorted(all_metrics)
             writer.writerow(header)
-            
+
             # 각 레벨 데이터
             for level in sorted(report['by_level'].keys()):
                 level_data = report['by_level'][level]
@@ -350,18 +385,18 @@ class ModelRunEvaluator:
                     score = level_data['metrics'].get(metric, 0.0)
                     row.append(f"{score:.4f}")
                 writer.writerow(row)
-        
+
         print(f"[저장] CSV: {output_file}")
-    
+
     def export_markdown(self, report: Dict[str, Any], output_dir: Path):
         """Markdown 리포트 생성"""
         output_file = output_dir / "evaluation_report.md"
-        
+
         with open(output_file, 'w', encoding='utf-8') as f:
             # 헤더
             f.write("# Ko-AgentBench 평가 보고서\n\n")
-            
-            # 요약
+
+            # 실행 정보
             summary = report['summary']
             f.write("## 실행 정보\n\n")
             f.write(f"- **평가 대상 모델**: {summary['model']}\n")
@@ -372,14 +407,50 @@ class ModelRunEvaluator:
             if summary['sample_size']:
                 f.write(f"- **샘플링**: 레벨당 {summary['sample_size']}개\n")
             f.write("\n")
-            
-            # 레벨별 상세
+
+            # 📊 성능 요약 테이블 추가
+            f.write("## 📊 성능 요약\n\n")
+            f.write("| Level | 태스크 수 | 성공률 | 평균 실행시간 | 주요 지표 |\n")
+            f.write("| --- | --- | --- | --- | --- |\n")
+
+            # 각 레벨의 핵심 메트릭 매핑
+            key_metrics = {
+                'L1': ['ToolAcc', 'ArgAcc'],
+                'L2': ['SelectAcc'],
+                'L3': ['FSM', 'PSM'],
+                'L4': ['Coverage'],
+                'L5': ['ErrorDetect', 'FallbackSR'],
+                'L6': ['EffScore', 'ReuseRate'],
+                'L7': ['ContextRetention']
+            }
+
+            for level in sorted(report['by_level'].keys()):
+                level_data = report['by_level'][level]
+                metadata = level_data['metadata']
+                metrics = level_data['metrics']
+
+                task_count = f"{level_data['evaluated_tasks']}/{level_data['total_tasks']}"
+                sr = f"{metadata.get('success_rate', 0):.1f}%" if 'success_rate' in metadata else "N/A"
+                exec_time = f"{metadata.get('average_execution_time', 0):.1f}초" if 'average_execution_time' in metadata else "N/A"
+
+                # 핵심 메트릭 표시
+                key_metric_strs = []
+                for km in key_metrics.get(level, []):
+                    if km in metrics:
+                        key_metric_strs.append(f"{km}: {metrics[km]:.3f}")
+                key_metric_str = ", ".join(key_metric_strs) if key_metric_strs else "N/A"
+
+                f.write(f"| **{level}** | {task_count} | {sr} | {exec_time} | {key_metric_str} |\n")
+
+            f.write("\n")
+
+            # 레벨별 상세 성능
             f.write("## 레벨별 성능\n\n")
-            
+
             for level in sorted(report['by_level'].keys()):
                 level_data = report['by_level'][level]
                 level_num = level[1]
-                
+
                 level_names = {
                     '1': 'Level 1: 단일 도구 호출',
                     '2': 'Level 2: 도구 선택',
@@ -389,74 +460,76 @@ class ModelRunEvaluator:
                     '6': 'Level 6: 컨텍스트 재사용',
                     '7': 'Level 7: 멀티턴 대화',
                 }
-                
+
                 f.write(f"### {level_names.get(level_num, level)}\n\n")
+
+                # 태스크 의도 설명 추가
+                if level_num in self.LEVEL_DESCRIPTIONS:
+                    f.write(f"> 태스크 의도: {self.LEVEL_DESCRIPTIONS[level_num]}\n>\n")
+
                 f.write(f"- 태스크 수: {level_data['evaluated_tasks']}/{level_data['total_tasks']}\n")
-                
+
                 metadata = level_data['metadata']
                 if 'success_rate' in metadata:
                     f.write(f"- 성공률: {metadata['success_rate']:.1f}%\n")
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
-                # 토큰 통계 추가
-                if 'average_tokens_per_task' in metadata:
-                    f.write(f"- 평균 토큰 수: {metadata['average_tokens_per_task']:.2f}\n")
-                if 'average_tps' in metadata:
-                    f.write(f"- 평균 TPS: {metadata['average_tps']:.2f} tokens/sec\n")
-                if 'average_prompt_tokens' in metadata:
-                    f.write(f"  - 평균 입력 토큰: {metadata['average_prompt_tokens']:.2f}\n")
-                if 'average_completion_tokens' in metadata:
-                    f.write(f"  - 평균 출력 토큰: {metadata['average_completion_tokens']:.2f}\n")
-                
+
                 f.write("\n**메트릭 점수:**\n\n")
-                
+
                 metrics = level_data['metrics']
                 if metrics:
                     for metric_name in sorted(metrics.keys()):
                         score = metrics[metric_name]
-                        f.write(f"- {metric_name}: {score:.3f}\n")
+                        # 메트릭 설명 추가
+                        description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
+                        f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
                 else:
                     f.write("- (메트릭 없음)\n")
-                
+
                 f.write("\n")
-        
+
+            # 토큰 사용량 섹션 (채원님 작업 예정)
+            f.write("## 토큰 사용량\n\n")
+            f.write("*[채원님 Langfuse 데이터 추가 예정]*\n\n")
+
         print(f"[저장] Markdown: {output_file}")
-    
+
     def export(self, report: Dict[str, Any], output_dir: str, formats: List[str]):
         """결과 내보내기"""
         output_path = Path(output_dir)
-        
+
         # 출력 디렉토리 생성
         model_safe = self.model.replace('/', '_')
         final_output_dir = output_path / f"{model_safe}_{self.date}"
         final_output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         print(f"\n{'='*80}")
         print(f"결과 저장")
         print(f"{'='*80}")
-        
+
         # 형식별 저장
         if 'all' in formats:
             formats = ['json', 'csv', 'markdown']
-        
+
         if 'json' in formats:
             self.export_json(report, final_output_dir)
-        
+
         if 'csv' in formats:
             self.export_csv(report, final_output_dir)
-        
+
         if 'markdown' in formats:
             self.export_markdown(report, final_output_dir)
-        
+
         print(f"{'='*80}\n")
 
 
 def main():
     """메인 함수"""
     load_dotenv()
-    
+
     # Azure API 키는 환경변수에서 로드됨
-    
+
     parser = argparse.ArgumentParser(
         description='Ko-AgentBench 모델 실행 결과 평가',
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -475,34 +548,34 @@ def main():
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --sample 10
         """
     )
-    
+
     # 필수 파라미터
-    parser.add_argument('--date', required=True, 
-                       help='실행 날짜 (예: 20251016)')
+    parser.add_argument('--date', required=True,
+                        help='실행 날짜 (예: 20251016)')
     parser.add_argument('--model', required=True,
-                       help='평가 대상 모델 (예: azure/gpt-4.1)')
-    
+                        help='평가 대상 모델 (예: azure/gpt-4.1)')
+
     # 평가 설정
     parser.add_argument('--judge-models', nargs='+', default=None,
-                    help='LLM Judge 모델들 (예: gpt-4o, claude-sonnet-4-5, gemini-2.5)')
+                        help='LLM Judge 모델들 (예: gpt-4o, claude-sonnet-4-5, gemini-2.5)')
     parser.add_argument('--sample', type=int, default=None,
-                       help='레벨당 평가할 태스크 수 (기본: 전체)')
+                        help='레벨당 평가할 태스크 수 (기본: 전체)')
     parser.add_argument('--quick', action='store_true',
-                       help='빠른 테스트 (각 레벨당 1개)')
+                        help='빠른 테스트 (각 레벨당 1개)')
     parser.add_argument('--log-file', help='특정 로그 파일 경로 (선택사항)')
-    
+
     # 출력 설정
     parser.add_argument('--output', default='reports',
-                       help='출력 디렉토리 (기본: reports)')
-    parser.add_argument('--format', nargs='+', 
-                       default=['json', 'csv', 'markdown'],
-                       choices=['json', 'csv', 'markdown', 'all'],
-                       help='출력 형식 (기본: json csv markdown)')
+                        help='출력 디렉토리 (기본: reports)')
+    parser.add_argument('--format', nargs='+',
+                        default=['json', 'csv', 'markdown'],
+                        choices=['json', 'csv', 'markdown', 'all'],
+                        help='출력 형식 (기본: json csv markdown)')
     parser.add_argument('--verbose', action='store_true',
-                       help='상세 로그 출력')
-    
+                        help='상세 로그 출력')
+
     args = parser.parse_args()
-    
+
     # Judge 모델 설정
     if args.judge_models:
         judge_models = args.judge_models
@@ -513,7 +586,7 @@ def main():
             "anthropic/claude-sonnet-4-5-20250929",
             "gemini/gemini-2.5-pro-preview-03-25"
         ]
-    
+
     # 평가 실행
     try:
         evaluator = ModelRunEvaluator(
@@ -523,21 +596,20 @@ def main():
             sample_size=1 if args.quick else args.sample,
             verbose=args.verbose
         )
-        
+
         report = evaluator.evaluate()
         evaluator.export(report, args.output, formats=args.format)
-        
+
         print("\n[완료] 평가가 성공적으로 완료되었습니다.\n")
-        
+
     except Exception as e:
         print(f"\n[오류] 평가 실패: {e}\n")
         import traceback
         traceback.print_exc()
         return 1
-    
+
     return 0
 
 
 if __name__ == "__main__":
     exit(main())
-

@@ -142,7 +142,8 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
             # Pass through evaluation helpers if present
             "minimum_steps": task.get("minimum_steps"),
             "data_flow": task.get("data_flow", []),
-            "error_injection": task.get("error_injection")
+            "error_injection": task.get("error_injection"),
+            "fallback_options": task.get("fallback_options", [])
         }
         converted_tasks.append(converted_task)
     
@@ -172,6 +173,7 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "minimum_steps": result.get("minimum_steps"),
         "data_flow": result.get("data_flow", []),
         "error_injection": result.get("error_injection"),
+        "fallback_options": result.get("fallback_options", []),
         "token_usage": result.get("token_usage", {
             "prompt_tokens": 0,
             "completion_tokens": 0,
@@ -395,12 +397,20 @@ def run_benchmark_on_dataset(
     # Convert dataset format to runner format (always use full set)
     converted_tasks = convert_dataset_to_tasks(tasks)
     
-    # Collect all required tools
+    # Collect all required tools (including fallback tools for L5)
     all_required_tools = []
     for task in converted_tasks:
+        # Add main tools
         for tool in task.get("available_tools", []):
             if tool not in all_required_tools:
                 all_required_tools.append(tool)
+
+        # Add fallback tools for L5 tasks
+        if task.get("fallback_options"):
+            for fallback_option in task["fallback_options"]:
+                tool_name = fallback_option.get("tool")
+                if tool_name and tool_name not in all_required_tools:
+                    all_required_tools.append(tool_name)
     
     print(f"Required tools: {all_required_tools}")
     
@@ -492,6 +502,9 @@ def run_benchmark_on_dataset(
                 result['data_flow'] = task.get('data_flow', [])
             if 'error_injection' in task:
                 result['error_injection'] = task.get('error_injection')
+            # Include fallback_options for L5 tasks
+            if 'fallback_options' in task:
+                result['fallback_options'] = task.get('fallback_options')
             all_results.append(result)
             
             # Print summary

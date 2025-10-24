@@ -1,0 +1,344 @@
+{
+  "metadata": {
+    "timestamp": "2025-10-23T23:28:19.054226",
+    "model": "azure/gpt-4",
+    "level": "L5",
+    "total_tasks": 2,
+    "successful_tasks": 2,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 23.82,
+    "average_execution_time": 11.91,
+    "total_steps": 6,
+    "average_steps": 3.0,
+    "total_tool_calls": 3,
+    "average_tool_calls": 1.5,
+    "total_tokens": 6052,
+    "average_tokens_per_task": 3026.0,
+    "average_prompt_tokens": 2933.0,
+    "average_completion_tokens": 93.0,
+    "average_tps": 254.09
+  },
+  "tool_usage_statistics": {
+    "PlaceSearch_kakao": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 0,
+      "failure": 1
+    },
+    "WebSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "task_id": "L5-001",
+      "instruction": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 4.1591339111328125,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "편의점",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 300,
+            "sort": "distance",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "PlaceSearch_kakao",
+        "error_type": "complete_unavailable"
+      },
+      "fallback_options": [],
+      "token_usage": {
+        "prompt_tokens": 403,
+        "completion_tokens": 95,
+        "total_tokens": 498
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "편의점",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 300,
+            "size": 1
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        }
+      ],
+      "final_response": "현재 서비스에 문제가 있어 강남역 주변의 편의점 정보를 제공받을 수 없습니다. 나중에 다시 시도해 주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_GMOigMCTeuHgSWIVnsraYTwC",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "현재 서비스에 문제가 있어 강남역 주변의 편의점 정보를 제공받을 수 없습니다. 나중에 다시 시도해 주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L5-002",
+      "instruction": "KOSDAQ 지수 현재 값을 알려줘.",
+      "level": 5,
+      "category": "Robustness",
+      "success": true,
+      "execution_time": 19.659515142440796,
+      "steps_taken": 4,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": {
+        "tool": "MarketIndex_ls",
+        "error_type": "complete_unavailable"
+      },
+      "fallback_options": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "KOSDAQ 지수 현재가",
+            "display": 1
+          }
+        },
+        {
+          "tool": "WebSearch_daum",
+          "args": {
+            "query": "KOSDAQ 지수 현재가",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "token_usage": {
+        "prompt_tokens": 5463,
+        "completion_tokens": 91,
+        "total_tokens": 5554
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": false,
+          "error": "Service completely unavailable"
+        },
+        {
+          "step": 3,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "KOSDAQ index"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Thu, 23 Oct 2025 23:28:09 +0900",
+            "total": 176789,
+            "start": 1,
+            "display": 10,
+            "items": [
+              {
+                "title": "<b>KOSDAQ</b> 인덱스 차트 및 쿼트",
+                "link": "https://kr.tradingview.com/symbols/KRX-KOSDAQ/",
+                "description": "KOSDAQ을 넘어 더 많은 지역 지수 및 시장 벤치마크를 확인하세요. 코스닥 어디까지 올라가는 거에요? 890p 920p 두곳정도 우선 보고 단기 조정 가능성 생각 중입니다 요즘 국장이 워낙 강하다보니 하락뷰가 잘 없는듯 하여 조정 관점을 올려봅니다 대추세는 상방을 보고 있습니다 크립토 마켓 요약 3월 31일 🌐 3월 31일 크립토 마켓 이슈요약 현재 비트코인은 82K 부근(정확히 $82,182.57)에서 거래되고 있으며, 24시간 기준 0.27% 하락흐름 이번 하락은 미국 소비자 지출 증가로 인한 인플레이션 우려, 그리고 중국 관세 리스크가 동시에 부각되며 위험자산 전반에 부정적 영향을 주고 있는 상황 주요 알트코인 흐름 요약 시총 2위인 이더리움은 -0.82%, XRP와 솔라나는 각각 +0.65%, +0.92% 상승 중입니다. 요즘 미장 부럽지 않은 자랑스러운(?) 코스닥입니다 슬슬 단기 비중 축소를 해볼만한 타이밍은 된 것 같다고 생각합니다 짧게는 20MA, 길게는 60MA "
+              },
+              {
+                "title": "<b>KOSDAQ Index</b> Today (KQ11)",
+                "link": "https://www.investing.com/indices/kosdaq",
+                "description": "Get 100% ad-free experience Find here information about the KOSDAQ index (KQ11). Assess the KOSDAQ stock price and overall performance. How Is The KOSDAQ Doing Today? The KOSDAQ live stock price is 872.03. What Is the KOSDAQ Ticker Symbol? KQ11 is the ticker symbol of the KOSDAQ index. Is KOSDAQ a Good Stock Market Index to Invest In? KOSDAQ offers exposure to a diversified basket of stocks, which can be appealing for investors seeking broad market exposure. Investing in the index can be done th"
+              },
+              {
+                "title": "코스닥 150 컴포넌트 – KRX:<b>KOSDAQ</b>150 스탁",
+                "link": "https://kr.tradingview.com/symbols/KRX-KOSDAQ150/components/",
+                "description": "지수 구성 종목은 아래 표에서 확인할 수 있습니다. 성과, 배당, 손익계산서, 재무상태표 등 다양한 재무 지표와 데이터를 기준으로 구성 종목을 정렬해 보세요."
+              },
+              {
+                "title": "<b>KOSDAQ</b> Quote - Korea Securities Dealers Association <b>KOSDAQ Index</b>",
+                "link": "https://www.bloomberg.com/quote/KOSDAQ:IND",
+                "description": "Korea Securities Dealers Association KOSDAQ Index 5:05 AM EDT 10/23/25 About Korea Securities Dealers Association KOSDAQ Index The KOSDAQ Index is a capitalization-weighted index that measures the performance of the KOSDAQ market. The index was developed with a base value of 100 as of July 1, 1996. The base value changed to 1000 as of Jan. 26, 2004. Note: The preferred shares are excluded in calculating KOSDAQ index from June 26, 2000. Before it's here, it's on the Do Not Sell or Share My Person"
+              },
+              {
+                "title": "<b>KOSDAQ Index</b> Charts and Quotes",
+                "link": "https://www.tradingview.com/symbols/KRX-KOSDAQ/",
+                "description": "Go beyond KOSDAQ with more regional indices and market benchmarks. KOSADQ BOTTOMED OUT ANALYSIS Q4 23 As i dispute with the future of the nasdaq it dawned to me how kosadq always comes through in times like this so as price test the last 2 levels im expecting a bull market continuation the korean nasdaq going short the market beta idk but pssibly nasdaq is doing the exact same and nasdaq got some serious beta with btc so im seein the same too KOSDAQ UPCOMING SELL THEORY See if this idea fits int"
+              },
+              {
+                "title": "<b>KOSDAQ</b> Composite <b>Index</b> Components – KRX:<b>KOSDAQ</b> Stocks",
+                "link": "https://www.tradingview.com/symbols/KRX-KOSDAQ/components/",
+                "description": "The index constituents can be found in the table below. Sort the components by various financial metrics and data such as performance, dividends, income statement and balance sheet. Ecopro BM Co., Ltd. Sam Chun Dang Pharm. Co., Ltd. Wonik IPS Co., Ltd. EO Technics Co., Ltd SM ENTERTAINMENT CO. Ltd. Dongjin Semichem Co., Ltd Tokai Carbon Korea Co., Ltd. GemVax & KAEL Co Ltd Eugene Technology Co., Ltd. ST PHARM CO., LTD. WONIK HOLDINGS CO., LTD. D&D Pharmatech Co., Ltd. Mezzion Pharma Co., Ltd. HI"
+              },
+              {
+                "title": "Foreign investors boost KOSPI and <b>KOSDAQ</b> as <b>index</b> trends upward",
+                "link": "https://biz.chosun.com/en/en-finance/2025/03/26/GJKUTGNZ7VHS5MVSG3OPBDWPO4/",
+                "description": "At the same time, the <b>KOSDAQ index</b> is up 2.31 points (0.32%), standing at 713.57. In the <b>KOSDAQ</b> market, individuals are net selling 28.2 billion won, while foreigners and institutions are..."
+              },
+              {
+                "title": "트레이딩뷰 (TradingView) 코스피 코스닥 주가지수 및 주식 시세 차트 보는법 (차트 보는 곳) Korean Stock mark....",
+                "link": "https://chart.wayful.com/2020/09/Where-and-How-Korean-stock-market-KOSPI-KOSDAQ-Index-and-Stock-price-live-chart.html",
+                "description": "Skip to main content 트레이딩뷰 (TradingView) 코스피 코스닥 주가지수 및 주식 시세 차트 보는법 (차트 보는 곳) Korean Stock market index and Stock prices live chart 주요 지수 및 종목 차트 바로가기 KOSPI Stock market indexes and Stock prices live chart 코스피 종합지수 KOSPI : Korea Composite Stock Price Index 코스피 200 지수 KOSPI 200 : KOSPI 200 Index 코스피 50 지수 KOSPI 50 Index 코스닥 종합지수 KOSDAQ Composite Index : Korea Securities Dealers Automated Quotation 코스닥 150 지수 KOSDAQ 150 Index 엘지화학 KRX:051910 LG 化學 LG Chem : LG Chemical Ltd. 엘지생활건강 KRX:051900 LG 生"
+              },
+              {
+                "title": "원문보기 (협정기관 방문 후 이용 가능 )",
+                "link": "https://dl.nanet.go.kr/VolumeNReport.do?volumeNo=363128",
+                "description": "권호기사 목록 테이블로 기사명, 저자명, 페이지, 원문, 기사목차 순으로 되어있습니다. KOSDAQ Index Futures 운용전략 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 제2단계 외환자유화 이후 자본유출입에 대한 고찰 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 외국인 주식투자와 원/달러 환율의 단기변동 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 주가지수선물을 이용한 지수차익거래 투자전략 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 전력의 국내 선물거래 타당성 분석 및 선물계약 설계안 ,1 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 박희양 ;김동선 ;정동효 ;임신묵 ;도진용 ;박찬영 ;박재현 원문보기 (음성지원, 협정기관 방문 후 이용 가능 )"
+              },
+              {
+                "title": "코스닥 종합 지수 시세 그래프 [31차트] <b>KOSDAQ</b> Composite <b>Index</b> price chart",
+                "link": "https://chart.wayful.com/2020/11/world-best-financial-instruments-pmwd.html",
+                "description": "Skip to main content 코스닥 종합 지수 시세 그래프 [31차트] KOSDAQ Composite Index price chart 왼쪽 큰 그래프 (월간), 오른쪽 작은 그래프 (위: 년간, 아래: 주간) 차트 날짜 기준은 CME/ICE 선물, 현물 금과 은, 환율(FX)은 시가코 시각 (GMT-6), 주가지수 및 주식은 뉴욕 시각 (GMT-5), 유럽 (EUREX) 선물은 프랑크푸르트 시각 (GMT+2), 한국거래소(KRX) 주식 지수 상품 달러/원 환율은 서울 시각 (GMT+9) 입니다. 현물 금 시세 (Gold XAUUSD), 은 시세 (Silver XAGUSD), 선물 CFDs 시세, 그리고 포렉스(Forex, FX, 환율) 시세는 실시간 차트이고, 선물(Futures)과 주식(Stock) 시세는 지연 또는 종가 시세 입니다. 현물 금/은 시세와 환율 (포렉스 Forex) 시세는 브로커마다 약간 차이가 있습니다. 선물과 선물CFDs는 약간의 가격차이가 있으므로, "
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "현재 KOSDAQ 지수는 872.03 입니다.",
+      "conversation_log": {
+        "total_messages": 7,
+        "messages": [
+          {
+            "role": "user",
+            "content": "KOSDAQ 지수 현재 값을 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_GMOigMCTeuHgSWIVnsraYTwC",
+            "content": {
+              "error": "Service completely unavailable",
+              "error_type": "complete_unavailable"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "현재 KOSDAQ 지수 조회 서비스가 완전히 사용할 수 없습니다. 나중에 다시 시도해 주세요."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_XgfWxjxzUEnZ9KHu5neFeLTA",
+            "content": {
+              "lastBuildDate": "Thu, 23 Oct 2025 23:28:09 +0900",
+              "total": 176789,
+              "start": 1,
+              "display": 10,
+              "items": [
+                {
+                  "title": "<b>KOSDAQ</b> 인덱스 차트 및 쿼트",
+                  "link": "https://kr.tradingview.com/symbols/KRX-KOSDAQ/",
+                  "description": "KOSDAQ을 넘어 더 많은 지역 지수 및 시장 벤치마크를 확인하세요. 코스닥 어디까지 올라가는 거에요? 890p 920p 두곳정도 우선 보고 단기 조정 가능성 생각 중입니다 요즘 국장이 워낙 강하다보니 하락뷰가 잘 없는듯 하여 조정 관점을 올려봅니다 대추세는 상방을 보고 있습니다 크립토 마켓 요약 3월 31일 🌐 3월 31일 크립토 마켓 이슈요약 현재 비트코인은 82K 부근(정확히 $82,182.57)에서 거래되고 있으며, 24시간 기준 0.27% 하락흐름 이번 하락은 미국 소비자 지출 증가로 인한 인플레이션 우려, 그리고 중국 관세 리스크가 동시에 부각되며 위험자산 전반에 부정적 영향을 주고 있는 상황 주요 알트코인 흐름 요약 시총 2위인 이더리움은 -0.82%, XRP와 솔라나는 각각 +0.65%, +0.92% 상승 중입니다. 요즘 미장 부럽지 않은 자랑스러운(?) 코스닥입니다 슬슬 단기 비중 축소를 해볼만한 타이밍은 된 것 같다고 생각합니다 짧게는 20MA, 길게는 60MA "
+                },
+                {
+                  "title": "<b>KOSDAQ Index</b> Today (KQ11)",
+                  "link": "https://www.investing.com/indices/kosdaq",
+                  "description": "Get 100% ad-free experience Find here information about the KOSDAQ index (KQ11). Assess the KOSDAQ stock price and overall performance. How Is The KOSDAQ Doing Today? The KOSDAQ live stock price is 872.03. What Is the KOSDAQ Ticker Symbol? KQ11 is the ticker symbol of the KOSDAQ index. Is KOSDAQ a Good Stock Market Index to Invest In? KOSDAQ offers exposure to a diversified basket of stocks, which can be appealing for investors seeking broad market exposure. Investing in the index can be done th"
+                },
+                {
+                  "title": "코스닥 150 컴포넌트 – KRX:<b>KOSDAQ</b>150 스탁",
+                  "link": "https://kr.tradingview.com/symbols/KRX-KOSDAQ150/components/",
+                  "description": "지수 구성 종목은 아래 표에서 확인할 수 있습니다. 성과, 배당, 손익계산서, 재무상태표 등 다양한 재무 지표와 데이터를 기준으로 구성 종목을 정렬해 보세요."
+                },
+                {
+                  "title": "<b>KOSDAQ</b> Quote - Korea Securities Dealers Association <b>KOSDAQ Index</b>",
+                  "link": "https://www.bloomberg.com/quote/KOSDAQ:IND",
+                  "description": "Korea Securities Dealers Association KOSDAQ Index 5:05 AM EDT 10/23/25 About Korea Securities Dealers Association KOSDAQ Index The KOSDAQ Index is a capitalization-weighted index that measures the performance of the KOSDAQ market. The index was developed with a base value of 100 as of July 1, 1996. The base value changed to 1000 as of Jan. 26, 2004. Note: The preferred shares are excluded in calculating KOSDAQ index from June 26, 2000. Before it's here, it's on the Do Not Sell or Share My Person"
+                },
+                {
+                  "title": "<b>KOSDAQ Index</b> Charts and Quotes",
+                  "link": "https://www.tradingview.com/symbols/KRX-KOSDAQ/",
+                  "description": "Go beyond KOSDAQ with more regional indices and market benchmarks. KOSADQ BOTTOMED OUT ANALYSIS Q4 23 As i dispute with the future of the nasdaq it dawned to me how kosadq always comes through in times like this so as price test the last 2 levels im expecting a bull market continuation the korean nasdaq going short the market beta idk but pssibly nasdaq is doing the exact same and nasdaq got some serious beta with btc so im seein the same too KOSDAQ UPCOMING SELL THEORY See if this idea fits int"
+                },
+                {
+                  "title": "<b>KOSDAQ</b> Composite <b>Index</b> Components – KRX:<b>KOSDAQ</b> Stocks",
+                  "link": "https://www.tradingview.com/symbols/KRX-KOSDAQ/components/",
+                  "description": "The index constituents can be found in the table below. Sort the components by various financial metrics and data such as performance, dividends, income statement and balance sheet. Ecopro BM Co., Ltd. Sam Chun Dang Pharm. Co., Ltd. Wonik IPS Co., Ltd. EO Technics Co., Ltd SM ENTERTAINMENT CO. Ltd. Dongjin Semichem Co., Ltd Tokai Carbon Korea Co., Ltd. GemVax & KAEL Co Ltd Eugene Technology Co., Ltd. ST PHARM CO., LTD. WONIK HOLDINGS CO., LTD. D&D Pharmatech Co., Ltd. Mezzion Pharma Co., Ltd. HI"
+                },
+                {
+                  "title": "Foreign investors boost KOSPI and <b>KOSDAQ</b> as <b>index</b> trends upward",
+                  "link": "https://biz.chosun.com/en/en-finance/2025/03/26/GJKUTGNZ7VHS5MVSG3OPBDWPO4/",
+                  "description": "At the same time, the <b>KOSDAQ index</b> is up 2.31 points (0.32%), standing at 713.57. In the <b>KOSDAQ</b> market, individuals are net selling 28.2 billion won, while foreigners and institutions are..."
+                },
+                {
+                  "title": "트레이딩뷰 (TradingView) 코스피 코스닥 주가지수 및 주식 시세 차트 보는법 (차트 보는 곳) Korean Stock mark....",
+                  "link": "https://chart.wayful.com/2020/09/Where-and-How-Korean-stock-market-KOSPI-KOSDAQ-Index-and-Stock-price-live-chart.html",
+                  "description": "Skip to main content 트레이딩뷰 (TradingView) 코스피 코스닥 주가지수 및 주식 시세 차트 보는법 (차트 보는 곳) Korean Stock market index and Stock prices live chart 주요 지수 및 종목 차트 바로가기 KOSPI Stock market indexes and Stock prices live chart 코스피 종합지수 KOSPI : Korea Composite Stock Price Index 코스피 200 지수 KOSPI 200 : KOSPI 200 Index 코스피 50 지수 KOSPI 50 Index 코스닥 종합지수 KOSDAQ Composite Index : Korea Securities Dealers Automated Quotation 코스닥 150 지수 KOSDAQ 150 Index 엘지화학 KRX:051910 LG 化學 LG Chem : LG Chemical Ltd. 엘지생활건강 KRX:051900 LG 生"
+                },
+                {
+                  "title": "원문보기 (협정기관 방문 후 이용 가능 )",
+                  "link": "https://dl.nanet.go.kr/VolumeNReport.do?volumeNo=363128",
+                  "description": "권호기사 목록 테이블로 기사명, 저자명, 페이지, 원문, 기사목차 순으로 되어있습니다. KOSDAQ Index Futures 운용전략 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 제2단계 외환자유화 이후 자본유출입에 대한 고찰 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 외국인 주식투자와 원/달러 환율의 단기변동 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 주가지수선물을 이용한 지수차익거래 투자전략 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 전력의 국내 선물거래 타당성 분석 및 선물계약 설계안 ,1 원문보기 (음성지원, 협정기관 방문 후 이용 가능 ) 박희양 ;김동선 ;정동효 ;임신묵 ;도진용 ;박찬영 ;박재현 원문보기 (음성지원, 협정기관 방문 후 이용 가능 )"
+                },
+                {
+                  "title": "코스닥 종합 지수 시세 그래프 [31차트] <b>KOSDAQ</b> Composite <b>Index</b> price chart",
+                  "link": "https://chart.wayful.com/2020/11/world-best-financial-instruments-pmwd.html",
+                  "description": "Skip to main content 코스닥 종합 지수 시세 그래프 [31차트] KOSDAQ Composite Index price chart 왼쪽 큰 그래프 (월간), 오른쪽 작은 그래프 (위: 년간, 아래: 주간) 차트 날짜 기준은 CME/ICE 선물, 현물 금과 은, 환율(FX)은 시가코 시각 (GMT-6), 주가지수 및 주식은 뉴욕 시각 (GMT-5), 유럽 (EUREX) 선물은 프랑크푸르트 시각 (GMT+2), 한국거래소(KRX) 주식 지수 상품 달러/원 환율은 서울 시각 (GMT+9) 입니다. 현물 금 시세 (Gold XAUUSD), 은 시세 (Silver XAGUSD), 선물 CFDs 시세, 그리고 포렉스(Forex, FX, 환율) 시세는 실시간 차트이고, 선물(Futures)과 주식(Stock) 시세는 지연 또는 종가 시세 입니다. 현물 금/은 시세와 환율 (포렉스 Forex) 시세는 브로커마다 약간 차이가 있습니다. 선물과 선물CFDs는 약간의 가격차이가 있으므로, "
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "현재 KOSDAQ 지수는 872.03 입니다."
+          }
+        ]
+      }
+    }
+  ]
+}
