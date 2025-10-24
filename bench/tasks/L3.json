@@ -1,65 +1,7 @@
 [
   {
     "task_id": "L3-001",
-    "instruction": "삼성전자 투자를 검토하고 있습니다. 현재 주가 정보를 확인한 후, 이번달 차트 데이터를 분석해서 종합 정보를 제공해주세요.",
-    "task_level": 3,
-    "task_category": "Multi Tool Sequential",
-    "golden_action": [
-      {
-        "step": 1,
-        "tool": "WebSearch_naver",
-        "args": {
-          "query": "삼성전자 종목 코드",
-          "display": 10,
-          "sort": "date"
-        }
-      },
-      {
-        "step": 2,
-        "tool": "StockPrice_kis",
-        "args": {
-          "symbol": "005930"
-        }
-      },
-      {
-        "step": 3,
-        "tool": "StockChart_kis",
-        "args": {
-          "symbol": "005930",
-          "period": "M"
-        }
-      }
-    ],
-    "minimum_steps": 3,
-    "essential_tools": [
-      "WebSearch_naver",
-      "StockPrice_kis",
-      "StockChart_kis"
-    ],
-    "data_flow": [
-      {
-        "to_step": 1,
-        "to_parameter": "query",
-        "from_step": "user_input",
-        "from_output": "삼성전자 종목코드"
-      },
-      {
-        "to_step": 2,
-        "to_parameter": "symbol",
-        "from_step": 1,
-        "from_output": "symbol"
-      },
-      {
-        "to_step": 3,
-        "to_parameter": "symbol",
-        "from_step": 1,
-        "from_output": "symbol"
-      }
-    ]
-  },
-  {
-    "task_id": "L3-002",
-    "instruction": "청량리역 근처에 가장 가까운 대학교를 알아보고, 그 학교 근처에 병원이 몇개 있는지 조사해주세요.",
+    "instruction": "청량리역 근처에 있는 대학교 찾아보고, 그 학교 근처에 병원이 몇개 있는지 조사해줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -103,8 +45,8 @@
     ]
   },
   {
-    "task_id": "L3-003",
-    "instruction": "빗썸의 KRW 마켓에 상장된 암호화폐 10개를 조사하고, 그 현재가를 조회해주세요.",
+    "task_id": "L3-002",
+    "instruction": "빗썸의 KRW 마켓에 상장된 암호화폐 10개를 조사하고, 그 현재가를 조회해줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -138,8 +80,8 @@
     ]
   },
   {
-    "task_id": "L3-004",
-    "instruction": "독학하기 좋은 수능 모의고사 수학 문제집 이름을 조사해주고, 알라딘에서 그 책 가격 알려줘.",
+    "task_id": "L3-003",
+    "instruction": "독학하기 좋은 수능 모의고사 수학 문제집 이름 조사해주고, 알라딘에서 그 책 가격 알려줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -170,7 +112,7 @@
     ]
   },
   {
-    "task_id": "L3-005",
+    "task_id": "L3-004",
     "instruction": "강남역에서 가장 가까운 애플 매장까지 걸어서 얼마나 걸리는지 알려줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
@@ -251,7 +193,7 @@
     ]
   },
   {
-    "task_id": "L3-006",
+    "task_id": "L3-005",
     "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
@@ -319,7 +261,7 @@
     ]
   },
   {
-    "task_id": "L3-007",
+    "task_id": "L3-006",
     "instruction": "이번주 알라딘 베스트 셀러 3권 조회해서 블로그 후기 글 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
@@ -350,8 +292,8 @@
     ]
   },
   {
-    "task_id": "L3-008",
-    "instruction": "서울역 근처에 있는 맛집을 추천해주고, 그 중 한 곳의 블로그 리뷰를 찾아주세요.",
+    "task_id": "L3-007",
+    "instruction": "서울역 근처 맛집 추천해주고, 그 중 한 곳의 블로그 리뷰 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -386,7 +328,7 @@
     ]
   },
   {
-    "task_id": "L3-009",
+    "task_id": "L3-008",
     "instruction": "부산 해운대구의 주소를 좌표로 변환하고, 그 좌표를 중심으로 반경 500m 내에 있는 편의점들 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
@@ -579,7 +521,7 @@
   },
   {
     "task_id": "L3-013",
-    "instruction": "홍대입구역에서 서울숲까지 대중교통 경로를 검색하고, 예상 소요 시간을 알려주세요.",
+    "instruction": "동교동에서 성수동까지 대중교통 경로를 검색하고, 예상 소요 시간을 알려주세요.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -593,7 +535,7 @@
         }
       },
       {
-        "step": 2,
+        "step": 1,
         "tool": "Geocoding_tmap",
         "args": {
           "city_do": "서울특별시",
@@ -602,7 +544,7 @@
         }
       },
       {
-        "step": 3,
+        "step": 2,
         "tool": "WalkRoute_tmap",
         "args": {
           "startX": "{step1.lon}",
@@ -612,34 +554,34 @@
         }
       }
     ],
-    "minimum_steps": 3,
+    "minimum_steps": 2,
     "essential_tools": [
       "Geocoding_tmap",
       "WalkRoute_tmap"
     ],
     "data_flow": [
       {
-        "to_step": 3,
+        "to_step": 2,
         "to_parameter": "startX",
         "from_step": 1,
         "from_output": "lon"
       },
       {
-        "to_step": 3,
+        "to_step": 2,
         "to_parameter": "startY",
         "from_step": 1,
         "from_output": "lat"
       },
       {
-        "to_step": 3,
+        "to_step": 2,
         "to_parameter": "endX",
-        "from_step": 2,
+        "from_step": 1,
         "from_output": "lon"
       },
       {
-        "to_step": 3,
+        "to_step": 2,
         "to_parameter": "endY",
-        "from_step": 2,
+        "from_step": 1,
         "from_output": "lat"
       }
     ]

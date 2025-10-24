@@ -590,7 +590,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "categories": {"type": "string", "description": "카테고리 코드 (예: 편의점 : )"},
+                "categories": {"type": "string", "description": "카테고리 코드 (편의점 : CS2, 학교 : SC4, 음식점/식당 : FD6, 카페 : CE7, 병원 : HP8)"},
                 "centerLon": {"type": "number"},
                 "centerLat": {"type": "number"},
                 "radius": {"type": "integer", "default": 1},
