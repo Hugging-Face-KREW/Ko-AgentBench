@@ -470,13 +470,20 @@ class ArgAccMetric(LLMJudgeMetric):
             if not golden_args or not pred_args:
                 return 0.0
 
-            # LLM Judge 호출 (1-5 점수)
-            prompt = f"Golden 인수: {golden_args}\nPredicted 인수: {pred_args}"
+            # 프롬프트 템플릿 사용
+            template = self.prompt_loader.get_prompt("arg_acc")
+            prompt = template.format(
+                golden_args=golden_args,
+                predicted_args=pred_args
+            )
+            
             result = self._call_multi_judge_score(prompt, 'arg_acc', min_score=1, max_score=5)
             
-            # 1-5 점수를 0.0-1.0 범위로 변환
+            # 1-5 점수를 0.0-1.0 범위로 변환 
             score = result.get("score", 1)
-            normalized_score = (score - 1) / 4.0  # 1->0.0, 5->1.0
+            normalized_score = max(0.0, (score - 1) / 4.0)  # 1->0.0, 5->1.0, 음수 방지
+            
+            print(f"DEBUG ArgAcc: score={score}, normalized_score={normalized_score}, result={result}")
             
             return normalized_score
             
