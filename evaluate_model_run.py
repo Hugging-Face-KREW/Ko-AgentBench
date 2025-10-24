@@ -36,6 +36,7 @@ class ModelRunEvaluator:
 
     # Metric별 상세 설명
     METRIC_DESCRIPTIONS = {
+        'RRR': '응답 반환율. 모델이 기술적 오류(Exception, Timeout 등) 없이 최종 응답을 반환했는지 여부',
         'ArgAcc': '인자 정확도. 도구 호출 시 전달한 인자들이 정답과 일치하는지 평가',
         'CallEM': '호출 완전 일치. 도구명과 모든 인자가 정답과 완벽하게 일치하는지 평가',
         'EPR_CVR': '유효 호출 비율. 생성한 도구 호출이 스키마상 유효하고 실행 가능한지 평가',
@@ -252,6 +253,11 @@ class ModelRunEvaluator:
                 print(f"  [오류] {task_id} 평가 실패: {e}")
                 continue
 
+        # RRR (Response Return Rate) 계산 로직 추가
+        # 기술적 오류 없이 응답을 반환한 비율
+        successful_responses = sum(1 for task in all_evaluations if task.get("success", False))
+        rrr_score = successful_responses / len(all_evaluations) if all_evaluations else 0.0
+
         # 메트릭별 평균 계산
         metric_averages = {}
         for metric_name in metrics.keys():
@@ -266,6 +272,7 @@ class ModelRunEvaluator:
                 metric_averages[metric_name] = sum(valid_scores) / len(valid_scores)
             else:
                 metric_averages[metric_name] = 0.0
+        metric_averages["RRR"] = rrr_score
 
         return {
             "level": level_num,
@@ -371,7 +378,7 @@ class ModelRunEvaluator:
             writer = csv.writer(f)
 
             # 헤더
-            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Execution_Rate', 'Task_Success_Rate(SR)', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
+            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
             writer.writerow(header)
 
             # 각 레벨 데이터
@@ -383,17 +390,14 @@ class ModelRunEvaluator:
                     level,
                     level_data['total_tasks'],
                     level_data['evaluated_tasks'],
-                    f"{metadata.get('success_rate', 0):.2f}%",  # 실행 완료율
-                    f"{level_data['metrics'].get('SR', 0) * 100:.2f}%",  # 태스크 완수율
                     f"{metadata.get('average_execution_time', 0):.2f}",
                     f"{metadata.get('average_tokens_per_task', 0):.2f}",
                     f"{metadata.get('average_tps', 0):.2f}",
                     f"{metadata.get('ttft', {}).get('average', 0):.4f}",
                 ]
                 for metric in sorted(all_metrics):
-                    if metric != 'SR':  # SR 중복 제거
-                        score = level_data['metrics'].get(metric, 0.0)
-                        row.append(f"{score:.4f}")
+                    score = level_data['metrics'].get(metric, 0.0)
+                    row.append(f"{score:.4f}")
                 writer.writerow(row)
 
         print(f"[저장] CSV: {output_file}")
@@ -420,8 +424,8 @@ class ModelRunEvaluator:
 
             # 📊 성능 요약 테이블 추가
             f.write("## 📊 성능 요약\n\n")
-            f.write("| Level | 태스크 수 | 실행 완료율 | 태스크 완수율(SR) | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
-            f.write("| --- | --- | --- | --- | --- | --- | --- | --- |\n")
+            f.write("| Level | 태스크 수 | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
+            f.write("| --- | --- | --- | --- | --- | --- |\n")
 
             # 각 레벨의 핵심 메트릭 매핑
             key_metrics = {
@@ -441,11 +445,6 @@ class ModelRunEvaluator:
 
                 task_count = f"{level_data['evaluated_tasks']}/{level_data['total_tasks']}"
                 
-                execution_rate = f"{metadata.get('success_rate', 0):.1f}%" if 'success_rate' in metadata else "N/A"
-                
-                sr_score = metrics.get('SR', 0)
-                sr_percentage = f"{sr_score * 100:.1f}%" if sr_score is not None else "N/A"
-                
                 exec_time = f"{metadata.get('average_execution_time', 0):.1f}초" if 'average_execution_time' in metadata else "N/A"
                 tps = f"{metadata.get('average_tps', 0):.0f}" if 'average_tps' in metadata else "N/A"
                 ttft = f"{metadata.get('ttft', {}).get('average', 0):.3f}초" if 'ttft' in metadata else "N/A"
@@ -457,8 +456,7 @@ class ModelRunEvaluator:
                         key_metric_strs.append(f"{km}: {metrics[km]:.3f}")
                 key_metric_str = ", ".join(key_metric_strs) if key_metric_strs else "N/A"
 
-                f.write(f"| **{level}** | {task_count} | {execution_rate} | {sr_percentage} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
-
+                f.write(f"| **{level}** | {task_count} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
             f.write("\n")
 
             # 레벨별 상세 성능
@@ -487,14 +485,6 @@ class ModelRunEvaluator:
                 f.write(f"- 태스크 수: {level_data['evaluated_tasks']}/{level_data['total_tasks']}\n")
 
                 metadata = level_data.get('metadata', {})
-                if 'success_rate' in metadata:
-                    f.write(f"- 실행 완료율: {metadata['success_rate']:.1f}% (에러 없이 완료)\n")
-
-                # SR 메트릭 추가
-                sr_score = level_data['metrics'].get('SR')
-                if sr_score is not None:
-                    f.write(f"- 태스크 완수율: {sr_score * 100:.1f}% (LLM Judge 평가)\n")
-
                 if 'average_execution_time' in metadata:
                     f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
 
@@ -502,11 +492,20 @@ class ModelRunEvaluator:
 
                 metrics = level_data['metrics']
                 if metrics:
+                    # RRR과 SR을 먼저 출력
+                    priority_metrics = ['RRR', 'SR']
+                    for metric_name in priority_metrics:
+                        if metric_name in metrics:
+                            score = metrics[metric_name]
+                            description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
+                            f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
+                    
+                    # 나머지 메트릭 출력
                     for metric_name in sorted(metrics.keys()):
-                        score = metrics[metric_name]
-                        # 메트릭 설명 추가
-                        description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
-                        f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
+                        if metric_name not in priority_metrics:
+                            score = metrics[metric_name]
+                            description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
+                            f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
                 else:
                     f.write("- (메트릭 없음)\n")
 
