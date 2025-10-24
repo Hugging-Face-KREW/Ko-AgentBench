@@ -1042,9 +1042,7 @@ class ErrorDetectMetric(LLMJudgeMetric):
 
 
 class GracefulFailMetric(Metric):
-    """
-    GracefulFail : 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율
-    """
+    """GracefulFail: 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율"""
     name = "GracefulFail"
     level = 5
 
@@ -1060,34 +1058,81 @@ class GracefulFailMetric(Metric):
         return True
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-
-        inj = ctx.task_schema.get("error_injection")
-        if not isinstance(inj, dict) or not inj:
-            return EvaluationResult(self.name, 0.0, {})
+        error_injection = ctx.task_schema.get("error_injection")
+        if not isinstance(error_injection, dict) or not error_injection:
+            return EvaluationResult(self.name, 0.0, {"reason": "No error injection"})
 
         # 반복 실행 결과가 있는 경우
-        reps = ctx.logs.get("repetition_results")
-        if isinstance(reps, list) and reps and isinstance(reps[0], dict):
-            total_fail = sum(1 for r in reps if not bool(r.get("success", False)))
+        repetition_results = ctx.logs.get("repetition_results")
+        if isinstance(repetition_results, list) and repetition_results and isinstance(repetition_results[0], dict):
+            total_fail = sum(1 for result in repetition_results if not bool(result.get("success", False)))
             graceful_fail = sum(
-                1 for r in reps
-                if (not bool(r.get("success", False))) and (not self._has_output(r.get("actual_output")))
+                1 for result in repetition_results
+                if (not bool(result.get("success", False))) and (not self._has_output(result.get("actual_output")))
             )
             score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
             return EvaluationResult(self.name, score, {
                 "total_fail": total_fail,
                 "graceful_fail": graceful_fail,
-                "repetitions": len(reps)
+                "repetitions": len(repetition_results)
             })
 
-        # 반복 정보 없으면 단일 시도
-        success = bool(ctx.logs.get("success", False))
-        if success:
-            return EvaluationResult(self.name, 0.0, {})
+        # 단일 시도 케이스: 주입된 도구가 실패했는지 확인
+        injected_tool = error_injection.get("tool")
+        tool_calls = ctx.logs.get("tool_calls", []) or []
         
-        out = ctx.logs.get("actual_output", None)
-        graceful = not self._has_output(out)
-        return EvaluationResult(self.name, 1.0 if graceful else 0.0, {})
+        # 1. 주입된 도구가 실패했는지 확인
+        injected_tool_failed = False
+        for call in tool_calls:
+            if not isinstance(call, dict):
+                continue
+            tool_name = call.get("tool") or call.get("tool_name")
+            if tool_name == injected_tool:
+                if call.get("success") is False or call.get("error"):
+                    injected_tool_failed = True
+                    break
+        
+        # 주입된 도구가 실패하지 않았으면 평가 대상 아님
+        if not injected_tool_failed:
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "Injected tool did not fail",
+                "injected_tool": injected_tool
+            })
+        
+        # 2. fallback 도구가 성공했는지 확인
+        fallback_options = ctx.task_schema.get("fallback_options") or []
+        fallback_tools = {
+            opt.get("tool") for opt in fallback_options
+            if isinstance(opt, dict) and opt.get("tool")
+        }
+        
+        fallback_succeeded = False
+        if fallback_tools:
+            for call in tool_calls:
+                if not isinstance(call, dict):
+                    continue
+                tool_name = call.get("tool") or call.get("tool_name")
+                if tool_name in fallback_tools:
+                    if call.get("success") is True and not call.get("error"):
+                        fallback_succeeded = True
+                        break
+        
+        # fallback이 성공했으면 graceful fail이 아님 (실제 데이터를 제공한 것)
+        if fallback_succeeded:
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "Fallback succeeded - provided actual data",
+                "injected_tool_failed": True,
+                "fallback_succeeded": True
+            })
+        
+        # 3. fallback이 없고 주입된 도구가 실패했으면 graceful fail로 간주
+        # (에러 메시지를 제공하는 것이 graceful fail의 목적)
+        return EvaluationResult(self.name, 1.0, {
+            "graceful": True,
+            "injected_tool_failed": True,
+            "fallback_succeeded": False,
+            "reason": "Injected tool failed without fallback - graceful fail"
+        })
     
 
 class FallbackSRMetric(Metric):
