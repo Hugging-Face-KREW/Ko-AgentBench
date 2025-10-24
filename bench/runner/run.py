@@ -40,23 +40,23 @@ class BenchmarkRunner:
     @observe(name="run_task")
     def run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """Run a single benchmark task.
-        
+
         Args:
             task: Task definition dictionary
-            
+
         Returns:
             Task execution result including tool invocation summary
         """
         start_time = time.time()
         # Accept both 'task_id' and 'id' from upstream converters
         task_id = task.get('task_id') or task.get('id', 'unknown')
-        
+
         if is_enabled():
             try:
                 langfuse = get_client()
                 category = task.get('task_category') or task.get('category', 'unknown')
                 difficulty = task.get('task_level') or task.get('difficulty', 'unknown')
-                
+
                 langfuse.update_current_trace(
                     name=f"Task: {task_id}",
                     metadata={
@@ -70,7 +70,7 @@ class BenchmarkRunner:
                 self.logger.debug(f"Langfuse update failed: {e}")
 
         self.logger.info(f"Starting task {task_id}")
-        
+
         try:
             # Seed conversation messages
             messages: List[Dict[str, Any]] = []
@@ -101,25 +101,41 @@ class BenchmarkRunner:
                 # Single-turn fallback
                 task_description = task.get('instruction') or task.get('description', '')
                 messages = [{"role": "user", "content": task_description}]
-            
-            # Get available tools for this task
-            task_tools = task.get('available_tools') or task.get('tools', [])
-            
-            # If no available_tools specified, extract from golden_action
-            if not task_tools and task.get('golden_action'):
+
+            # For L5 tasks with fallback_options, use only golden_action tools initially
+            if task.get('fallback_options') and task.get('golden_action'):
+                # L5 fallback scenario: Start with golden_action tools only
+                task_tools = []
                 golden_action = task.get('golden_action', [])
                 if isinstance(golden_action, dict):
                     golden_action = [golden_action]
-                
+
                 for action in golden_action:
                     if isinstance(action, dict):
                         tool_name = action.get('tool')
                         if tool_name and tool_name != 'reuse' and tool_name not in task_tools:
                             task_tools.append(tool_name)
-                
-                if task_tools:
-                    self.logger.info(f"[INFO] Extracted tools from golden_action: {task_tools}")
-            
+
+                self.logger.info(f"[L5] Starting with golden_action tools: {task_tools}")
+            else:
+                # Get available tools for this task (non-L5 or L5 without fallback)
+                task_tools = task.get('available_tools') or task.get('tools', [])
+
+                # If no available_tools specified, extract from golden_action
+                if not task_tools and task.get('golden_action'):
+                    golden_action = task.get('golden_action', [])
+                    if isinstance(golden_action, dict):
+                        golden_action = [golden_action]
+
+                    for action in golden_action:
+                        if isinstance(action, dict):
+                            tool_name = action.get('tool')
+                            if tool_name and tool_name != 'reuse' and tool_name not in task_tools:
+                                task_tools.append(tool_name)
+
+                    if task_tools:
+                        self.logger.info(f"[INFO] Extracted tools from golden_action: {task_tools}")
+
             available_tools = []
             for tool_name in task_tools:
                 tool = self.tool_registry.get_tool(tool_name)
@@ -127,7 +143,7 @@ class BenchmarkRunner:
                     available_tools.append(tool.get_schema())
                 else:
                     self.logger.warning(f"Tool '{tool_name}' not found in registry")
-            
+
             # DEBUG: Log tools being passed to LLM
             self.logger.info(f"Task tools requested: {task_tools}")
             self.logger.info(f"Available tools count: {len(available_tools)}")
@@ -135,7 +151,7 @@ class BenchmarkRunner:
                 self.logger.info(f"First tool schema keys: {list(available_tools[0].keys())}")
             else:
                 self.logger.warning("[WARNING] NO TOOLS AVAILABLE FOR THIS TASK!")
-            
+
             # Check if this is a multi-turn conversation task (L6/L7)
             conversation = task.get('conversation_tracking') or task.get('conversation')
             if isinstance(conversation, dict) and isinstance(conversation.get('turns'), list):
@@ -145,7 +161,7 @@ class BenchmarkRunner:
                 # Single-turn task: execute once
                 task_description = task.get('instruction') or task.get('description', '')
                 messages = [{"role": "user", "content": task_description}]
-                result = self._execute_loop(messages, available_tools, task)
+                result = self._execute_loop_with_fallback(messages, available_tools, task)
             
             # Aggregate tool invocation summary
             tool_invocations = []
@@ -508,6 +524,99 @@ class BenchmarkRunner:
             "final_response": message.get('content', ''),
             "conversation": messages
         }
+
+    @observe(name="execute_loop_with_fallback")
+    def _execute_loop_with_fallback(self, messages: List[Dict],
+                                   tools: List[Dict],
+                                   task: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute the LLM-tool interaction loop with fallback support for L5 tasks.
+
+        Args:
+            messages: Conversation messages
+            tools: Available tools
+            task: Task definition
+
+        Returns:
+            Execution result
+        """
+        # First attempt with original tools
+        result = self._execute_loop(messages, tools, task)
+
+        # Check if we need fallback (L5 task with failed tools and fallback_options available)
+        fallback_options = task.get('fallback_options')
+        if (not result.get('final_response') or
+            (fallback_options and self._has_failed_tools(result))):
+
+            self.logger.info(f"[L5 FALLBACK] Original execution failed, trying fallback options")
+
+            # Extract fallback tools
+            fallback_tools = []
+            for fallback_option in fallback_options:
+                tool_name = fallback_option.get('tool')
+                if tool_name:
+                    fallback_tools.append(tool_name)
+
+            if fallback_tools:
+                self.logger.info(f"[L5 FALLBACK] Switching to fallback tools: {fallback_tools}")
+
+                # Create new tool schemas for fallback
+                available_fallback_tools = []
+                for tool_name in fallback_tools:
+                    tool = self.tool_registry.get_tool(tool_name)
+                    if tool:
+                        available_fallback_tools.append(tool.get_schema())
+                    else:
+                        self.logger.warning(f"Fallback tool '{tool_name}' not found in registry")
+
+                if available_fallback_tools:
+                    # Reset conversation to original user message (remove failed attempts)
+                    original_user_message = None
+                    for msg in messages:
+                        if msg.get('role') == 'user':
+                            original_user_message = msg
+                            break
+
+                    if original_user_message:
+                        fallback_messages = [original_user_message]
+                        self.logger.info(f"[L5 FALLBACK] Retrying with {len(available_fallback_tools)} fallback tools")
+
+                        # Execute with fallback tools
+                        fallback_result = self._execute_loop(fallback_messages, available_fallback_tools, task)
+
+                        # Combine results: original steps + fallback steps
+                        combined_steps = result.get('steps', []) + fallback_result.get('steps', [])
+
+                        # Update step numbers for fallback steps
+                        original_steps_count = len(result.get('steps', []))
+                        for step in fallback_result.get('steps', []):
+                            step['step'] += original_steps_count
+
+                        # Combine conversation logs
+                        original_conversation = result.get('conversation', messages)
+                        fallback_conversation = fallback_result.get('conversation', fallback_messages)
+
+                        # Create combined conversation: original + separator + fallback
+                        combined_conversation = list(original_conversation)
+                        # Add fallback conversation (skip the repeated user message)
+                        for msg in fallback_conversation[1:]:  # Skip first user message as it's duplicate
+                            combined_conversation.append(msg)
+
+                        return {
+                            "steps": combined_steps,
+                            "final_response": fallback_result.get('final_response', ''),
+                            "conversation": combined_conversation,
+                            "fallback_used": True
+                        }
+
+        return result
+
+    def _has_failed_tools(self, result: Dict[str, Any]) -> bool:
+        """Check if any tools failed in the execution result."""
+        for step in result.get('steps', []):
+            for tool_call in step.get('tool_calls', []):
+                if not tool_call.get('success', False):
+                    return True
+        return False
     
     @observe(as_type="generation")
     def _call_llm_with_retry(self, messages: List[Dict], 
