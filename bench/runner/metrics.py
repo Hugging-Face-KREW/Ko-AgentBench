@@ -7,7 +7,49 @@ import yaml
 import os
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
+from pydantic import BaseModel, Field, validator
 from ..adapters.base_adapter import BaseAdapter
+
+# Pydantic 모델 정의
+class SRResponse(BaseModel):
+    """SR 메트릭 응답 모델"""
+    score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
+    reason: str = Field(..., description="간단한 이유")
+
+class ArgAccResponse(BaseModel):
+    """ArgAcc 메트릭 응답 모델"""
+    score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
+    reason: str = Field(..., description="각 인수별 유사도 분석 결과")
+
+class ErrorDetectResponse(BaseModel):
+    """ErrorDetect 메트릭 응답 모델"""
+    error_reported: bool = Field(..., description="에러 보고 여부")
+    reported_error_type: str = Field(..., description="보고된 에러 타입")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
+    reason: str = Field(..., description="간단한 이유")
+    
+    @validator('reported_error_type')
+    def validate_error_type(cls, v):
+        allowed_types = ["timeout", "data_not_available", "complete_unavailable", "other", "none"]
+        if v not in allowed_types:
+            return "other"
+        return v
+
+class EffScoreResponse(BaseModel):
+    """EffScore 메트릭 응답 모델"""
+    success: bool = Field(..., description="성공 여부")
+    reason: str = Field(..., description="간단한 이유")
+
+class ContextRetentionResponse(BaseModel):
+    """ContextRetention 메트릭 응답 모델"""
+    score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
+    reason: str = Field(..., description="간단한 이유")
+
+class RefRecallResponse(BaseModel):
+    """RefRecall 메트릭 응답 모델"""
+    score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
+    reason: str = Field(..., description="간단한 이유")
 
 class PromptLoader:
     """YAML 파일에서 프롬프트를 로딩하는 클래스"""
@@ -98,67 +140,69 @@ class LLMJudgeMetric(Metric):
         self.llm_adapters = []  # 복수 judge용
         self.prompt_loader = PromptLoader()
     
-    def _parse_json_response(self, content: str, fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
-        """JSON 응답 파싱"""
-
-        try:
-            return json.loads(content)
-        except json.JSONDecodeError:
-            match = re.search(fallback_pattern, content.lower() if 'true|false' in fallback_pattern else content)
-            if match:
-                if 'true|false' in fallback_pattern:
-                    return {fallback_key: match.group(1) == "true", "reason": "Parsed from text"}
-                else:
-                    return {fallback_key: int(match.group(1)), "reason": "Parsed from text"}
-            return {fallback_key: False if 'true|false' in fallback_pattern else 0, 
-                    "reason": "Failed to parse LLM response"}
-    
-    def _call_single_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
-                          fallback_pattern: str, fallback_key: str) -> Dict[str, Any]:
-        """단일 judge 호출"""
+    def _call_structured_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
+                              response_model: BaseModel) -> Dict[str, Any]:
+        """구조화된 출력을 사용하는 단일 judge 호출"""
         try:
             messages = [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ]
             
-            response = adapter.chat_completion(messages, temperature=0.0)
+            # response_format을 사용하여 구조화된 출력 요청
+            response = adapter.chat_completion(
+                messages, 
+                temperature=0.0,
+                response_format={
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": response_model.__name__,
+                        "schema": response_model.model_json_schema(),
+                        "strict": True
+                    }
+                }
+            )
+            
             content = response.get("message", {}).get("content", "{}")
             
-            
-            result = self._parse_json_response(content, fallback_pattern, fallback_key)
-            
-            # reported_error_type 추출 (error_detect 메트릭용)
-            if fallback_key == "error_reported":
-                try:
-                    if isinstance(content, str):
-                        import re
-                        error_type_match = re.search(r'"reported_error_type"\s*:\s*"([^"]+)"', content)
-                        if error_type_match:
-                            result["reported_error_type"] = error_type_match.group(1)
-                        else:
-                            result["reported_error_type"] = "none"
-                    else:
-                        result["reported_error_type"] = "none"
-                except:
-                    result["reported_error_type"] = "none"
-            
-            return result
+            # Pydantic 모델로 파싱
+            parsed_response = response_model.model_validate_json(content)
+            return parsed_response.model_dump()
             
         except Exception as e:
-            default_value = False if 'true|false' in fallback_pattern else 0
-            result = {fallback_key: default_value, "reason": f"Error: {str(e)}"}
-            if fallback_key == "error_reported":
-                result["reported_error_type"] = "none"
-            return result
+            logging.error(f"Structured judge call failed: {str(e)}")
+            # 기본값 반환
+            try:
+                # Pydantic v2에서 model_fields 사용
+                if hasattr(response_model, 'model_fields'):
+                    defaults = {}
+                    for field_name, field_info in response_model.model_fields.items():
+                        if field_name == 'score':
+                            defaults[field_name] = 1
+                        elif field_name == 'confidence':
+                            defaults[field_name] = 0.0
+                        elif field_name == 'error_reported' or field_name == 'success':
+                            defaults[field_name] = False
+                        elif field_name == 'reported_error_type':
+                            defaults[field_name] = "none"
+                        else:
+                            defaults[field_name] = f"Error: {str(e)}"
+                    return defaults
+                else:
+                    # 기본 실패 응답
+                    return {"error": str(e)}
+            except:
+                return {"error": str(e)}
     
     def _call_multi_judge_binary(self, prompt: str, metric_key: str, 
+                                 response_model: BaseModel,
                                  result_key: str = "error_reported") -> Dict[str, Any]:
         """복수 judge 호출 - 이진 결정 (다수결)
         
         Args:
             prompt: 평가 프롬프트
             metric_key: 시스템 프롬프트 키 (예: 'error_detect')
+            response_model: 응답 Pydantic 모델
             result_key: 결과 키 (예: 'error_reported', 'success')
         """
         if hasattr(self, 'llm_adapters') and self.llm_adapters:
@@ -169,13 +213,11 @@ class LLMJudgeMetric(Metric):
             return {result_key: False, "confidence": 0.0, "reason": "No LLM adapter available"}
         
         system_prompt = self.prompt_loader.get_system_prompt(metric_key)
-        fallback_pattern = f'"{result_key}"\\s*:\\s*(true|false)'
         
         all_results = []
         
         for idx, adapter in enumerate(judges_to_use, 1):
-            result = self._call_single_judge(adapter, system_prompt, prompt, 
-                                            fallback_pattern, result_key)
+            result = self._call_structured_judge(adapter, system_prompt, prompt, response_model)
             result['judge_id'] = idx
             result['judge_model'] = getattr(adapter, 'model_name', 'unknown')
             all_results.append(result)
@@ -221,12 +263,14 @@ class LLMJudgeMetric(Metric):
         }
     
     def _call_multi_judge_score(self, prompt: str, metric_key: str, 
+                                response_model: BaseModel,
                                 min_score: int = 1, max_score: int = 5) -> Dict[str, Any]:
         """복수 judge 호출 - 점수 평가 (평균)
         
         Args:
             prompt: 평가 프롬프트
             metric_key: 시스템 프롬프트 키
+            response_model: 응답 Pydantic 모델
             min_score: 최소 점수
             max_score: 최대 점수
         """
@@ -238,13 +282,11 @@ class LLMJudgeMetric(Metric):
             return {"score": 0, "reason": "No LLM adapter available"}
         
         system_prompt = self.prompt_loader.get_system_prompt(metric_key)
-        fallback_pattern = f'"score"\\s*:\\s*([{min_score}-{max_score}])'
         
         all_results = []
         
         for idx, adapter in enumerate(judges_to_use, 1):
-            result = self._call_single_judge(adapter, system_prompt, prompt, 
-                                            fallback_pattern, "score")
+            result = self._call_structured_judge(adapter, system_prompt, prompt, response_model)
             result['judge_id'] = idx
             result['judge_model'] = getattr(adapter, 'model_name', 'unknown')
             all_results.append(result)
@@ -319,7 +361,7 @@ class SRMetric(LLMJudgeMetric):
         )
         
         # Multi-judge 호출 (점수 평가)
-        llm_result = self._call_multi_judge_score(prompt, 'sr', min_score=1, max_score=5)
+        llm_result = self._call_multi_judge_score(prompt, 'sr', SRResponse, min_score=1, max_score=5)
         raw_score = llm_result.get("score", 1)
         
         # 1-5점을 0.0-1.0 스케일로 정규화
@@ -534,7 +576,7 @@ class ArgAccMetric(LLMJudgeMetric):
                 predicted_args=pred_args
             )
             
-            result = self._call_multi_judge_score(prompt, 'arg_acc', min_score=1, max_score=5)
+            result = self._call_multi_judge_score(prompt, 'arg_acc', ArgAccResponse, min_score=1, max_score=5)
             
             # 1-5 점수를 0.0-1.0 범위로 변환 
             score = result.get("score", 1)
@@ -1074,7 +1116,7 @@ class ErrorDetectMetric(LLMJudgeMetric):
         )
 
         # Multi-judge 호출
-        llm_result = self._call_multi_judge_binary(prompt, 'error_detect', 'error_reported')
+        llm_result = self._call_multi_judge_binary(prompt, 'error_detect', ErrorDetectResponse, 'error_reported')
         error_reported = llm_result.get("error_reported", False)
         reported_error_type = llm_result.get("reported_error_type", "none")
         confidence = llm_result.get("confidence", 0.0)
@@ -1463,7 +1505,7 @@ class EffScoreMetric(LLMJudgeMetric):
         )
 
         # Multi-judge 호출
-        llm_result = self._call_multi_judge_binary(prompt, 'eff_score', 'success')
+        llm_result = self._call_multi_judge_binary(prompt, 'eff_score', EffScoreResponse, 'success')
         success = llm_result.get("success", False)
         
         actual_calls = len(ctx.action_trace)
@@ -1550,7 +1592,7 @@ class ContextRetentionMetric(LLMJudgeMetric):
         )
 
         # Multi-judge 호출 (점수 평균)
-        llm_result = self._call_multi_judge_score(prompt, 'context_retention', 1, 5)
+        llm_result = self._call_multi_judge_score(prompt, 'context_retention', ContextRetentionResponse, 1, 5)
         raw_score = llm_result.get("score", 0)
         
         # 1-5점을 0-1 스케일로 정규화
@@ -1609,7 +1651,7 @@ class RefRecallMetric(LLMJudgeMetric):
         )
 
         # Multi-judge 호출 (점수 평균)
-        llm_result = self._call_multi_judge_score(prompt, 'context_retention', 1, 5)
+        llm_result = self._call_multi_judge_score(prompt, 'ref_recall', RefRecallResponse, 1, 5)
         raw_score = llm_result.get("score", 0)
         normalized_score = max(0.0, (raw_score - 1) / 4.0)
         
