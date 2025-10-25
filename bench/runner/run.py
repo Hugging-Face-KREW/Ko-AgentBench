@@ -568,15 +568,26 @@ class BenchmarkRunner:
 
             self.logger.info(f"[L5 FALLBACK] Original execution failed, trying fallback options")
 
-            # Extract fallback tools
+            # Extract fallback tools from fallback_options
             fallback_tools = []
             for fallback_option in fallback_options:
                 tool_name = fallback_option.get('tool')
-                if tool_name:
+                if tool_name and tool_name not in fallback_tools:
                     fallback_tools.append(tool_name)
+            
+            # Also include golden_action tools to give LLM context about original intended tools
+            golden_action = task.get('golden_action', [])
+            if isinstance(golden_action, dict):
+                golden_action = [golden_action]
+            
+            for action in golden_action:
+                if isinstance(action, dict):
+                    tool_name = action.get('tool')
+                    if tool_name and tool_name != 'reuse' and tool_name not in fallback_tools:
+                        fallback_tools.append(tool_name)
 
             if fallback_tools:
-                self.logger.info(f"[L5 FALLBACK] Switching to fallback tools: {fallback_tools}")
+                self.logger.info(f"[L5 FALLBACK] Switching to combined tools (fallback + golden_action): {fallback_tools}")
 
                 # Create new tool schemas for fallback
                 available_fallback_tools = []
