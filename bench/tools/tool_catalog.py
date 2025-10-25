@@ -105,7 +105,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object",
             "properties": {
                 "symbol": {"type": "string", "description": "종목 코드 (예: 삼성전자 005930)"},
-                "market": {"type": "string", "enum": ["KOSPI", "KOSDAQ"], "default": "KOSPI"},
+                "market": {"type": "string", "enum": ["KOSPI", "KOSDAQ"], "default": "KOSPI", "description" : "코스피 : KOSPI, 코스닥 : KOSDAQ"},
             },
             "required": ["symbol"],
         },
@@ -118,7 +118,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object",
             "properties": {
                 "symbol": {"type": "string", "description": "종목 심볼 (예: AAPL, TSLA)"},
-                "exchange": {"type": "string", "enum": ["NASDAQ", "NYSE"], "default": "NASDAQ", "description": "거래소"}
+                "exchange": {"type": "string", "enum": ["NASDAQ", "NYSE"], "default": "NASDAQ", "description": "거래소 (나스닥 : NASDAQ, 뉴욕증권거래소: NYSE)"}
             },
             "required": ["symbol"]
         }
@@ -131,7 +131,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "type": "object",
             "properties": {
                 "symbol": {"type": "string", "description": "종목 코드 (예: 005930)"},
-                "period": {"type": "string", "enum": ["D", "W", "M"], "default": "D"},
+                "period": {"type": "string", "enum": ["D", "W", "M"], "default": "D", "description" :"조회 기간 (일: D, 주: W, 월: M)"},
                 "count": {"type": "integer", "default": 30, "description": "조회할 데이터 개수"},
             },
             "required": ["symbol"],
@@ -148,7 +148,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
             "markets": {
                 "type": "string",
                 "default": "KRW-BTC",
-                "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                "description": "쉼표로 구분되는 마켓 코드 목록 (비트코인: KRW-BTC, 이더리움: KRW-ETH)",
                 "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
             }
         },
@@ -164,7 +164,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "markets": {
                     "type": "string",
                     "default": "KRW-BTC",
-                    "description": "쉼표로 구분되는 마켓 코드 목록 (예: KRW-BTC,KRW-ETH)",
+                    "description": "쉼표로 구분되는 마켓 코드 목록 (비트코인 : KRW-BTC, 이더리움 : KRW-ETH)",
                     "pattern": "^[A-Z]{2,5}-[A-Z0-9.-]+(,[A-Z]{2,5}-[A-Z0-9.-]+)*$"
                 }
             },
@@ -208,8 +208,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
-                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"}
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (비트코인: BTC, 이더리움: ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화 (원화: KRW, 비트코인: BTC, 테더: USDT)"}
             },
             "required": ["symbol"]
         }
@@ -221,7 +221,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT", "ALL"], "default": "KRW", "description": "기준 통화"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT", "ALL"], "default": "KRW", "description": "기준 통화 (원화: KRW, 비트코인: BTC, 테더: USDT)"},
                 "include_event": {"type": "boolean", "default": True, "description": "이벤트 마켓 포함 여부"}
             },
             "required": []
@@ -234,8 +234,8 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "symbol": {"type": "string", "description": "암호화폐 심볼 (예: BTC, ETH)"},
-                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화"},
+                "symbol": {"type": "string", "description": "암호화폐 심볼 (비트코인 : BTC, 이더리움 : ETH)"},
+                "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화 (원화: KRW, 비트코인: BTC, 테더: USDT)"},
                 "candle_type": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "default": "days", "description": "캔들 타입"},
                 "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
                 "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 30, "description": "조회할 캔들 개수"},
@@ -390,7 +390,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 },
                 "category_id": {
                     "type": "integer",
-                    "description": "분야의 고유 번호로 리스트를 제한합니다. (기본값: 0, 전체)",
+                    "description": "분야의 고유 번호로 리스트를 제한합니다. (기본값(전체): CID=0, 에세이 : CID=55889, 과학 : CID=987, 인문학 : CID=656, 경제경영 : CID=170)",
                     "default": 0
                 },
                 "year": {
@@ -476,7 +476,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "category": {"type": "string", "description": "카테고리 코드 (예: CE7=카페)"},
+                "category": {"type": "string", "description": "카테고리 코드 (편의점 : CS2, 카페 : CE7, 학교 : SC4, 음식점 : FD6, 병원 : HP8)"},
                 "x": {"type": "number", "description": "중심 경도"},
                 "y": {"type": "number", "description": "중심 위도"},
                 "radius": {"type": "integer", "minimum": 0, "maximum": 20000, "default": 1000},
@@ -590,7 +590,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "categories": {"type": "string"},
+                "categories": {"type": "string", "description": "카테고리 코드 (예: 편의점 : )"},
                 "centerLon": {"type": "number"},
                 "centerLat": {"type": "number"},
                 "radius": {"type": "integer", "default": 1},
