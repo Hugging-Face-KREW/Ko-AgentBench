@@ -1,7 +1,7 @@
 [
   {
     "task_id": "L5-001",
-    "instruction": "다음에서 아이폰 17 출시일 검색해줘.",
+    "instruction": "아이폰 17 출시일 검색해줘.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -31,7 +31,7 @@
   },
   {
     "task_id": "L5-002",
-    "instruction": "다음에서 '아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
+    "instruction": "'아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -69,7 +69,7 @@
   },
   {
     "task_id": "L5-003",
-    "instruction": "다음에서 2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘",
+    "instruction": "2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -100,7 +100,7 @@
   },
   {
     "task_id": "L5-004",
-    "instruction": "네이버에서 2025년도 노벨화학상 수상자를 검색해줘",
+    "instruction": "2025년도 노벨화학상 수상자를 검색해줘",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -130,7 +130,7 @@
   },
   {
     "task_id": "L5-005",
-    "instruction": "성수동 카페 소식을 알려주는 블로그 하나만 소개해줘",
+    "instruction": "성수동 카페 추천해주는 블로그 하나만 소개해줘",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -170,7 +170,7 @@
   },
   {
     "task_id": "L5-006",
-    "instruction": "네이버에서 국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
+    "instruction": "국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -366,7 +366,7 @@
   },
   {
     "task_id": "L5-011",
-    "instruction": "삼성전자(005930) 현재가를 숫자만 한 줄로 알려줘.",
+    "instruction": "삼성전자(005930) 현재가격 얼마야? 소수점 둘째자리까지 부탁해",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -394,7 +394,7 @@
   },
   {
     "task_id": "L5-012",
-    "instruction": "비트코인(KRW) 현재가를 숫자만 한 줄로 알려줘.",
+    "instruction": "비트코인(KRW) 현재가 얼마야? 소수점까지 알려줄 필요는 없어",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -421,7 +421,7 @@
   },
   {
     "task_id": "L5-013",
-    "instruction": "이더리움 1분봉 30개 중 마지막 종가를 숫자만 한 줄로 알려줘.",
+    "instruction": "이더리움 1분봉 30개 중 마지막 종가를 간단하게 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -454,7 +454,7 @@
   },
   {
     "task_id": "L5-014",
-    "instruction": "리플(KRW) 현재가를 숫자만 한 줄로 알려줘.",
+    "instruction": "리플(KRW) 현재가격 얼마야?",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -481,7 +481,7 @@
   },
   {
     "task_id": "L5-015",
-    "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 자동차로 가장 빠른 경로 총 소요 시간(초)만 숫자로 알려줘.",
+    "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 얼마나 걸려? 차타고 갈꺼야.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -513,8 +513,7 @@
   },
   {
     "task_id": "L5-016",
-    "instruction": "인천국제공항(126.450517,37.46019)에서 코엑스(127.0592,37.511)까지 자동차 경로 총 거리(미터)만 숫자로 알려줘.",
-    "task_level": 5,
+    "instruction": "인천국제공항(126.450517,37.46019)에서 코엑스(127.0592,37.511)까지 차타고 거리 얼마나 가야해?",
     "task_category": "Robustness",
     "golden_action": [
       {
@@ -545,7 +544,7 @@
   },
   {
     "task_id": "L5-017",
-    "instruction": "홍대입구역 근처 500m 안에서 편의점 하나만 찾아줘.",
+    "instruction": "홍대입구역 근처 500m 안에서 편의점 하나만 찾아줘. 어디야?",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -582,7 +581,7 @@
   },
   {
     "task_id": "L5-018",
-    "instruction": "네이버에서 '제주도 가을 여행 코스' 블로그 글 하나만 제목 알려줘.",
+    "instruction": "네이버에서 '제주도 가을 여행 코스' 블로그 글 뭐 있어? 하나만 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -613,26 +612,35 @@
   },
   {
     "task_id": "L5-019",
-    "instruction": "빗썸에서 거래 가능한 마켓 목록 개수 알려줘.",
+    "instruction": "KOSDAQ 지수 현재 가격 얼마냐?",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
       {
-        "tool": "MarketList_bithumb",
+        "tool": "MarketIndex_ls",
         "args": {
-          "isDetails": false
+          "jisu": "KOSDAQ"
         }
       }
     ],
     "error_injection": {
-      "tool": "MarketList_bithumb",
-      "error_type": "timeout"
+      "tool": "MarketIndex_ls",
+      "error_type": "complete_unavailable"
     },
     "fallback_options": [
       {
-        "tool": "MarketList_upbit",
+        "tool": "WebSearch_naver",
         "args": {
-          "quote": "KRW"
+          "query": "KOSDAQ 지수 현재가",
+          "display": 1
+        }
+      },
+      {
+        "tool": "WebSearch_daum",
+        "args": {
+          "query": "KOSDAQ 지수 현재가",
+          "page": 1,
+          "size": 1
         }
       }
     ]
