@@ -1392,22 +1392,41 @@
       {
         "turn_number": 3,
         "role": "user",
-        "content": "방금 찾아준 영상 다시 알려줘."
+        "content": "직캠이 뭐야?"
       },
       {
         "turn_number": 4,
         "role": "assistant",
+        "content": "직캠(fancam)은 특정 가수나 연예인을 집중적으로 촬영한 영상을 말합니다. 주로 팬들이 콘서트나 무대에서 자신이 좋아하는 멤버만 따라 찍은 영상이죠."
+      },
+      {
+        "turn_number": 5,
+        "role": "user",
+        "content": "아이유가 누구야?"
+      },
+      {
+        "turn_number": 6,
+        "role": "assistant",
+        "content": "아이유는 대한민국의 싱어송라이터이자 배우입니다. 2008년 데뷔해 '좋은 날', 'Palette', 'Blueming' 등 수많은 히트곡을 발표했으며, '나의 아저씨', '호텔 델루나' 등 드라마에서도 활약했습니다."
+      },
+      {
+        "turn_number": 7,
+        "role": "user",
+        "content": "아까 찾아준 아이유 콘서트 직캠 영상 다시 알려줘."
+      },
+      {
+        "turn_number": 8,
+        "role": "assistant",
         "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다.",
         "action": {
           "context_used": [
-          {
-            "source_turn": 2,
-            "info": "아이유 콘서트 직캠 최신 영상 검색 결과",
-            "usage_type": "direct_reference"
-          }
-        ]
+            {
+              "source_turn": 2,
+              "info": "아이유 콘서트 직캠 최신 영상 검색 결과",
+              "usage_type": "direct_reference"
+            }
+          ]
         }
-
       }
     ]
   }},
@@ -1505,19 +1524,39 @@
       {
         "turn_number": 3,
         "role": "user",
-        "content": "아까 알려준 헤어 트렌드 다시 보여줘."
+        "content": "모카무스가 뭐야?"
       },
       {
         "turn_number": 4,
         "role": "assistant",
-        "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다. 1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일... 2. 2024년 인기 헤어 스타일링 트렌드 총정리 3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기 4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택 5. 2024년 봄 필수 트렌드 헤어스타일 추천",
+        "content": "모카무스(Mocha Mousse)는 2025년 트렌드 헤어 컬러로, 초콜릿과 커피를 연상시키는 깊고 부드러운 브라운 톤입니다. 편안하고 세련된 느낌을 주는 컬러죠."
+      },
+      {
+        "turn_number": 5,
+        "role": "user",
+        "content": "퍼스널 컬러가 뭐야?"
+      },
+      {
+        "turn_number": 6,
+        "role": "assistant",
+        "content": "퍼스널 컬러는 개인의 피부톤, 눈동자 색, 머리카락 색에 가장 어울리는 색상 팔레트를 의미합니다. 봄/여름/가을/겨울 4가지 시즌으로 나뉘며, 자신에게 맞는 컬러를 찾으면 더욱 빛나 보일 수 있습니다."
+      },
+      {
+        "turn_number": 7,
+        "role": "user",
+        "content": "아까 찾아준 겨울 헤어 트렌드 다시 보여줘."
+      },
+      {
+        "turn_number": 8,
+        "role": "assistant",
+        "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천",
         "action": {
           "context_used": [
-          {
-            "source_turn": 2,
-            "info": "2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개 검색 결과",
-            "usage_type": "direct_reference"
-          }
+            {
+              "source_turn": 2,
+              "info": "2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개 검색 결과",
+              "usage_type": "direct_reference"
+            }
           ]
         }
       }
@@ -1618,21 +1657,41 @@
       {
         "turn_number": 3,
         "role": "user",
-        "content": "그럼 이 5주 중에 종가가 가장 높았던 주는 언제고 얼마였어?"
+        "content": "거래량이 뭐야?"
       },
       {
         "turn_number": 4,
         "role": "assistant",
-        "content": "확인해 보니, 5주 중 종가가 가장 높았던 때는 2025년 10월 10일이며, 종가는 428,000원이었습니다.",
+        "content": "거래량은 일정 기간 동안 거래된 주식의 총 개수를 의미합니다. 거래량이 많다는 것은 그만큼 많은 투자자들이 해당 주식을 사고팔고 있다는 뜻으로, 시장의 관심도를 나타냅니다."
+      },
+      {
+        "turn_number": 5,
+        "role": "user",
+        "content": "SK하이닉스가 어떤 회사야?"
+      },
+      {
+        "turn_number": 6,
+        "role": "assistant",
+        "content": "SK하이닉스는 반도체 제조 기업으로, 메모리 반도체(D램, 낸드플래시) 분야에서 세계 2위 규모를 자랑합니다. SK그룹 계열사로, AI와 데이터센터 수요 증가에 따라 주목받고 있습니다."
+      },
+      {
+        "turn_number": 7,
+        "role": "user",
+        "content": "아까 찾아준 SK하이닉스 주봉 차트 다시 보여줘."
+      },
+      {
+        "turn_number": 8,
+        "role": "assistant",
+        "content": "네, SK하이닉스의 5주간 주봉 차트 데이터입니다.\n\n2025년 10월 13일 (종가: 415,000원)\n2025년 10월 10일 (종가: 428,000원)\n2025년 9월 29일 (종가: 395,500원)\n2025년 9월 22일 (종가: 336,500원)\n2025년 9월 15일 (종가: 353,000원)",
         "action": {
           "context_used": [
-          {
-            "source_turn": 2,
-            "info": "'SK하이닉스 주봉 차트 5주치' 검색 결과",
-            "usage_type": "direct_reference"
-          }
+            {
+              "source_turn": 2,
+              "info": "'SK하이닉스 주봉 차트 5주치' 검색 결과",
+              "usage_type": "direct_reference"
+            }
           ]
-        } 
+        }
       }
     ]
   }
@@ -1835,16 +1894,36 @@
       {
         "turn_number": 3,
         "role": "user",
-        "content": "그 중에서 '장꼬방' 주소 알려줘."
+        "content": "디저트 카페가 뭐야?"
       },
       {
         "turn_number": 4,
         "role": "assistant",
-        "content": "네, 주소는 '서울 서초구 서초동 1316'입니다.",
+        "content": "디저트 카페는 케이크, 마카롱, 쿠키 등 다양한 디저트를 전문적으로 판매하는 카페입니다. 일반 카페보다 디저트 메뉴가 풍부하고, 감각적인 인테리어로 SNS에서 인기가 많습니다."
+      },
+      {
+        "turn_number": 5,
+        "role": "user",
+        "content": "강남역이 어디야?"
+      },
+      {
+        "turn_number": 6,
+        "role": "assistant",
+        "content": "강남역은 서울 지하철 2호선과 신분당선이 지나는 역으로, 서울 강남구와 서초구의 경계에 위치합니다. 강남의 핵심 상권 중 하나로, 수많은 기업과 상가가 밀집해 있습니다."
+      },
+      {
+        "turn_number": 7,
+        "role": "user",
+        "content": "아까 찾아준 강남역 디저트 카페 목록 다시 보여줘."
+      },
+      {
+        "turn_number": 8,
+        "role": "assistant",
+        "content": "네, 강남역 근처 디저트 카페 목록입니다. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있습니다.",
         "action": {
           "context_used": [
-          {
-            "source_turn": 2,
+            {
+              "source_turn": 2,
             "info": "'강남역 디저트 카페' 검색 결과",
             "usage_type": "direct_reference"
           }
