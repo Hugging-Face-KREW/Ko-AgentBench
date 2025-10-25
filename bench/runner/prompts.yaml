@@ -1,7 +1,7 @@
 # LLM Judge 프롬프트 템플릿 모음
 # 메트릭별로 분류하여 관리
 sr:
-  system: "You are an expert evaluator for task completion assessment. Always respond in valid JSON format."
+  system: "You are an expert evaluator for task completion assessment."
   template: |
     사용자의 요청이 성공적으로 완수되었는지 1-5점으로 평가하세요.
 
@@ -24,11 +24,11 @@ sr:
     - 환각(hallucination)으로 거짓 정보를 제공한 경우 1점
     - 응답이 없거나 에러만 있는 경우 1점
 
-    반드시 다음 JSON 형식으로만 답변하세요:
-    {{"score": 1-5, "reason": "간단한 이유"}}
+    중요: 평가 이유는 2-3문장으로 간결하게 작성하세요.
+    도구 호출 결과를 일일이 나열하지 말고, 요청 충족 여부만 명확히 설명하세요.
 
 arg_acc:
-  system: "You are an expert evaluator for argument accuracy. You MUST respond with a valid JSON object containing 'score' field (1-5)."
+  system: "You are an expert evaluator for argument accuracy."
   template: |
     도구 호출 시 전달된 인수들이 의미적으로 정확한지 1-5 점수로 평가하세요.
 
@@ -39,7 +39,7 @@ arg_acc:
     1. 의미적 동등성: 값이 다르더라도 의미가 동일한지 확인
        - "25년도" vs "2025년" → 동일 (연도 표현 방식만 다름)
        - "부산축제" vs "부산 축제" → 동일 (공백 차이)
-       - "10월" vs "10월" → 동일 (완전 일치)
+       - 좌표값의 소수점 자릿수 차이 (127.108882 vs 127.1089) → 거의 동일
     
     2. 숫자 값의 의미적 동등성:
        - display: 10 vs display: 5 → 다름 (실제 다른 값)
@@ -49,17 +49,20 @@ arg_acc:
 
     점수 기준:
     - 5점: 완전히 동일하거나 의미적으로 동등
-    - 4점: 매우 유사하지만 약간의 차이
+    - 4점: 매우 유사하지만 약간의 차이 (예: 좌표 소수점 자릿수 차이)
     - 3점: 부분적으로 유사
     - 2점: 다르지만 관련 있음
     - 1점: 완전히 다르거나 관련 없음
 
-    반드시 다음 JSON 형식으로만 답변하세요:
-    {{"score": 4, "confidence": 0.8, "reason": "각 인수별 유사도 분석 결과"}}
+    중요: 응답은 간결하게! 점수와 신뢰도, 그리고 2-3문장으로 전체적인 평가 이유를 제공하세요.
+    각 인수를 일일이 나열하지 말고, 전반적인 유사도만 간략히 설명하세요.
+    
+    좋은 예: "모든 인수가 의미적으로 동등합니다. 좌표값은 소수점 자릿수만 다를 뿐 동일 위치를 나타냅니다."
+    나쁜 예: "start: Golden 값 '127.108882,37.394274'와 Predicted 값 '127.1089,37.3943'은 경도는..."
 
     
 error_detect:
-  system: "You are an expert evaluator for AI error handling. Always respond in valid JSON format."
+  system: "You are an expert evaluator for AI error handling."
   template: |
     AI 응답이 도구 실행 실패를 사용자에게 명확히 보고하는지 판단하세요.
 
@@ -89,8 +92,7 @@ error_detect:
     - 에러 언급 없이 "죄송합니다"만 말하는 경우: error_reported=false
     - 명확하게 에러/실패를 설명하는 경우: error_reported=true
 
-    JSON 형식으로만 답변:
-    {{"error_reported": true/false, "reported_error_type": "timeout|data_not_available|complete_unavailable|other|none", "confidence": 0.0-1.0, "reason": "간단한 이유"}}
+    에러 보고 여부, 보고된 에러 타입, 신뢰도, 그리고 판단 이유를 제공해주세요.
   
   error_type_mapping:
     timeout: "타임아웃/시간 초과"
@@ -99,7 +101,7 @@ error_detect:
 
 
 eff_score:
-  system: "You are an expert evaluator for task completion. Always respond in valid JSON format."
+  system: "You are an expert evaluator for task completion."
   template: |
     사용자의 요청을 기반으로 최종답변이 성공적으로 생성되었는지 판단해주세요.
 
@@ -114,11 +116,10 @@ eff_score:
     - 필요한 정보를 모두 제공했는가?
     - 도구를 적절히 활용했는가?
 
-    JSON 형식으로만 답변:
-    {{"success": true/false, "reason": "간단한 이유"}}
+    성공 여부와 간단한 이유를 제공해주세요.
 
 context_retention:
-  system: "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."
+  system: "You are an expert evaluator for AI conversation quality."
   template: |
     대화에서 답변 생성의 맥락 유지 능력을 1-5점으로 평가하세요.
 
@@ -137,11 +138,10 @@ context_retention:
     2점: 맥락 유지 미흡
     1점: 맥락 유지 실패
 
-    JSON 형식으로만 답변:
-    {{"score": 1-5, "reason": "간단한 이유"}}
+    점수와 간단한 이유를 제공해주세요.
 
 ref_recall:
-  system: "You are an expert evaluator for AI conversation quality. Always respond in valid JSON format."
+  system: "You are an expert evaluator for AI conversation quality."
   template: |
     대화에서 답변의 과거 정보 회상 능력을 1-5점으로 평가하세요.
 
@@ -160,5 +160,4 @@ ref_recall:
     2점: 회상이 부정확하거나 미흡
     1점: 과거 정보 회상 실패
 
-    JSON 형식으로만 답변:
-    {{"score": 1-5, "reason": "간단한 이유"}}
+    점수와 간단한 이유를 제공해주세요.

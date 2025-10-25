@@ -19,6 +19,23 @@ from bench.runner.metrics import (
 )
 from bench.adapters.litellm_adapter import LiteLLMAdapter
 
+# Import API keys from secrets (환경변수 설정은 main()에서)
+try:
+    from configs.secrets import (
+        AZURE_API_KEY,
+        AZURE_API_BASE,
+        AZURE_API_VERSION,
+        ANTHROPIC_API_KEY,
+        GEMINI_API_KEY
+    )
+except ImportError:
+    print("[경고] configs.secrets를 import할 수 없습니다.")
+    AZURE_API_KEY = None
+    AZURE_API_BASE = None
+    AZURE_API_VERSION = None
+    ANTHROPIC_API_KEY = None
+    GEMINI_API_KEY = None
+
 
 class ModelRunEvaluator:
     """모델 실행 결과 평가 클래스"""
@@ -67,12 +84,14 @@ class ModelRunEvaluator:
             model: str,
             judge_models: List[str],
             sample_size: Optional[int] = None,
+            levels: Optional[List[str]] = None,
             verbose: bool = False
     ):
         self.date = date
         self.model = model
         self.judge_models = judge_models
         self.sample_size = sample_size
+        self.levels = levels  # 평가할 레벨 목록
         self.verbose = verbose
         self.judge_adapters = []
 
@@ -292,6 +311,8 @@ class ModelRunEvaluator:
         print(f"{'='*80}")
         print(f"모델: {self.model}")
         print(f"날짜: {self.date}")
+        if self.levels:
+            print(f"평가 레벨: {', '.join(self.levels)}")
         if self.sample_size:
             print(f"샘플링: 레벨당 {self.sample_size}개")
         print(f"{'='*80}\n")
@@ -303,6 +324,23 @@ class ModelRunEvaluator:
             raise FileNotFoundError(
                 f"날짜 {self.date}, 모델 {self.model}에 해당하는 결과 파일을 찾을 수 없습니다."
             )
+
+        # 평가할 레벨 필터링
+        if self.levels:
+            # 대소문자 구분 없이 처리 (L1, l1 모두 허용)
+            requested_levels = [lvl.upper() if not lvl.startswith('L') else lvl for lvl in self.levels]
+            requested_levels = ['L' + lvl if not lvl.startswith('L') else lvl for lvl in requested_levels]
+            
+            filtered_files = {k: v for k, v in level_files.items() if k in requested_levels}
+            
+            if not filtered_files:
+                available = ', '.join(sorted(level_files.keys()))
+                requested = ', '.join(requested_levels)
+                raise ValueError(
+                    f"요청한 레벨({requested})을 찾을 수 없습니다.\n"
+                    f"사용 가능한 레벨: {available}"
+                )
+            level_files = filtered_files
 
         print(f"발견된 파일:")
         for level, path in sorted(level_files.items()):
@@ -600,18 +638,32 @@ def main():
     """메인 함수"""
     load_dotenv()
 
-    # Azure API 키는 환경변수에서 로드됨
+    # Set API keys from secrets.py to environment variables
+    if AZURE_API_KEY:
+        os.environ['AZURE_API_KEY'] = AZURE_API_KEY
+    if AZURE_API_BASE:
+        os.environ['AZURE_API_BASE'] = AZURE_API_BASE
+    if AZURE_API_VERSION:
+        os.environ['AZURE_API_VERSION'] = AZURE_API_VERSION
+    if ANTHROPIC_API_KEY:
+        os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
+    if GEMINI_API_KEY:
+        os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
 
     parser = argparse.ArgumentParser(
         description='Ko-AgentBench 모델 실행 결과 평가',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 예시:
-  # 기본 사용
+  # 기본 사용 (모든 레벨)
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1
   
+  # 특정 레벨만 평가
+  python evaluate_model_run.py --date 20251021 --model anthropic/claude-sonnet-4-5 --levels L1
+  python evaluate_model_run.py --date 20251021 --model anthropic/claude-sonnet-4-5 --levels L1,L3,L5
+  
   # Judge 모델 지정
-  python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --judge-model azure/gpt-4o
+  python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --judge-models azure/gpt-4o gemini/gemini-2.5-pro-preview-03-25
   
   # 빠른 테스트 (각 레벨당 1개)
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --quick
@@ -628,6 +680,8 @@ def main():
                         help='평가 대상 모델 (예: azure/gpt-4.1)')
 
     # 평가 설정
+    parser.add_argument('--levels', type=str, default=None,
+                        help='평가할 레벨 지정 (예: L1, L1,L3,L5). 기본: 모든 레벨')
     parser.add_argument('--judge-models', nargs='+', default=None,
                         help='LLM Judge 모델들 (예: gpt-4o, claude-sonnet-4-5, gemini-2.5)')
     parser.add_argument('--sample', type=int, default=None,
@@ -659,6 +713,13 @@ def main():
             "gemini/gemini-2.5-pro-preview-03-25"
         ]
 
+    # 레벨 파싱
+    levels = None
+    if args.levels:
+        # 쉼표로 구분된 레벨 파싱 (예: "L1,L3,L5" 또는 "1,3,5")
+        levels = [lvl.strip() for lvl in args.levels.split(',')]
+        print(f"[설정] 평가 대상 레벨: {', '.join(levels)}")
+
     # 평가 실행
     try:
         evaluator = ModelRunEvaluator(
@@ -666,6 +727,7 @@ def main():
             model=args.model,
             judge_models=judge_models,
             sample_size=1 if args.quick else args.sample,
+            levels=levels,
             verbose=args.verbose
         )
 
