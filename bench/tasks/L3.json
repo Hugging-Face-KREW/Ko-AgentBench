@@ -293,7 +293,7 @@
   },
   {
     "task_id": "L3-007",
-    "instruction": "안국역 근처 맛집 추천해주고, 후기 영상 찾아줘.",
+    "instruction": "남양주 1km 이내 맛집 검색해주고, 후기 영상 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -301,7 +301,7 @@
         "step": 1,
         "tool": "AddressToCoord_kakao",
         "args": {
-          "keyword": "안국역",
+          "keyword": "남양주",
           "size": 5
         }
       },
@@ -310,8 +310,8 @@
         "tool": "PlaceSearch_kakao",
         "args": {
           "keyword": "맛집",
-          "x": 126.984932,
-          "y": 37.576477,
+          "x": 127.216475764948,
+          "y": 37.6360236390492,
           "size": 5
         }
       },
