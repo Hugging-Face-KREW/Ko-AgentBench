@@ -1,49 +1,6 @@
 [
   {
     "task_id": "L5-001",
-    "instruction": "서울 중구 세종대로 110 주소의 좌표를 알려줘",
-    "task_level": 5,
-    "task_category": "Robustness",
-    "golden_action": [
-      {
-        "tool": "AddressToCoord_kakao",
-        "args": {
-          "address": "서울 중구 세종대로 110"
-        }
-      }
-    ],
-    "error_injection": {
-      "tool": "AddressToCoord_kakao",
-      "error_type": "timeout"
-    }
-  },
-  {
-    "task_id": "L5-002",
-    "instruction": "강남역(127.02758, 37.49794) 300m 안에 있는 편의점 하나만 알려줘.",
-    "task_level": 5,
-    "task_category": "Robustness",
-    "golden_action": [
-      {
-        "tool": "PlaceSearch_kakao",
-        "args": {
-          "keyword": "편의점",
-          "x": 127.02758,
-          "y": 37.49794,
-          "radius": 300,
-          "sort": "distance",
-          "page": 1,
-          "size": 1
-        }
-      }
-    ],
-    "error_injection": {
-      "tool": "PlaceSearch_kakao",
-      "error_type": "complete_unavailable"
-    },
-    "failure_type": "no_results"
-  },
-  {
-    "task_id": "L5-003",
     "instruction": "KOSDAQ 지수 현재 값을 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -78,25 +35,7 @@
     ]
   },
   {
-    "task_id": "L5-004",
-    "instruction": "빗썸 KRW-BTC 현재가 숫자만 알려줘.",
-    "task_level": 5,
-    "task_category": "Robustness",
-    "golden_action": [
-      {
-        "tool": "CryptoPrice_bithumb",
-        "args": {
-          "markets": "KRW-BTC"
-        }
-      }
-    ],
-    "error_injection": {
-      "tool": "CryptoPrice_bithumb",
-      "error_type": "timeout"
-    }
-  },
-  {
-    "task_id": "L5-005",
+    "task_id": "L5-002",
     "instruction": "다음에서 아이폰 17 출시일 검색해줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -126,7 +65,7 @@
     ]
   },
   {
-    "task_id": "L5-006",
+    "task_id": "L5-003",
     "instruction": "다음에서 '아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -164,7 +103,7 @@
     ]
   },
   {
-    "task_id": "L5-007",
+    "task_id": "L5-004",
     "instruction": "다음에서 2025년 LoL 월드 챔피언쉽에 진출한 한국팀 명단을 검색해줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -195,7 +134,7 @@
     ]
   },
   {
-    "task_id": "L5-008",
+    "task_id": "L5-005",
     "instruction": "네이버에서 2025년도 노벨화학상 수상자를 검색해줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -225,7 +164,7 @@
     ]
   },
   {
-    "task_id": "L5-009",
+    "task_id": "L5-006",
     "instruction": "네이버에서 북한 해킹 조직 김수키에 대해 검색해줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -256,7 +195,7 @@
     ]
   },
   {
-    "task_id": "L5-010",
+    "task_id": "L5-007",
     "instruction": "성수동 카페 소식을 알려주는 블로그 하나만 소개해줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -296,7 +235,7 @@
     ]
   },
   {
-    "task_id": "L5-011",
+    "task_id": "L5-008",
     "instruction": "네이버에서 국산 NPU 관련 가장 최신 뉴스 하나만 골라 기사 제목만 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -336,7 +275,7 @@
     ]
   },
   {
-    "task_id": "L5-012",
+    "task_id": "L5-009",
     "instruction": "알라딘에서 '인공지능' 검색해서 맨 위 결과의 제목만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -376,7 +315,7 @@
     ]
   },
   {
-    "task_id": "L5-013",
+    "task_id": "L5-010",
     "instruction": "2025년 9월 1주차 알라딘 국내도서 베스트셀러 3위 제목만 알려줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -417,7 +356,7 @@
     ]
   },
   {
-    "task_id": "L5-014",
+    "task_id": "L5-011",
     "instruction": "알라딘에서 한강 작가의 책 한권 추천해줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -456,7 +395,7 @@
     ]
   },
   {
-    "task_id": "L5-015",
+    "task_id": "L5-012",
     "instruction": "알라딘 25년 9월 첫째주 국내도서 베스트셀러 1위 제목만 알려줘",
     "task_level": 5,
     "task_category": "Robustness",
@@ -496,7 +435,7 @@
     ]
   },
   {
-    "task_id": "L5-016",
+    "task_id": "L5-013",
     "instruction": "애플(AAPL) 현재가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -532,7 +471,7 @@
     ]
   },
   {
-    "task_id": "L5-017",
+    "task_id": "L5-014",
     "instruction": "삼성전자(005930) 현재가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -560,7 +499,7 @@
     ]
   },
   {
-    "task_id": "L5-018",
+    "task_id": "L5-015",
     "instruction": "비트코인(KRW) 현재가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -587,7 +526,7 @@
     ]
   },
   {
-    "task_id": "L5-019",
+    "task_id": "L5-016",
     "instruction": "이더리움 1분봉 30개 중 마지막 종가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -620,7 +559,7 @@
     ]
   },
   {
-    "task_id": "L5-020",
+    "task_id": "L5-017",
     "instruction": "리플(KRW) 현재가를 숫자만 한 줄로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -647,7 +586,7 @@
     ]
   },
   {
-    "task_id": "L5-021",
+    "task_id": "L5-018",
     "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 자동차로 가장 빠른 경로 총 소요 시간(초)만 숫자로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -679,7 +618,7 @@
     ]
   },
   {
-    "task_id": "L5-022",
+    "task_id": "L5-019",
     "instruction": "인천국제공항(126.450517,37.46019)에서 코엑스(127.0592,37.511)까지 자동차 경로 총 거리(미터)만 숫자로 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -711,7 +650,7 @@
     ]
   },
   {
-    "task_id": "L5-023",
+    "task_id": "L5-020",
     "instruction": "홍대입구역 근처 500m 안에서 편의점 하나만 찾아줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -748,7 +687,7 @@
     ]
   },
   {
-    "task_id": "L5-024",
+    "task_id": "L5-021",
     "instruction": "네이버에서 '제주도 가을 여행 코스' 블로그 글 하나만 제목 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -779,7 +718,7 @@
     ]
   },
   {
-    "task_id": "L5-025",
+    "task_id": "L5-022",
     "instruction": "빗썸에서 거래 가능한 마켓 목록 개수 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -805,7 +744,7 @@
     ]
   },
   {
-    "task_id": "L5-026",
+    "task_id": "L5-023",
     "instruction": "판교역(127.108882,37.394274)에서 여의도(126.92490,37.52190)까지 자차로 가는 최단 경로의 소요 시간 알려줘.",
     "task_level": 5,
     "task_category": "Robustness",
@@ -820,7 +759,8 @@
       }
     ],
     "error_injection": {
-              "tool": "Directions_naver",      "error_type": "timeout"
+      "tool": "Directions_naver",
+      "error_type": "timeout"
     },
     "fallback_options": [
       {
