@@ -176,6 +176,8 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "fallback_options": result.get("fallback_options", []),
         "resp_schema": result.get("resp_schema", {}),
         "arg_schema": result.get("arg_schema", {}),
+        "repetitions": result.get("repetitions", 1),
+        "repetition_results": result.get("repetition_results", []),
         "token_usage": result.get("token_usage", {
             "prompt_tokens": 0,
             "completion_tokens": 0,
@@ -391,6 +393,7 @@ def run_benchmark_on_dataset(
     save_logs: bool = True,
     log_dir: str = "logs/benchmark_results",
     run_timestamp: str = None,
+    repetitions: int = 1,
     **adapter_config: Any
 ) -> List[Dict[str, Any]]:
     """Run benchmark on a specific dataset level.
@@ -405,6 +408,7 @@ def run_benchmark_on_dataset(
         save_logs: Whether to save results to JSON
         log_dir: Directory to save logs
         run_timestamp: Timestamp for the entire run (shared across levels)
+        repetitions: Number of repetitions for each task (for pass@k metric)
         **adapter_config: Additional adapter configuration
         
     Returns:
@@ -509,10 +513,32 @@ def run_benchmark_on_dataset(
                         tool_name = action.get("tool", "unknown")
                         print(f"      [TOOL] Expected tool: {tool_name}")
         
+        # Log repetitions info
+        if repetitions > 1:
+            print(f"\n[REPETITIONS] Running task {repetitions} times for pass@k metric")
+        
         print(f"{'─'*80}")
         
         try:
-            result = runner.run_task(task)
+            # Run task with repetitions
+            repetition_results = []
+            main_result = None
+            
+            for rep in range(repetitions):
+                if repetitions > 1:
+                    print(f"\n[Repetition {rep + 1}/{repetitions}]")
+                
+                result = runner.run_task(task)
+                
+                # Store repetition success status
+                repetition_results.append(result.get('success', False))
+                
+                # Use first run as main result
+                if rep == 0:
+                    main_result = result
+            
+            # Use main_result for detailed logging
+            result = main_result
             
             # Add original task information
             result['task_id'] = task['id']
@@ -521,6 +547,9 @@ def run_benchmark_on_dataset(
             result['category'] = task['category']
             result['expected_tools'] = task['available_tools']
             result['golden_action'] = task['golden_action']
+            # Add repetition results for pass@k metric
+            result['repetitions'] = repetitions
+            result['repetition_results'] = repetition_results
             # Include dataset guidance fields for analysis
             if 'minimum_steps' in task:
                 result['minimum_steps'] = task.get('minimum_steps')
@@ -540,6 +569,9 @@ def run_benchmark_on_dataset(
             
             # Print summary
             print(f"\n[RESULT] Success: {result['success']}")
+            if repetitions > 1:
+                success_count = sum(repetition_results)
+                print(f"  Pass@{repetitions}: {success_count}/{repetitions} ({success_count/repetitions*100:.1f}%)")
             print(f"  Execution time: {result['execution_time']:.2f}s")
             print(f"  Steps taken: {result['steps_taken']}")
             
@@ -587,6 +619,8 @@ def run_benchmark_on_dataset(
                 "golden_action": task.get('golden_action', []),
                 "minimum_steps": task.get('minimum_steps'),
                 "data_flow": task.get('data_flow', []),
+                "repetitions": repetitions,
+                "repetition_results": [False] * repetitions,
                 "success": False,
                 "error": str(e),
                 "execution_time": 0,
@@ -633,6 +667,8 @@ def main():
     parser.add_argument("--cache-mode", type=str, default="read",
                         choices=['read', 'write'],
                         help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
+    parser.add_argument("--repetitions", type=int, default=1,
+                        help="Number of repetitions for each task to measure pass@k metric (default: 1)")
 
     args = parser.parse_args()
     
@@ -775,6 +811,7 @@ def main():
                 save_logs=(not args.no_save_logs),
                 log_dir="logs/benchmark_results",
                 run_timestamp=run_timestamp,
+                repetitions=args.repetitions,
                 **adapter_config
             )
             all_level_results[level_name] = results
