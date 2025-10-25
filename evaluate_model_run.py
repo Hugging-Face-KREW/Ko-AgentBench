@@ -230,6 +230,7 @@ class ModelRunEvaluator:
                 "fallback_options": task_result.get("fallback_options", []),
                 "resp_schema": task_result.get("resp_schema"),
                 "arg_schema": task_result.get("arg_schema"),
+                "repetitions": task_result.get("repetitions", 1),  # pass@k용
             }
 
             # logs 구성
@@ -240,6 +241,7 @@ class ModelRunEvaluator:
                 "actual_output": task_result.get("final_response", ""),
                 "final_response": task_result.get("final_response", ""),
                 "conversation_log": task_result.get("conversation_log", {}),
+                "repetition_results": task_result.get("repetition_results", []),  # pass@k용
             }
 
             # EvalContext 생성 및 메트릭 평가
