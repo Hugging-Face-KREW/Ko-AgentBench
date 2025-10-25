@@ -32,6 +32,9 @@ class LiteLLMAdapter(BaseAdapter):
         
         # Drop unsupported parameters for models that don't support them
         litellm.drop_params = True
+        
+        # Enable JSON schema validation for better Pydantic/Gemini compatibility
+        litellm.enable_json_schema_validation = True
     
     @observe(as_type="generation")
     def chat_completion(self, messages: List[Dict[str, str]], 

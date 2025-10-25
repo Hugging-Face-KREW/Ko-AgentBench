@@ -1,7 +1,6 @@
 """Evaluation metrics for Ko-AgentBench."""
 
 import json
-import re
 import logging
 import yaml
 import os
@@ -13,17 +12,38 @@ from ..adapters.base_adapter import BaseAdapter
 # Pydantic 모델 정의
 class SRResponse(BaseModel):
     """SR 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False  # Gemini 호환성을 위해 strict mode 비활성화
+        }
+    }
+    
     score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
     reason: str = Field(..., description="간단한 이유")
 
 class ArgAccResponse(BaseModel):
     """ArgAcc 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False
+        }
+    }
+    
     score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
     confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
     reason: str = Field(..., description="각 인수별 유사도 분석 결과")
 
 class ErrorDetectResponse(BaseModel):
     """ErrorDetect 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False
+        }
+    }
+    
     error_reported: bool = Field(..., description="에러 보고 여부")
     reported_error_type: str = Field(..., description="보고된 에러 타입")
     confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
@@ -38,16 +58,37 @@ class ErrorDetectResponse(BaseModel):
 
 class EffScoreResponse(BaseModel):
     """EffScore 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False
+        }
+    }
+    
     success: bool = Field(..., description="성공 여부")
     reason: str = Field(..., description="간단한 이유")
 
 class ContextRetentionResponse(BaseModel):
     """ContextRetention 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False
+        }
+    }
+    
     score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
     reason: str = Field(..., description="간단한 이유")
 
 class RefRecallResponse(BaseModel):
     """RefRecall 메트릭 응답 모델"""
+    model_config = {
+        "json_schema_extra": {
+            "additionalProperties": False,
+            "strict": False
+        }
+    }
+    
     score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
     reason: str = Field(..., description="간단한 이유")
 
@@ -149,19 +190,37 @@ class LLMJudgeMetric(Metric):
                 {"role": "user", "content": user_prompt}
             ]
             
-            # response_format을 사용하여 구조화된 출력 요청
-            response = adapter.chat_completion(
-                messages, 
-                temperature=0.0,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": response_model.__name__,
-                        "schema": response_model.model_json_schema(),
-                        "strict": True
+            # Gemini 모델 감지
+            model_name = getattr(adapter, 'model_name', '').lower()
+            is_gemini = 'gemini' in model_name
+            
+            # Gemini 모델에 최적화된 response_format 사용
+            if is_gemini:
+                response = adapter.chat_completion(
+                    messages, 
+                    temperature=0.0,
+                    max_tokens=2048,  # Judge 평가는 더 많은 토큰 필요 (특히 한국어)
+                    response_format={
+                        "type": "json_object",
+                        "response_schema": response_model.model_json_schema(),
+                        "enforce_validation": True  # Gemini JSON 검증 강화
                     }
-                }
-            )
+                )
+            else:
+                # OpenAI 스타일 모델용
+                response = adapter.chat_completion(
+                    messages, 
+                    temperature=0.0,
+                    max_tokens=2048,
+                    response_format={
+                        "type": "json_schema",
+                        "json_schema": {
+                            "name": response_model.__name__,
+                            "schema": response_model.model_json_schema(),
+                            "strict": False
+                        }
+                    }
+                )
             
             content = response.get("message", {}).get("content", "{}")
             
@@ -170,7 +229,9 @@ class LLMJudgeMetric(Metric):
             return parsed_response.model_dump()
             
         except Exception as e:
-            logging.error(f"Structured judge call failed: {str(e)}")
+            logging.error(f"Structured judge call failed for {getattr(adapter, 'model_name', 'unknown')}: {str(e)}")
+            logging.error(f"Raw response content: {content if 'content' in locals() else 'N/A'}")
+            
             # 기본값 반환
             try:
                 # Pydantic v2에서 model_fields 사용
@@ -191,7 +252,7 @@ class LLMJudgeMetric(Metric):
                 else:
                     # 기본 실패 응답
                     return {"error": str(e)}
-            except:
+            except Exception:
                 return {"error": str(e)}
     
     def _call_multi_judge_binary(self, prompt: str, metric_key: str, 
