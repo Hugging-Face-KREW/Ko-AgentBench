@@ -45,10 +45,10 @@ class LiteLLMAdapter(BaseAdapter):
         Args:
             messages: List of chat messages
             tools: Available tools for function calling
-            **kwargs: Additional parameters
+            **kwargs: Additional parameters (including 'n' for multiple completions)
             
         Returns:
-            Chat completion response
+            Chat completion response (or list of responses if n > 1)
         """
         # Convert to provider format
         provider_request = self.convert_to_provider_format(messages, tools)
@@ -94,8 +94,44 @@ class LiteLLMAdapter(BaseAdapter):
             response: LiteLLM response object
             
         Returns:
-            Canonical format response
+            Canonical format response (or list of responses if n > 1)
         """
+        # Handle multiple choices (when n > 1)
+        if len(response.choices) > 1:
+            results = []
+            for choice in response.choices:
+                result = {
+                    "message": {
+                        "role": choice.message.role,
+                        "content": choice.message.content or ""
+                    },
+                    "usage": {
+                        "prompt_tokens": response.usage.prompt_tokens,
+                        "completion_tokens": response.usage.completion_tokens,
+                        "total_tokens": response.usage.total_tokens
+                    },
+                    "model": response.model,
+                    "finish_reason": choice.finish_reason
+                }
+                
+                # Handle function calls
+                if hasattr(choice.message, 'tool_calls') and choice.message.tool_calls:
+                    result["message"]["tool_calls"] = []
+                    for tool_call in choice.message.tool_calls:
+                        result["message"]["tool_calls"].append({
+                            "id": tool_call.id,
+                            "type": tool_call.type,
+                            "function": {
+                                "name": tool_call.function.name,
+                                "arguments": tool_call.function.arguments
+                            }
+                        })
+                
+                results.append(result)
+            
+            return {"choices": results, "n": len(results)}
+        
+        # Single choice (default behavior)
         choice = response.choices[0]
         
         result = {

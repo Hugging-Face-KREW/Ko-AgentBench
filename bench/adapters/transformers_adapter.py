@@ -211,6 +211,37 @@ class TransformersAdapter(BaseAdapter):
         Args:
             messages: List of chat messages
             tools: Available tools for function calling
+            **kwargs: Additional generation parameters (including 'n' for multiple completions)
+            
+        Returns:
+            Chat completion response in canonical format (or dict with 'choices' if n > 1)
+        """
+        # Check if multiple completions requested
+        n = kwargs.pop('n', 1)
+        
+        if n > 1:
+            # Generate multiple completions by running inference multiple times
+            self.logger.info(f"[REPETITION] Generating {n} completions")
+            results = []
+            
+            for i in range(n):
+                self.logger.info(f"[REPETITION] Generating completion {i+1}/{n}")
+                result = self._single_chat_completion(messages, tools, **kwargs)
+                results.append(result)
+            
+            return {"choices": results, "n": n}
+        else:
+            # Single completion (default behavior)
+            return self._single_chat_completion(messages, tools, **kwargs)
+    
+    def _single_chat_completion(self, messages: List[Dict[str, str]], 
+                                tools: Optional[List[Dict]] = None,
+                                **kwargs) -> Dict[str, Any]:
+        """Generate a single chat completion.
+        
+        Args:
+            messages: List of chat messages
+            tools: Available tools for function calling
             **kwargs: Additional generation parameters
             
         Returns:
