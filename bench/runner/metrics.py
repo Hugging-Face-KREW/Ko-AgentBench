@@ -597,7 +597,8 @@ class RespOKMetric(Metric):
 
     @staticmethod
     def _extract_candidate(ctx: EvalContext):
-        cand = ctx.logs.get("actual_output")
+        # final_response를 확인
+        cand = ctx.logs.get("final_response")
 
         if isinstance(cand, (str, dict, list)):
             return cand

@@ -197,7 +197,7 @@ class ModelRunEvaluator:
             if self.verbose:
                 print(f"  [{idx}/{len(tasks_to_evaluate)}] {task_id}")
 
-            # task_schema 구성
+            # task_schema 구성 
             task_schema = {
                 "task_id": task_result.get("task_id"),
                 "instruction": task_result.get("instruction"),
@@ -210,6 +210,7 @@ class ModelRunEvaluator:
                 "error_injection": task_result.get("error_injection"),
                 "fallback_options": task_result.get("fallback_options", []),
                 "resp_schema": task_result.get("resp_schema"),
+                "arg_schema": task_result.get("arg_schema"),
             }
 
             # logs 구성
