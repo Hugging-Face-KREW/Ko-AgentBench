@@ -1,43 +1,7 @@
-[
+[  
   {
     "task_id": "L1-001",
-    "instruction": "25년도 10월에 부산에서 하는 축제 하나만 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "WebSearch_naver",
-        "args": {
-          "query": "25년도 10월 부산축제",
-          "display": 10
-        }
-      }
-    ],
-    "arg_schema": {
-      "query": {
-        "type": "string",
-        "required": true
-      },
-      "display": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 100,
-        "default": 10
-      },
-      "start": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 1000,
-        "default": 1
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-002",
-    "instruction": "판교역에서 잠실야구장까지 자차로 몇 분 걸릴까?",
+    "instruction": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -80,52 +44,8 @@
     }
   },
   {
-    "task_id": "L1-003",
-    "instruction": "판교역에서 잠실야구장까지 톨게이트 피해서 차로 몇 km 가야 돼?",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "Directions_naver",
-        "args": {
-          "start": "127.108882,37.394274",
-          "goal": "127.07190,37.51130",
-          "option": "traavoidtoll"
-        }
-      }
-    ],
-    "arg_schema": {
-      "start": {
-        "type": "string",
-        "required": true
-      },
-      "goal": {
-        "type": "string",
-        "required": true
-      },
-      "waypoints": {
-        "type": "string",
-        "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
-      },
-      "option": {
-        "type": "string",
-        "enum": [
-          "trafast",
-          "tracomfort",
-          "traoptimal",
-          "traavoidtoll",
-          "traavoidcaronly",
-          "trafast:traavoidtoll"
-        ]
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-004",
-    "instruction": "서울역에서 인천공항 제1터미널까지 유료도로는 피하고, 광화문와 여의도를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+    "task_id": "L1-002",
+    "instruction": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -169,8 +89,35 @@
     }
   },
   {
-    "task_id": "L1-005",
-    "instruction": "LS에서 KOSDAQ 지수의 등락률(%)만 숫자 한 줄로 알려줘.",
+    "task_id": "L1-003",
+    "instruction": "빗썸에서 비트코인 원화 현재가 알려줘.",
+    "task_level": 1,
+    "task_category": "Single Tool",
+    "golden_action": [
+      {
+        "tool": "CryptoPrice_bithumb",
+        "args": {
+          "markets": "KRW-BTC"
+        }
+      }
+    ],
+    "arg_schema": {
+      "markets": {
+        "type": "string",
+        "enum": [
+          "KRW-BTC",
+          "BTC-ETH"
+        ],
+        "required": true
+      }
+    },
+    "resp_schema": {
+      "type": "string"
+    }
+  },
+  {
+    "task_id": "L1-004",
+    "instruction": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -198,34 +145,7 @@
     }
   },
   {
-    "task_id": "L1-006",
-    "instruction": "빗썸에서 비트코인 원화 현재가 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "CryptoPrice_bithumb",
-        "args": {
-          "markets": "KRW-BTC"
-        }
-      }
-    ],
-    "arg_schema": {
-      "markets": {
-        "type": "string",
-        "enum": [
-          "KRW-BTC",
-          "BTC-ETH"
-        ],
-        "required": true
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-007",
+    "task_id": "L1-005",
     "instruction": "네이버에서 ‘전기차 충전 요금 인상’ 검색해서 첫 번째 결과 제목만 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
@@ -262,7 +182,7 @@
     }
   },
   {
-    "task_id": "L1-008",
+    "task_id": "L1-006",
     "instruction": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
@@ -299,8 +219,8 @@
     }
   },
   {
-    "task_id": "L1-009",
-    "instruction": "네이버 뉴스에서 '반도체 수출 전망'으로 검색해서 상단 기사 하나만 골라 제목을 알려줘.",
+    "task_id": "L1-007",
+    "instruction": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -336,8 +256,8 @@
     }
   },
   {
-    "task_id": "L1-010",
-    "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 맨 위 책 제목만 한 줄로 알려줘.",
+    "task_id": "L1-008",
+    "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -449,167 +369,8 @@
     }
   },
   {
-    "task_id": "L1-011",
-    "instruction": "알라딘 국내 베스트셀러 2025년 9월 1주차 첫 번째 결과 제목만 한 줄로 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "ItemList_aladin",
-        "args": {
-          "query_type": "Bestseller",
-          "search_target": "Book",
-          "start": 1,
-          "max_results": 1,
-          "cover": "Mid",
-          "category_id": 0,
-          "year": 2025,
-          "month": 9,
-          "week": 1,
-          "output": "xml",
-          "outofStockFilter": 0
-        }
-      }
-    ],
-    "arg_schema": {
-      "QueryType": {
-        "type": "string",
-        "enum": [
-          "ItemNewAll",
-          "ItemNewSpecial",
-          "ItemEditorChoice",
-          "Bestseller",
-          "BlogBest"
-        ],
-        "required": true
-      },
-      "SearchTarget": {
-        "type": "string",
-        "enum": [
-          "Book",
-          "Foreign",
-          "Music",
-          "DVD",
-          "Used",
-          "eBook",
-          "All"
-        ],
-        "default": "Book"
-      },
-      "SubSearchTarget": {
-        "type": "string",
-        "enum": [
-          "Book",
-          "Music",
-          "DVD"
-        ]
-      },
-      "Start": {
-        "type": "integer",
-        "minimum": 1,
-        "default": 1
-      },
-      "MaxResults": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 100,
-        "default": 10
-      },
-      "Cover": {
-        "type": "string",
-        "enum": [
-          "Big",
-          "MidBig",
-          "Mid",
-          "Small",
-          "Mini",
-          "None"
-        ],
-        "default": "Mid"
-      },
-      "CategoryId": {
-        "type": "integer",
-        "default": 0
-      },
-      "Year": {
-        "type": "integer"
-      },
-      "Month": {
-        "type": "integer"
-      },
-      "Week": {
-        "type": "integer"
-      },
-      "Output": {
-        "type": "string",
-        "enum": [
-          "XML",
-          "JS"
-        ],
-        "default": "XML"
-      },
-      "outofStockFilter": {
-        "type": "integer",
-        "enum": [
-          0,
-          1
-        ],
-        "default": 0
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-012",
-    "instruction": "다음에서 '손흥민' 검색해서 첫 결과 제목만 한 줄로 알려줘.",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "WebSearch_daum",
-        "args": {
-          "query": "손흥민",
-          "sort": "accuracy",
-          "page": 1,
-          "size": 1
-        }
-      }
-    ],
-    "arg_schema": {
-      "query": {
-        "type": "string",
-        "required": true
-      },
-      "sort": {
-        "type": "string",
-        "enum": [
-          "accuracy",
-          "recency"
-        ],
-        "default": "accuracy"
-      },
-      "page": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 50,
-        "default": 1
-      },
-      "size": {
-        "type": "integer",
-        "minimum": 1,
-        "maximum": 50,
-        "default": 10
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-013",
-    "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목만 한 줄로 알려줘.",
+    "task_id": "L1-009",
+    "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -654,31 +415,8 @@
     }
   },
   {
-    "task_id": "L1-014",
-    "instruction": "카카오맵으로 서울 중구 세종대로 110 주소를 좌표로 바꿔줘",
-    "task_level": 1,
-    "task_category": "Single Tool",
-    "golden_action": [
-      {
-        "tool": "AddressToCoord_kakao",
-        "args": {
-          "address": "서울 중구 세종대로 110"
-        }
-      }
-    ],
-    "arg_schema": {
-      "address": {
-        "type": "string",
-        "required": true
-      }
-    },
-    "resp_schema": {
-      "type": "string"
-    }
-  },
-  {
-    "task_id": "L1-015",
-    "instruction": "카카오맵으로 강남역 근처에서 '파스타' 검색해서 첫 번째 가게 이름만 한 줄로 알려줘.",
+    "task_id": "L1-010",
+    "instruction": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -736,8 +474,8 @@
     }
   },
   {
-    "task_id": "L1-016",
-    "instruction": "홍대입구역 기준 500m 안에 있는 카페 하나만 찾아서 상호명 한 줄로 알려줘.",
+    "task_id": "L1-011",
+    "instruction": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
