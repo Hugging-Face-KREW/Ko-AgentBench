@@ -189,10 +189,11 @@ class BenchmarkRunner:
                 and len(result.get('steps', [])) > 0
             )
             
-            # 토큰 사용량 집계
+            # 토큰 사용량 및 TTFT 집계
             total_prompt_tokens = 0
             total_completion_tokens = 0
             total_tokens = 0
+            ttft_list = []  # ← TTFT 리스트
 
             for step in result.get('steps', []):
                 llm_response = step.get('llm_response', {})
@@ -200,6 +201,16 @@ class BenchmarkRunner:
                 total_prompt_tokens += usage.get('prompt_tokens', 0)
                 total_completion_tokens += usage.get('completion_tokens', 0)
                 total_tokens += usage.get('total_tokens', 0)
+                
+                # TTFT 수집
+                ttft = step.get('ttft', 0)
+                if ttft > 0:
+                    ttft_list.append(ttft)
+
+            # TTFT 통계 계산
+            avg_ttft = sum(ttft_list) / len(ttft_list) if ttft_list else 0
+            min_ttft = min(ttft_list) if ttft_list else 0
+            max_ttft = max(ttft_list) if ttft_list else 0
 
             final_result = {
                 "task_id": task_id,
@@ -212,6 +223,12 @@ class BenchmarkRunner:
                     "prompt_tokens": total_prompt_tokens,
                     "completion_tokens": total_completion_tokens,
                     "total_tokens": total_tokens
+                },
+                "ttft_stats": {  # ← TTFT 통계 추가
+                    "average": avg_ttft,
+                    "min": min_ttft,
+                    "max": max_ttft,
+                    "count": len(ttft_list)
                 },
                 "error": None
             }
@@ -320,7 +337,8 @@ class BenchmarkRunner:
                     "turn": turn_idx,
                     "llm_response": response,
                     "tool_calls": [],
-                    "timestamp": time.time()
+                    "timestamp": time.time(),
+                    "ttft": response.get('ttft', 0)
                 }
                 
                 # Log assistant response
@@ -457,7 +475,8 @@ class BenchmarkRunner:
                 "step": step + 1,
                 "llm_response": response,
                 "tool_calls": [],
-                "timestamp": time.time()
+                "timestamp": time.time(),
+                "ttft": response.get('ttft', 0)
             }
             
             # Handle tool calls
@@ -620,24 +639,25 @@ class BenchmarkRunner:
     
     @observe(as_type="generation")
     def _call_llm_with_retry(self, messages: List[Dict], 
-                           tools: List[Dict]) -> Dict[str, Any]:
-        """Call LLM with retry logic.
-        
-        Args:
-            messages: Conversation messages
-            tools: Available tools
-            
-        Returns:
-            LLM response
-        """
-        # DEBUG: Log before calling LLM
+                        tools: List[Dict]) -> Dict[str, Any]:
+        """Call LLM with retry logic."""
         self.logger.debug(f"Calling LLM with {len(tools)} tools")
         
         last_error = None
         
         for attempt in range(self.max_retries):
             try:
+                # TTFT 측정 시작
+                import time
+                start_time = time.perf_counter()
+                
                 result = self.adapter.chat_completion(messages, tools)
+                
+                # TTFT 측정 종료 (API 호출 완료 시점 = 첫 토큰 수신 시점)
+                ttft = time.perf_counter() - start_time
+                
+                # TTFT를 결과에 추가
+                result['ttft'] = ttft
                 
                 if is_enabled() and 'usage' in result:
                     try:
@@ -645,6 +665,7 @@ class BenchmarkRunner:
                         langfuse.update_current_span(
                             metadata={
                                 "model": result.get('model', self.adapter.model_name),
+                                "ttft": ttft,  # ← TTFT 추가
                                 "usage": {
                                     "input_tokens": result['usage'].get('prompt_tokens', 0),
                                     "output_tokens": result['usage'].get('completion_tokens', 0),
