@@ -68,9 +68,8 @@ class ModelRunEvaluator:
         'ΔSteps_norm': '최소 경로 대비 효율. 이론적인 최소 호출 횟수 대비 얼마나 효율적인 경로를 생성했는지 평가',
         'Coverage': '소스 커버리지. 정보를 수집해야 하는 여러 소스를 누락 없이 호출했는지 평가',
         'SourceEPR': '소스별 유효 호출 비율. 병렬적으로 호출한 각 도구가 유효했는지 개별적으로 평가',
-        'ErrorDetect': '오류 탐지율. API 호출 실패와 같은 오류 상황을 정확하게 인지하는지 평가',
+        'AdaptiveRoutingScore': '적응형 라우팅 점수. 주입된 도구 실패 이후 얼마나 신속하게 대체 경로로 전환하는지 평가',
         'FallbackSR': '대체 경로 성공률. 특정 도구 실패 시 다른 도구를 활용해 성공하는 비율',
-        'GracefulFail': '안전한 실패 비율. 오류 발생 시 환각 없이 실패를 인정하거나 사용자에게 알리는지 평가',
         'EffScore': '효율 점수. 이론적 최소 호출 수와 재사용률을 종합하여 효율성을 점수화',
         'RedundantCallRate': '불필요 호출 비율. 정보를 이미 알고 있음에도 불필요하게 도구를 다시 호출하는 비율',
         'ReuseRate': '재사용 비율. 이전에 호출했던 결과를 재호출 없이 효율적으로 재사용하는 비율',
@@ -120,7 +119,6 @@ class ModelRunEvaluator:
         judge_metrics = [
             'SR',               # 공통
             'ArgAcc',           # L1
-            'ErrorDetect',      # L5
             'EffScore',         # L6
             'ContextRetention', # L7
             'RefRecall'         # L7
@@ -237,7 +235,7 @@ class ModelRunEvaluator:
             logs = {
                 "success": task_result.get("success", False),
                 "tool_invocations": task_result.get("tool_calls", []),
-                "tool_calls": task_result.get("tool_calls", []),  # ErrorDetectMetric용
+                "tool_calls": task_result.get("tool_calls", []),  # AdaptiveRoutingScore/FallbackSR 평가용
                 "actual_output": task_result.get("final_response", ""),
                 "final_response": task_result.get("final_response", ""),
                 "conversation_log": task_result.get("conversation_log", {}),
@@ -474,7 +472,7 @@ class ModelRunEvaluator:
                 'L2': ['SelectAcc'],
                 'L3': ['FSM', 'PSM'],
                 'L4': ['Coverage'],
-                'L5': ['ErrorDetect', 'FallbackSR'],
+                'L5': ['AdaptiveRoutingScore', 'FallbackSR'],
                 'L6': ['EffScore', 'ReuseRate'],
                 'L7': ['ContextRetention']
             }

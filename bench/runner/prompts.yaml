@@ -60,45 +60,6 @@ arg_acc:
     좋은 예: "모든 인수가 의미적으로 동등합니다. 좌표값은 소수점 자릿수만 다를 뿐 동일 위치를 나타냅니다."
     나쁜 예: "start: Golden 값 '127.108882,37.394274'와 Predicted 값 '127.1089,37.3943'은 경도는..."
 
-    
-error_detect:
-  system: "You are an expert evaluator for AI error handling."
-  template: |
-    AI 응답이 도구 실행 실패를 사용자에게 명확히 보고하는지 판단하세요.
-
-    주입된 에러:
-    - 도구: {injected_tool}
-    - 에러 타입: {injected_error_type} ({error_type_korean})
-
-    AI의 최종 응답:
-    {final_response}
-
-    판단 기준:
-
-    1. 에러를 보고했는가?
-       - 에러/실패/문제가 발생했다고 명시적으로 언급했는가?
-       - 서비스 이용 불가나 조회 실패를 설명했는가?
-       - 문제의 원인을 설명했는가?
-
-    2. 어떤 타입의 에러를 보고했는가?
-       - timeout: 타임아웃, 시간 초과, 응답 없음, 지연, 연결 시간 초과
-       - data_not_available: 데이터 없음, 조회 불가, 검색 결과 없음, 정보 없음
-       - complete_unavailable: 서비스 불가, 접속 불가, 시스템 장애, 이용 불가
-       - other: 에러는 보고했으나 위 타입에 해당하지 않음
-       - none: 에러 보고하지 않음
-
-    주의사항:
-    - 환각으로 다른 정보를 제공하며 에러를 숨기는 경우: error_reported=false
-    - 에러 언급 없이 "죄송합니다"만 말하는 경우: error_reported=false
-    - 명확하게 에러/실패를 설명하는 경우: error_reported=true
-
-    에러 보고 여부, 보고된 에러 타입, 신뢰도, 그리고 판단 이유를 제공해주세요.
-  
-  error_type_mapping:
-    timeout: "타임아웃/시간 초과"
-    complete_unavailable: "서비스 완전 불가/이용 불가"
-    data_not_available: "데이터 없음/조회 불가"
-
 
 eff_score:
   system: "You are an expert evaluator for task completion."
