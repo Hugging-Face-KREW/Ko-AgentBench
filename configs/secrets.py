@@ -1,7 +1,6 @@
 import os
 import warnings
 
-
 # 네이버 검색 API
 # https://developers.naver.com/products/search/
 NAVER_CLIENT_ID = os.environ.get('NAVER_CLIENT_ID', '')
