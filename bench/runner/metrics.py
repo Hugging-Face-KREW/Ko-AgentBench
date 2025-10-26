@@ -35,27 +35,6 @@ class ArgAccResponse(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
     reason: str = Field(..., description="각 인수별 유사도 분석 결과")
 
-class ErrorDetectResponse(BaseModel):
-    """ErrorDetect 메트릭 응답 모델"""
-    model_config = {
-        "json_schema_extra": {
-            "additionalProperties": False,
-            "strict": False
-        }
-    }
-    
-    error_reported: bool = Field(..., description="에러 보고 여부")
-    reported_error_type: str = Field(..., description="보고된 에러 타입")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="신뢰도 0.0-1.0")
-    reason: str = Field(..., description="간단한 이유")
-    
-    @validator('reported_error_type')
-    def validate_error_type(cls, v):
-        allowed_types = ["timeout", "data_not_available", "complete_unavailable", "other", "none"]
-        if v not in allowed_types:
-            return "other"
-        return v
-
 class EffScoreResponse(BaseModel):
     """EffScore 메트릭 응답 모델"""
     model_config = {
@@ -1104,204 +1083,104 @@ class SourceEPRMetric(Metric):
         })
 
 #레벨5 메트릭
-class ErrorDetectMetric(LLMJudgeMetric):
+class AdaptiveRoutingScoreMetric(Metric):
     """
-    ErrorDetect : 주입된 오류(tool,error_type)를 모델이 보고하는지의 비율
-    LLM-as-a-Judge로 final_response에서 에러 보고 여부를 판단
+    AdaptiveRoutingScore : 주입 오류 발생 후 대체 경로로 전환하는 속도를 평가
     """
-    name = "ErrorDetect"
+    name = "AdaptiveRoutingScore"
     level = 5
 
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        inj = ctx.task_schema.get("error_injection", {}) or {}
-        inj_tool = inj.get("tool")
-        inj_type = inj.get("error_type")
-
-        # 에러 주입이 없으면 평가 불가
-        if not inj_tool or not inj_type:
-            return EvaluationResult(self.name, 0.0, {
-                "reason": "No error injection defined",
-                "error_occurred": False,
-                "error_reported": False
-            })
-
-        # 1단계: 실제로 에러가 발생했는지 확인
-        error_occurred = False
-        tool_calls = ctx.logs.get("tool_calls") or []
-        
-        for inv in tool_calls:
-            if isinstance(inv, dict) and inv.get("error"):
-                t = inv.get("tool") or inv.get("tool_name")
-                # error 필드에서 에러 타입 추출
-                error_msg = inv.get("error", "")
-                if t == inj_tool and error_msg:
-                    # 에러 메시지에서 타입 매칭 확인
-                    if (inj_type == "timeout" and "timeout" in error_msg.lower()) or \
-                       (inj_type == "complete_unavailable" and "unavailable" in error_msg.lower()) or \
-                       (inj_type == "data_not_available" and "no data" in error_msg.lower()):
-                        error_occurred = True
-                        break
-
-        if not error_occurred:
-            return EvaluationResult(self.name, 0.0, {
-                "reason": "Error injection did not trigger",
-                "error_occurred": False,
-                "error_reported": False
-            })
-
-        # 2단계: 모델이 에러를 보고했는지 LLM Judge로 판단
-        final_response = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
-        
-        # final_response 검증 강화
-        if final_response is None:
-            final_response = ""
-        elif not isinstance(final_response, str):
-            final_response = str(final_response)
-        
-        # 빈 문자열이거나 너무 짧은 경우 처리
-        if not final_response or len(final_response.strip()) < 3:
-            return EvaluationResult(self.name, 0.0, {
-                "reason": "No final response to evaluate",
-                "error_occurred": True,
-                "error_reported": False
-            })
-
-        # LLM Judge 프롬프트 구성
-        error_type_korean = self.prompt_loader.get_error_type_mapping(inj_type)
-        prompt_template = self.prompt_loader.get_prompt('error_detect')
-        prompt = prompt_template.format(
-            injected_tool=inj_tool,
-            injected_error_type=inj_type,
-            error_type_korean=error_type_korean,
-            final_response=final_response
-        )
-
-        # Multi-judge 호출
-        llm_result = self._call_multi_judge_binary(prompt, 'error_detect', ErrorDetectResponse, 'error_reported')
-        error_reported = llm_result.get("error_reported", False)
-        reported_error_type = llm_result.get("reported_error_type", "none")
-        confidence = llm_result.get("confidence", 0.0)
-        
-        # 에러 타입 일치 여부 비교
-        type_matches = (reported_error_type == inj_type)
-        
-        # 점수 계산: 에러를 보고하고 타입도 일치해야 만점
-        # 단, 다수결에서 실패했지만 reported_error_type이 유효한 경우도 고려
-        if error_reported and type_matches:
-            score = 1.0
-        elif not error_reported and reported_error_type != "none" and type_matches:
-            # 다수결에서 실패했지만 에러 타입이 올바르게 감지된 경우 부분 점수
-            score = 0.5
-        else:
-            score = 0.0
-        
-        return EvaluationResult(self.name, score, {
-            "error_occurred": True,
-            "error_reported": error_reported,
-            "reported_error_type": reported_error_type,
-            "type_matches": type_matches,
-            "confidence": confidence,
-            "llm_reason": llm_result.get("reason", "No reason provided"),
-            "injected_tool": inj_tool,
-            "injected_error_type": inj_type,
-            "vote_details": llm_result.get("vote_count"),
-            "individual_judges": llm_result.get("individual_results")
-        })
-
-
-class GracefulFailMetric(Metric):
-    """GracefulFail: 전체 실패 케이스 중 환각 없이 안전하게 실패를 보고한 비율"""
-    name = "GracefulFail"
-    level = 5
-
-    @staticmethod
-    def _has_output(v: Any) -> bool:
-        """출력이 유효한지 확인"""
-        if v is None:
-            return False
-        if isinstance(v, str):
-            return v.strip() != ""
-        if isinstance(v, (list, dict)):
-            return len(v) > 0
-        return True
-
-    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        error_injection = ctx.task_schema.get("error_injection")
-        if not isinstance(error_injection, dict) or not error_injection:
-            return EvaluationResult(self.name, 0.0, {"reason": "No error injection"})
-
-        # 반복 실행 결과가 있는 경우
-        repetition_results = ctx.logs.get("repetition_results")
-        if isinstance(repetition_results, list) and repetition_results and isinstance(repetition_results[0], dict):
-            total_fail = sum(1 for result in repetition_results if not bool(result.get("success", False)))
-            graceful_fail = sum(
-                1 for result in repetition_results
-                if (not bool(result.get("success", False))) and (not self._has_output(result.get("actual_output")))
-            )
-            score = (graceful_fail / total_fail) if total_fail > 0 else 0.0
-            return EvaluationResult(self.name, score, {
-                "total_fail": total_fail,
-                "graceful_fail": graceful_fail,
-                "repetitions": len(repetition_results)
-            })
-
-        # 단일 시도 케이스: 주입된 도구가 실패했는지 확인
+        error_injection = ctx.task_schema.get("error_injection") or {}
         injected_tool = error_injection.get("tool")
-        tool_calls = ctx.logs.get("tool_calls", []) or []
-        
-        # 1. 주입된 도구가 실패했는지 확인
-        injected_tool_failed = False
-        for call in tool_calls:
-            if not isinstance(call, dict):
-                continue
-            tool_name = call.get("tool") or call.get("tool_name")
-            if tool_name == injected_tool:
-                if call.get("success") is False or call.get("error"):
-                    injected_tool_failed = True
-                    break
-        
-        # 주입된 도구가 실패하지 않았으면 평가 대상 아님
-        if not injected_tool_failed:
+
+        if not injected_tool:
+            return EvaluationResult(self.name, None, {"reason": "No error injection"})
+
+        tool_calls = ctx.logs.get("tool_calls") or []
+        if not tool_calls:
             return EvaluationResult(self.name, 0.0, {
-                "reason": "Injected tool did not fail",
+                "reason": "No tool calls recorded",
                 "injected_tool": injected_tool
             })
-        
-        # 2. fallback 도구가 성공했는지 확인
+
         fallback_options = ctx.task_schema.get("fallback_options") or []
         fallback_tools = {
             opt.get("tool") for opt in fallback_options
             if isinstance(opt, dict) and opt.get("tool")
         }
-        
-        fallback_succeeded = False
-        if fallback_tools:
-            for call in tool_calls:
-                if not isinstance(call, dict):
-                    continue
-                tool_name = call.get("tool") or call.get("tool_name")
-                if tool_name in fallback_tools:
-                    if call.get("success") is True and not call.get("error"):
-                        fallback_succeeded = True
-                        break
-        
-        # fallback이 성공했으면 graceful fail이 아님 (실제 데이터를 제공한 것)
-        if fallback_succeeded:
+
+        # failure 및 fallback 단계 탐색
+        failure_index = None
+        failure_step = None
+        fallback_index = None
+        fallback_step = None
+        fallback_tool_used = None
+
+        def _as_int(value: Any) -> Optional[int]:
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                return None
+
+        for idx, call in enumerate(tool_calls):
+            if not isinstance(call, dict):
+                continue
+
+            tool_name = call.get("tool_name") or call.get("tool")
+            step = _as_int(call.get("step"))
+            success = call.get("success")
+            error = call.get("error")
+
+            if failure_index is None and tool_name == injected_tool and (success is False or error):
+                failure_index = idx
+                failure_step = step
+                continue
+
+            if failure_index is None:
+                continue
+
+            if fallback_tools:
+                is_fallback = tool_name in fallback_tools
+            else:
+                is_fallback = tool_name is not None and tool_name != injected_tool
+
+            if is_fallback:
+                fallback_index = idx
+                fallback_step = step
+                fallback_tool_used = tool_name
+                break
+
+        if failure_index is None:
             return EvaluationResult(self.name, 0.0, {
-                "reason": "Fallback succeeded - provided actual data",
-                "injected_tool_failed": True,
-                "fallback_succeeded": True
+                "reason": "Injected tool did not fail",
+                "injected_tool": injected_tool
             })
-        
-        # 3. fallback이 없고 주입된 도구가 실패했으면 graceful fail로 간주
-        # (에러 메시지를 제공하는 것이 graceful fail의 목적)
-        return EvaluationResult(self.name, 1.0, {
-            "graceful": True,
-            "injected_tool_failed": True,
-            "fallback_succeeded": False,
-            "reason": "Injected tool failed without fallback - graceful fail"
+
+        if fallback_index is None:
+            return EvaluationResult(self.name, 0.0, {
+                "reason": "No fallback attempt after failure",
+                "failure_step": failure_step,
+                "injected_tool": injected_tool
+            })
+
+        # 단계 간격 계산 (step 값 우선, 없으면 index 기준)
+        if failure_step is not None and fallback_step is not None:
+            step_gap = max(0, fallback_step - failure_step - 1)
+        else:
+            step_gap = max(0, fallback_index - failure_index - 1)
+
+        score = 1.0 / (1 + step_gap)
+
+        return EvaluationResult(self.name, score, {
+            "failure_step": failure_step,
+            "fallback_step": fallback_step,
+            "fallback_tool": fallback_tool_used,
+            "step_gap": step_gap,
+            "injected_tool": injected_tool,
+            "fallback_candidates": list(fallback_tools) if fallback_tools else None
         })
-    
+
 
 class FallbackSRMetric(Metric):
     """
@@ -1753,8 +1632,7 @@ METRICS = {
     "Coverage": CoverageMetric(),
     "SourceEPR": SourceEPRMetric(),
     #레벨5 메트릭 
-    "ErrorDetect": ErrorDetectMetric(), 
-    "GracefulFail": GracefulFailMetric(),
+    "AdaptiveRoutingScore": AdaptiveRoutingScoreMetric(),
     "FallbackSR": FallbackSRMetric(),
     #레벨6 메트릭
     "ReuseRate": ReuseRateMetric(),
@@ -1788,5 +1666,3 @@ def get_common_metrics() -> Dict[str, Metric]:
 def get_level_specific_metrics(level: int) -> Dict[str, Metric]:
     """특정 레벨 전용 메트릭만 반환 (공통 메트릭 제외)"""
     return {name: metric for name, metric in METRICS.items() if metric.level == level}
-
-
