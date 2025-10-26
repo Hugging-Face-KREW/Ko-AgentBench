@@ -616,7 +616,11 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "categories": {"type": "string", "description": "카테고리(예: EV충전소;주유소;주차장;음식점;카페;디저트;관광지;숙박;마트;편의점;은행;병원;약국;세차;정비소;교통;레저/스포츠;문화생활; 생활서비스;대형유통점)"},
+                "categories": {"type": "string",
+                         "description": '''
+                         조회 가능한 업종 명칭을 지정합니다. 여러개의 업종 검색시 ';'로 구분하여 나열합니다. 예) EV충전소;주유소;주차장;편의점;병원
+                         (업종 예: EV충전소;주유소;주차장;음식점;카페;디저트;관광지;숙박;마트;편의점;은행;병원;약국;세차;정비소;교통;레저/스포츠;문화생활;생활서비스;대형유통점)
+                         '''},
                 "centerLon": {"type": "number"},
                 "centerLat": {"type": "number"},
                 "radius": {"type": "integer", "default": 1},
