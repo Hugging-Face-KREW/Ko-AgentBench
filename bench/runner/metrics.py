@@ -1325,6 +1325,7 @@ class ReuseRateMetric(Metric):
                             break
                     
                     if next_tool_index is not None:
+                        # context_used 이후에 다른 도구 호출이 있는 경우
                         next_golden = golden_tools[next_tool_index]
                         next_signature = (
                             next_golden["tool"],
@@ -1335,11 +1336,7 @@ class ReuseRateMetric(Metric):
                             prev_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == prev_signature]
                             next_call_indices = [idx for idx, sig in enumerate(actual_signatures) if sig == next_signature]
                             
-                            # context_used 위치에서 실제로 재호출 없이 진행되었는지 확인
-                            # 이전 호출과 다음 호출 사이에 동일한 이전 호출이 없어야 함
                             if prev_call_indices and next_call_indices:
-                                # 가장 마지막 prev 호출과 첫 번째 next 호출 사이에
-                                # 추가 prev 호출이 없으면 재사용한 것
                                 last_prev_idx = max(prev_call_indices)
                                 first_next_idx = min([idx for idx in next_call_indices if idx > last_prev_idx], default=None)
                                 
@@ -1349,6 +1346,22 @@ class ReuseRateMetric(Metric):
                                         reused += 1
                         except (ValueError, TypeError):
                             pass
+                    else:
+                        # context_used가 마지막인 경우
+                        # 이전 도구가 전체 실행에서 1회만 호출되었다면 재사용 성공
+                        if prev_tool_index is not None:
+                            prev_golden = golden_tools[prev_tool_index]
+                            prev_signature = (
+                                prev_golden["tool"],
+                                json.dumps(prev_golden["args"], sort_keys=True)
+                            )
+                            
+                            # 전체 실행에서 이 도구가 몇 번 호출되었는지 확인
+                            total_calls = actual_signatures.count(prev_signature)
+                            
+                            # 1회만 호출 = 재호출하지 않고 이전 결과를 재사용함
+                            if total_calls == 1:
+                                reused += 1
         
         score = reused / reuse_opportunities if reuse_opportunities > 0 else 0.0
         
