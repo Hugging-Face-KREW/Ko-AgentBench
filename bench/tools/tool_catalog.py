@@ -616,7 +616,7 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
         {
             "type": "object",
             "properties": {
-                "categories": {"type": "string", "description": "카테고리"},
+                "categories": {"type": "string", "description": "카테고리(예: EV충전소;주유소;주차장;음식점;카페;디저트;관광지;숙박;마트;편의점;은행;병원;약국;세차;정비소;교통;레저/스포츠;문화생활; 생활서비스;대형유통점)"},
                 "centerLon": {"type": "number"},
                 "centerLat": {"type": "number"},
                 "radius": {"type": "integer", "default": 1},
@@ -627,8 +627,6 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
     ),
 }
 
-
-    
 
 
 def resolve_tool_classes(tool_names: List[str]) -> List[Type[BaseTool]]:
