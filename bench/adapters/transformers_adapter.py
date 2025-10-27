@@ -620,9 +620,14 @@ class TransformersAdapter(BaseAdapter):
         tool_calls = []
         remaining_text = text
         
-        # Pattern 1: XML-wrapped tool calls (most common for Qwen)
+        # Pattern 1: XML-wrapped tool calls (most common for Qwen and similar models)
+        # Improved pattern that handles nested JSON better using balanced bracket matching
         # Matches: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
-        xml_pattern = r'<tool_call>\s*(\{[^<]+\})\s*</tool_call>'
+        xml_pattern = r'<tool_call>\s*(\{(?:[^{}]|(?:\{[^{}]*\}))*\})\s*</tool_call>'
+        
+        # Pattern 1b: <tools> tag format (Claude-style, used by some models)
+        # Matches: <tools>{"type": "function", "function": {...}}</tools>
+        tools_tag_pattern = r'<tools>\s*(\{(?:[^{}]|(?:\{[^{}]*\}))*\})\s*</tools>'
         
         # Pattern 2: Function tag format
         # Matches: <function=tool_name>{...arguments...}</function>
@@ -638,7 +643,50 @@ class TransformersAdapter(BaseAdapter):
         array_pattern = r'\[\s*\{[^\]]+\}\s*\]'
         
         try:
-            # Try function tag format first (for models like Midm)
+            # Try <tools> tag format first (Claude-style, used by some Korean models)
+            # Matches: <tools>{"type": "function", "function": {...}}</tools>
+            tools_tag_matches = re.finditer(tools_tag_pattern, text, re.DOTALL)
+            tools_tag_found = False
+            
+            for match in tools_tag_matches:
+                tools_tag_found = True
+                json_str = match.group(1)
+                try:
+                    call_data = json.loads(json_str)
+                    
+                    # Extract function info from nested structure
+                    if 'function' in call_data:
+                        func_data = call_data['function']
+                        tool_name = func_data.get('name')
+                        # Parameters might be nested under 'parameters'
+                        arguments = func_data.get('parameters', {})
+                        if 'properties' in arguments:
+                            # Schema format, extract actual values if present
+                            arguments = arguments.get('properties', {})
+                    else:
+                        # Direct format
+                        tool_name = call_data.get('tool_name') or call_data.get('name')
+                        arguments = call_data.get('arguments', {})
+                    
+                    if tool_name:
+                        tool_calls.append({
+                            'id': f'call_{len(tool_calls)}',
+                            'type': 'function',
+                            'function': {
+                                'name': tool_name,
+                                'arguments': json.dumps(arguments) if isinstance(arguments, dict) else arguments
+                            }
+                        })
+                except json.JSONDecodeError as e:
+                    self.logger.warning(f"Failed to parse <tools> tag JSON: {e}")
+                    continue
+            
+            if tools_tag_found:
+                # Remove all <tools> tags from text
+                remaining_text = re.sub(tools_tag_pattern, '', text, flags=re.DOTALL).strip()
+                return (tool_calls if tool_calls else None), remaining_text
+            
+            # Try function tag format (for models like Midm)
             # Matches: <function=tool_name>{...arguments...}</function>
             function_matches = re.finditer(function_tag_pattern, text, re.DOTALL)
             function_found = False
@@ -669,7 +717,7 @@ class TransformersAdapter(BaseAdapter):
                 remaining_text = re.sub(function_tag_pattern, '', text, flags=re.DOTALL).strip()
                 return (tool_calls if tool_calls else None), remaining_text
             
-            # Try XML pattern (most common for Qwen)
+            # Try XML pattern (most common for Qwen and models with <tool_call> format)
             xml_matches = re.finditer(xml_pattern, text, re.DOTALL)
             xml_found = False
             
