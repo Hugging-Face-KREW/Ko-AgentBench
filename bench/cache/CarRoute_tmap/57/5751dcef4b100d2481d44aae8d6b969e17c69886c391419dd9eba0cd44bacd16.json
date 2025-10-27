@@ -1,0 +1,93 @@
+{
+  "key": "5751dcef4b100d2481d44aae8d6b969e17c69886c391419dd9eba0cd44bacd16",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-10-27T12:21:56.041710",
+  "input_params": {
+    "endX": 126.975228,
+    "endY": 37.496152,
+    "searchOption": 0,
+    "startX": 126.975228,
+    "startY": 37.496152
+  },
+  "raw_args": {
+    "startX": 126.975228,
+    "startY": 37.496152,
+    "endX": 126.975228,
+    "endY": 37.496152,
+    "searchOption": 0
+  },
+  "data": {
+    "usedFavoriteRouteVertices": "",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            126.975228,
+            37.496152
+          ]
+        },
+        "properties": {
+          "totalDistance": 0,
+          "totalTime": 0,
+          "totalFare": 0,
+          "taxiFare": 0,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "0m 이동",
+          "nextRoadName": "",
+          "turnType": 200,
+          "pointType": "S"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              126.975228,
+              37.496152
+            ],
+            [
+              126.975228,
+              37.496152
+            ]
+          ]
+        },
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "",
+          "description": "",
+          "distance": 0,
+          "time": 0,
+          "roadType": 0,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            126.975228,
+            37.496152
+          ]
+        },
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "",
+          "description": "",
+          "nextRoadName": "",
+          "turnType": 201,
+          "pointType": "E"
+        }
+      }
+    ]
+  }
+}
