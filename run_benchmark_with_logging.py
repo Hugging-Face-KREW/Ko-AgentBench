@@ -748,13 +748,15 @@ def main():
             if _provider_ready(m):
                 selected_model = m
                 break
-        # Fallback: keep existing preference order if none match, but warn
+        # Fallback: keep existing preference order if none match
         if selected_model is None:
             selected_model = MODEL_IDS[0]
-            print(
-                f"[WARNING] No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
-                f"  Tip: Set provider keys to match one of: {MODEL_IDS}"
-            )
+            # Only warn if NOT using local inference
+            if not args.use_local:
+                print(
+                    f"[WARNING] No provider credentials matched MODEL_IDS. Falling back to '{selected_model}'.\n"
+                    f"  Tip: Set provider keys to match one of: {MODEL_IDS}"
+                )
     else:
         # Final fallback
         selected_model = "openai/gpt-4.1" if os.getenv("OPENAI_API_KEY") else "azure/gpt-4.1"
