@@ -79,10 +79,10 @@ export TMAP_APP_KEY="your-tmap-app-key"
 ### 3) 실행과 평가
 ```bash
 # 벤치마크 실행 (L1 레벨, 캐시 읽기 모드)
-uv run python run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
+uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
 
 # 평가 (실행 날짜를 YYYYMMDD 형식으로 입력)
-uv run python evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
+uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
 ```
 
 ---
@@ -110,19 +110,19 @@ run_benchmark_with_logging.py로 모델을 평가합니다.
 
 ```bash
 # 전체 레벨 실행 (캐시 읽기 모드)
-uv run python run_benchmark_with_logging.py
+uv run run_benchmark_with_logging.py
 
 # 특정 레벨만 실행
-uv run python run_benchmark_with_logging.py --levels L1,L2,L3
+uv run run_benchmark_with_logging.py --levels L1,L2,L3
 
 # 특정 모델 지정
-uv run python run_benchmark_with_logging.py --model openai/gpt-4
+uv run run_benchmark_with_logging.py --model openai/gpt-4
 
 # 로컬 모델 사용
-uv run python run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct
+uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct
 
 # API 호출 후 캐시 저장
-uv run python run_benchmark_with_logging.py --cache-mode write
+uv run run_benchmark_with_logging.py --cache-mode write
 ```
 
 ### 주요 옵션
@@ -139,7 +139,7 @@ uv run python run_benchmark_with_logging.py --cache-mode write
 **실행 제어**
 - `--max-steps`: 태스크당 최대 단계 (기본: 10)
 - `--timeout`: 태스크당 시간 제한(초) (기본: 60)
-- `--passes`: 반복 실행 횟수 (Pass@k 계산용)
+- `--repetitions`: 반복 실행 횟수 (Pass@k 계산용)
 - `--no-save-logs`: 로그 저장 비활성화
 
 **캐시 모드**
@@ -159,10 +159,10 @@ evaluate_model_run.py로 실행 로그를 분석하여 보고서를 생성합니
 
 ```bash
 # 기본 평가
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o
 
 # 빠른 테스트 (레벨당 1개)
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ```
 
 ### 주요 옵션
@@ -183,17 +183,35 @@ python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 
 ## 🔄 캐시 시스템과 재현성
 
-**동작 원리**
-- API 요청과 응답을 저장하여 동일 요청 시 캐시된 응답 반환
-- 캐시 키: `hash(tool_name, normalized_parameters)`
-- 캐시 저장 위치: `bench/cache/{tool_name}/{shard}/{key}.json`
-- 캐시 적중률을 로그와 보고서에 자동 기록
+Ko-AgentBench는 재현 가능한 벤치마크 실행과 API 비용 절감을 위해 파일 기반 캐시를 제공합니다.
 
-**캐시 모드**
-- **Read** (기본): 캐시만 사용, 없으면 오류. 재현과 분석에 최적
-- **Write**: 실제 API 호출 후 응답 저장. 초기 생성이나 갱신 시 사용 (configs/secrets.py에 API 키 설정 필요)
+### 구조
+- **경로**: `bench/cache/<tool_name>/<shard>/<key>.json`
+- **키 생성**: 도구명 + 정규화된 인자 + 스키마의 SHA-256 해시
+- **레코드**: API 입력/출력, 타임스탬프, 메타데이터 저장
 
+### 모드
+
+**Read 모드** (기본):
+```bash
+uv run run_benchmark_with_logging.py --cache-mode read
+```
+- 캐시만 사용, 실제 API 호출 없음
+- API 키 없이도 벤치마크 실행 가능
+- 캐시 미스 시 에러 발생
+
+**Write 모드**
+```bash
+uv run run_benchmark_with_logging.py --cache-mode write
+```
+- 실제 API 호출 후 캐시에 기록
+- 새 데이터셋 준비 시 사용
+  
+**저장 위치**
+- 디렉토리: `bench/cache/`
+- 내용: 요청 해시별 응답 본문, 헤더, 메타데이터
 ---
+
 
 ## 🧩 평가 레벨과 태스크
 
@@ -286,22 +304,22 @@ Ko-AgentBench/
 
 ```bash
 # 1) GPT-4로 L1-L3 레벨 평가
-uv run python run_benchmark_with_logging.py --levels L1,L2,L3 --model openai/gpt-4
+uv run run_benchmark_with_logging.py --levels L1,L2,L3 --model openai/gpt-4
 
 # 2) Claude로 전체 레벨 평가 + 캐시 생성
-uv run python run_benchmark_with_logging.py --model anthropic/claude-3-5-sonnet-20241022 --cache-mode write
+uv run run_benchmark_with_logging.py --model anthropic/claude-3-5-sonnet-20241022 --cache-mode write
 
 # 3) 로컬 모델 4bit 양자화 평가
-uv run python run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct --quantization 4bit --device cuda
+uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct --quantization 4bit --device cuda
 
 # 4) 멀티턴 대화 레벨 평가
-uv run python run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
+uv run run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
 
 # 5) 평가 보고서 생성
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
 
 # 6) 빠른 샘플 평가
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ```
 
 ---
