@@ -12,6 +12,7 @@ Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하
 
 도구 호출 에이전트를 평가하는 벤치마크는 단순히 "정확한 API를 호출했는가"를 넘어서야 합니다. 에이전트는 불완전한 정보 속에서 다수의 도구 중 적절한 것을 선택하고, 때로는 여러 단계에 걸쳐 도구를 연결하며, 오류가 발생했을 때 적절히 대응해야 합니다. 또한 동일한 정보를 반복 요청하지 않고 효율적으로 작동해야 하며, 여러 턴에 걸친 대화에서 맥락을 유지해야 합니다.
 
+
 Ko-AgentBench는 이러한 문제의식에서 출발하여, 에이전트의 도구 호출 능력을 현실성(Realism), 명확성(Clarity), 판별력(Discriminative Power), 견고성(Robustness), 효율성(Efficiency), 재현성(Reproducibility), 확장성(Extensibility)의 원칙을 기반으로 평가합니다.
 
 현실성을 위해 단일 API 호출로 완결되는 단편적 태스크가 아닌, 실제 업무 흐름에서 발생하는 stateful 다중 턴 시나리오를 구성했습니다. 도구 간 데이터 의존성과 실행 흐름이 실제 환경과 유사하게 설계되어, 에이전트가 실제 환경에서 직면할 문제를 반영합니다. 명확성을 확보하기 위해 평가 대상 태스크, 입출력 형식, 측정 지표, 스키마 정의, 평가 절차를 모호함 없이 정의했습니다.
@@ -51,20 +52,24 @@ uv python install 3.10
 uv sync --python 3.10
 ```
 
-### 2) 환경 변수 설정 (.env)
+### 2) API 키 설정
+
+`configs/secrets.py`파일에서 API키를 설정할 수 있습니다.
+
 ```bash
-# 모델별 API 키 (필요한 항목만)
-OPENAI_API_KEY=your_key
-AZURE_API_KEY=your_key
-ANTHROPIC_API_KEY=your_key
-GEMINI_API_KEY=your_key
+# LLM Model API key
+export OPENAI_API_KEY="your-openai-key"
+export AZURE_API_KEY="your-azure-key"
+export AZURE_API_BASE="https://your-resource.openai.azure.com/"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export GEMINI_API_KEY="your-gemini-key"
 
-# 로컬 모델용 OpenAI 호환 서버
-OPENAI_BASE_URL=http://localhost:8000/v1
-
-# 재현성 설정
-KO_AGENTBENCH_OFFLINE=0        # 1이면 캐시만 사용
-KO_AGENTBENCH_SEED=2025
+# Tool API key (도구 실행에 필요, 캐시 모드에서는 선택적)
+export NAVER_CLIENT_ID="your-naver-client-id"
+export NAVER_CLIENT_SECRET="your-naver-client-secret"
+export KAKAO_REST_API_KEY="your-kakao-api-key"
+export TMAP_APP_KEY="your-tmap-app-key"
+# 기타 API 키는 configs/secrets.py 참고
 ```
 
 ### 3) 실행과 평가
@@ -176,16 +181,13 @@ python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 
 **동작 원리**
 - API 요청과 응답을 저장하여 동일 요청 시 캐시된 응답 반환
-- 캐시 키: `hash(method, url, sorted(query), sorted(headers), body)`
+- 캐시 키: `hash(tool_name, normalized_parameters)`
+- 캐시 저장 위치: `bench/cache/{tool_name}/{shard}/{key}.json`
 - 캐시 적중률을 로그와 보고서에 자동 기록
 
 **캐시 모드**
 - **Read** (기본): 캐시만 사용, 없으면 오류. 재현과 분석에 최적
-- **Write**: 실제 API 호출 후 응답 저장. 초기 생성이나 갱신 시 사용
-
-**저장 위치**
-- 디렉토리: `bench/cache/`
-- 내용: 요청 해시별 응답 본문, 헤더, 메타데이터
+- **Write**: 실제 API 호출 후 응답 저장. 초기 생성이나 갱신 시 사용 (configs/secrets.py에 API 키 설정 필요)
 
 ---
 
