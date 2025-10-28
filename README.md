@@ -123,6 +123,9 @@ uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruc
 
 # API 호출 후 캐시 저장
 uv run run_benchmark_with_logging.py --cache-mode write
+
+# 태스크 3회 반복 수행
+uv run run_benchmark_with_logging.py ----repetition 3
 ```
 
 ### 주요 옵션
