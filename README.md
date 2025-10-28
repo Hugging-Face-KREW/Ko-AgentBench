@@ -3,22 +3,27 @@
 
 [English](README_en.md) | 한국어
 
-Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다.  
-실제 API를 직접 호출하지 않고도 테스트 가능한 캐시 기반 가상 API를 제공하여 재현성, 일관성, 비용 안정성을 확보합니다.
+<div align="center">
+<img src="https://github.com/user-attachments/assets/9cde519b-7935-4e0f-bd34-4d8a81e14103" width="200">
+</div>
 
 ---
 
 ## Ko-AgentBench ✨
 
-도구 호출 에이전트를 평가하는 벤치마크는 단순히 "정확한 API를 호출했는가"를 넘어서야 합니다. 에이전트는 불완전한 정보 속에서 다수의 도구 중 적절한 것을 선택하고, 때로는 여러 단계에 걸쳐 도구를 연결하며, 오류가 발생했을 때 적절히 대응해야 합니다. 또한 동일한 정보를 반복 요청하지 않고 효율적으로 작동해야 하며, 여러 턴에 걸친 대화에서 맥락을 유지해야 합니다.
+Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다. 
+실제 API를 직접 호출하지 않고도 테스트 가능한 캐시 기반 가상 API를 제공하여 재현성, 일관성, 비용 안정성을 확보합니다.
 
-Ko-AgentBench는 이러한 문제의식에서 출발하여, 에이전트의 도구 호출 능력을 현실성(Realism), 명확성(Clarity), 판별력(Discriminative Power), 견고성(Robustness), 효율성(Efficiency), 재현성(Reproducibility), 확장성(Extensibility)의 원칙을 기반으로 평가합니다.
+> [!TIP]
+> **Why Ko-AgentBench?**
+>
+> 도구 호출 에이전트를 평가하는 벤치마크는 단순히 "정확한 API를 호출했는가"를 넘어서야 합니다. 에이전트는 불완전한 정보 속에서 다수의 도구 중 적절한 것을 선택하고, 때로는 여러 단계에 걸쳐 도구를 연결하며, 오류가 발생했을 때 적절히 대응해야 합니다. 또한 동일한 정보를 반복 요청하지 않고 효율적으로 작동해야 하며, 여러 턴에 걸친 대화에서 맥락을 유지해야 합니다.
+>
+> Ko-AgentBench는 이러한 문제의식에서 출발하여, 에이전트의 도구 호출 능력을 현실성(Realism), 명확성(Clarity), 판별력(Discriminative Power), 견고성(Robustness), 효율성(Efficiency), 재현성(Reproducibility), 확장성(Extensibility)의 원칙을 기반으로 평가합니다.
+
 
 현실성을 위해 단일 API 호출로 완결되는 단편적 태스크가 아닌, 실제 업무 흐름에서 발생하는 stateful 다중 턴 시나리오를 구성했습니다. 도구 간 데이터 의존성과 실행 흐름이 실제 환경과 유사하게 설계되어, 에이전트가 실제 환경에서 직면할 문제를 반영합니다. 명확성을 확보하기 위해 평가 대상 태스크, 입출력 형식, 측정 지표, 스키마 정의, 평가 절차를 모호함 없이 정의했습니다.
 
-판별력은 반복 실행을 통한 Pass@k 메트릭으로 달성됩니다. 동일 태스크를 k번 실행하여 성공률을 측정함으로써 모델 간 성능 차이를 통계적으로 유의미하게 구분할 수 있습니다. 견고성 평가를 위해 오류 주입 시나리오와 불완전한 정보 상황을 의도적으로 설계하여, 에이전트가 실패 시 안전하게 처리하는 능력(graceful degradation)을 측정합니다. 효율성은 태스크 완수 여부뿐만 아니라, 최소 단계 실행, 중복 호출 억제, 이전 결과 재사용 등을 정량화하여 평가합니다.
-
-재현성 확보를 위해 가상 API 시스템과 오프라인 실행 모드를 제공합니다. 네트워크 상태나 외부 API 변동성과 무관하게 동일한 결과를 재현할 수 있으며, 시드 및 파라미터 고정을 통해 실험 재현성을 보장합니다. 이는 연구자들이 공정한 조건에서 모델을 비교할 수 있게 하며, 벤치마크 결과의 신뢰성을 높입니다. 확장성은 태스크, 도구, 평가 지표의 모듈화를 통해 구현되어, 새로운 평가 시나리오를 손쉽게 추가할 수 있습니다.
 
 ### 7가지 독립적 Task 실행를 통한 모델의 성능 측정
 
@@ -51,29 +56,33 @@ uv python install 3.10
 uv sync --python 3.10
 ```
 
-### 2) 환경 변수 설정 (.env)
+### 2) API 키 설정
+
+`configs/secrets.py`파일에서 API키를 설정할 수 있습니다.
+
 ```bash
-# 모델별 API 키 (필요한 항목만)
-OPENAI_API_KEY=your_key
-AZURE_API_KEY=your_key
-ANTHROPIC_API_KEY=your_key
-GEMINI_API_KEY=your_key
+# LLM Model API key
+export OPENAI_API_KEY="your-openai-key"
+export AZURE_API_KEY="your-azure-key"
+export AZURE_API_BASE="https://your-resource.openai.azure.com/"
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export GEMINI_API_KEY="your-gemini-key"
 
-# 로컬 모델용 OpenAI 호환 서버
-OPENAI_BASE_URL=http://localhost:8000/v1
-
-# 재현성 설정
-KO_AGENTBENCH_OFFLINE=0        # 1이면 캐시만 사용
-KO_AGENTBENCH_SEED=2025
+# Tool API key (도구 실행에 필요, 캐시 모드에서는 선택적)
+export NAVER_CLIENT_ID="your-naver-client-id"
+export NAVER_CLIENT_SECRET="your-naver-client-secret"
+export KAKAO_REST_API_KEY="your-kakao-api-key"
+export TMAP_APP_KEY="your-tmap-app-key"
+# 기타 API 키는 configs/secrets.py 참고
 ```
 
 ### 3) 실행과 평가
 ```bash
 # 벤치마크 실행 (L1 레벨, 캐시 읽기 모드)
-uv run python run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
+uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
 
 # 평가 (실행 날짜를 YYYYMMDD 형식으로 입력)
-uv run python evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
+uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
 ```
 
 ---
@@ -101,19 +110,19 @@ run_benchmark_with_logging.py로 모델을 평가합니다.
 
 ```bash
 # 전체 레벨 실행 (캐시 읽기 모드)
-uv run python run_benchmark_with_logging.py
+uv run run_benchmark_with_logging.py
 
 # 특정 레벨만 실행
-uv run python run_benchmark_with_logging.py --levels L1,L2,L3
+uv run run_benchmark_with_logging.py --levels L1,L2,L3
 
 # 특정 모델 지정
-uv run python run_benchmark_with_logging.py --model openai/gpt-4
+uv run run_benchmark_with_logging.py --model openai/gpt-4
 
 # 로컬 모델 사용
-uv run python run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct
+uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct
 
 # API 호출 후 캐시 저장
-uv run python run_benchmark_with_logging.py --cache-mode write
+uv run run_benchmark_with_logging.py --cache-mode write
 ```
 
 ### 주요 옵션
@@ -130,7 +139,7 @@ uv run python run_benchmark_with_logging.py --cache-mode write
 **실행 제어**
 - `--max-steps`: 태스크당 최대 단계 (기본: 10)
 - `--timeout`: 태스크당 시간 제한(초) (기본: 60)
-- `--passes`: 반복 실행 횟수 (Pass@k 계산용)
+- `--repetitions`: 반복 실행 횟수 (Pass@k 계산용)
 - `--no-save-logs`: 로그 저장 비활성화
 
 **캐시 모드**
@@ -150,10 +159,10 @@ evaluate_model_run.py로 실행 로그를 분석하여 보고서를 생성합니
 
 ```bash
 # 기본 평가
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o
 
 # 빠른 테스트 (레벨당 1개)
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ```
 
 ### 주요 옵션
@@ -174,20 +183,35 @@ python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 
 ## 🔄 캐시 시스템과 재현성
 
-**동작 원리**
-- API 요청과 응답을 저장하여 동일 요청 시 캐시된 응답 반환
-- 캐시 키: `hash(method, url, sorted(query), sorted(headers), body)`
-- 캐시 적중률을 로그와 보고서에 자동 기록
+Ko-AgentBench는 재현 가능한 벤치마크 실행과 API 비용 절감을 위해 파일 기반 캐시를 제공합니다.
 
-**캐시 모드**
-- **Read** (기본): 캐시만 사용, 없으면 오류. 재현과 분석에 최적
-- **Write**: 실제 API 호출 후 응답 저장. 초기 생성이나 갱신 시 사용
+### 구조
+- **경로**: `bench/cache/<tool_name>/<shard>/<key>.json`
+- **키 생성**: 도구명 + 정규화된 인자 + 스키마의 SHA-256 해시
+- **레코드**: API 입력/출력, 타임스탬프, 메타데이터 저장
 
+### 모드
+
+**Read 모드** (기본):
+```bash
+uv run run_benchmark_with_logging.py --cache-mode read
+```
+- 캐시만 사용, 실제 API 호출 없음
+- API 키 없이도 벤치마크 실행 가능
+- 캐시 미스 시 에러 발생
+
+**Write 모드**
+```bash
+uv run run_benchmark_with_logging.py --cache-mode write
+```
+- 실제 API 호출 후 캐시에 기록
+- 새 데이터셋 준비 시 사용
+  
 **저장 위치**
 - 디렉토리: `bench/cache/`
 - 내용: 요청 해시별 응답 본문, 헤더, 메타데이터
-
 ---
+
 
 ## 🧩 평가 레벨과 태스크
 
@@ -280,22 +304,22 @@ Ko-AgentBench/
 
 ```bash
 # 1) GPT-4로 L1-L3 레벨 평가
-uv run python run_benchmark_with_logging.py --levels L1,L2,L3 --model openai/gpt-4
+uv run run_benchmark_with_logging.py --levels L1,L2,L3 --model openai/gpt-4
 
 # 2) Claude로 전체 레벨 평가 + 캐시 생성
-uv run python run_benchmark_with_logging.py --model anthropic/claude-3-5-sonnet-20241022 --cache-mode write
+uv run run_benchmark_with_logging.py --model anthropic/claude-3-5-sonnet-20241022 --cache-mode write
 
 # 3) 로컬 모델 4bit 양자화 평가
-uv run python run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct --quantization 4bit --device cuda
+uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct --quantization 4bit --device cuda
 
 # 4) 멀티턴 대화 레벨 평가
-uv run python run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
+uv run run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
 
 # 5) 평가 보고서 생성
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
 
 # 6) 빠른 샘플 평가
-python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
+uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ```
 
 ---
