@@ -1,7 +1,7 @@
 {
   "key": "156f511971759e9d1fef9ddf2b6d7018eab0e7e54d7e099ed21269fe18a67368",
   "tool": "ItemList_aladin",
-  "created_at": "2025-10-27T11:57:18.170738",
+  "created_at": "2025-10-27T08:37:14.659052",
   "input_params": {
     "category_id": 0,
     "cover": "Mid",
@@ -16,8 +16,12 @@
   "raw_args": {
     "query_type": "Bestseller",
     "search_target": "All",
+    "start": 1,
     "max_results": 10,
-    "category_id": 0
+    "cover": "Mid",
+    "category_id": 0,
+    "output": "js",
+    "out_of_stock_filter": 0
   },
   "data": {
     "errorCode": 23,

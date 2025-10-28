@@ -1,0 +1,232 @@
+{
+  "key": "4374f71662a5ee473e35bc45ce03aeadd0a4225f3e2817f18f22409585eec196",
+  "tool": "WalkRoute_tmap",
+  "created_at": "2025-10-27T16:48:58.872587",
+  "input_params": {
+    "endX": 127.024,
+    "endY": 37.5123,
+    "startX": 127.027,
+    "startY": 37.514
+  },
+  "raw_args": {
+    "startY": 37.514,
+    "startX": 127.027,
+    "endY": 37.5123,
+    "endX": 127.024
+  },
+  "data": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02732639152221,
+            37.51409776494046
+          ]
+        },
+        "properties": {
+          "totalDistance": 441,
+          "totalTime": 339,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "34m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 200,
+          "pointType": "SP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02732639152221,
+              37.51409776494046
+            ],
+            [
+              127.02746249841697,
+              37.513808912057804
+            ]
+          ]
+        },
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "",
+          "description": ", 34m",
+          "distance": 34,
+          "time": 26,
+          "roadType": 0,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02746249841697,
+            37.513808912057804
+          ]
+        },
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "포에버마인스튜디오",
+          "description": "포에버마인스튜디오에서 우회전 후 357m 이동",
+          "direction": "",
+          "nearPoiName": "포에버마인스튜디오",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 13,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02746249841697,
+              37.513808912057804
+            ],
+            [
+              127.02731806814326,
+              37.51377280254855
+            ],
+            [
+              127.02699310055793,
+              37.51367280833115
+            ],
+            [
+              127.02622928757316,
+              37.51344782075634
+            ],
+            [
+              127.02562379232938,
+              37.513264497850535
+            ],
+            [
+              127.02480720668542,
+              37.513028399508926
+            ],
+            [
+              127.02424059639732,
+              37.51285896457732
+            ],
+            [
+              127.02368231868385,
+              37.512689529795594
+            ]
+          ]
+        },
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "",
+          "description": ", 357m",
+          "distance": 357,
+          "time": 274,
+          "roadType": 0,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02368231868385,
+            37.512689529795594
+          ]
+        },
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "수우미양가창고",
+          "description": "수우미양가창고에서 좌회전 후 50m 이동",
+          "direction": "",
+          "nearPoiName": "수우미양가창고",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 12,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02368231868385,
+              37.512689529795594
+            ],
+            [
+              127.02387397992524,
+              37.51226458261149
+            ]
+          ]
+        },
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "",
+          "description": ", 50m",
+          "distance": 50,
+          "time": 39,
+          "roadType": 22,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02387397992524,
+            37.51226458261149
+          ]
+        },
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "도착지",
+          "description": "도착",
+          "direction": "",
+          "nearPoiName": "도착지",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "도착지",
+          "facilityType": "",
+          "facilityName": "",
+          "turnType": 201,
+          "pointType": "EP"
+        }
+      }
+    ]
+  }
+}

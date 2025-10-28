@@ -1,0 +1,27 @@
+{
+  "key": "d19cbec08ae9fb144e7fd0be640c9b6ffed3ff328addd278f21cfa02507f06ff",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-10-27T15:49:05.935593",
+  "input_params": {
+    "endX": 126,
+    "endY": 37.5393,
+    "searchOption": 0,
+    "startX": 127.036978,
+    "startY": 37.500692
+  },
+  "raw_args": {
+    "startX": 127.036978,
+    "startY": 37.500692,
+    "endX": 126,
+    "endY": 37.5393
+  },
+  "data": {
+    "success": false,
+    "error_code": "API_REQUEST_FAILED",
+    "error_message": "자동차 경로 API 호출 실패: 400 Client Error: Bad Request for url: https://apis.openapi.sk.com/tmap/routes",
+    "suggested_actions": [
+      "좌표 범위 확인",
+      "경로 검색 옵션 확인"
+    ]
+  }
+}

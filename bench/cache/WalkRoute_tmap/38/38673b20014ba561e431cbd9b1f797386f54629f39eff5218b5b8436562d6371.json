@@ -1,0 +1,216 @@
+{
+  "key": "38673b20014ba561e431cbd9b1f797386f54629f39eff5218b5b8436562d6371",
+  "tool": "WalkRoute_tmap",
+  "created_at": "2025-10-27T07:10:08.069141",
+  "input_params": {
+    "endX": 127.028307900881,
+    "endY": 37.4981646510397,
+    "startX": 127.02800140627488,
+    "startY": 37.49808633653005
+  },
+  "raw_args": {
+    "endY": 37.4981646510397,
+    "endX": 127.028307900881,
+    "startX": 127.02800140627488,
+    "startY": 37.49808633653005
+  },
+  "data": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02801567158858,
+            37.498052419240565
+          ]
+        },
+        "properties": {
+          "totalDistance": 107,
+          "totalTime": 100,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "47m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "14",
+          "facilityName": "",
+          "turnType": 200,
+          "pointType": "SP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02801567158858,
+              37.498052419240565
+            ],
+            [
+              127.02851284415954,
+              37.498207965651986
+            ]
+          ]
+        },
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "",
+          "description": ", 47m",
+          "distance": 47,
+          "time": 47,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "14",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02851284415954,
+            37.498207965651986
+          ]
+        },
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "ING생명 신한지점",
+          "description": "ING생명 신한지점에서 우회전 후 35m 이동",
+          "direction": "",
+          "nearPoiName": "ING생명 신한지점",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "14",
+          "facilityName": "",
+          "turnType": 13,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02851284415954,
+              37.498207965651986
+            ],
+            [
+              127.02860728534908,
+              37.49801910039883
+            ],
+            [
+              127.02870449778048,
+              37.49805243160535
+            ],
+            [
+              127.02874060552654,
+              37.49805520970864
+            ]
+          ]
+        },
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "",
+          "description": ", 35m",
+          "distance": 35,
+          "time": 35,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "14",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02874060552654,
+            37.49805520970864
+          ]
+        },
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "강남역  1번출구",
+          "description": "강남역  1번출구에서 직진 후 강남대로를 따라 25m 이동",
+          "direction": "",
+          "nearPoiName": "강남역  1번출구",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "강남역1번출구",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 11,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02874060552654,
+              37.49805520970864
+            ],
+            [
+              127.02847674301076,
+              37.49797188131839
+            ]
+          ]
+        },
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "강남대로",
+          "description": "강남대로, 25m",
+          "distance": 25,
+          "time": 18,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02847674301076,
+            37.49797188131839
+          ]
+        },
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "도착지",
+          "description": "도착",
+          "direction": "",
+          "nearPoiName": "도착지",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "도착지",
+          "facilityType": "",
+          "facilityName": "",
+          "turnType": 201,
+          "pointType": "EP"
+        }
+      }
+    ]
+  }
+}
