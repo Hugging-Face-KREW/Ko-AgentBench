@@ -226,7 +226,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 | **L2** | 도구 선택 | `get_crypto_price_upbit` vs `get_crypto_price_bithumb` | SelectAcc |
 | **L3** | 도구 순차 추론 | 종목검색 → 시세조회 → 결과종합 | FSM, PSM, ProvAcc |
 | **L4** | 도구 병렬 추론 | 여러 거래소 동시 조회 후 비교 | Coverage, SourceEPR |
-| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | ErrorDetect, FallbackSR |
+| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | LAdaptiveRoutingScore, FallbackSR |
 | **L6** | 효율적인 도구 활용 | 중복 호출 방지, 캐시 활용 | EffScore, ReuseRate |
 | **L7** | 장기 컨텍스트 기억 | 멀티턴 대화에서 이전 정보 활용 | ContextRetention, RefRecall |
 
@@ -251,8 +251,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 | L3 | **ProvAcc** | 인자 전달 정확도 | 비율 |
 | L4 | **Coverage** | 필수 도구 실행률 | 성공한 필수 도구 / 전체 필수 도구 |
 | L4 | **SourceEPR** | 도구별 유효 호출률 | 평균(유효 호출 / 전체 호출) |
-| L5 | **ErrorDetect** | 오류 감지율 | 0~1 정규화 |
-| L5 | **GracefulFail** | 안전한 실패율 | 안전 실패 / 전체 실패 |
+| L5 | **AdaptiveRoutingScore** | 도구 실패 직후 대체 경로로 전환한 민첩성 | 0~1 정규화 |
 | L5 | **FallbackSR** | 대체 경로 성공률 | 비율 |
 | L6 | **ReuseRate** | 재사용률 | 재사용 / (재사용+중복) |
 | L6 | **RedundantCallRate** | 중복 호출률 | 중복 호출 / 전체 호출 |
