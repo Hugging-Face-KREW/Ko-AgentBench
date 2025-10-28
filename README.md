@@ -3,12 +3,17 @@
 
 [English](README_en.md) | 한국어
 
-Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다.  
+<div align="center">
+<img src="https://github.com/user-attachments/assets/9cde519b-7935-4e0f-bd34-4d8a81e14103" width="200">
+</div>
+
 실제 API를 직접 호출하지 않고도 테스트 가능한 캐시 기반 가상 API를 제공하여 재현성, 일관성, 비용 안정성을 확보합니다.
 
 ---
 
 ## Ko-AgentBench ✨
+
+Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다. 
 
 도구 호출 에이전트를 평가하는 벤치마크는 단순히 "정확한 API를 호출했는가"를 넘어서야 합니다. 에이전트는 불완전한 정보 속에서 다수의 도구 중 적절한 것을 선택하고, 때로는 여러 단계에 걸쳐 도구를 연결하며, 오류가 발생했을 때 적절히 대응해야 합니다. 또한 동일한 정보를 반복 요청하지 않고 효율적으로 작동해야 하며, 여러 턴에 걸친 대화에서 맥락을 유지해야 합니다.
 
