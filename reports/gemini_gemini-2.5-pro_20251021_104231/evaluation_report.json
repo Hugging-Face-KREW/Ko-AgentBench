@@ -1,0 +1,1537 @@
+{
+  "summary": {
+    "model": "gemini_gemini-2.5-pro",
+    "judge_model": "gemini/gemini-2.5-pro",
+    "execution_date": "20251021_104231",
+    "evaluation_date": "2025-10-25T03:26:25.912455",
+    "total_tasks": 160,
+    "evaluated_tasks": 21,
+    "sample_size": 3,
+    "levels_evaluated": 7
+  },
+  "by_level": {
+    "L1": {
+      "file": "L1.json",
+      "total_tasks": 16,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 1.0,
+        "EPR_CVR": 0.3333333333333333,
+        "pass@k": 1.0,
+        "ToolAcc": 0.3333333333333333,
+        "ArgAcc": 0.0,
+        "CallEM": 0.0,
+        "RespOK": 0.0
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T10:45:20.195627",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L1",
+        "total_tasks": 16,
+        "successful_tasks": 14,
+        "failed_tasks": 2,
+        "success_rate": 87.5,
+        "total_execution_time": 168.2,
+        "average_execution_time": 10.51,
+        "total_steps": 24,
+        "average_steps": 1.5,
+        "total_tool_calls": 10,
+        "average_tool_calls": 0.62
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L1-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ToolAcc": {
+              "score": 1.0,
+              "details": {
+                "matched": true
+              }
+            },
+            "ArgAcc": {
+              "score": 0.0,
+              "details": {
+                "ok": true,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "llm_judge_score": 0.0
+              }
+            },
+            "CallEM": {
+              "score": 0.0,
+              "details": {}
+            },
+            "RespOK": {
+              "score": 0.0,
+              "details": {}
+            }
+          }
+        },
+        {
+          "task_id": "L1-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 0,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ToolAcc": {
+              "score": 0.0,
+              "details": {
+                "matched": false
+              }
+            },
+            "ArgAcc": {
+              "score": 0.0,
+              "details": {
+                "ok": true,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "llm_judge_score": 0.0
+              }
+            },
+            "CallEM": {
+              "score": 0.0,
+              "details": {}
+            },
+            "RespOK": {
+              "score": 0.0,
+              "details": {}
+            }
+          }
+        },
+        {
+          "task_id": "L1-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 0,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ToolAcc": {
+              "score": 0.0,
+              "details": {
+                "matched": false
+              }
+            },
+            "ArgAcc": {
+              "score": 0.0,
+              "details": {
+                "ok": true,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "llm_judge_score": 0.0
+              }
+            },
+            "CallEM": {
+              "score": 0.0,
+              "details": {}
+            },
+            "RespOK": {
+              "score": 0.0,
+              "details": {}
+            }
+          }
+        }
+      ]
+    },
+    "L2": {
+      "file": "L2.json",
+      "total_tasks": 56,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 1.0,
+        "EPR_CVR": 1.0,
+        "pass@k": 1.0,
+        "SelectAcc": 1.0
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T16:23:57.918994",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L2",
+        "total_tasks": 56,
+        "successful_tasks": 46,
+        "failed_tasks": 10,
+        "success_rate": 82.14,
+        "total_execution_time": 589.42,
+        "average_execution_time": 10.53,
+        "total_steps": 83,
+        "average_steps": 1.48,
+        "total_tool_calls": 37,
+        "average_tool_calls": 0.66
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L2-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "SelectAcc": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L2-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "SelectAcc": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L2-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "SelectAcc": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "L3": {
+      "file": "L3.json",
+      "total_tasks": 27,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 1.0,
+        "EPR_CVR": 1.0,
+        "pass@k": 1.0,
+        "FSM": 0.0,
+        "PSM": 0.5555555555555555,
+        "ΔSteps_norm": 0.3333333333333333,
+        "ProvAcc": 0.0
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T11:02:02.537474",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L3",
+        "total_tasks": 27,
+        "successful_tasks": 24,
+        "failed_tasks": 3,
+        "success_rate": 88.89,
+        "total_execution_time": 379.15,
+        "average_execution_time": 14.04,
+        "total_steps": 45,
+        "average_steps": 1.67,
+        "total_tool_calls": 32,
+        "average_tool_calls": 1.19
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L3-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 2,
+                "valid_calls": 2
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "FSM": {
+              "score": 0.0,
+              "details": {
+                "golden_steps": 3,
+                "actual_steps": 2,
+                "reason": "단계 수 불일치"
+              }
+            },
+            "PSM": {
+              "score": 0.6666666666666666,
+              "details": {
+                "matched_weight": 2.0,
+                "total_weight": 3.0,
+                "matched_tools": [
+                  "StockPrice_kis",
+                  "StockChart_kis"
+                ],
+                "missing_tools": [
+                  "WebSearch_naver"
+                ]
+              }
+            },
+            "ΔSteps_norm": {
+              "score": 0.0,
+              "details": {
+                "minimum_steps": 3,
+                "actual_steps": 2,
+                "delta_norm": -0.3333,
+                "extra_steps": -1
+              }
+            },
+            "ProvAcc": {
+              "score": 0.0,
+              "details": {
+                "valid_flows": 0,
+                "total_flows": 3,
+                "flow_details": [
+                  {
+                    "to_step": 1,
+                    "to_parameter": "query",
+                    "from_step": "user_input",
+                    "expected_source": "삼성전자 종목코드",
+                    "actual_value": null,
+                    "is_valid": false
+                  },
+                  {
+                    "to_step": 2,
+                    "to_parameter": "symbol",
+                    "from_step": 1,
+                    "expected_source": "symbol",
+                    "is_valid": false,
+                    "reason": "step 2을 찾을 수 없음"
+                  },
+                  {
+                    "to_step": 3,
+                    "to_parameter": "symbol",
+                    "from_step": 1,
+                    "expected_source": "symbol",
+                    "is_valid": false,
+                    "reason": "step 3을 찾을 수 없음"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L3-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 2,
+                "valid_calls": 2
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "FSM": {
+              "score": 0.0,
+              "details": {
+                "golden_sequence": [
+                  "PlaceSearch_kakao",
+                  "CategorySearch_tmap"
+                ],
+                "actual_sequence": [
+                  "PlaceSearch_kakao",
+                  "PlaceSearch_kakao"
+                ],
+                "match": false
+              }
+            },
+            "PSM": {
+              "score": 0.5,
+              "details": {
+                "matched_weight": 1.0,
+                "total_weight": 2.0,
+                "matched_tools": [
+                  "PlaceSearch_kakao"
+                ],
+                "missing_tools": [
+                  "CategorySearch_tmap"
+                ]
+              }
+            },
+            "ΔSteps_norm": {
+              "score": 1.0,
+              "details": {
+                "minimum_steps": 2,
+                "actual_steps": 2,
+                "delta_norm": 0.0,
+                "extra_steps": 0
+              }
+            },
+            "ProvAcc": {
+              "score": 0.0,
+              "details": {
+                "valid_flows": 0,
+                "total_flows": 2,
+                "flow_details": [
+                  {
+                    "to_step": 2,
+                    "to_parameter": "centerLat",
+                    "from_step": 1,
+                    "expected_source": "latitude",
+                    "actual_value": null,
+                    "is_valid": false
+                  },
+                  {
+                    "to_step": 2,
+                    "to_parameter": "centerLon",
+                    "from_step": 1,
+                    "expected_source": "longtitude",
+                    "actual_value": null,
+                    "is_valid": false
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L3-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "FSM": {
+              "score": 0.0,
+              "details": {
+                "golden_steps": 2,
+                "actual_steps": 1,
+                "reason": "단계 수 불일치"
+              }
+            },
+            "PSM": {
+              "score": 0.5,
+              "details": {
+                "matched_weight": 1.0,
+                "total_weight": 2.0,
+                "matched_tools": [
+                  "MarketList_bithumb"
+                ],
+                "missing_tools": [
+                  "CryptoPrice_bithumb"
+                ]
+              }
+            },
+            "ΔSteps_norm": {
+              "score": 0.0,
+              "details": {
+                "minimum_steps": 2,
+                "actual_steps": 1,
+                "delta_norm": -0.5,
+                "extra_steps": -1
+              }
+            },
+            "ProvAcc": {
+              "score": 0.0,
+              "details": {
+                "valid_flows": 0,
+                "total_flows": 1,
+                "flow_details": [
+                  {
+                    "to_step": 2,
+                    "to_parameter": "markets",
+                    "from_step": 1,
+                    "expected_source": "market_list",
+                    "is_valid": false,
+                    "reason": "step 2을 찾을 수 없음"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "L4": {
+      "file": "L4.json",
+      "total_tasks": 10,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 1.0,
+        "EPR_CVR": 1.0,
+        "pass@k": 1.0,
+        "Coverage": 0.6666666666666666,
+        "SourceEPR": 0.6666666666666666
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T11:05:32.088932",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L4",
+        "total_tasks": 10,
+        "successful_tasks": 10,
+        "failed_tasks": 0,
+        "success_rate": 100.0,
+        "total_execution_time": 209.52,
+        "average_execution_time": 20.95,
+        "total_steps": 16,
+        "average_steps": 1.6,
+        "total_tool_calls": 9,
+        "average_tool_calls": 0.9
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L4-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 2,
+                "valid_calls": 2
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "Coverage": {
+              "score": 1.0,
+              "details": {
+                "required_tools": [
+                  "WebSearch_naver",
+                  "BlogSearch_naver"
+                ],
+                "covered_tools": [
+                  "WebSearch_naver",
+                  "BlogSearch_naver"
+                ],
+                "missing_tools": [],
+                "total_required": 2,
+                "total_covered": 2
+              }
+            },
+            "SourceEPR": {
+              "score": 1.0,
+              "details": {
+                "source_eprs": {
+                  "WebSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
+                  },
+                  "BlogSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
+                  }
+                },
+                "average_epr": 1.0,
+                "total_sources": 2
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L4-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "Coverage": {
+              "score": 0.5,
+              "details": {
+                "required_tools": [
+                  "WebSearch_naver",
+                  "NewsSearch_naver"
+                ],
+                "covered_tools": [
+                  "WebSearch_naver"
+                ],
+                "missing_tools": [
+                  "NewsSearch_naver"
+                ],
+                "total_required": 2,
+                "total_covered": 1
+              }
+            },
+            "SourceEPR": {
+              "score": 0.5,
+              "details": {
+                "source_eprs": {
+                  "WebSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
+                  },
+                  "NewsSearch_naver": {
+                    "epr": 0.0,
+                    "total_calls": 0,
+                    "valid_calls": 0,
+                    "reason": "도구 미호출"
+                  }
+                },
+                "average_epr": 0.5,
+                "total_sources": 2
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L4-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 1
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "Coverage": {
+              "score": 0.5,
+              "details": {
+                "required_tools": [
+                  "WebSearch_naver",
+                  "BlogSearch_naver"
+                ],
+                "covered_tools": [
+                  "WebSearch_naver"
+                ],
+                "missing_tools": [
+                  "BlogSearch_naver"
+                ],
+                "total_required": 2,
+                "total_covered": 1
+              }
+            },
+            "SourceEPR": {
+              "score": 0.5,
+              "details": {
+                "source_eprs": {
+                  "WebSearch_naver": {
+                    "epr": 1.0,
+                    "total_calls": 1,
+                    "valid_calls": 1
+                  },
+                  "BlogSearch_naver": {
+                    "epr": 0.0,
+                    "total_calls": 0,
+                    "valid_calls": 0,
+                    "reason": "도구 미호출"
+                  }
+                },
+                "average_epr": 0.5,
+                "total_sources": 2
+              }
+            }
+          }
+        }
+      ]
+    },
+    "L5": {
+      "file": "L5.json",
+      "total_tasks": 26,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 1.0,
+        "EPR_CVR": 0.0,
+        "pass@k": 1.0,
+        "ErrorDetect": 0.0,
+        "GracefulFail": 1.0,
+        "FallbackSR": 0.0
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T11:08:48.901014",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L5",
+        "total_tasks": 26,
+        "successful_tasks": 21,
+        "failed_tasks": 5,
+        "success_rate": 80.77,
+        "total_execution_time": 196.76,
+        "average_execution_time": 7.57,
+        "total_steps": 40,
+        "average_steps": 1.54,
+        "total_tool_calls": 19,
+        "average_tool_calls": 0.73
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L5-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ErrorDetect": {
+              "score": 0.0,
+              "details": {
+                "error_occurred": true,
+                "error_reported": false,
+                "reported_error_type": "none",
+                "type_matches": false,
+                "confidence": 0.0,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "injected_tool": "AddressToCoord_kakao",
+                "injected_error_type": "timeout",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "error_reported": false,
+                    "reason": "Failed to parse LLM response",
+                    "reported_error_type": "none",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "GracefulFail": {
+              "score": 1.0,
+              "details": {
+                "graceful": true,
+                "injected_tool_failed": true,
+                "fallback_succeeded": false,
+                "reason": "Injected tool failed without fallback - graceful fail"
+              }
+            },
+            "FallbackSR": {
+              "score": null,
+              "details": {
+                "reason": "No fallback options - not applicable"
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L5-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ErrorDetect": {
+              "score": 0.0,
+              "details": {
+                "error_occurred": true,
+                "error_reported": false,
+                "reported_error_type": "none",
+                "type_matches": false,
+                "confidence": 0.0,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "injected_tool": "PlaceSearch_kakao",
+                "injected_error_type": "complete_unavailable",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "error_reported": false,
+                    "reason": "Failed to parse LLM response",
+                    "reported_error_type": "none",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "GracefulFail": {
+              "score": 1.0,
+              "details": {
+                "graceful": true,
+                "injected_tool_failed": true,
+                "fallback_succeeded": false,
+                "reason": "Injected tool failed without fallback - graceful fail"
+              }
+            },
+            "FallbackSR": {
+              "score": null,
+              "details": {
+                "reason": "No fallback options - not applicable"
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L5-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 1,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ErrorDetect": {
+              "score": 0.0,
+              "details": {
+                "error_occurred": true,
+                "error_reported": false,
+                "reported_error_type": "none",
+                "type_matches": false,
+                "confidence": 0.0,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "injected_tool": "MarketIndex_ls",
+                "injected_error_type": "complete_unavailable",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "error_reported": false,
+                    "reason": "Failed to parse LLM response",
+                    "reported_error_type": "none",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "GracefulFail": {
+              "score": 1.0,
+              "details": {
+                "graceful": true,
+                "injected_tool_failed": true,
+                "fallback_succeeded": false,
+                "reason": "Injected tool failed without fallback - graceful fail"
+              }
+            },
+            "FallbackSR": {
+              "score": null,
+              "details": {
+                "reason": "No fallback options - not applicable"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "L6": {
+      "file": "L6.json",
+      "total_tasks": 15,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 0.6666666666666666,
+        "EPR_CVR": 0.6666666666666666,
+        "pass@k": 0.6666666666666666,
+        "ReuseRate": 0.3333333333333333,
+        "RedundantCallRate": 0.6666666666666666,
+        "EffScore": 0.0
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T11:16:56.825953",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L6",
+        "total_tasks": 15,
+        "successful_tasks": 13,
+        "failed_tasks": 2,
+        "success_rate": 86.67,
+        "total_execution_time": 487.88,
+        "average_execution_time": 32.53,
+        "total_steps": 56,
+        "average_steps": 3.73,
+        "total_tool_calls": 22,
+        "average_tool_calls": 1.47
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L6-001",
+          "success": false,
+          "metrics": {
+            "SR": {
+              "score": 0.0,
+              "details": {
+                "success": false
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 0,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 0.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 0
+              }
+            },
+            "ReuseRate": {
+              "score": 0.0,
+              "details": {
+                "reuse_opportunities": 2,
+                "reused": 0,
+                "total_actual_calls": 0,
+                "golden_tools": [
+                  "ItemSearch_aladin",
+                  "ItemSearch_aladin"
+                ]
+              }
+            },
+            "RedundantCallRate": {
+              "score": 1.0,
+              "details": {
+                "reuse_opportunities": 2,
+                "redundant_calls": 0,
+                "non_redundant_calls": 2,
+                "total_calls": 0,
+                "unique_calls": 0,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
+              }
+            },
+            "EffScore": {
+              "score": 0.0,
+              "details": {
+                "success": false,
+                "actual_calls": 0,
+                "minimum_calls": 2,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L6-002",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 2,
+                "valid_calls": 2
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ReuseRate": {
+              "score": 1.0,
+              "details": {
+                "reuse_opportunities": 1,
+                "reused": 1,
+                "total_actual_calls": 2,
+                "golden_tools": [
+                  "NewsSearch_naver",
+                  "NewsSearch_naver"
+                ]
+              }
+            },
+            "RedundantCallRate": {
+              "score": 1.0,
+              "details": {
+                "reuse_opportunities": 1,
+                "redundant_calls": 0,
+                "non_redundant_calls": 1,
+                "total_calls": 2,
+                "unique_calls": 2,
+                "redundant_rate": 0.0,
+                "non_redundant_rate": 1.0
+              }
+            },
+            "EffScore": {
+              "score": 0.0,
+              "details": {
+                "success": false,
+                "actual_calls": 2,
+                "minimum_calls": 2,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L6-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 2,
+                "valid_calls": 2
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ReuseRate": {
+              "score": 0.0,
+              "details": {
+                "reuse_opportunities": 1,
+                "reused": 0,
+                "total_actual_calls": 2,
+                "golden_tools": [
+                  "VideoSearch_daum"
+                ]
+              }
+            },
+            "RedundantCallRate": {
+              "score": 0.0,
+              "details": {
+                "reuse_opportunities": 1,
+                "redundant_calls": 1,
+                "non_redundant_calls": 0,
+                "total_calls": 2,
+                "unique_calls": 1,
+                "redundant_rate": 1.0,
+                "non_redundant_rate": 0.0
+              }
+            },
+            "EffScore": {
+              "score": 0.0,
+              "details": {
+                "success": false,
+                "actual_calls": 2,
+                "minimum_calls": 1,
+                "llm_reason": "Multi-judge vote: 0/1. Judge 1 (gemini/gemini-2.5-pro): No (type: none)",
+                "vote_details": {
+                  "positive": 0,
+                  "negative": 1,
+                  "total": 1
+                },
+                "individual_judges": [
+                  {
+                    "success": false,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "L7": {
+      "file": "L7.json",
+      "total_tasks": 10,
+      "evaluated_tasks": 3,
+      "metrics": {
+        "SR": 0.6666666666666666,
+        "EPR_CVR": 0.6666666666666666,
+        "pass@k": 0.6666666666666666,
+        "ContextRetention": 0.3333333333333333,
+        "RefRecall": 0.3333333333333333
+      },
+      "metadata": {
+        "timestamp": "2025-10-21T11:21:58.039252",
+        "model": "gemini/gemini-2.5-pro",
+        "level": "L7",
+        "total_tasks": 10,
+        "successful_tasks": 9,
+        "failed_tasks": 1,
+        "success_rate": 90.0,
+        "total_execution_time": 301.17,
+        "average_execution_time": 30.12,
+        "total_steps": 37,
+        "average_steps": 3.7,
+        "total_tool_calls": 15,
+        "average_tool_calls": 1.5
+      },
+      "task_evaluations": [
+        {
+          "task_id": "L7-001",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 3,
+                "valid_calls": 3
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ContextRetention": {
+              "score": 0.0,
+              "details": {
+                "raw_score": 0,
+                "normalized_score": 0.0,
+                "average_score": 0.0,
+                "reason": "Multi-judge average: 0.00/5. Judge 1 (gemini/gemini-2.5-pro): 0/5",
+                "total_messages": 12,
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "RefRecall": {
+              "score": 0.0,
+              "details": {
+                "raw_score": 0,
+                "normalized_score": 0.0,
+                "average_score": 0.0,
+                "reason": "Multi-judge average: 0.00/5. Judge 1 (gemini/gemini-2.5-pro): 0/5",
+                "total_messages": 12,
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L7-002",
+          "success": false,
+          "metrics": {
+            "SR": {
+              "score": 0.0,
+              "details": {
+                "success": false
+              }
+            },
+            "EPR_CVR": {
+              "score": 0.0,
+              "details": {
+                "total_calls": 0,
+                "valid_calls": 0
+              }
+            },
+            "pass@k": {
+              "score": 0.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 0
+              }
+            },
+            "ContextRetention": {
+              "score": 0.0,
+              "details": {
+                "raw_score": 0,
+                "normalized_score": 0.0,
+                "average_score": 0.0,
+                "reason": "Multi-judge average: 0.00/5. Judge 1 (gemini/gemini-2.5-pro): 0/5",
+                "total_messages": 3,
+                "evaluated_messages": 3,
+                "individual_judges": [
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "RefRecall": {
+              "score": 0.0,
+              "details": {
+                "raw_score": 0,
+                "normalized_score": 0.0,
+                "average_score": 0.0,
+                "reason": "Multi-judge average: 0.00/5. Judge 1 (gemini/gemini-2.5-pro): 0/5",
+                "total_messages": 3,
+                "evaluated_messages": 3,
+                "individual_judges": [
+                  {
+                    "score": 0,
+                    "reason": "Failed to parse LLM response",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "task_id": "L7-003",
+          "success": true,
+          "metrics": {
+            "SR": {
+              "score": 1.0,
+              "details": {
+                "success": true
+              }
+            },
+            "EPR_CVR": {
+              "score": 1.0,
+              "details": {
+                "total_calls": 3,
+                "valid_calls": 3
+              }
+            },
+            "pass@k": {
+              "score": 1.0,
+              "details": {
+                "repetitions": 1,
+                "actual_repetitions": 1,
+                "success_count": 1
+              }
+            },
+            "ContextRetention": {
+              "score": 1.0,
+              "details": {
+                "raw_score": 5,
+                "normalized_score": 1.0,
+                "average_score": 5.0,
+                "reason": "Multi-judge average: 5.00/5. Judge 1 (gemini/gemini-2.5-pro): 5/5",
+                "total_messages": 12,
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            },
+            "RefRecall": {
+              "score": 1.0,
+              "details": {
+                "raw_score": 5,
+                "normalized_score": 1.0,
+                "average_score": 5.0,
+                "reason": "Multi-judge average: 5.00/5. Judge 1 (gemini/gemini-2.5-pro): 5/5",
+                "total_messages": 12,
+                "evaluated_messages": 9,
+                "individual_judges": [
+                  {
+                    "score": 5,
+                    "reason": "Parsed from text",
+                    "judge_id": 1,
+                    "judge_model": "gemini/gemini-2.5-pro"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
