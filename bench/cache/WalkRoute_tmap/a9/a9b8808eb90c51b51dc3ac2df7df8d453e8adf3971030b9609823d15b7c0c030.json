@@ -1,0 +1,602 @@
+{
+  "key": "a9b8808eb90c51b51dc3ac2df7df8d453e8adf3971030b9609823d15b7c0c030",
+  "tool": "WalkRoute_tmap",
+  "created_at": "2025-10-27T08:31:15.509094",
+  "input_params": {
+    "endX": 127.025310702725,
+    "endY": 37.5036902997713,
+    "startX": 127.028001406275,
+    "startY": 37.4980863365301
+  },
+  "raw_args": {
+    "endY": 37.5036902997713,
+    "endX": 127.025310702725,
+    "startX": 127.028001406275,
+    "startY": 37.4980863365301
+  },
+  "data": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02801567158858,
+            37.498052419240565
+          ]
+        },
+        "properties": {
+          "totalDistance": 688,
+          "totalTime": 611,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "16m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "14",
+          "facilityName": "",
+          "turnType": 200,
+          "pointType": "SP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02801567158858,
+              37.498052419240565
+            ],
+            [
+              127.0279712315818,
+              37.49803853116724
+            ],
+            [
+              127.02784346661139,
+              37.497996867046986
+            ]
+          ]
+        },
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "",
+          "description": ", 16m",
+          "distance": 16,
+          "time": 16,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "14",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02784346661139,
+            37.497996867046986
+          ]
+        },
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "",
+          "description": "우회전 후 93m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "14",
+          "facilityName": "",
+          "turnType": 13,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02784346661139,
+              37.497996867046986
+            ],
+            [
+              127.02773791437977,
+              37.49821906156218
+            ],
+            [
+              127.02763791759075,
+              37.49842736890141
+            ],
+            [
+              127.02755736473308,
+              37.49859123730765
+            ],
+            [
+              127.02754347467359,
+              37.498677338167084
+            ],
+            [
+              127.02750458696796,
+              37.49876066112266
+            ],
+            [
+              127.02751014146813,
+              37.498780103408215
+            ]
+          ]
+        },
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "",
+          "description": ", 93m",
+          "distance": 93,
+          "time": 92,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "14",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02751014146813,
+            37.498780103408215
+          ]
+        },
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "강남역  11번출구",
+          "description": "강남역  11번출구에서 좌회전 후 194m 이동",
+          "direction": "",
+          "nearPoiName": "강남역  11번출구",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "강남역11번출구",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 12,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02751014146813,
+              37.498780103408215
+            ],
+            [
+              127.02739625634743,
+              37.49901340759404
+            ],
+            [
+              127.02713237584682,
+              37.49956611642589
+            ],
+            [
+              127.02712959753647,
+              37.49959389092719
+            ],
+            [
+              127.02712404170114,
+              37.499621665378626
+            ],
+            [
+              127.02695737967917,
+              37.49999384137257
+            ],
+            [
+              127.02690460356334,
+              37.50010493862984
+            ],
+            [
+              127.02675460834045,
+              37.50041878836529
+            ]
+          ]
+        },
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "",
+          "description": ", 194m",
+          "distance": 194,
+          "time": 169,
+          "roadType": 24,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02675460834045,
+            37.50041878836529
+          ]
+        },
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "",
+          "description": "횡단보도 후 6m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "15",
+          "facilityName": "",
+          "turnType": 211,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02675460834045,
+              37.50041878836529
+            ],
+            [
+              127.0267296092021,
+              37.50046878210859
+            ]
+          ]
+        },
+        "properties": {
+          "index": 7,
+          "lineIndex": 3,
+          "name": "",
+          "description": ", 6m",
+          "distance": 6,
+          "time": 4,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "15",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.0267296092021,
+            37.50046878210859
+          ]
+        },
+        "properties": {
+          "index": 8,
+          "pointIndex": 4,
+          "name": "",
+          "description": "직진 후 94m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 11,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.0267296092021,
+              37.50046878210859
+            ],
+            [
+              127.02643795140972,
+              37.50109370427346
+            ],
+            [
+              127.02635462071288,
+              37.5012686824496
+            ]
+          ]
+        },
+        "properties": {
+          "index": 9,
+          "lineIndex": 4,
+          "name": "",
+          "description": ", 94m",
+          "distance": 94,
+          "time": 98,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02635462071288,
+            37.5012686824496
+          ]
+        },
+        "properties": {
+          "index": 10,
+          "pointIndex": 5,
+          "name": "",
+          "description": "횡단보도 후 7m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "15",
+          "facilityName": "",
+          "turnType": 211,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02635462071288,
+              37.5012686824496
+            ],
+            [
+              127.02632128899965,
+              37.50131867604326
+            ]
+          ]
+        },
+        "properties": {
+          "index": 11,
+          "lineIndex": 5,
+          "name": "",
+          "description": ", 7m",
+          "distance": 7,
+          "time": 4,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "15",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02632128899965,
+            37.50131867604326
+          ]
+        },
+        "properties": {
+          "index": 12,
+          "pointIndex": 6,
+          "name": "",
+          "description": "직진 후 159m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 11,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02632128899965,
+              37.50131867604326
+            ],
+            [
+              127.02613518461712,
+              37.5016797418668
+            ],
+            [
+              127.02604907663094,
+              37.5018463876276
+            ],
+            [
+              127.02588519252654,
+              37.5022046763946
+            ],
+            [
+              127.02574075188222,
+              37.502535190959364
+            ],
+            [
+              127.02568519777014,
+              37.50266295289695
+            ]
+          ]
+        },
+        "properties": {
+          "index": 13,
+          "lineIndex": 6,
+          "name": "",
+          "description": ", 159m",
+          "distance": 159,
+          "time": 144,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02568519777014,
+            37.50266295289695
+          ]
+        },
+        "properties": {
+          "index": 14,
+          "pointIndex": 7,
+          "name": "",
+          "description": "횡단보도 후 7m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "15",
+          "facilityName": "",
+          "turnType": 211,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02568519777014,
+              37.50266295289695
+            ],
+            [
+              127.02566019839612,
+              37.50272127900537
+            ]
+          ]
+        },
+        "properties": {
+          "index": 15,
+          "lineIndex": 7,
+          "name": "",
+          "description": ", 7m",
+          "distance": 7,
+          "time": 4,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "15",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02566019839612,
+            37.50272127900537
+          ]
+        },
+        "properties": {
+          "index": 16,
+          "pointIndex": 8,
+          "name": "",
+          "description": "직진 후 강남대로를 따라 112m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 11,
+          "pointType": "GP"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              127.02566019839612,
+              37.50272127900537
+            ],
+            [
+              127.02562408845105,
+              37.50279626964498
+            ],
+            [
+              127.02538242948509,
+              37.50330176213574
+            ],
+            [
+              127.02521021280577,
+              37.50366005075235
+            ]
+          ]
+        },
+        "properties": {
+          "index": 17,
+          "lineIndex": 8,
+          "name": "강남대로",
+          "description": "강남대로, 112m",
+          "distance": 112,
+          "time": 80,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            127.02521021280577,
+            37.50366005075235
+          ]
+        },
+        "properties": {
+          "index": 18,
+          "pointIndex": 9,
+          "name": "도착지",
+          "description": "도착",
+          "direction": "",
+          "nearPoiName": "도착지",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "도착지",
+          "facilityType": "",
+          "facilityName": "",
+          "turnType": 201,
+          "pointType": "EP"
+        }
+      }
+    ]
+  }
+}
