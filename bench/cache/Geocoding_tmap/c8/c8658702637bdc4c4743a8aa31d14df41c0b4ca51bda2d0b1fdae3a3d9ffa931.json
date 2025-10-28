@@ -1,0 +1,24 @@
+{
+  "key": "c8658702637bdc4c4743a8aa31d14df41c0b4ca51bda2d0b1fdae3a3d9ffa931",
+  "tool": "Geocoding_tmap",
+  "created_at": "2025-10-27T07:03:48.981777",
+  "input_params": {
+    "bunji": "0",
+    "city_do": "서울특별시",
+    "detailAddress": "",
+    "dong": "역삼동",
+    "gu_gun": "강남구"
+  },
+  "raw_args": {
+    "city_do": "서울특별시",
+    "gu_gun": "강남구",
+    "dong": "역삼동",
+    "bunji": "0",
+    "detailAddress": ""
+  },
+  "data": {
+    "success": false,
+    "error_code": "API_REQUEST_FAILED",
+    "error_message": "주소 변환 API 호출 실패: 400 Client Error: Bad Request for url: https://apis.openapi.sk.com/tmap/geo/geocoding?version=1.0&city_do=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C&gu_gun=%EA%B0%95%EB%82%A8%EA%B5%AC&dong=%EC%97%AD%EC%82%BC%EB%8F%99&addressFlag=F01&coordType=WGS84GEO&appKey=jdGdpiNgtZ7k5por2yIAnJUDEM14Uku4i3PAE0oi&bunji=0"
+  }
+}

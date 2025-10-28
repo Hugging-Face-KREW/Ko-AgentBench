@@ -267,6 +267,10 @@ class TransformersAdapter(BaseAdapter):
         # Tokenize
         inputs = self.tokenizer(prompt, return_tensors="pt", padding=True)
         
+        # Remove token_type_ids if present (not used by decoder-only models)
+        if 'token_type_ids' in inputs:
+            inputs.pop('token_type_ids')
+        
         # Move to device
         if self.device != 'auto':
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
@@ -601,9 +605,10 @@ class TransformersAdapter(BaseAdapter):
         
         Supports multiple formats:
         1. XML-wrapped: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
-        2. Plain JSON with tool_name: {"tool_name": "...", "arguments": {...}}
-        3. Plain JSON with name: {"name": "...", "arguments": {...}}
-        4. Array of tool calls
+        2. Function tag format: <function=tool_name>{...arguments...}</function>
+        3. Plain JSON with tool_name: {"tool_name": "...", "arguments": {...}}
+        4. Plain JSON with name: {"name": "...", "arguments": {...}}
+        5. Array of tool calls
         
         Args:
             text: Generated text from model
@@ -615,21 +620,104 @@ class TransformersAdapter(BaseAdapter):
         tool_calls = []
         remaining_text = text
         
-        # Pattern 1: XML-wrapped tool calls (most common for Qwen)
+        # Pattern 1: XML-wrapped tool calls (most common for Qwen and similar models)
+        # Improved pattern that handles nested JSON better using balanced bracket matching
         # Matches: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
-        xml_pattern = r'<tool_call>\s*(\{[^<]+\})\s*</tool_call>'
+        xml_pattern = r'<tool_call>\s*(\{(?:[^{}]|(?:\{[^{}]*\}))*\})\s*</tool_call>'
         
-        # Pattern 2: Single tool call with tool_name
+        # Pattern 1b: <tools> tag format (Claude-style, used by some models)
+        # Matches: <tools>{"type": "function", "function": {...}}</tools>
+        tools_tag_pattern = r'<tools>\s*(\{(?:[^{}]|(?:\{[^{}]*\}))*\})\s*</tools>'
+        
+        # Pattern 2: Function tag format
+        # Matches: <function=tool_name>{...arguments...}</function>
+        function_tag_pattern = r'<function=([^>]+)>(\{[^<]+\})</function>'
+        
+        # Pattern 3: Single tool call with tool_name
         single_tool_name_pattern = r'\{"tool_name":\s*"([^"]+)",\s*"arguments":\s*(\{[^}]+\})\}'
         
-        # Pattern 3: Single tool call with name
+        # Pattern 4: Single tool call with name
         single_name_pattern = r'\{"name":\s*"([^"]+)",\s*"arguments":\s*(\{[^}]+\})\}'
         
-        # Pattern 4: Array of tool calls
+        # Pattern 5: Array of tool calls
         array_pattern = r'\[\s*\{[^\]]+\}\s*\]'
         
         try:
-            # Try XML pattern first (most common)
+            # Try <tools> tag format first (Claude-style, used by some Korean models)
+            # Matches: <tools>{"type": "function", "function": {...}}</tools>
+            tools_tag_matches = re.finditer(tools_tag_pattern, text, re.DOTALL)
+            tools_tag_found = False
+            
+            for match in tools_tag_matches:
+                tools_tag_found = True
+                json_str = match.group(1)
+                try:
+                    call_data = json.loads(json_str)
+                    
+                    # Extract function info from nested structure
+                    if 'function' in call_data:
+                        func_data = call_data['function']
+                        tool_name = func_data.get('name')
+                        # Parameters might be nested under 'parameters'
+                        arguments = func_data.get('parameters', {})
+                        if 'properties' in arguments:
+                            # Schema format, extract actual values if present
+                            arguments = arguments.get('properties', {})
+                    else:
+                        # Direct format
+                        tool_name = call_data.get('tool_name') or call_data.get('name')
+                        arguments = call_data.get('arguments', {})
+                    
+                    if tool_name:
+                        tool_calls.append({
+                            'id': f'call_{len(tool_calls)}',
+                            'type': 'function',
+                            'function': {
+                                'name': tool_name,
+                                'arguments': json.dumps(arguments) if isinstance(arguments, dict) else arguments
+                            }
+                        })
+                except json.JSONDecodeError as e:
+                    self.logger.warning(f"Failed to parse <tools> tag JSON: {e}")
+                    continue
+            
+            if tools_tag_found:
+                # Remove all <tools> tags from text
+                remaining_text = re.sub(tools_tag_pattern, '', text, flags=re.DOTALL).strip()
+                return (tool_calls if tool_calls else None), remaining_text
+            
+            # Try function tag format (for models like Midm)
+            # Matches: <function=tool_name>{...arguments...}</function>
+            function_matches = re.finditer(function_tag_pattern, text, re.DOTALL)
+            function_found = False
+            
+            for match in function_matches:
+                function_found = True
+                tool_name = match.group(1).strip()
+                arguments_str = match.group(2).strip()
+                
+                try:
+                    # Parse arguments JSON
+                    arguments = json.loads(arguments_str)
+                    
+                    tool_calls.append({
+                        'id': f'call_{len(tool_calls)}',
+                        'type': 'function',
+                        'function': {
+                            'name': tool_name,
+                            'arguments': json.dumps(arguments) if isinstance(arguments, dict) else arguments
+                        }
+                    })
+                except json.JSONDecodeError as e:
+                    self.logger.warning(f"Failed to parse function tag arguments JSON: {e}")
+                    continue
+            
+            if function_found:
+                # Remove all function tags from text
+                remaining_text = re.sub(function_tag_pattern, '', text, flags=re.DOTALL).strip()
+                return (tool_calls if tool_calls else None), remaining_text
+            
+            # Try XML pattern (most common for Qwen and models with <tool_call> format)
             xml_matches = re.finditer(xml_pattern, text, re.DOTALL)
             xml_found = False
             
