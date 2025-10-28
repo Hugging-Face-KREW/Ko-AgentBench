@@ -226,7 +226,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 | **L2** | 도구 선택 | `get_crypto_price_upbit` vs `get_crypto_price_bithumb` | SelectAcc |
 | **L3** | 도구 순차 추론 | 종목검색 → 시세조회 → 결과종합 | FSM, PSM, ProvAcc |
 | **L4** | 도구 병렬 추론 | 여러 거래소 동시 조회 후 비교 | Coverage, SourceEPR |
-| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | LAdaptiveRoutingScore, FallbackSR |
+| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | AdaptiveRoutingScore, FallbackSR |
 | **L6** | 효율적인 도구 활용 | 중복 호출 방지, 캐시 활용 | EffScore, ReuseRate |
 | **L7** | 장기 컨텍스트 기억 | 멀티턴 대화에서 이전 정보 활용 | ContextRetention, RefRecall |
 
