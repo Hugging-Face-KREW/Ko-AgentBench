@@ -1,7 +1,7 @@
 {
   "key": "227f1de644bcca354b7dc91733c3f9ec9eebae8bd01b3b2abc5b837a78cd08f8",
   "tool": "CryptoCandle_upbit",
-  "created_at": "2025-10-26T12:25:55.675273",
+  "created_at": "2025-10-27T16:48:50.292908",
   "input_params": {
     "candle_type": "days",
     "count": 50,
@@ -9,10 +9,10 @@
     "symbol": "ETH"
   },
   "raw_args": {
+    "count": 50,
     "symbol": "ETH",
     "candle_type": "days",
-    "quote": "KRW",
-    "count": 50
+    "quote": "KRW"
   },
   "data": {
     "symbol": "ETH",
@@ -20,12 +20,20 @@
     "candle_type": "days",
     "data": [
       {
+        "timestamp": "2025-10-27T09:00:00",
+        "open": 6150000.0,
+        "high": 6272000.0,
+        "low": 6101000.0,
+        "close": 6205000.0,
+        "volume": 47424.16808183
+      },
+      {
         "timestamp": "2025-10-26T09:00:00",
         "open": 5891000.0,
-        "high": 6031000.0,
+        "high": 6173000.0,
         "low": 5857000.0,
-        "close": 6004000.0,
-        "volume": 19350.27705469
+        "close": 6149000.0,
+        "volume": 45239.47008143
       },
       {
         "timestamp": "2025-10-25T09:00:00",
@@ -410,14 +418,6 @@
         "low": 5980000.0,
         "close": 6000000.0,
         "volume": 54099.54166782
-      },
-      {
-        "timestamp": "2025-09-07T09:00:00",
-        "open": 5990000.0,
-        "high": 6037000.0,
-        "low": 5982000.0,
-        "close": 6014000.0,
-        "volume": 24522.71363204
       }
     ]
   }
