@@ -1,8 +1,7 @@
 # Ko-AgentBench
+<img width="1200" height="800" alt="banner" src="https://github.com/user-attachments/assets/b65de588-e5ff-4d4b-a386-0e1d0c684cf4" />
 
 [English](README_en.md) | 한국어
-
-<img width="2000" height="1000" alt="banner" src="https://github.com/user-attachments/assets/b65de588-e5ff-4d4b-a386-0e1d0c684cf4" />
 
 Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다.  
 실제 API를 직접 호출하지 않고도 테스트 가능한 캐시 기반 가상 API를 제공하여 재현성, 일관성, 비용 안정성을 확보합니다.
@@ -178,7 +177,6 @@ python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 **동작 원리**
 - API 요청과 응답을 저장하여 동일 요청 시 캐시된 응답 반환
 - 캐시 키: `hash(method, url, sorted(query), sorted(headers), body)`
-- 오프라인 모드: `KO_AGENTBENCH_OFFLINE=1` 설정 시 네트워크 차단
 - 캐시 적중률을 로그와 보고서에 자동 기록
 
 **캐시 모드**
@@ -199,11 +197,11 @@ python evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 |-------|----------|------|-----------|
 | **L1** | 단일 도구 호출 | `StockPrice_ls(symbol="005930")` | ToolAcc, ArgAcc, CallEM, RespOK |
 | **L2** | 도구 선택 | `get_crypto_price_upbit` vs `get_crypto_price_bithumb` | SelectAcc |
-| **L3** | 순차 실행 | 종목검색 → 시세조회 → 결과종합 | FSM, PSM, ProvAcc |
-| **L4** | 병렬 처리 | 여러 거래소 동시 조회 후 비교 | Coverage, SourceEPR |
-| **L5** | 오류 처리 | API 실패 시 대체 경로 활용 | ErrorDetect, FallbackSR |
-| **L6** | 효율성 | 중복 호출 방지, 캐시 활용 | EffScore, ReuseRate |
-| **L7** | 맥락 유지 | 멀티턴 대화에서 이전 정보 활용 | ContextRetention, RefRecall |
+| **L3** | 도구 순차 추론 | 종목검색 → 시세조회 → 결과종합 | FSM, PSM, ProvAcc |
+| **L4** | 도구 병렬 추론 | 여러 거래소 동시 조회 후 비교 | Coverage, SourceEPR |
+| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | ErrorDetect, FallbackSR |
+| **L6** | 효율적인 도구 활용 | 중복 호출 방지, 캐시 활용 | EffScore, ReuseRate |
+| **L7** | 장기 컨텍스트 기억 | 멀티턴 대화에서 이전 정보 활용 | ContextRetention, RefRecall |
 
 ---
 
