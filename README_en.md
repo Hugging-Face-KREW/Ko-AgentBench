@@ -55,7 +55,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 
 ---
 
-## �️ Available API Tools
+## 🛠️ Available API Tools
 
 Ko-AgentBench provides various Korean service APIs that users actually use in daily life.
 
@@ -76,7 +76,7 @@ Ko-AgentBench provides various Korean service APIs that users actually use in da
 
 ---
 
-## �📊 The 7 Independent Evaluation Dimensions
+## 📊 The 7 Independent Evaluation Dimensions
 
 Tool-calling ability isn’t one-dimensional. “Using tools well” involves choosing the right tool, planning to chain tools, handling errors, and operating efficiently. Ko-AgentBench separates these abilities into seven independently measured dimensions—they are not difficulty tiers but orthogonal capabilities.
 
