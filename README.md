@@ -55,7 +55,27 @@ uv run run_benchmark_with_logging.py --cache-mode write
 
 ---
 
-## 📊 7가지 독립적 평가 차원
+## 🛠️ 제공되는 API 도구
+
+Ko-AgentBench는 한국 사용자가 실제로 사용하는 다양한 서비스의 API를 제공합니다.
+
+| 서비스 | 도구 | 설명 |
+| :--- | :--- | :--- |
+| **네이버 검색** | `Search_naver_web`<br>`Search_naver_blog`<br>`Search_naver_news` | 네이버 통합검색, 블로그, 뉴스 검색 API |
+| **카카오 로컬** | `AddressToCoord_kakao`<br>`CoordToAddress_kakao`<br>`PlaceSearch_kakao`<br>`CategorySearch_kakao` | 주소-좌표 변환, 장소 검색, 카테고리별 검색 |
+| **업비트** | `CryptoPrice_upbit`<br>`MarketList_upbit`<br>`CryptoCandle_upbit` | 암호화폐 현재가, 마켓 목록, 캔들 차트 데이터 조회 |
+| **빗썸** | `CryptoPrice_bithumb`<br>`OrderBook_bithumb`<br>`MarketList_bithumb`<br>`CryptoCandle_bithumb` | 암호화폐 현재가, 호가, 마켓 목록, 캔들 차트 조회 |
+| **LS증권** | `StockPrice_ls`<br>`MarketIndex_ls`<br>`OrderBook_ls`<br>`SectorStock_ls`<br>`StockTrades_ls` | 국내외 주식 현재가, 시장지수, 호가, 업종별 종목, 체결 내역 조회 |
+| **한국투자증권** | `StockPrice_kis`<br>`USStockPrice_kis`<br>`StockChart_kis` | 국내 주식 현재가, 미국 주식 현재가, 차트 데이터 조회 |
+| **알라딘** | `ItemSearch_aladin`<br>`ItemList_aladin`<br>`ItemLookup_aladin` | 도서 검색, 베스트셀러/신간 목록, 도서 상세정보 조회 |
+| **티맵** | `POISearch_tmap`<br>`Geocoding_tmap`<br>`ReverseGeocoding_tmap`<br>`CarRoute_tmap`<br>`CategorySearch_tmap` | POI 검색, 주소-좌표 변환, 자동차 경로 안내, 카테고리 검색 |
+| **네이버 지도** | `Directions_naver` | 대중교통/자동차/도보 경로 안내 |
+
+> **Note**: 모든 API는 캐시 기반으로 동작하며, Read 모드(기본값)에서는 실제 API 키 없이 사용 가능합니다.
+
+---
+
+## �📊 7가지 독립적 평가 차원
 
 에이전트의 도구 호출 능력은 단일 차원으로 측정할 수 없습니다. "도구를 잘 쓴다"는 것은 정확한 도구를 선택하는 능력, 여러 도구를 연결하는 계획 능력, 오류에 대응하는 강건성, 효율적으로 작동하는 능력 등 여러 독립적인 역량의 조합입니다. Ko-AgentBench는 이러한 역량을 7가지로 분리하여 각각 독립적으로 측정합니다. 이는 난이도 단계가 아니라, 서로 다른 측면의 능력을 평가하는 체계입니다.
 

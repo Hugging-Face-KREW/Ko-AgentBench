@@ -55,7 +55,28 @@ uv run run_benchmark_with_logging.py --cache-mode write
 
 ---
 
-## 📊 The 7 Independent Evaluation Dimensions
+## �️ Available API Tools
+
+Ko-AgentBench provides various Korean service APIs that users actually use in daily life.
+
+| Service | Tools | Description |
+| :--- | :--- | :--- |
+| **Naver Search** | `Search_naver_web`<br>`Search_naver_blog`<br>`Search_naver_news` | Naver integrated search, blog, and news search APIs |
+| **Kakao Local** | `AddressToCoord_kakao`<br>`CoordToAddress_kakao`<br>`PlaceSearch_kakao`<br>`CategorySearch_kakao` | Address-coordinate conversion, place search, category search |
+| **Upbit** | `CryptoPrice_upbit`<br>`MarketList_upbit`<br>`CryptoCandle_upbit` | Crypto current price, market list, candle chart data |
+| **Bithumb** | `CryptoPrice_bithumb`<br>`OrderBook_bithumb`<br>`MarketList_bithumb`<br>`CryptoCandle_bithumb` | Crypto current price, order book, market list, candle chart |
+| **LS Securities** | `StockPrice_ls`<br>`MarketIndex_ls`<br>`OrderBook_ls`<br>`SectorStock_ls`<br>`StockTrades_ls` | Domestic/international stock prices, market index, order book, sector stocks, trade history |
+| **Korea Investment** | `StockPrice_kis`<br>`USStockPrice_kis`<br>`StockChart_kis` | Domestic stock price, US stock price, chart data |
+| **Aladin** | `ItemSearch_aladin`<br>`ItemList_aladin`<br>`ItemLookup_aladin` | Book search, bestseller/new release lists, book details |
+| **TMAP** | `POISearch_tmap`<br>`Geocoding_tmap`<br>`ReverseGeocoding_tmap`<br>`CarRoute_tmap`<br>`CategorySearch_tmap` | POI search, address-coordinate conversion, car routing, category search |
+| **Naver Maps** | `Directions_naver` | Public transit/car/walking directions |
+| **Korea Tourism** | `FestivalSearch_kto` | National festival information search |
+
+> **Note**: All APIs operate in cache mode; in Read mode (default), no actual API keys are required.
+
+---
+
+## �📊 The 7 Independent Evaluation Dimensions
 
 Tool-calling ability isn’t one-dimensional. “Using tools well” involves choosing the right tool, planning to chain tools, handling errors, and operating efficiently. Ko-AgentBench separates these abilities into seven independently measured dimensions—they are not difficulty tiers but orthogonal capabilities.
 
