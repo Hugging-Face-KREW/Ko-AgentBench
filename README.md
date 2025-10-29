@@ -5,27 +5,57 @@
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/9cde519b-7935-4e0f-bd34-4d8a81e14103" width="200">
+
+[![Dataset](https://img.shields.io/badge/🤗%20Dataset-Ko--AgentBench-blue)](https://huggingface.co/datasets/huggingface-KREW/Ko-AgentBench)
+[![Leaderboard](https://img.shields.io/badge/🏆%20Leaderboard-Ko--AgentBench-green)](https://huggingface.co/spaces/huggingface-KREW/Ko-AgentBench)
+
 </div>
 
 ---
 
 ## Ko-AgentBench ✨
 
-Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하기 위한 벤치마크입니다. 
-실제 API를 직접 호출하지 않고도 테스트 가능한 캐시 기반 가상 API를 제공하여 재현성, 일관성, 비용 안정성을 확보합니다.
+**한국어 도구 호출(Tool-Calling) 에이전트를 위한 종합 평가 벤치마크**
+
+Ko-AgentBench는 AI 에이전트가 네이버 검색, 카카오맵, 암호화폐 거래소, 주식 조회 등 **한국 사용자가 실제로 사용하는 도구**들을 얼마나 효과적으로 활용하는지 평가합니다.
+
+### 🎯 핵심 특징
+
+- **🇰🇷 한국 특화**: 네이버, 카카오, 티맵, 업비트/빗썸, LS증권, 알라딘 등 한국 서비스 API 활용
+- **🔑 API 키 불필요**: 캐시 기반 슈도 API로 실제 API 키 없이도 즉시 평가 가능
+- **🎯 7가지 독립 평가**: 도구 선택, 순차/병렬 추론, 오류 처리, 효율성, 장기 맥락 등 다각도 측정
+- **🔄 재현 가능**: 동일 조건에서 반복 실행 보장, 연구 재현성 확보
 
 > [!TIP]
 > **Why Ko-AgentBench?**
 >
-> 도구 호출 에이전트를 평가하는 벤치마크는 단순히 "정확한 API를 호출했는가"를 넘어서야 합니다. 에이전트는 불완전한 정보 속에서 다수의 도구 중 적절한 것을 선택하고, 때로는 여러 단계에 걸쳐 도구를 연결하며, 오류가 발생했을 때 적절히 대응해야 합니다. 또한 동일한 정보를 반복 요청하지 않고 효율적으로 작동해야 하며, 여러 턴에 걸친 대화에서 맥락을 유지해야 합니다.
+> **기존 벤치마크의 한계**
+> - 대부분의 도구 호출 벤치마크는 **영어 중심**이며, 한국어 환경과 한국 사용자의 실제 사용 사례를 반영하지 못함
+> - 단순히 "정확한 API를 호출했는가"만 평가하고, 실제 업무 흐름의 복잡성(오류 처리, 효율성, 맥락 유지 등)을 고려하지 않음
 >
-> Ko-AgentBench는 이러한 문제의식에서 출발하여, 에이전트의 도구 호출 능력을 현실성(Realism), 명확성(Clarity), 판별력(Discriminative Power), 견고성(Robustness), 효율성(Efficiency), 재현성(Reproducibility), 확장성(Extensibility)의 원칙을 기반으로 평가합니다.
+> **Ko-AgentBench의 차별점**
+> - **한국 실사용 도구 기반 평가**: 네이버 검색/블로그, 카카오 지도/장소검색, 티맵 경로안내, 업비트/빗썸 암호화폐 거래, LS증권 주식조회, 한국관광공사 축제정보, 알라딘 도서검색 등 한국인이 일상적으로 사용하는 서비스로 구성
+> - **현실적인 다중 턴 시나리오**: 단일 API 호출이 아닌, 여러 도구를 연결하고 데이터를 전달하는 실제 업무 흐름 반영
+> - **종합적 평가 체계**: 현실성, 명확성, 판별력, 견고성, 효율성, 재현성, 확장성의 7가지 원칙 기반 평가
 
+### 💡 캐시 시스템: API 키 없이 바로 시작
 
-현실성을 위해 단일 API 호출로 완결되는 단편적 태스크가 아닌, 실제 업무 흐름에서 발생하는 stateful 다중 턴 시나리오를 구성했습니다. 도구 간 데이터 의존성과 실행 흐름이 실제 환경과 유사하게 설계되어, 에이전트가 실제 환경에서 직면할 문제를 반영합니다. 명확성을 확보하기 위해 평가 대상 태스크, 입출력 형식, 측정 지표, 스키마 정의, 평가 절차를 모호함 없이 정의했습니다.
+Ko-AgentBench는 **사전 수집된 API 응답 캐시**를 제공하여 실제 API 호출 없이도 벤치마크를 실행할 수 있습니다.
 
+- **Read 모드** (기본): 캐시만 사용, API 키 불필요 → 누구나 즉시 평가 가능
+- **Write 모드**: 실제 API 호출 후 캐시 저장 → 새로운 데이터셋 확장 시 사용
 
-### 7가지 독립적 Task 실행를 통한 모델의 성능 측정
+```bash
+# API 키 없이 실행 (캐시 모드)
+uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
+
+# 실제 API 호출 (API 키 필요)
+uv run run_benchmark_with_logging.py --cache-mode write
+```
+
+---
+
+## 📊 7가지 독립적 평가 차원
 
 에이전트의 도구 호출 능력은 단일 차원으로 측정할 수 없습니다. "도구를 잘 쓴다"는 것은 정확한 도구를 선택하는 능력, 여러 도구를 연결하는 계획 능력, 오류에 대응하는 강건성, 효율적으로 작동하는 능력 등 여러 독립적인 역량의 조합입니다. Ko-AgentBench는 이러한 역량을 7가지로 분리하여 각각 독립적으로 측정합니다. 이는 난이도 단계가 아니라, 서로 다른 측면의 능력을 평가하는 체계입니다.
 
@@ -51,29 +81,22 @@ Ko-AgentBench는 한국어 도구 사용(Tool-Calling) 에이전트를 평가하
 git clone https://github.com/Hugging-Face-KREW/Ko-AgentBench
 cd Ko-AgentBench
 
-# Python 3.10 + 의존성 설치 (uv 사용)
-uv python install 3.10
-uv sync --python 3.10
+# uv 설치 (미설치 시)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 의존성 설치
+uv sync
 ```
 
-### 2) API 키 설정
+### 2) LLM API 키 설정
 
-`configs/secrets.py`파일에서 API키를 설정할 수 있습니다.
+평가할 모델의 API 키만 설정하면 됩니다 (도구 API 키는 캐시 모드에서 불필요).
 
 ```bash
-# LLM Model API key
+# LLM Model API key (필수)
 export OPENAI_API_KEY="your-openai-key"
-export AZURE_API_KEY="your-azure-key"
-export AZURE_API_BASE="https://your-resource.openai.azure.com/"
 export ANTHROPIC_API_KEY="your-anthropic-key"
 export GEMINI_API_KEY="your-gemini-key"
-
-# Tool API key (도구 실행에 필요, 캐시 모드에서는 선택적)
-export NAVER_CLIENT_ID="your-naver-client-id"
-export NAVER_CLIENT_SECRET="your-naver-client-secret"
-export KAKAO_REST_API_KEY="your-kakao-api-key"
-export TMAP_APP_KEY="your-tmap-app-key"
-# 기타 API 키는 configs/secrets.py 참고
 ```
 
 ### 3) 실행과 평가
@@ -87,7 +110,25 @@ uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
 
 ---
 
-## 🧪 파이프라인 구조
+## 📁 프로젝트 구조
+
+### 폴더 구조
+```
+Ko-AgentBench/
+├─ bench/
+│  ├─ tasks/       # YAML 태스크 정의
+│  ├─ tools/       # 도구 스펙과 어댑터
+│  ├─ runner/      # 실행 엔진과 메트릭
+│  └─ cache/       # API 응답 캐시
+├─ logs/           # 실행 로그
+├─ reports/        # 평가 보고서
+├─ configs/        # 설정 파일
+├─ run_benchmark_with_logging.py
+├─ evaluate_model_run.py
+└─ README.md
+```
+
+### 파이프라인 구조
 
 ```
 [1] 실행: run_benchmark_with_logging.py
@@ -184,80 +225,78 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 
 ---
 
-## 🔄 캐시 시스템과 재현성
-
-Ko-AgentBench는 재현 가능한 벤치마크 실행과 API 비용 절감을 위해 파일 기반 캐시를 제공합니다.
-
-### 구조
-- **경로**: `bench/cache/<tool_name>/<shard>/<key>.json`
-- **키 생성**: 도구명 + 정규화된 인자 + 스키마의 SHA-256 해시
-- **레코드**: API 입력/출력, 타임스탬프, 메타데이터 저장
-
-### 모드
-
-**Read 모드** (기본):
-```bash
-uv run run_benchmark_with_logging.py --cache-mode read
-```
-- 캐시만 사용, 실제 API 호출 없음
-- API 키 없이도 벤치마크 실행 가능
-- 캐시 미스 시 에러 발생
-
-**Write 모드**
-```bash
-uv run run_benchmark_with_logging.py --cache-mode write
-```
-- 실제 API 호출 후 캐시에 기록
-- 새 데이터셋 준비 시 사용
-  
-**저장 위치**
-- 디렉토리: `bench/cache/`
-- 내용: 요청 해시별 응답 본문, 헤더, 메타데이터
----
-
-
 ## 🧩 평가 레벨과 태스크
 
 에이전트의 도구 호출 능력을 7개 레벨로 평가합니다.
 
 | Level | 평가 영역 | 예시 | 주요 지표 |
 |-------|----------|------|-----------|
-| **L1** | 단일 도구 호출 | `StockPrice_ls(symbol="005930")` | ToolAcc, ArgAcc, CallEM, RespOK |
-| **L2** | 도구 선택 | `get_crypto_price_upbit` vs `get_crypto_price_bithumb` | SelectAcc |
-| **L3** | 도구 순차 추론 | 종목검색 → 시세조회 → 결과종합 | FSM, PSM, ProvAcc |
-| **L4** | 도구 병렬 추론 | 여러 거래소 동시 조회 후 비교 | Coverage, SourceEPR |
-| **L5** | 오류 처리와 강건성 | API 실패 시 대체 경로 활용 | AdaptiveRoutingScore, FallbackSR |
-| **L6** | 효율적인 도구 활용 | 중복 호출 방지, 캐시 활용 | EffScore, ReuseRate |
-| **L7** | 장기 컨텍스트 기억 | 멀티턴 대화에서 이전 정보 활용 | ContextRetention, RefRecall |
+| **L1** | 단일 도구 호출 | "판교역에서 잠실야구장까지 자차로 몇 분 걸릴까?" | ToolAcc, ArgAcc, CallEM, RespOK |
+| **L2** | 도구 선택 | "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어" | SelectAcc |
+| **L3** | 도구 순차 추론 | "청량리역 근처 대학교 찾아보고, 그 학교 근처에 병원 몇 개 있는지 조사해줘" | FSM, PSM, ProvAcc |
+| **L4** | 도구 병렬 추론 | "여러 거래소에서 비트코인 시세 동시 조회 후 비교" | Coverage, SourceEPR |
+| **L5** | 오류 처리와 강건성 | "아이폰 17 출시일 검색해줘" (API 실패 시 대체 경로) | AdaptiveRoutingScore, FallbackSR |
+| **L6** | 효율적인 도구 활용 | "파이썬 알고리즘 트레이딩 책 찾아줘" (중복 호출 방지) | EffScore, ReuseRate |
+| **L7** | 장기 컨텍스트 기억 | "요즘 비트코인에 관심이 생겼는데..." (멀티턴 대화) | ContextRetention, RefRecall |
 
 ---
 
 ## 🧩 평가 지표
 
-| 레벨 | 지표 | 설명 | 계산 방식 |
+### 공통 지표 (모든 레벨)
+| 지표 | 풀네임 | 설명 | 계산 방식 |
 |---|---|---|---|
-| 공통 | **RRR** | 정상 실행 비율 | 성공 실행 수 / 전체 실행 수 |
-| 공통 | **SR** | 태스크 완수 점수 | Judge 평가 1~5점 → (점수-1)/4 |
-| 공통 | **EPRCVR** | 유효 도구 호출 비율 | 유효 호출 수 / 전체 호출 수 |
-| 공통 | **PassAtK** | k회 시도 성공률 | 성공 시도 수 / k |
-| L1 | **ToolAcc** | 올바른 도구 선택 | 일치=1, 불일치=0 |
-| L1 | **ArgAcc** | 인자 정확도 | Judge 평가 1~5 → 0~1 |
-| L1 | **CallEM** | 도구+인자 완전 일치 | 0 또는 1 |
-| L1 | **RespOK** | 응답 형식 준수 | 0 또는 1 |
-| L2 | **SelectAcc** | 올바른 도구 선택률 | 0 또는 1 |
-| L3 | **FSM** | 호출 순서 일치 | 0 또는 1 |
-| L3 | **PSM** | 필수 도구 포함률 | 포함된 필수 도구 / 전체 필수 도구 |
-| L3 | **DeltaStepsNorm** | 효율성 | min(1, 최소 단계 / 실제 단계) |
-| L3 | **ProvAcc** | 인자 전달 정확도 | 비율 |
-| L4 | **Coverage** | 필수 도구 실행률 | 성공한 필수 도구 / 전체 필수 도구 |
-| L4 | **SourceEPR** | 도구별 유효 호출률 | 평균(유효 호출 / 전체 호출) |
-| L5 | **AdaptiveRoutingScore** | 도구 실패 직후 대체 경로로 전환한 민첩성 | 0~1 정규화 |
-| L5 | **FallbackSR** | 대체 경로 성공률 | 비율 |
-| L6 | **ReuseRate** | 재사용률 | 재사용 / (재사용+중복) |
-| L6 | **RedundantCallRate** | 중복 호출률 | 중복 호출 / 전체 호출 |
-| L6 | **EffScore** | 성공 시 효율 점수 | min(1, 최소 단계 / 실제 단계) |
-| L7 | **ContextRetention** | 맥락 유지 능력 | Judge 평가 1~5 → 0~1 |
-| L7 | **RefRecall** | 정보 회상 정확도 | Judge 평가 1~5 → 0~1 |
+| **SR** | Success Rate | 태스크 완수 점수 | LLM Judge 평가 1-5점 → (점수-1)/4 |
+| **EPR/CVR** | Effective Precision Rate / Call Validity Rate | 유효 도구 호출 비율 | 유효 호출 수 / 전체 호출 수 |
+| **Pass@k** | Pass at k | k회 시도 성공률 | 성공 시도 수 / k |
+
+### 레벨별 전용 지표
+
+**L1: 단일 도구 호출**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **ToolAcc** | Tool Accuracy | 올바른 도구 선택 | 일치=1, 불일치=0 |
+| **ArgAcc** | Argument Accuracy | 인자 정확도 | LLM Judge 평가 1-5 → 0-1 |
+| **CallEM** | Call Exact Match | 도구+인자 완전 일치 | 0 또는 1 |
+| **RespOK** | Response Schema OK | 응답 형식 준수 | 0 또는 1 |
+
+**L2: 도구 선택**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **SelectAcc** | Selection Accuracy | 올바른 도구 선택률 | 0 또는 1 |
+
+**L3: 순차적 추론**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **FSM** | Full Sequence Match | 호출 순서 완전 일치 | 0 또는 1 |
+| **PSM** | Partial Sequence Match | 필수 도구 포함률 | 포함된 필수 도구 / 전체 필수 도구 |
+| **ΔSteps_norm** | Delta Steps Normalized | 효율성 (최소 경로 대비) | min(1, 최소 단계 / 실제 단계) |
+| **ProvAcc** | Provenance Accuracy | 인자 전달 정확도 | 올바른 데이터 흐름 / 전체 흐름 |
+
+**L4: 병렬적 추론**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **Coverage** | Source Coverage | 필수 도구 실행률 | 성공한 필수 도구 / 전체 필수 도구 |
+| **SourceEPR** | Source-wise EPR | 도구별 유효 호출률 평균 | 평균(유효 호출 / 전체 호출) |
+
+**L5: 오류 처리와 강건성**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **AdaptiveRoutingScore** | Adaptive Routing Score | 실패 후 대체 경로 전환 민첩성 | 1 / (1 + 전환 지연 단계) |
+| **FallbackSR** | Fallback Success Rate | 대체 경로 성공률 | 대체 성공 / 대체 시도 |
+
+**L6: 효율적인 도구 활용**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **ReuseRate** | Context Reuse Rate | 재사용률 | 재사용 / (재사용+중복) |
+| **RedundantCallRate** | Redundant Call Rate | 중복 호출 방지율 | 1 - (중복 호출 / 재사용 기회) |
+| **EffScore** | Efficiency Score | 성공 시 효율 점수 | min(1, 최소 단계 / 실제 단계) |
+
+**L7: 장기 컨텍스트 기억**
+| 지표 | 풀네임 | 설명 | 계산 방식 |
+|---|---|---|---|
+| **ContextRetention** | Context Retention | 맥락 유지 능력 | LLM Judge 평가 1-5 → 0-1 |
+| **RefRecall** | Reference Recall | 정보 회상 정확도 | LLM Judge 평가 1-5 → 0-1 |
 
 ### Judge 평가
 - 평가 모델: GPT-4o, Claude, Gemini 앙상블
@@ -268,7 +307,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 
 ## 🧮 종합 점수
 
-- **기본 능력** = L1~L3 지표 평균 (40%)
+- **기본 능력** = L1-L3 지표 평균 (40%)
 - **오류 처리** = L5 지표 평균 (20%)
 - **효율성** = L6 지표 평균 (25%)
 - **맥락 처리** = L7 지표 평균 (15%)
@@ -284,25 +323,7 @@ uv run run_benchmark_with_logging.py --cache-mode write
 
 ---
 
-## 📁 폴더 구조
-```
-Ko-AgentBench/
-├─ bench/
-│  ├─ tasks/       # YAML 태스크 정의
-│  ├─ tools/       # 도구 스펙과 어댑터
-│  ├─ runner/      # 실행 엔진과 메트릭
-│  └─ cache/       # API 응답 캐시
-├─ logs/           # 실행 로그
-├─ reports/        # 평가 보고서
-├─ configs/        # 설정 파일
-├─ run_benchmark_with_logging.py
-├─ evaluate_model_run.py
-└─ README.md
-```
-
----
-
-## 🔍 사용 예시
+##  사용 예시
 
 ```bash
 # 1) GPT-4로 L1-L3 레벨 평가
