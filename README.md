@@ -233,10 +233,10 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 |-------|----------|------|-----------|
 | **L1** | 단일 도구 호출 | "판교역에서 잠실야구장까지 자차로 몇 분 걸릴까?" | ToolAcc, ArgAcc, CallEM, RespOK |
 | **L2** | 도구 선택 | "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어" | SelectAcc |
-| **L3** | 도구 순차 추론 | "청량리역 근처 대학교 찾아보고, 그 학교 근처에 병원 몇 개 있는지 조사해줘" | FSM, PSM, ProvAcc |
+| **L3** | 도구 순차 추론 | "청량리역 근처 대학교 찾아보고, 그 학교 근처에 병원 몇 개 있는지 조사해줘" | FSM, PSM, ΔSteps_norm, ProvAcc |
 | **L4** | 도구 병렬 추론 | "여러 거래소에서 비트코인 시세 동시 조회 후 비교" | Coverage, SourceEPR |
 | **L5** | 오류 처리와 강건성 | "아이폰 17 출시일 검색해줘" (API 실패 시 대체 경로) | AdaptiveRoutingScore, FallbackSR |
-| **L6** | 효율적인 도구 활용 | "파이썬 알고리즘 트레이딩 책 찾아줘" (중복 호출 방지) | EffScore, ReuseRate |
+| **L6** | 효율적인 도구 활용 | "파이썬 알고리즘 트레이딩 책 찾아줘" (중복 호출 방지) | ReuseRate, RedundantCallRate, EffScore |
 | **L7** | 장기 컨텍스트 기억 | "요즘 비트코인에 관심이 생겼는데..." (멀티턴 대화) | ContextRetention, RefRecall |
 
 ---
@@ -244,59 +244,59 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ## 🧩 평가 지표
 
 ### 공통 지표 (모든 레벨)
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **SR** | Success Rate | 태스크 완수 점수 | LLM Judge 평가 1-5점 → (점수-1)/4 |
-| **EPR/CVR** | Effective Precision Rate / Call Validity Rate | 유효 도구 호출 비율 | 유효 호출 수 / 전체 호출 수 |
-| **Pass@k** | Pass at k | k회 시도 성공률 | 성공 시도 수 / k |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **SR** (Success Rate) | 태스크 완수 점수 | LLM Judge 평가 1-5점 → (점수-1)/4 |
+| **EPR/CVR** | 유효 도구 호출 비율 | 유효 호출 수 / 전체 호출 수 |
+| **Pass@k** | k회 시도 성공률 | 성공 시도 수 / k |
 
 ### 레벨별 전용 지표
 
 **L1: 단일 도구 호출**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **ToolAcc** | Tool Accuracy | 올바른 도구 선택 | 일치=1, 불일치=0 |
-| **ArgAcc** | Argument Accuracy | 인자 정확도 | LLM Judge 평가 1-5 → 0-1 |
-| **CallEM** | Call Exact Match | 도구+인자 완전 일치 | 0 또는 1 |
-| **RespOK** | Response Schema OK | 응답 형식 준수 | 0 또는 1 |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **ToolAcc** | 올바른 도구 선택 | 일치=1, 불일치=0 |
+| **ArgAcc** | 인자 정확도 | LLM Judge 평가 1-5 → 0-1 |
+| **CallEM** (Call Exact Match) | 도구+인자 완전 일치 | 0 또는 1 |
+| **RespOK** | 응답 형식 준수 | 0 또는 1 |
 
 **L2: 도구 선택**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **SelectAcc** | Selection Accuracy | 올바른 도구 선택률 | 0 또는 1 |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **SelectAcc** | 올바른 도구 선택률 | 0 또는 1 |
 
 **L3: 순차적 추론**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **FSM** | Full Sequence Match | 호출 순서 완전 일치 | 0 또는 1 |
-| **PSM** | Partial Sequence Match | 필수 도구 포함률 | 포함된 필수 도구 / 전체 필수 도구 |
-| **ΔSteps_norm** | Delta Steps Normalized | 효율성 (최소 경로 대비) | min(1, 최소 단계 / 실제 단계) |
-| **ProvAcc** | Provenance Accuracy | 인자 전달 정확도 | 올바른 데이터 흐름 / 전체 흐름 |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **FSM** (Full Sequence Match) | 호출 순서 완전 일치 | 0 또는 1 |
+| **PSM** (Partial Sequence Match) | 필수 도구 포함률 | 포함된 필수 도구 / 전체 필수 도구 |
+| **ΔSteps_norm** | 효율성 (최소 경로 대비) | min(1, 최소 단계 / 실제 단계) |
+| **ProvAcc** | 인자 전달 정확도 | 올바른 데이터 흐름 / 전체 흐름 |
 
 **L4: 병렬적 추론**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **Coverage** | Source Coverage | 필수 도구 실행률 | 성공한 필수 도구 / 전체 필수 도구 |
-| **SourceEPR** | Source-wise EPR | 도구별 유효 호출률 평균 | 평균(유효 호출 / 전체 호출) |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **Coverage** | 필수 도구 실행률 | 성공한 필수 도구 / 전체 필수 도구 |
+| **SourceEPR** | 도구별 유효 호출률 평균 | 평균(유효 호출 / 전체 호출) |
 
 **L5: 오류 처리와 강건성**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **AdaptiveRoutingScore** | Adaptive Routing Score | 실패 후 대체 경로 전환 민첩성 | 1 / (1 + 전환 지연 단계) |
-| **FallbackSR** | Fallback Success Rate | 대체 경로 성공률 | 대체 성공 / 대체 시도 |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **AdaptiveRoutingScore** | 실패 후 대체 경로 전환 민첩성 | 1 / (1 + 전환 지연 단계) |
+| **FallbackSR** | 대체 경로 성공률 | 대체 성공 / 대체 시도 |
 
 **L6: 효율적인 도구 활용**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **ReuseRate** | Context Reuse Rate | 재사용률 | 재사용 / (재사용+중복) |
-| **RedundantCallRate** | Redundant Call Rate | 중복 호출 방지율 | 1 - (중복 호출 / 재사용 기회) |
-| **EffScore** | Efficiency Score | 성공 시 효율 점수 | min(1, 최소 단계 / 실제 단계) |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **ReuseRate** | 재사용률 | 재사용 / (재사용+중복) |
+| **RedundantCallRate** | 중복 호출 방지율 | 1 - (중복 호출 / 재사용 기회) |
+| **EffScore** | 성공 시 효율 점수 | min(1, 최소 단계 / 실제 단계) |
 
 **L7: 장기 컨텍스트 기억**
-| 지표 | 풀네임 | 설명 | 계산 방식 |
-|---|---|---|---|
-| **ContextRetention** | Context Retention | 맥락 유지 능력 | LLM Judge 평가 1-5 → 0-1 |
-| **RefRecall** | Reference Recall | 정보 회상 정확도 | LLM Judge 평가 1-5 → 0-1 |
+| 지표 | 설명 | 계산 방식 |
+|---|---|---|
+| **ContextRetention** | 맥락 유지 능력 | LLM Judge 평가 1-5 → 0-1 |
+| **RefRecall** | 정보 회상 정확도 | LLM Judge 평가 1-5 → 0-1 |
 
 ### Judge 평가
 - 평가 모델: GPT-4o, Claude, Gemini 앙상블
