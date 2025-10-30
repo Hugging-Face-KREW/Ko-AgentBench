@@ -655,7 +655,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 예시:
-  # 기본 사용 (모든 레벨)
+  # 기본 사용 (모든 레벨, 단일 Judge )
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1
   
   # 특정 레벨만 평가
@@ -683,7 +683,7 @@ def main():
     parser.add_argument('--levels', type=str, default=None,
                         help='평가할 레벨 지정 (예: L1, L1,L3,L5). 기본: 모든 레벨')
     parser.add_argument('--judge-models', nargs='+', default=None,
-                        help='LLM Judge 모델들 (예: gpt-4o, claude-sonnet-4-5, gemini-2.5)')
+                        help='LLM Judge 모델(들). 기본: gpt-4o 단일 모델. 앙상블 원하면 여러 개 지정 (예: gpt-4o claude-sonnet-4-5 gemini-2.5)')
     parser.add_argument('--sample', type=int, default=None,
                         help='레벨당 평가할 태스크 수 (기본: 전체)')
     parser.add_argument('--quick', action='store_true',
@@ -706,12 +706,8 @@ def main():
     if args.judge_models:
         judge_models = args.judge_models
     else:
-        # 기본값: 3개 Judge (변경 가능!)
-        judge_models = [
-            "azure/gpt-4o",
-            "anthropic/claude-sonnet-4-5-20250929",
-            "gemini/gemini-2.5-pro-preview-03-25"
-        ]
+        # 기본값: 단일 Judge 
+        judge_models = ["azure/gpt-4o"]
 
     # 레벨 파싱
     levels = None
