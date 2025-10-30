@@ -232,7 +232,7 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ### 주요 옵션
 - `--date`: 벤치마크 실행 날짜 (YYYYMMDD 형식)
 - `--model`: 평가할 모델 ID
-- `--judge-models`: 평가 모델 목록 (기본: `gpt-4o,claude-sonnet,gemini`)
+- `--judge-models`: 평가 모델(들) (기본: `gpt-4o` 단일 모델, 앙상블 원하면 여러 개 모델 지정) 
 - `--sample N`: 레벨당 N개만 평가
 - `--quick`: 레벨당 1개만 평가 (샘플링)
 - `--format`: 출력 형식 (`json`/`csv`/`markdown`/`all`)
@@ -358,7 +358,7 @@ uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruc
 # 4) 멀티턴 대화 레벨 평가
 uv run run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
 
-# 5) 평가 보고서 생성
+# 5) 평가 보고서 생성 (기본: 단일 Judge)
 uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
 
 # 6) 빠른 샘플 평가
