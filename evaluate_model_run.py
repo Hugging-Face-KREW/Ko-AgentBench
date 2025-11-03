@@ -707,7 +707,7 @@ def main():
         judge_models = args.judge_models
     else:
         # 기본값: 단일 Judge 
-        judge_models = ["azure/gpt-4o"]
+        judge_models = ["gpt-4o"]
 
     # 레벨 파싱
     levels = None
