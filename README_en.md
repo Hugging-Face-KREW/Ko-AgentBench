@@ -233,7 +233,7 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ### Key options
 - `--date`: Benchmark execution date (YYYYMMDD)
 - `--model`: Model ID to evaluate
-- `--judge-models`: Judge ensemble (default: `gpt-4o,claude-sonnet,gemini`)
+- `--judge-models`: Judge model(s) (Default: `gpt-4o` single model, Specify multiple for ensemble)
 - `--sample N`: Evaluate N samples per level
 - `--quick`: 1 sample per level (sampling)
 - `--format`: Output format (`json`/`csv`/`markdown`/`all`)
@@ -359,7 +359,7 @@ uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruc
 # 4) Multi-turn dialogue levels
 uv run run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
 
-# 5) Generate evaluation reports
+# 5) Generate evaluation reports (default: single Judge)
 uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
 
 # 6) Quick sampled evaluation
