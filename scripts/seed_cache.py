@@ -18,6 +18,7 @@ from typing import List
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
+from bench.adapters.openrouter_adapter import OpenRouterAdapter
 from bench.runner import BenchmarkRunner
 
 
@@ -44,7 +45,10 @@ def main() -> None:
         print("[seed] No datasets found.")
         return
 
-    adapter = LiteLLMAdapter(args.model)
+    if args.model.lower().startswith("openrouter/"):
+        adapter = OpenRouterAdapter(args.model)
+    else:
+        adapter = LiteLLMAdapter(args.model)
 
     for level in args.levels:
         tasks_raw = datasets.get(level)
