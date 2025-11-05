@@ -5,7 +5,7 @@ A comprehensive benchmarking framework for evaluating AI agents on Korean langua
 
 from .tasks import TaskLoader
 from .tools import ToolRegistry, BaseTool
-from .adapters import BaseAdapter, LiteLLMAdapter
+from .adapters import BaseAdapter, LiteLLMAdapter, OpenRouterAdapter
 from .runner import BenchmarkRunner
 
 __version__ = "0.1.0"
@@ -14,6 +14,7 @@ __all__ = [
     'ToolRegistry', 
     'BaseTool',
     'BaseAdapter',
-    'LiteLLMAdapter', 
+    'LiteLLMAdapter',
+    'OpenRouterAdapter',
     'BenchmarkRunner'
 ]

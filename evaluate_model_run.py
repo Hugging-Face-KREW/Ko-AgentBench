@@ -18,6 +18,7 @@ from bench.runner.metrics import (
     METRICS
 )
 from bench.adapters.litellm_adapter import LiteLLMAdapter
+from bench.adapters.openrouter_adapter import OpenRouterAdapter
 
 # Import API keys from secrets (환경변수 설정은 main()에서)
 try:
@@ -26,7 +27,10 @@ try:
         AZURE_API_BASE,
         AZURE_API_VERSION,
         ANTHROPIC_API_KEY,
-        GEMINI_API_KEY
+        GEMINI_API_KEY,
+        OPENROUTER_API_KEY,
+        OPENROUTER_APP_URL,
+        OPENROUTER_APP_TITLE,
     )
 except ImportError:
     print("[경고] configs.secrets를 import할 수 없습니다.")
@@ -35,6 +39,9 @@ except ImportError:
     AZURE_API_VERSION = None
     ANTHROPIC_API_KEY = None
     GEMINI_API_KEY = None
+    OPENROUTER_API_KEY = None
+    OPENROUTER_APP_URL = None
+    OPENROUTER_APP_TITLE = None
 
 
 class ModelRunEvaluator:
@@ -99,7 +106,10 @@ class ModelRunEvaluator:
 
         for judge_model in self.judge_models:
             try:
-                adapter = LiteLLMAdapter(judge_model)
+                if judge_model.lower().startswith("openrouter/"):
+                    adapter = OpenRouterAdapter(judge_model)
+                else:
+                    adapter = LiteLLMAdapter(judge_model)
                 self.judge_adapters.append(adapter)
                 print(f"{judge_model} 초기화 완료")
             except Exception as e:
@@ -649,6 +659,12 @@ def main():
         os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
     if GEMINI_API_KEY:
         os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
+    if OPENROUTER_API_KEY:
+        os.environ['OPENROUTER_API_KEY'] = OPENROUTER_API_KEY
+    if OPENROUTER_APP_URL:
+        os.environ.setdefault('OPENROUTER_APP_URL', OPENROUTER_APP_URL)
+    if OPENROUTER_APP_TITLE:
+        os.environ.setdefault('OPENROUTER_APP_TITLE', OPENROUTER_APP_TITLE)
 
     parser = argparse.ArgumentParser(
         description='Ko-AgentBench 모델 실행 결과 평가',

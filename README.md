@@ -117,12 +117,19 @@ uv sync
 export OPENAI_API_KEY="your-openai-key"
 export ANTHROPIC_API_KEY="your-anthropic-key"
 export GEMINI_API_KEY="your-gemini-key"
+export OPENROUTER_API_KEY="your-openrouter-key"
+# (선택) OpenRouter 권장 헤더
+export OPENROUTER_APP_URL="https://your-service.tld"
+export OPENROUTER_APP_TITLE="Ko-AgentBench Runner"
 ```
 
 ### 3) 실행과 평가
 ```bash
 # 벤치마크 실행 (L1 레벨, 캐시 읽기 모드)
 uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
+
+# OpenRouter 모델 사용 예시
+uv run run_benchmark_with_logging.py --levels L1 --model openrouter/anthropic/claude-3.5-sonnet
 
 # 평가 (실행 날짜를 YYYYMMDD 형식으로 입력)
 uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all

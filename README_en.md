@@ -118,12 +118,19 @@ Only the LLM’s API key is required (tool API keys are unnecessary in cache mod
 export OPENAI_API_KEY="your-openai-key"
 export ANTHROPIC_API_KEY="your-anthropic-key"
 export GEMINI_API_KEY="your-gemini-key"
+export OPENROUTER_API_KEY="your-openrouter-key"
+# Optional headers recommended by OpenRouter
+export OPENROUTER_APP_URL="https://your-service.tld"
+export OPENROUTER_APP_TITLE="Ko-AgentBench Runner"
 ```
 
 ### 3) Run and Evaluate
 ```bash
 # Run benchmark (L1, cache read mode)
 uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
+
+# OpenRouter example
+uv run run_benchmark_with_logging.py --levels L1 --model openrouter/anthropic/claude-3.5-sonnet
 
 # Evaluate (enter execution date as YYYYMMDD)
 uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all

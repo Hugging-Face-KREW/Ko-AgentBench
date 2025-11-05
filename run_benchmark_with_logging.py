@@ -20,6 +20,7 @@ except Exception:
 
 from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
+from bench.adapters.openrouter_adapter import OpenRouterAdapter
 from bench.adapters.transformers_adapter import TransformersAdapter
 from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
@@ -33,7 +34,10 @@ from configs.secrets import (
     AZURE_API_BASE, 
     AZURE_API_VERSION,
     ANTHROPIC_API_KEY,
-    GEMINI_API_KEY
+    GEMINI_API_KEY,
+    OPENROUTER_API_KEY,
+    OPENROUTER_APP_URL,
+    OPENROUTER_APP_TITLE,
 )
 
 
@@ -480,8 +484,12 @@ def run_benchmark_on_dataset(
         print(f"\n[LOCAL] Using TransformersAdapter for local inference")
         adapter = TransformersAdapter(model_name, **adapter_config)
     else:
-        print(f"\n[API] Using LiteLLMAdapter for API inference")
-        adapter = LiteLLMAdapter(model_name, **adapter_config)
+        if model_name.lower().startswith("openrouter/"):
+            print(f"\n[API] Using OpenRouterAdapter for API inference")
+            adapter = OpenRouterAdapter(model_name, **adapter_config)
+        else:
+            print(f"\n[API] Using LiteLLMAdapter for API inference")
+            adapter = LiteLLMAdapter(model_name, **adapter_config)
     
     runner = BenchmarkRunner(adapter, registry, max_steps=max_steps, timeout=timeout)
     
@@ -694,6 +702,12 @@ def main():
         os.environ['ANTHROPIC_API_KEY'] = ANTHROPIC_API_KEY
     if GEMINI_API_KEY:
         os.environ['GEMINI_API_KEY'] = GEMINI_API_KEY
+    if OPENROUTER_API_KEY:
+        os.environ['OPENROUTER_API_KEY'] = OPENROUTER_API_KEY
+    if OPENROUTER_APP_URL:
+        os.environ.setdefault('OPENROUTER_APP_URL', OPENROUTER_APP_URL)
+    if OPENROUTER_APP_TITLE:
+        os.environ.setdefault('OPENROUTER_APP_TITLE', OPENROUTER_APP_TITLE)
     
     # Check API keys (include Azure/Google for better provider detection)
     provider_keys = [
@@ -703,6 +717,7 @@ def main():
         "GROQ_API_KEY",
         "AZURE_API_KEY",
         "GEMINI_API_KEY",
+        "OPENROUTER_API_KEY",
     ]
     found_keys = [k for k in provider_keys if os.getenv(k)]
     if not found_keys:
@@ -737,6 +752,8 @@ def main():
             return bool(os.getenv("GROQ_API_KEY"))
         if provider == "gemini":
             return bool(os.getenv("GEMINI_API_KEY"))
+        if provider == "openrouter":
+            return bool(os.getenv("OPENROUTER_API_KEY"))
         if provider == "huggingface":
             return bool(os.getenv("HUGGINGFACE_API_KEY"))
         return False
@@ -769,7 +786,7 @@ def main():
     # For local inference, model name doesn't need provider prefix
     if args.use_local:
         # Remove provider prefix if present (e.g., "huggingface/Qwen/..." -> "Qwen/...")
-        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "gemini"]:
+        if "/" in selected_model and selected_model.split("/")[0] in ["huggingface", "openai", "anthropic", "azure", "groq", "gemini", "openrouter"]:
             selected_model = "/".join(selected_model.split("/")[1:])
         print(f"Using local inference mode")
         print(f"Model: {selected_model}")

@@ -22,7 +22,9 @@ MODEL_IDS: List[str] = [
     "anthropic/claude-sonnet-4",
     "anthropic/claude-sonnet-4-20250514",
     "gemini/gemini-2.5-pro",
-    "gemini/gemini-2.5-flash"
+    "gemini/gemini-2.5-flash",
+    "openrouter/anthropic/claude-3.5-sonnet",
+    "openrouter/openai/gpt-4o-mini",
 ]
 
 __all__ = ["MODEL_IDS"]
