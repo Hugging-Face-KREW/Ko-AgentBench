@@ -818,11 +818,11 @@ def main():
             adapter_config['quantization'] = args.quantization
         
         # vLLM-specific configurations (applied when --model starts with vllm/)
-        adapter_config['tensor_parallel_size'] = args.tensor_parallel_size
-        adapter_config['gpu_memory_utilization'] = args.gpu_memory_utilization
-        if args.max_model_len:
-            adapter_config['max_model_len'] = args.max_model_len
-        
+        if selected_model.startswith("vllm/"):
+            adapter_config['tensor_parallel_size'] = args.tensor_parallel_size
+            adapter_config['gpu_memory_utilization'] = args.gpu_memory_utilization
+            if args.max_model_len:
+                adapter_config['max_model_len'] = args.max_model_len
         # Context management is now handled automatically by adapters
         # based on model config (max_position_embeddings, etc.)
     
