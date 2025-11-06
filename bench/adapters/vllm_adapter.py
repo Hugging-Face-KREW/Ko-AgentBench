@@ -457,7 +457,7 @@ class VLLMAdapter(BaseAdapter):
         if last_user_idx > 0:
             keep_from = max(0, last_user_idx - 5)
             messages = messages[keep_from:]
-            self.logger.warning(f"[VLLM CONTEXT] Removed {keep_from} older messages")
+            self.logger.warning(f"[VLLM CONTEXT] Removed {keep_from} older messages (messages before index {keep_from})")
         
         if system_msg:
             messages.insert(0, system_msg)
