@@ -205,7 +205,7 @@ uv run run_benchmark_with_logging.py --repetition 3
 
 **모델 설정**
 - `--model`: 모델 ID (예: `openai/gpt-4`, `anthropic/claude-3-5-sonnet-20241022`)
-- `--use-local`: 로컬 Transformers 사용 (vLLM은 모델명에 `vllm/` prefix 추가)
+- `--use-local`: 로컬 모델 사용 (Transformers 기본, vLLM은 모델명에 `vllm/` prefix 추가)
 - `--quantization`: `4bit`/`8bit` (Transformers 전용)
 - `--device`: `cuda`/`cpu`/`auto`
 - `--dtype`: `auto`/`float16`/`bfloat16`/`float32`
