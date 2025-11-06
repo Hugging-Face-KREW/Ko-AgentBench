@@ -9,11 +9,9 @@ from ..observability import observe
 
 try:
     from vllm import LLM, SamplingParams
-    from vllm.sampling_params import GuidedDecodingParams
 except ImportError:
     LLM = None
     SamplingParams = None
-    GuidedDecodingParams = None
 
 
 class VLLMAdapter(BaseAdapter):
