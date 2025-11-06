@@ -22,6 +22,7 @@ from bench.tools.tool_registry import ToolRegistry
 from bench.adapters.litellm_adapter import LiteLLMAdapter
 from bench.adapters.openrouter_adapter import OpenRouterAdapter
 from bench.adapters.transformers_adapter import TransformersAdapter
+from bench.adapters.vllm_adapter import VLLMAdapter
 from bench.runner import BenchmarkRunner
 from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
@@ -481,8 +482,13 @@ def run_benchmark_on_dataset(
     
     # Create adapter based on use_local flag
     if use_local:
-        print(f"\n[LOCAL] Using TransformersAdapter for local inference")
-        adapter = TransformersAdapter(model_name, **adapter_config)
+        # Check if vLLM prefix is present
+        if model_name.lower().startswith("vllm/"):
+            print(f"\n[LOCAL] Using VLLMAdapter for high-performance inference")
+            adapter = VLLMAdapter(model_name, **adapter_config)
+        else:
+            print(f"\n[LOCAL] Using TransformersAdapter for local inference")
+            adapter = TransformersAdapter(model_name, **adapter_config)
     else:
         if model_name.lower().startswith("openrouter/"):
             print(f"\n[API] Using OpenRouterAdapter for API inference")
@@ -677,6 +683,14 @@ def main():
                         help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
     parser.add_argument("--repetitions", type=int, default=1,
                         help="Number of repetitions for each task to measure pass@k metric (default: 1)")
+    
+    # vLLM-specific arguments
+    parser.add_argument("--tensor-parallel-size", type=int, default=1,
+                        help="Number of GPUs for tensor parallelism (vLLM only, default: 1)")
+    parser.add_argument("--gpu-memory-utilization", type=float, default=0.9,
+                        help="GPU memory utilization for vLLM (0.0-1.0, default: 0.9)")
+    parser.add_argument("--max-model-len", type=int, default=None,
+                        help="Maximum model context length for vLLM (default: auto-detect)")
 
     args = parser.parse_args()
     
@@ -802,7 +816,14 @@ def main():
         adapter_config['dtype'] = args.dtype
         if args.quantization:
             adapter_config['quantization'] = args.quantization
-        # Context management is now handled automatically by TransformersAdapter
+        
+        # vLLM-specific configurations (applied when --model starts with vllm/)
+        adapter_config['tensor_parallel_size'] = args.tensor_parallel_size
+        adapter_config['gpu_memory_utilization'] = args.gpu_memory_utilization
+        if args.max_model_len:
+            adapter_config['max_model_len'] = args.max_model_len
+        
+        # Context management is now handled automatically by adapters
         # based on model config (max_position_embeddings, etc.)
     
     # Run benchmarks on each level
