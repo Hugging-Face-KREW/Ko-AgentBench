@@ -186,8 +186,11 @@ uv run run_benchmark_with_logging.py --levels L1,L2,L3
 # 특정 모델 지정
 uv run run_benchmark_with_logging.py --model openai/gpt-4
 
-# 로컬 모델 사용
+# 로컬 모델 사용 (Transformers)
 uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct
+
+# 로컬 모델 사용 (vLLM)
+uv run run_benchmark_with_logging.py --use-local --model vllm/Qwen/Qwen2.5-7B-Instruct
 
 # API 호출 후 캐시 저장
 uv run run_benchmark_with_logging.py --cache-mode write
@@ -202,10 +205,13 @@ uv run run_benchmark_with_logging.py --repetition 3
 
 **모델 설정**
 - `--model`: 모델 ID (예: `openai/gpt-4`, `anthropic/claude-3-5-sonnet-20241022`)
-- `--use-local`: 로컬 Transformers 사용
-- `--quantization`: `4bit`/`8bit`
+- `--use-local`: 로컬 모델 사용 (Transformers 기본, vLLM은 모델명에 `vllm/` prefix 추가)
+- `--quantization`: `4bit`/`8bit` (Transformers 전용)
 - `--device`: `cuda`/`cpu`/`auto`
 - `--dtype`: `auto`/`float16`/`bfloat16`/`float32`
+- `--tensor-parallel-size`: 텐서 병렬화 GPU 수 (vLLM 전용, 기본: 1)
+- `--gpu-memory-utilization`: GPU 메모리 사용률 (vLLM 전용, 기본: 0.9)
+- `--max-model-len`: 최대 컨텍스트 길이 (vLLM 전용, 기본: 자동)
 
 **실행 제어**
 - `--max-steps`: 태스크당 최대 단계 (기본: 10)
@@ -359,16 +365,19 @@ uv run run_benchmark_with_logging.py --levels L1,L2,L3 --model openai/gpt-4
 # 2) Claude로 전체 레벨 평가 + 캐시 생성
 uv run run_benchmark_with_logging.py --model anthropic/claude-3-5-sonnet-20241022 --cache-mode write
 
-# 3) 로컬 모델 4bit 양자화 평가
+# 3) 로컬 모델 4bit 양자화 평가 (Transformers)
 uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruct --quantization 4bit --device cuda
 
-# 4) 멀티턴 대화 레벨 평가
+# 4) vLLM으로 멀티 GPU 고성능 추론
+uv run run_benchmark_with_logging.py --use-local --model vllm/Qwen/Qwen2.5-72B-Instruct --tensor-parallel-size 4
+
+# 5) 멀티턴 대화 레벨 평가
 uv run run_benchmark_with_logging.py --levels L6,L7 --max-steps 20
 
-# 5) 평가 보고서 생성 (기본: 단일 Judge)
+# 6) 평가 보고서 생성 (기본: 단일 Judge)
 uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --format all
 
-# 6) 빠른 샘플 평가
+# 7) 빠른 샘플 평가
 uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ```
 
