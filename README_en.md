@@ -333,15 +333,6 @@ Seven levels assess the agent’s tool-calling capabilities.
 
 ---
 
-## 🧮 Composite Score
-
-- Basic ability = Average of L1–L3 metrics (40%)
-- Error handling = Average of L5 metrics (20%)
-- Efficiency = Average of L6 metrics (25%)
-- Context handling = Average of L7 metrics (15%)
-
----
-
 ## 📊 Leaderboard
 
 Results are saved to `reports/{model}_{date}/`:
