@@ -15,6 +15,11 @@ from ..config import is_read_mode, get_cache_dir, get_pseudo_api_mode
 from ..cache.cache_store import FileCacheStore
 from .arg_normalizer import normalize_args
 
+# Maximum number of items to keep in market/finance list results
+# This limit reduces token usage and cache size while preserving enough data
+# for typical trading operations and market analysis
+MAX_MARKET_LIST_ITEMS = 20
+
 
 def _tool_signature(parameters_schema: Dict[str, Any], description: str) -> str:
     payload = {"description": description, "parameters": parameters_schema or {}}
@@ -102,19 +107,19 @@ class CachingExecutor:
         elif "MarketList_" in tool_name:  # Upbit, Bithumb
             # For truncation, slicing already creates a new list, no need for extra copy
             if isinstance(result, list):
-                if len(result) > 20:
-                    return result[:20]
+                if len(result) > MAX_MARKET_LIST_ITEMS:
+                    return result[:MAX_MARKET_LIST_ITEMS]
             elif isinstance(result, dict):
                 # Create shallow copy to avoid mutation
                 result = result.copy()
                 # Bithumb usually returns {"status":..., "data": [...]}
                 if "data" in result and isinstance(result["data"], list):
-                    if len(result["data"]) > 20:
-                        result["data"] = result["data"][:20]
+                    if len(result["data"]) > MAX_MARKET_LIST_ITEMS:
+                        result["data"] = result["data"][:MAX_MARKET_LIST_ITEMS]
                 # Upbit sometimes returns dict wrapper
                 if "markets" in result and isinstance(result["markets"], list):
-                    if len(result["markets"]) > 20:
-                        result["markets"] = result["markets"][:20]
+                    if len(result["markets"]) > MAX_MARKET_LIST_ITEMS:
+                        result["markets"] = result["markets"][:MAX_MARKET_LIST_ITEMS]
 
         return result
 
