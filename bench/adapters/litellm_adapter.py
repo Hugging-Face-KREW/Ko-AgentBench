@@ -4,10 +4,8 @@ from typing import Any, Dict, List, Optional
 from .base_adapter import BaseAdapter
 from ..observability import observe
 
-try:
-    import litellm
-except ImportError:
-    litellm = None
+# Lazy import litellm
+litellm = None
 
 
 class LiteLLMAdapter(BaseAdapter):
@@ -20,8 +18,12 @@ class LiteLLMAdapter(BaseAdapter):
             model_name: Model name (e.g., 'gpt-3.5-turbo', 'claude-3-sonnet')
             **config: Configuration parameters
         """
+        global litellm
         if litellm is None:
-            raise ImportError("litellm package is required for LiteLLMAdapter")
+            try:
+                import litellm
+            except ImportError:
+                raise ImportError("litellm package is required for LiteLLMAdapter")
             
         super().__init__(model_name, **config)
         
