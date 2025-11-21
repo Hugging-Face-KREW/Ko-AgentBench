@@ -63,7 +63,7 @@ class CachingExecutor:
                                 # Copy only fields we want to keep (exclude path, section)
                                 sanitized_opt = {
                                     k: v for k, v in route_opt.items() 
-                                    if k not in ("path", "section")
+                                    if k not in {"path", "section"}
                                 }
                                 sanitized_routes.append(sanitized_opt)
                             else:
@@ -81,7 +81,7 @@ class CachingExecutor:
                         # Copy only fields we want to keep (exclude geometry)
                         sanitized_feature = {
                             k: v for k, v in feature.items() 
-                            if k != "geometry"
+                            if k not in {"geometry"}
                         }
                         sanitized_features.append(sanitized_feature)
                     else:
@@ -106,7 +106,7 @@ class CachingExecutor:
                             if isinstance(poi, dict):
                                 sanitized_poi = {
                                     k: v for k, v in poi.items()
-                                    if k not in ("newAddressList", "evChargers")
+                                    if k not in {"newAddressList", "evChargers"}
                                 }
                                 sanitized_pois.append(sanitized_poi)
                             else:
