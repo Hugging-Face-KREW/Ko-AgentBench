@@ -155,7 +155,6 @@ class CachingExecutor:
         # Call real API with normalized arguments to satisfy method signatures
         # (e.g., alias mapping like symbol->shcode for LSStock).
         result = api_callable(**normalized)
-        
         # Sanitize result BEFORE saving to cache
         result = self._sanitize_result(tool_name, result)
         try:
