@@ -68,11 +68,14 @@ class CachingExecutor:
 
         elif "POISearch_tmap" in tool_name:
             if isinstance(result, dict) and "searchPoiInfo" in result:
-                pois = result["searchPoiInfo"].get("pois", {}).get("poi", [])
-                for poi in pois:
-                    poi.pop("newAddressList", None)
-                    poi.pop("evChargers", None)
-
+                pois_data = result["searchPoiInfo"].get("pois")
+                if isinstance(pois_data, dict):
+                    poi_list = pois_data.get("poi", [])
+                    if isinstance(poi_list, list):
+                        for poi in poi_list:
+                            if isinstance(poi, dict):
+                                poi.pop("newAddressList", None)
+                                poi.pop("evChargers", None)
         # 2. Market/Finance Tools - Truncate long lists
         elif "MarketList_" in tool_name:  # Upbit, Bithumb
             # Upbit returns list directly or dict with market list
