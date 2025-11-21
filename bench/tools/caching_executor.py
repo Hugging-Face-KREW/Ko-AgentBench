@@ -126,7 +126,6 @@ class CachingExecutor:
         
         # Sanitize result BEFORE saving to cache
         result = self._sanitize_result(tool_name, result)
-        
         try:
             # Include input parameters in cache record
             self._store.put(
