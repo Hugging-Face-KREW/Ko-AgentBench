@@ -38,48 +38,90 @@ class CachingExecutor:
         self._last_meta: Dict[str, Any] = {}
 
     def _sanitize_result(self, tool_name: str, result: Any) -> Any:
-        """Sanitize result data to reduce token usage and cache size."""
+        """Sanitize result data to reduce token usage and cache size.
+        
+        Uses shallow copying and selective field copying to avoid the overhead
+        of deepcopy while preventing mutation of the original result object.
+        """
         if not isinstance(result, (dict, list)):
             return result
 
         # 1. Map Tools (Naver/Tmap/Kakao) - Remove heavy coordinates
         if "Directions_naver" in tool_name:
             if isinstance(result, dict) and "route" in result:
+                # Create a shallow copy of the result dict
+                result = result.copy()
+                result["route"] = result["route"].copy()
+                
                 # Remove detailed path coordinates
                 for key in result["route"]:
                     if isinstance(result["route"][key], list):
+                        # Create new list with sanitized route options
+                        sanitized_routes = []
                         for route_opt in result["route"][key]:
-                            if "path" in route_opt:
-                                route_opt.pop("path", None)
-                            if "section" in route_opt:
-                                route_opt.pop("section", None)
-                            if "guide" in route_opt:
-                                # Keep guide but maybe simplify if needed, currently keeping it
-                                pass
+                            if isinstance(route_opt, dict):
+                                # Copy only fields we want to keep (exclude path, section)
+                                sanitized_opt = {
+                                    k: v for k, v in route_opt.items() 
+                                    if k not in ("path", "section")
+                                }
+                                sanitized_routes.append(sanitized_opt)
+                            else:
+                                sanitized_routes.append(route_opt)
+                        result["route"][key] = sanitized_routes
 
         elif "Route_tmap" in tool_name:  # CarRoute_tmap, WalkRoute_tmap
             if isinstance(result, dict) and "features" in result:
+                # Create a shallow copy of the result dict
+                result = result.copy()
+                # Create new features list with geometry removed
+                sanitized_features = []
                 for feature in result["features"]:
-                    if "geometry" in feature:
-                        feature.pop("geometry", None)
-                    if "properties" in feature and "index" in feature["properties"]:
-                        # Keep only essential properties
-                        pass
+                    if isinstance(feature, dict):
+                        # Copy only fields we want to keep (exclude geometry)
+                        sanitized_feature = {
+                            k: v for k, v in feature.items() 
+                            if k != "geometry"
+                        }
+                        sanitized_features.append(sanitized_feature)
+                    else:
+                        sanitized_features.append(feature)
+                result["features"] = sanitized_features
 
         elif "POISearch_tmap" in tool_name:
             if isinstance(result, dict) and "searchPoiInfo" in result:
-                pois = result["searchPoiInfo"].get("pois", {}).get("poi", [])
-                for poi in pois:
-                    poi.pop("newAddressList", None)
-                    poi.pop("evChargers", None)
+                # Create shallow copies to avoid mutation
+                result = result.copy()
+                search_info = result["searchPoiInfo"].copy()
+                result["searchPoiInfo"] = search_info
+                
+                if "pois" in search_info:
+                    pois_wrapper = search_info["pois"].copy()
+                    search_info["pois"] = pois_wrapper
+                    
+                    if "poi" in pois_wrapper and isinstance(pois_wrapper["poi"], list):
+                        # Create new POI list with unwanted fields removed
+                        sanitized_pois = []
+                        for poi in pois_wrapper["poi"]:
+                            if isinstance(poi, dict):
+                                sanitized_poi = {
+                                    k: v for k, v in poi.items()
+                                    if k not in ("newAddressList", "evChargers")
+                                }
+                                sanitized_pois.append(sanitized_poi)
+                            else:
+                                sanitized_pois.append(poi)
+                        pois_wrapper["poi"] = sanitized_pois
 
         # 2. Market/Finance Tools - Truncate long lists
         elif "MarketList_" in tool_name:  # Upbit, Bithumb
-            # Upbit returns list directly or dict with market list
+            # For truncation, slicing already creates a new list, no need for extra copy
             if isinstance(result, list):
                 if len(result) > 20:
                     return result[:20]
             elif isinstance(result, dict):
+                # Create shallow copy to avoid mutation
+                result = result.copy()
                 # Bithumb usually returns {"status":..., "data": [...]}
                 if "data" in result and isinstance(result["data"], list):
                     if len(result["data"]) > 20:
