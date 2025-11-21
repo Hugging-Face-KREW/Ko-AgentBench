@@ -99,10 +99,24 @@ class CachingExecutor:
                 if isinstance(pois_data, dict):
                     poi_list = pois_data.get("poi", [])
                     if isinstance(poi_list, list):
+                        # Create a shallow copy of the result to avoid mutating the original
+                        result = result.copy()
+                        result["searchPoiInfo"] = result["searchPoiInfo"].copy()
+                        result["searchPoiInfo"]["pois"] = result["searchPoiInfo"]["pois"].copy()
+                        
+                        # Create new POI list with sanitized items
+                        sanitized_pois = []
                         for poi in poi_list:
                             if isinstance(poi, dict):
-                                poi.pop("newAddressList", None)
-                                poi.pop("evChargers", None)
+                                # Copy only fields we want to keep (exclude newAddressList, evChargers)
+                                sanitized_poi = {
+                                    k: v for k, v in poi.items() 
+                                    if k not in {"newAddressList", "evChargers"}
+                                }
+                                sanitized_pois.append(sanitized_poi)
+                            else:
+                                sanitized_pois.append(poi)
+                        result["searchPoiInfo"]["pois"]["poi"] = sanitized_pois
         # 2. Market/Finance Tools - Truncate long lists
         elif "MarketList_" in tool_name:  # Upbit, Bithumb
             # For truncation, slicing already creates a new list, no need for extra copy
