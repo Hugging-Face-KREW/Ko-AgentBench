@@ -15,6 +15,11 @@ from ..config import is_read_mode, get_cache_dir, get_pseudo_api_mode
 from ..cache.cache_store import FileCacheStore
 from .arg_normalizer import normalize_args
 
+# Maximum number of items to keep in market/finance list results
+# This limit reduces token usage and cache size while preserving enough data
+# for typical trading operations and market analysis
+MAX_MARKET_LIST_ITEMS = 20
+
 
 def _tool_signature(parameters_schema: Dict[str, Any], description: str) -> str:
     payload = {"description": description, "parameters": parameters_schema or {}}
@@ -36,6 +41,101 @@ class CachingExecutor:
     def __init__(self) -> None:
         self._store = FileCacheStore(get_cache_dir())
         self._last_meta: Dict[str, Any] = {}
+
+    def _sanitize_result(self, tool_name: str, result: Any) -> Any:
+        """Sanitize result data to reduce token usage and cache size.
+        
+        Uses shallow copying and selective field copying to avoid the overhead
+        of deepcopy while preventing mutation of the original result object.
+        """
+        if not isinstance(result, (dict, list)):
+            return result
+
+        # 1. Map Tools (Naver/Tmap/Kakao) - Remove heavy coordinates
+        if "Directions_naver" in tool_name:
+            if isinstance(result, dict) and "route" in result:
+                # Create a shallow copy of the result dict
+                result = result.copy()
+                result["route"] = result["route"].copy()
+                
+                # Remove detailed path coordinates
+                for key in result["route"]:
+                    if isinstance(result["route"][key], list):
+                        # Create new list with sanitized route options
+                        sanitized_routes = []
+                        for route_opt in result["route"][key]:
+                            if isinstance(route_opt, dict):
+                                # Copy only fields we want to keep (exclude path, section)
+                                sanitized_opt = {
+                                    k: v for k, v in route_opt.items() 
+                                    if k not in {"path", "section"}
+                                }
+                                sanitized_routes.append(sanitized_opt)
+                            else:
+                                sanitized_routes.append(route_opt)
+                        result["route"][key] = sanitized_routes
+
+        elif "Route_tmap" in tool_name:  # CarRoute_tmap, WalkRoute_tmap
+            if isinstance(result, dict) and "features" in result:
+                # Create a shallow copy of the result dict
+                result = result.copy()
+                # Create new features list with geometry removed
+                sanitized_features = []
+                for feature in result["features"]:
+                    if isinstance(feature, dict):
+                        # Copy only fields we want to keep (exclude geometry)
+                        sanitized_feature = {
+                            k: v for k, v in feature.items() 
+                            if k not in {"geometry"}
+                        }
+                        sanitized_features.append(sanitized_feature)
+                    else:
+                        sanitized_features.append(feature)
+                result["features"] = sanitized_features
+
+        elif "POISearch_tmap" in tool_name:
+            if isinstance(result, dict) and "searchPoiInfo" in result:
+                pois_data = result["searchPoiInfo"].get("pois")
+                if isinstance(pois_data, dict):
+                    poi_list = pois_data.get("poi", [])
+                    if isinstance(poi_list, list):
+                        # Create a shallow copy of the result to avoid mutating the original
+                        result = result.copy()
+                        result["searchPoiInfo"] = result["searchPoiInfo"].copy()
+                        result["searchPoiInfo"]["pois"] = result["searchPoiInfo"]["pois"].copy()
+                        
+                        # Create new POI list with sanitized items
+                        sanitized_pois = []
+                        for poi in poi_list:
+                            if isinstance(poi, dict):
+                                # Copy only fields we want to keep (exclude newAddressList, evChargers)
+                                sanitized_poi = {
+                                    k: v for k, v in poi.items() 
+                                    if k not in {"newAddressList", "evChargers"}
+                                }
+                                sanitized_pois.append(sanitized_poi)
+                            else:
+                                sanitized_pois.append(poi)
+                        result["searchPoiInfo"]["pois"]["poi"] = sanitized_pois
+        # 2. Market/Finance Tools - Truncate long lists
+        elif "MarketList_" in tool_name:  # Upbit, Bithumb
+            # For truncation, slicing already creates a new list, no need for extra copy
+            if isinstance(result, list):
+                if len(result) > MAX_MARKET_LIST_ITEMS:
+                    return result[:MAX_MARKET_LIST_ITEMS]
+            elif isinstance(result, dict):
+                # Create shallow copy to avoid mutation
+                result = result.copy()
+                # Bithumb usually returns {"status":..., "data": [...]}
+                if "data" in result and isinstance(result["data"], list):
+                    if len(result["data"]) > MAX_MARKET_LIST_ITEMS:
+                        result["data"] = result["data"][:MAX_MARKET_LIST_ITEMS]
+                # Upbit sometimes returns dict wrapper
+                elif "markets" in result and isinstance(result["markets"], list):
+                    if len(result["markets"]) > MAX_MARKET_LIST_ITEMS:
+                        result["markets"] = result["markets"][:MAX_MARKET_LIST_ITEMS]
+
+        return result
 
     def execute(
         self,
@@ -60,12 +160,17 @@ class CachingExecutor:
                     f"Pseudo-API(read): cache miss for {tool_name} with key={key}. Seed the cache first."
                 )
             self._last_meta = {"mode": mode, "hit": True, "key": key}
-            return cached.get("data")
+            
+            # Sanitize cached data before returning (for backward compatibility with old large caches)
+            data = cached.get("data")
+            return self._sanitize_result(tool_name, data)
 
         # write mode (default): always call real API and record
-    # Call real API with normalized arguments to satisfy method signatures
-    # (e.g., alias mapping like symbol->shcode for LSStock).
+        # Call real API with normalized arguments to satisfy method signatures
+        # (e.g., alias mapping like symbol->shcode for LSStock).
         result = api_callable(**normalized)
+        # Sanitize result BEFORE saving to cache
+        result = self._sanitize_result(tool_name, result)
         try:
             # Include input parameters in cache record
             self._store.put(
