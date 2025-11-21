@@ -117,7 +117,7 @@ class CachingExecutor:
                     if len(result["data"]) > MAX_MARKET_LIST_ITEMS:
                         result["data"] = result["data"][:MAX_MARKET_LIST_ITEMS]
                 # Upbit sometimes returns dict wrapper
-                if "markets" in result and isinstance(result["markets"], list):
+                elif "markets" in result and isinstance(result["markets"], list):
                     if len(result["markets"]) > MAX_MARKET_LIST_ITEMS:
                         result["markets"] = result["markets"][:MAX_MARKET_LIST_ITEMS]
 
