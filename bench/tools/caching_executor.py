@@ -37,6 +37,60 @@ class CachingExecutor:
         self._store = FileCacheStore(get_cache_dir())
         self._last_meta: Dict[str, Any] = {}
 
+    def _sanitize_result(self, tool_name: str, result: Any) -> Any:
+        """Sanitize result data to reduce token usage and cache size."""
+        if not isinstance(result, (dict, list)):
+            return result
+
+        # 1. Map Tools (Naver/Tmap/Kakao) - Remove heavy coordinates
+        if "Directions_naver" in tool_name:
+            if isinstance(result, dict) and "route" in result:
+                # Remove detailed path coordinates
+                for key in result["route"]:
+                    if isinstance(result["route"][key], list):
+                        for route_opt in result["route"][key]:
+                            if "path" in route_opt:
+                                route_opt.pop("path", None)
+                            if "section" in route_opt:
+                                route_opt.pop("section", None)
+                            if "guide" in route_opt:
+                                # Keep guide but maybe simplify if needed, currently keeping it
+                                pass
+
+        elif "Route_tmap" in tool_name:  # CarRoute_tmap, WalkRoute_tmap
+            if isinstance(result, dict) and "features" in result:
+                for feature in result["features"]:
+                    if "geometry" in feature:
+                        feature.pop("geometry", None)
+                    if "properties" in feature and "index" in feature["properties"]:
+                        # Keep only essential properties
+                        pass
+
+        elif "POISearch_tmap" in tool_name:
+            if isinstance(result, dict) and "searchPoiInfo" in result:
+                pois = result["searchPoiInfo"].get("pois", {}).get("poi", [])
+                for poi in pois:
+                    poi.pop("newAddressList", None)
+                    poi.pop("evChargers", None)
+
+        # 2. Market/Finance Tools - Truncate long lists
+        elif "MarketList_" in tool_name:  # Upbit, Bithumb
+            # Upbit returns list directly or dict with market list
+            if isinstance(result, list):
+                if len(result) > 20:
+                    return result[:20]
+            elif isinstance(result, dict):
+                # Bithumb usually returns {"status":..., "data": [...]}
+                if "data" in result and isinstance(result["data"], list):
+                    if len(result["data"]) > 20:
+                        result["data"] = result["data"][:20]
+                # Upbit sometimes returns dict wrapper
+                if "markets" in result and isinstance(result["markets"], list):
+                    if len(result["markets"]) > 20:
+                        result["markets"] = result["markets"][:20]
+
+        return result
+
     def execute(
         self,
         *,
@@ -60,12 +114,19 @@ class CachingExecutor:
                     f"Pseudo-API(read): cache miss for {tool_name} with key={key}. Seed the cache first."
                 )
             self._last_meta = {"mode": mode, "hit": True, "key": key}
-            return cached.get("data")
+            
+            # Sanitize cached data before returning (for backward compatibility with old large caches)
+            data = cached.get("data")
+            return self._sanitize_result(tool_name, data)
 
         # write mode (default): always call real API and record
-    # Call real API with normalized arguments to satisfy method signatures
-    # (e.g., alias mapping like symbol->shcode for LSStock).
+        # Call real API with normalized arguments to satisfy method signatures
+        # (e.g., alias mapping like symbol->shcode for LSStock).
         result = api_callable(**normalized)
+        
+        # Sanitize result BEFORE saving to cache
+        result = self._sanitize_result(tool_name, result)
+        
         try:
             # Include input parameters in cache record
             self._store.put(
