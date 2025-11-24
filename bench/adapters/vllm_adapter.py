@@ -7,11 +7,9 @@ from typing import Any, Dict, List, Optional
 from .base_adapter import BaseAdapter
 from ..observability import observe
 
-try:
-    from vllm import LLM, SamplingParams
-except ImportError:
-    LLM = None
-    SamplingParams = None
+# Lazy import vllm to avoid heavy initialization cost when not using VLLMAdapter
+LLM = None
+SamplingParams = None
 
 
 class VLLMAdapter(BaseAdapter):
@@ -43,11 +41,15 @@ class VLLMAdapter(BaseAdapter):
                 - trust_remote_code: Whether to trust remote code (default: True)
                 - dtype: Data type ('auto', 'float16', 'bfloat16', 'float32')
         """
-        if LLM is None or SamplingParams is None:
-            raise ImportError(
-                "vllm package is required for VLLMAdapter. "
-                "Install it with: pip install vllm"
-            )
+        global LLM, SamplingParams
+        if LLM is None:
+            try:
+                from vllm import LLM, SamplingParams
+            except ImportError:
+                raise ImportError(
+                    "vllm package is required for VLLMAdapter. "
+                    "Install it with: pip install vllm"
+                )
         
         # Remove 'vllm/' prefix if present
         if model_name.startswith('vllm/'):
