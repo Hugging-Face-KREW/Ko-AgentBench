@@ -19,6 +19,19 @@
           "exchgubun": "K"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "OrderBook_ls",
+        "fields": [
+          "t1101OutBlock.bidho1",
+          "t1101OutBlock.bidho2",
+          "t1101OutBlock.bidho3",
+          "t1101OutBlock.offerho1",
+          "t1101OutBlock.offerho2",
+          "t1101OutBlock.offerho3"
+        ]
+      }
     ]
   },
   {
@@ -42,6 +55,18 @@
           "count": 30
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockChart_kis",
+        "fields": [
+          "data[0].date",
+          "data[0].close",
+          "data[0].open",
+          "data[0].high",
+          "data[0].low"
+        ]
+      }
     ]
   },
   {
@@ -62,6 +87,16 @@
         "args": {
           "address": "서울특별시 강남구 테헤란로 152"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "AddressToCoord_kakao",
+        "fields": [
+          "longitude",
+          "latitude",
+          "address_name"
+        ]
       }
     ]
   },
@@ -85,6 +120,17 @@
           "exchange": "NASDAQ"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "USStockPrice_kis",
+        "fields": [
+          "current_price",
+          "change_rate",
+          "change_rate",
+          "volume"
+        ]
+      }
     ]
   },
   {
@@ -105,6 +151,16 @@
         "args": {
           "jisu": "KOSDAQ"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "MarketIndex_ls",
+        "fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ]
       }
     ]
   },
@@ -128,6 +184,18 @@
           "item_id_type": "ISBN13"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemLookup_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales",
+          "item[0].description"
+        ]
+      }
     ]
   },
   {
@@ -147,6 +215,15 @@
         "args": {
           "markets": "KRW-BTC"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
       }
     ]
   },
@@ -172,6 +249,16 @@
           "radius": 500
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CategorySearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].distance"
+        ]
+      }
     ]
   },
   {
@@ -195,6 +282,15 @@
           "dong": "상암동"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "Geocoding_tmap",
+        "fields": [
+          "coordinateInfo.lon",
+          "coordinateInfo.lat"
+        ]
+      }
     ]
   },
   {
@@ -215,6 +311,15 @@
         "args": {
           "markets": "KRW-ETH"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "OrderBook_bithumb",
+        "fields": [
+          "[0].orderbook_units[0].bid_price",
+          "[0].orderbook_units[0].ask_price"
+        ]
       }
     ]
   },
@@ -237,6 +342,18 @@
           "query_type": "Bestseller",
           "category_id": 170
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemList_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[1].title",
+          "item[1].author",
+          "item[2].title"
+        ]
       }
     ]
   },
@@ -262,6 +379,16 @@
           "radius": 1
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CategorySearch_tmap",
+        "fields": [
+          "pois[0].name",
+          "error_message",
+          "totalCount"
+        ]
+      }
     ]
   },
   {
@@ -280,6 +407,17 @@
       {
         "tool": "MarketList_upbit",
         "args": {}
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "MarketList_upbit",
+        "fields": [
+          "markets[0].market",
+          "markets[0].korean_name",
+          "markets[1].market",
+          "markets[1].korean_name"
+        ]
       }
     ]
   },
@@ -301,6 +439,16 @@
           "shcode": "005930",
           "exchgubun": "K"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
       }
     ]
   },
@@ -324,6 +472,15 @@
           "dong": "역삼동"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "Geocoding_tmap",
+        "fields": [
+          "coordinateInfo.lon",
+          "coordinateInfo.lat"
+        ]
+      }
     ]
   },
   {
@@ -346,6 +503,16 @@
           "sort": "accuracy"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "VideoSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].author",
+          "documents[0].play_time"
+        ]
+      }
     ]
   },
   {
@@ -367,6 +534,15 @@
           "searchKeyword": "서울 이마트"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "POISearch_tmap",
+        "fields": [
+          "searchPoiInfo.pois.poi[0].name",
+          "searchPoiInfo.pois.poi[0].newAddressList.newAddress[0].fullAddressRoad"
+        ]
+      }
     ]
   },
   {
@@ -386,6 +562,15 @@
           "markets": "KRW-ETH"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "OrderBook_bithumb",
+        "fields": [
+          "[0].orderbook_units[0].bid_price",
+          "[0].orderbook_units[0].ask_price"
+        ]
+      }
     ]
   },
   {
@@ -404,6 +589,16 @@
         "args": {
           "shcode": "035720"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockTrades_ls",
+        "fields": [
+          "t8454OutBlock1[0].price",
+          "t8454OutBlock1[0].msvolume",
+          "t8454OutBlock1[0].chetime"
+        ]
       }
     ]
   },
@@ -428,6 +623,18 @@
           "count": 50
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "fields": [
+          "data[0].timestamp",
+          "data[0].close",
+          "data[0].open",
+          "data[0].high",
+          "data[0].low"
+        ]
+      }
     ]
   },
   {
@@ -450,6 +657,16 @@
           "sort": "Accuracy"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].priceSales"
+        ]
+      }
     ]
   },
   {
@@ -469,6 +686,16 @@
         "args": {
           "shcode": "051910"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
       }
     ]
   },
@@ -492,6 +719,16 @@
           "count": 30
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "fields": [
+          "data[0].timestamp",
+          "data[0].close",
+          "data[0].open"
+        ]
+      }
     ]
   },
   {
@@ -513,6 +750,17 @@
           "search_target": "Book",
           "max_results": 10
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemList_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[1].title",
+          "item[2].title"
+        ]
       }
     ]
   },
@@ -536,6 +784,16 @@
           "sort": "sim"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].bloggername",
+          "items[0].description"
+        ]
+      }
     ]
   },
   {
@@ -557,6 +815,17 @@
           "sort": "Accuracy",
           "max_results": 5
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[1].title",
+          "item[2].title"
+        ]
       }
     ]
   },
@@ -580,6 +849,16 @@
           "sort": "date"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].pubDate"
+        ]
+      }
     ]
   },
   {
@@ -601,6 +880,16 @@
           "query": "아이폰 15 프로 실사용 후기",
           "sort": "sim"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].bloggername",
+          "items[0].description"
+        ]
       }
     ]
   },
@@ -624,6 +913,16 @@
           "sort": "date"
         }
       }
+    ],
+    "golden_fields": [
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].pubDate"
+        ]
+      }
     ]
   },
   {
@@ -644,6 +943,16 @@
         "args": {
           "query": "2024년 부동산 세법 개정"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents",
+          "documents[0].url"
+        ]
       }
     ]
   }
