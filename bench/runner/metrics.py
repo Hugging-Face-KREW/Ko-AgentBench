@@ -561,11 +561,6 @@ class SRMetric(LLMJudgeMetric):
                     final_response=final_response,
                     tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
                 )
-        prompt = prompt_template.format(
-            instruction=instruction,
-            final_response=final_response,
-            tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
-        )
         
         # Multi-judge 호출 (점수 평가)
         llm_result = self._call_multi_judge_score(prompt, 'sr', SRResponse, min_score=1, max_score=5)
