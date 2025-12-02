@@ -24,6 +24,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].longitude",
+          "places[0].latitude"
+        ]
+      },
+      {
+        "tool": "CategorySearch_tmap",
+        "fields": [
+          "totalCount",
+          "pois[0].name"
+        ]
+      }
+    ],
     "minimum_steps": 2,
     "essential_tools": [
       "PlaceSearch_kakao",
@@ -65,6 +82,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "MarketList_bithumb",
+        "fields": [
+          "[0].market",
+          "[1].market",
+          "[2].market"
+        ]
+      },
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
+      }
+    ],
     "minimum_steps": 2,
     "essential_tools": [
       "MarketList_bithumb",
@@ -100,6 +134,23 @@
         "args": {
           "query": "{book_title}"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].priceSales",
+          "item[0].author"
+        ]
       }
     ],
     "data_flow": [
@@ -146,6 +197,23 @@
           "endX": "{endX}",
           "endY": "{endY}"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].longitude",
+          "places[0].latitude"
+        ]
+      },
+      {
+        "tool": "WalkRoute_tmap",
+        "fields": [
+          "features[0].properties.totalTime",
+          "features[0].properties.totalDistance"
+        ]
       }
     ],
     "minimum_steps": 3,
@@ -228,6 +296,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "Geocoding_tmap",
+        "fields": [
+          "coordinateInfo.lon",
+          "coordinateInfo.lat"
+        ]
+      },
+      {
+        "tool": "CarRoute_tmap",
+        "fields": [
+          "features[0].properties.totalTime",
+          "features[0].properties.totalDistance"
+        ]
+      }
+    ],
     "minimum_steps": 2,
     "essential_tools": [
       "Geocoding_tmap",
@@ -282,6 +366,25 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "ItemList_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[1].title",
+          "item[2].title"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].bloggername",
+          "items[0].description"
+        ]
+      }
+    ],
     "data_flow": [
       {
         "to_step": 2,
@@ -321,6 +424,29 @@
         "args": {
           "query": "{places[0].name} 후기"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "AddressToCoord_kakao",
+        "fields": [
+          "longitude",
+          "latitude"
+        ]
+      },
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address"
+        ]
+      },
+      {
+        "tool": "VideoSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].author"
+        ]
       }
     ],
     "minimum_steps": 2,
@@ -380,6 +506,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "AddressToCoord_kakao",
+        "fields": [
+          "longitude",
+          "latitude"
+        ]
+      },
+      {
+        "tool": "CategorySearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].distance",
+          "places[0].address"
+        ]
+      }
+    ],
     "minimum_steps": 2,
     "essential_tools": [
       "AddressToCoord_kakao",
@@ -436,6 +579,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "Geocoding_tmap",
+        "fields": [
+          "coordinateInfo.lon",
+          "coordinateInfo.lat"
+        ]
+      },
+      {
+        "tool": "CarRoute_tmap",
+        "fields": [
+          "features[0].properties.totalTime",
+          "features[0].properties.totalDistance"
+        ]
+      }
+    ],
     "minimum_steps": 2,
     "essential_tools": [
       "Geocoding_tmap",
@@ -489,6 +648,23 @@
         "args": {
           "query": "{places[0].name} 가격 후기"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[1].name"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
       }
     ],
     "minimum_steps": 2,

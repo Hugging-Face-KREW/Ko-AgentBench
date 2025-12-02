@@ -1,4 +1,4 @@
-[  
+[
   {
     "task_id": "L1-001",
     "instruction": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
@@ -12,6 +12,15 @@
           "goal": "127.07190,37.51130",
           "option": "traoptimal"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "Directions_naver",
+        "fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ]
       }
     ],
     "arg_schema": {
@@ -59,6 +68,15 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "Directions_naver",
+        "fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ]
+      }
+    ],
     "arg_schema": {
       "start": {
         "type": "string",
@@ -101,6 +119,16 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].opening_price",
+          "[0].change_rate"
+        ]
+      }
+    ],
     "arg_schema": {
       "markets": {
         "type": "string",
@@ -128,6 +156,16 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "MarketIndex_ls",
+        "fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ]
+      }
+    ],
     "arg_schema": {
       "jisu": {
         "type": "string",
@@ -146,7 +184,7 @@
   },
   {
     "task_id": "L1-005",
-    "instruction": "네이버에서 ‘전기차 충전 요금 인상’ 검색해서 첫 번째 결과 제목만 알려줘.",
+    "instruction": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘.",
     "task_level": 1,
     "task_category": "Single Tool",
     "golden_action": [
@@ -157,6 +195,15 @@
           "display": 1,
           "start": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].link"
+        ]
       }
     ],
     "arg_schema": {
@@ -196,6 +243,15 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].bloggername"
+        ]
+      }
+    ],
     "arg_schema": {
       "query": {
         "type": "string",
@@ -231,6 +287,15 @@
           "display": 1,
           "start": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].originallink"
+        ]
       }
     ],
     "arg_schema": {
@@ -275,6 +340,17 @@
           "outofStockFilter": 0,
           "opt_result": ""
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ]
       }
     ],
     "arg_schema": {
@@ -384,6 +460,16 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "VideoSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ]
+      }
+    ],
     "arg_schema": {
       "query": {
         "type": "string",
@@ -431,6 +517,16 @@
           "page": 1,
           "size": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].phone"
+        ]
       }
     ],
     "arg_schema": {
@@ -489,6 +585,16 @@
           "page": 1,
           "size": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CategorySearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "total_count"
+        ]
       }
     ],
     "arg_schema": {

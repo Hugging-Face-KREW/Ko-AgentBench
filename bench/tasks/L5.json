@@ -15,6 +15,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "WebSearch_daum",
       "error_type": "timeout"
@@ -43,6 +59,29 @@
           "page": 1,
           "size": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "VideoSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].play_time"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
       }
     ],
     "error_injection": {
@@ -83,6 +122,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "WebSearch_daum",
       "error_type": "timeout"
@@ -111,6 +166,22 @@
           "display": 10,
           "start": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
       }
     ],
     "error_injection": {
@@ -142,6 +213,30 @@
           "start": 1,
           "sort": "sim"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
       }
     ],
     "error_injection": {
@@ -182,6 +277,29 @@
           "start": 1,
           "sort": "date"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
       }
     ],
     "error_injection": {
@@ -226,6 +344,30 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "ItemSearch_aladin",
       "error_type": "timeout"
@@ -265,6 +407,30 @@
           "start": 1,
           "max_results": 10
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "ItemList_aladin",
+        "fields": [
+          "item[2].title",
+          "item[2].author",
+          "item[2].publisher"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
       }
     ],
     "error_injection": {
@@ -307,6 +473,30 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "ItemSearch_aladin",
+        "fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "ItemSearch_aladin",
       "error_type": "timeout"
@@ -340,6 +530,29 @@
           "symbol": "AAPL",
           "exchange": "NASDAQ"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "USStockPrice_kis",
+        "fields": [
+          "current_price",
+          "change_rate"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
       }
     ],
     "error_injection": {
@@ -378,6 +591,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_kis",
+        "fields": [
+          "current_price",
+          "change_rate"
+        ]
+      },
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "StockPrice_kis",
       "error_type": "timeout"
@@ -404,6 +634,22 @@
           "symbol": "BTC",
           "quote": "KRW"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CryptoPrice_upbit",
+        "fields": [
+          "current_price",
+          "change_rate"
+        ]
+      },
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
       }
     ],
     "error_injection": {
@@ -436,6 +682,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "CryptoCandle_upbit",
+        "fields": [
+          "data[0].close",
+          "data[0].timestamp"
+        ]
+      },
+      {
+        "tool": "CryptoCandle_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].candle_date_time_kst"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "CryptoCandle_upbit",
       "error_type": "data_not_available"
@@ -465,6 +727,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
+      },
+      {
+        "tool": "CryptoPrice_upbit",
+        "fields": [
+          "current_price",
+          "change_rate"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "CryptoPrice_bithumb",
       "error_type": "timeout"
@@ -481,7 +759,7 @@
   },
   {
     "task_id": "L5-015",
-    "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 얼마나 걸려? 차타고 갈꺼야.",
+    "instruction": "강남역(127.027621,37.497942)에서 서울시청(126.977022,37.566536)까지 얼마나 걸려? 차타고 갈거야.",
     "task_level": 5,
     "task_category": "Robustness",
     "golden_action": [
@@ -494,6 +772,22 @@
           "endY": 37.566536,
           "searchOption": 2
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CarRoute_tmap",
+        "fields": [
+          "features[0].properties.totalDistance",
+          "features[0].properties.totalTime"
+        ]
+      },
+      {
+        "tool": "Directions_naver",
+        "fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ]
       }
     ],
     "error_injection": {
@@ -527,6 +821,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "CarRoute_tmap",
+        "fields": [
+          "features[0].properties.totalDistance",
+          "features[0].properties.totalTime"
+        ]
+      },
+      {
+        "tool": "Directions_naver",
+        "fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "CarRoute_tmap",
       "error_type": "complete_unavailable"
@@ -558,6 +868,24 @@
           "page": 1,
           "size": 1
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "CategorySearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].distance"
+        ]
+      },
+      {
+        "tool": "PlaceSearch_kakao",
+        "fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].distance"
+        ]
       }
     ],
     "error_injection": {
@@ -594,6 +922,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
+      }
+    ],
     "error_injection": {
       "tool": "BlogSearch_naver",
       "error_type": "timeout"
@@ -621,6 +966,30 @@
         "args": {
           "jisu": "KOSDAQ"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "MarketIndex_ls",
+        "fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.change",
+          "t1511OutBlock.volumerate"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "WebSearch_daum",
+        "fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ]
       }
     ],
     "error_injection": {
@@ -658,6 +1027,22 @@
           "goal": "126.92490,37.52190",
           "option": "trafast"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "Directions_naver",
+        "fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ]
+      },
+      {
+        "tool": "CarRoute_tmap",
+        "fields": [
+          "features[0].properties.totalDistance",
+          "features[0].properties.totalTime"
+        ]
       }
     ],
     "error_injection": {

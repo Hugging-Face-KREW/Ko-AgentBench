@@ -20,6 +20,24 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title"
+        ]
+      }
+    ],
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
@@ -48,6 +66,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
@@ -73,6 +107,23 @@
         "args": {
           "markets": "KRW-BTC"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
+      },
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
       }
     ],
     "minimum_sources": 2,
@@ -103,6 +154,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
@@ -129,6 +196,23 @@
           "query": "LG에너지솔루션 2024 투자전망",
           "display": 10
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
       }
     ],
     "minimum_sources": 2,
@@ -173,6 +257,23 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
+      },
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "minimum_sources": 4,
     "decision": {
       "decision_type": "multi_criteria",
@@ -206,6 +307,29 @@
           "query": "2025 민생지원금 정책",
           "display": 10
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
       }
     ],
     "minimum_sources": 3,
@@ -243,6 +367,29 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "NewsSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "minimum_sources": 3,
     "decision": {
       "decision_type": "multi_criteria",
@@ -271,6 +418,22 @@
         }
       }
     ],
+    "golden_fields": [
+      {
+        "tool": "WebSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      },
+      {
+        "tool": "BlogSearch_naver",
+        "fields": [
+          "items[0].title",
+          "items[0].description"
+        ]
+      }
+    ],
     "minimum_sources": 2,
     "decision": {
       "decision_type": "multi_criteria",
@@ -296,6 +459,23 @@
         "args": {
           "markets": "KRW-BTC"
         }
+      }
+    ],
+    "golden_fields": [
+      {
+        "tool": "StockPrice_ls",
+        "fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff"
+        ]
+      },
+      {
+        "tool": "CryptoPrice_bithumb",
+        "fields": [
+          "[0].trade_price",
+          "[0].change_rate"
+        ]
       }
     ],
     "minimum_sources": 2,

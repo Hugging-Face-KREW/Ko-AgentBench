@@ -115,6 +115,145 @@ class PromptLoader:
         mapping = self._prompts.get('error_detect', {}).get('error_type_mapping', {})
         return mapping.get(error_type, error_type)
 
+
+def extract_value_by_path(data: Any, path: str) -> Any:
+    """
+    점 표기법과 배열 인덱싱을 사용하여 중첩된 데이터에서 값 추출.
+    
+    예시:
+    - "items[0].title" -> data["items"][0]["title"]
+    - "route.traoptimal[0].summary.duration" -> data["route"]["traoptimal"][0]["summary"]["duration"]
+    
+    Args:
+        data: 중첩된 dict/list 데이터
+        path: 점 표기법 경로 (예: "items[0].title")
+    
+    Returns:
+        추출된 값, 실패 시 None
+    """
+    import re
+    
+    if data is None:
+        return None
+    
+    try:
+        current = data
+        # 경로를 파싱: items[0].title -> ["items", "[0]", "title"]
+        tokens = re.split(r'\.', path)
+        
+        for token in tokens:
+            if not token:
+                continue
+                
+            # 배열 인덱스 처리: items[0] -> "items", 0
+            array_match = re.match(r'^(\w+)\[(\d+)\]$', token)
+            if array_match:
+                key = array_match.group(1)
+                index = int(array_match.group(2))
+                
+                if isinstance(current, dict) and key in current:
+                    current = current[key]
+                    if isinstance(current, list) and index < len(current):
+                        current = current[index]
+                    else:
+                        return None
+                else:
+                    return None
+            # 단순 배열 인덱스: [0]
+            elif re.match(r'^\[(\d+)\]$', token):
+                index = int(token[1:-1])
+                if isinstance(current, list) and index < len(current):
+                    current = current[index]
+                else:
+                    return None
+            # 일반 키
+            else:
+                if isinstance(current, dict) and token in current:
+                    current = current[token]
+                else:
+                    return None
+        
+        return current
+    except Exception:
+        return None
+
+
+def extract_golden_context(
+    action_trace: List[Dict[str, Any]], 
+    golden_fields: List[Dict[str, Any]]
+) -> str:
+    """
+    태스크의 golden_fields 정의에 따라 도구 호출 결과에서 핵심 필드만 추출.
+    
+    Args:
+        action_trace: 도구 호출 기록 리스트
+            [{"tool": "WebSearch_naver", "result": {...}, "success": True}, ...]
+        golden_fields: golden_fields 정의
+            [{"tool": "WebSearch_naver", "fields": ["items[0].title", "items[0].description"]}, ...]
+    
+    Returns:
+        추출된 golden context JSON 문자열
+        
+    Note:
+        - 도구 호출 실패나 필드가 없는 경우에도 에러 없이 graceful하게 처리
+        - 모델이 잘못된 도구를 호출했더라도 해당 도구 결과만 제외하고 진행
+    """
+    if not golden_fields:
+        # golden_fields가 없으면 기존 방식(100자 truncation)으로 fallback
+        return None
+    
+    extracted_context = []
+    
+    # golden_fields를 tool별로 그룹화
+    tool_to_fields = {}
+    for gf in golden_fields:
+        tool_name = gf.get("tool")
+        fields = gf.get("fields", [])
+        if tool_name:
+            if tool_name not in tool_to_fields:
+                tool_to_fields[tool_name] = []
+            tool_to_fields[tool_name].extend(fields)
+    
+    # 각 도구 호출에서 관련 필드 추출
+    for action in action_trace:
+        tool_name = action.get("tool")
+        result = action.get("result")
+        success = action.get("success", False)
+        
+        # 실패한 호출이나 결과가 없는 경우 스킵
+        if not success or result is None:
+            continue
+        
+        # 해당 도구의 golden_fields가 있는지 확인
+        if tool_name not in tool_to_fields:
+            continue
+        
+        fields_to_extract = tool_to_fields[tool_name]
+        tool_context = {
+            "tool": tool_name,
+            "extracted_fields": {}
+        }
+        
+        for field_path in fields_to_extract:
+            try:
+                value = extract_value_by_path(result, field_path)
+                if value is not None:
+                    tool_context["extracted_fields"][field_path] = value
+            except Exception:
+                # 필드 추출 실패 시 무시하고 계속 진행
+                continue
+        
+        # 추출된 필드가 있는 경우에만 추가
+        if tool_context["extracted_fields"]:
+            extracted_context.append(tool_context)
+    
+    if not extracted_context:
+        # 추출된 컨텍스트가 없으면 None 반환 (fallback 처리)
+        return None
+    
+    return json.dumps(extracted_context, ensure_ascii=False, indent=2)
+
+
 @dataclass
 class EvaluationResult:
     """메트릭 평가 결과"""
@@ -382,23 +521,46 @@ class SRMetric(LLMJudgeMetric):
                 }
             )
         
-        # 도구 호출 정보 수집
+        # 도구 호출 정보 수집 (응답은 golden_context에서 제공하므로 호출 정보만 포함)
         tool_calls = []
         for action in ctx.action_trace:
             tool_calls.append({
                 "tool": action.get("tool"),
                 "args": action.get("args", {}),
-                "success": action.get("success", False),
-                "result_preview": str(action.get("result", ""))[:100]
+                "success": action.get("success", False)
             })
+        
+        # golden_fields가 있으면 핵심 컨텍스트 추출, 없으면 기본 tool_calls 사용
+        golden_fields = ctx.task_schema.get("golden_fields", [])
+        golden_context = extract_golden_context(ctx.action_trace, golden_fields)
         
         # LLM Judge 프롬프트 구성
         prompt_template = self.prompt_loader.get_prompt('sr')
-        prompt = prompt_template.format(
-            instruction=instruction,
-            final_response=final_response,
-            tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
-        )
+        
+        # golden_context가 있으면 프롬프트에 포함
+        if golden_context:
+            prompt = prompt_template.format(
+                instruction=instruction,
+                final_response=final_response,
+                tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2),
+                golden_context=golden_context
+            )
+        else:
+            # golden_context 플레이스홀더가 없는 기존 템플릿과의 호환성
+            try:
+                prompt = prompt_template.format(
+                    instruction=instruction,
+                    final_response=final_response,
+                    tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2),
+                    golden_context="[golden_context 없음 - 기본 result_preview 사용]"
+                )
+            except KeyError:
+                # golden_context 플레이스홀더가 템플릿에 없는 경우
+                prompt = prompt_template.format(
+                    instruction=instruction,
+                    final_response=final_response,
+                    tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
+                )
         
         # Multi-judge 호출 (점수 평가)
         llm_result = self._call_multi_judge_score(prompt, 'sr', SRResponse, min_score=1, max_score=5)
