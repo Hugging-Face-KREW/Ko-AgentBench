@@ -69,3 +69,11 @@ class BaseAdapter(ABC):
             "model_name": self.model_name,
             "config": self.config
         }
+    
+    def reset_conversation(self):
+        """Reset conversation state between tasks.
+        
+        This is a no-op for most adapters but can be overridden
+        for adapters that maintain stateful conversations (e.g., Assistants API).
+        """
+        pass
