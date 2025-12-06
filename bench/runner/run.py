@@ -3,7 +3,7 @@
 import json
 import time
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from ..adapters.base_adapter import BaseAdapter
 from ..tools.tool_registry import ToolRegistry
@@ -81,8 +81,52 @@ class BenchmarkRunner:
                 for t in turns:
                     role = t.get('role')
                     content = t.get('content', '')
-                    if role in ("user", "assistant") and content:
+                    if role == "user" and content:
                         messages.append({"role": role, "content": content})
+                    elif role == "assistant":
+                        # For assistant messages, preserve/convert tool_calls
+                        msg = {"role": role}
+                        if content:
+                            msg["content"] = content
+                        
+                        # Check for tool_calls (already in correct format)
+                        if t.get('tool_calls'):
+                            msg["tool_calls"] = t['tool_calls']
+                            messages.append(msg)
+                        # Or convert from 'action' field (dataset format)
+                        elif t.get('action'):
+                            action = t['action']
+                            if isinstance(action, dict) and action.get('tool') and action.get('result'):
+                                # Only convert action to tool_calls if result exists (complete pair)
+                                import uuid
+                                call_id = f"call_{uuid.uuid4().hex[:24]}"
+                                msg["tool_calls"] = [{
+                                    "id": call_id,
+                                    "type": "function",
+                                    "function": {
+                                        "name": action['tool'],
+                                        "arguments": json.dumps(action.get('args', {}))
+                                    }
+                                }]
+                                messages.append(msg)
+                                messages.append({
+                                    "role": "tool",
+                                    "tool_call_id": call_id,
+                                    "content": json.dumps(action['result'])
+                                })
+                            elif content:
+                                # Text-only assistant message (no tool calls)
+                                messages.append(msg)
+                        elif content:
+                            # Text-only assistant message
+                            messages.append(msg)
+                    elif role == "tool":
+                        # Also preserve tool result messages
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": t.get('tool_call_id'),
+                            "content": content
+                        })
                 # Trim trailing assistant messages so the next model output is a response to the last user
                 if messages:
                     # Find last index of a user message
@@ -144,13 +188,7 @@ class BenchmarkRunner:
                 else:
                     self.logger.warning(f"Tool '{tool_name}' not found in registry")
 
-            # DEBUG: Log tools being passed to LLM
-            self.logger.info(f"Task tools requested: {task_tools}")
-            self.logger.info(f"Available tools count: {len(available_tools)}")
-            if available_tools:
-                self.logger.info(f"First tool schema keys: {list(available_tools[0].keys())}")
-            else:
-                self.logger.warning("[WARNING] NO TOOLS AVAILABLE FOR THIS TASK!")
+            # ...existing code...
 
             # Check if this is a multi-turn conversation task (L6/L7)
             conversation = task.get('conversation_tracking') or task.get('conversation')
@@ -178,8 +216,8 @@ class BenchmarkRunner:
                         "error_type": tool_call.get('error_type'),  # For ErrorDetect metric
                     })
             
-            # Add tool_invocations to result
-            result['tool_invocations'] = tool_invocations
+            # Add tool_calls to result (for legacy compatibility)
+            result['tool_calls'] = tool_invocations
             
             execution_time = time.time() - start_time
             
@@ -216,7 +254,7 @@ class BenchmarkRunner:
                 "task_id": task_id,
                 "success": success,
                 "result": result,
-                "tool_invocations": tool_invocations,
+                "tool_calls": tool_invocations,  # 필드명 변경
                 "execution_time": execution_time,
                 "steps_taken": len(result.get('steps', [])),
                 "token_usage": {
@@ -248,6 +286,10 @@ class BenchmarkRunner:
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
             
+            # Reset adapter conversation state for next task (important for Assistants API)
+            if hasattr(self.adapter, 'reset_conversation'):
+                self.adapter.reset_conversation()
+            
             return final_result
             
         except Exception as e:
@@ -274,6 +316,10 @@ class BenchmarkRunner:
                     )
                 except Exception as e:
                     self.logger.debug(f"Langfuse update failed: {e}")
+            
+            # Reset adapter conversation state even on error
+            if hasattr(self.adapter, 'reset_conversation'):
+                self.adapter.reset_conversation()
             
             return error_result
     
@@ -305,6 +351,9 @@ class BenchmarkRunner:
         all_steps = []
         step_counter = 0
         
+        # Extract task level for API routing
+        task_level = task.get('level')
+        
         self.logger.info(f"\n{'='*80}")
         self.logger.info(f"[MULTI-TURN] Multi-turn conversation: {len(turns)} turns")
         self.logger.info(f"{'='*80}\n")
@@ -328,7 +377,7 @@ class BenchmarkRunner:
             
             # Call LLM with current context
             try:
-                response = self._call_llm_with_retry(messages, tools)
+                response = self._call_llm_with_retry(messages, tools, task_level)
                 message = response.get('message', {})
                 
                 step_counter += 1
@@ -371,15 +420,20 @@ class BenchmarkRunner:
                             self.logger.error(f"      [ERROR] {tool_result.get('error')}")
                         
                         # Add tool result to conversation
+                        # Handle both successful and failed tool executions
+                        result_content = tool_result.get('result')
+                        if result_content is None:
+                            # If tool failed, include error message
+                            result_content = {"error": tool_result.get('error', 'Tool execution failed')}
                         messages.append({
                             "role": "tool",
                             "tool_call_id": tool_call['id'],
-                            "content": json.dumps(tool_result['result'])
+                            "content": json.dumps(result_content)
                         })
                     
                     # Get final response after tool execution
                     self.logger.info(f"[INFO] Getting final response after tool execution...")
-                    final_response = self._call_llm_with_retry(messages, tools)
+                    final_response = self._call_llm_with_retry(messages, tools, task_level)
                     final_message = final_response.get('message', {})
                     
                     # Log final response
@@ -442,11 +496,8 @@ class BenchmarkRunner:
         steps = []
         start_time = time.time()
         
-        # DEBUG: Log tools being used in loop
-        self.logger.info(f"_execute_loop: Received {len(tools)} tools")
-        if tools:
-            tool_names = [t.get('function', {}).get('name', 'unknown') for t in tools]
-            self.logger.info(f"Tool names in loop: {tool_names}")
+        # Extract task level for API routing
+        task_level = task.get('level')
         
         # Log seeded conversation history for multi-turn scenarios
         seeded_messages_count = len(messages)
@@ -469,7 +520,7 @@ class BenchmarkRunner:
             self.logger.info(f"{'='*60}")
             
             # Get LLM response
-            response = self._call_llm_with_retry(messages, tools)
+            response = self._call_llm_with_retry(messages, tools, task_level)
             
             step_data = {
                 "step": step + 1,
@@ -650,7 +701,8 @@ class BenchmarkRunner:
     
     @observe(as_type="generation")
     def _call_llm_with_retry(self, messages: List[Dict], 
-                        tools: List[Dict]) -> Dict[str, Any]:
+                        tools: List[Dict],
+                        task_level: Optional[int] = None) -> Dict[str, Any]:
         """Call LLM with retry logic."""
         self.logger.debug(f"Calling LLM with {len(tools)} tools")
         
@@ -662,7 +714,7 @@ class BenchmarkRunner:
                 import time
                 start_time = time.perf_counter()
                 
-                result = self.adapter.chat_completion(messages, tools)
+                result = self.adapter.chat_completion(messages, tools, task_level=task_level)
                 
                 # TTFT 측정 종료 (API 호출 완료 시점 = 첫 토큰 수신 시점)
                 ttft = time.perf_counter() - start_time

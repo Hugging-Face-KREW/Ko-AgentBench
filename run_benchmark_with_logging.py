@@ -9,6 +9,7 @@ import os
 import argparse
 import json
 import glob
+import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, List, Optional, Type, Dict
@@ -198,7 +199,7 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
     
     # Extract tool calls in a simplified format with results
     tool_calls = []
-    for invocation in result.get("tool_invocations", []):
+    for invocation in result.get("tool_calls", []):
         tool_call = {
             "step": invocation.get("step"),
             "tool_name": invocation.get("tool_name"),
@@ -590,10 +591,10 @@ def run_benchmark_on_dataset(
             print(f"  Steps taken: {result['steps_taken']}")
             
             # Print tool call details
-            tool_invocations = result.get('tool_invocations', [])
-            if tool_invocations:
-                print(f"  Tool calls: {len(tool_invocations)}")
-                for inv in tool_invocations:
+            tool_calls = result.get('tool_calls', [])
+            if tool_calls:
+                print(f"  Tool calls: {len(tool_calls)}")
+                for inv in tool_calls:
                     print(f"    • Step {inv.get('step')}: {inv.get('tool_name')}")
                     print(f"      Args: {inv.get('arguments')}")
                     print(f"      Success: {inv.get('success')}")
@@ -684,6 +685,13 @@ def main():
     parser.add_argument("--repetitions", type=int, default=1,
                         help="Number of repetitions for each task to measure pass@k metric (default: 1)")
     
+    # GPT-5 reasoning control arguments
+    parser.add_argument("--effort", type=str, default="low",
+                        choices=['low', 'medium', 'high'],
+                        help="Reasoning effort for GPT-5 (low, medium, high, default: low)")
+    parser.add_argument("--max-completion-tokens", type=int, default=1024,
+                        help="Maximum completion tokens for GPT-5 (default: 1024)")
+    
     # vLLM-specific arguments
     parser.add_argument("--tensor-parallel-size", type=int, default=1,
                         help="Number of GPUs for tensor parallelism (vLLM only, default: 1)")
@@ -701,6 +709,15 @@ def main():
     print("="*80)
     print("Ko-AgentBench Dataset Runner with Tool Call Logging")
     print("="*80)
+    
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.StreamHandler()  # Console output
+        ]
+    )
     
     # Load environment variables
     load_dotenv()
@@ -825,6 +842,10 @@ def main():
                 adapter_config['max_model_len'] = args.max_model_len
         # Context management is now handled automatically by adapters
         # based on model config (max_position_embeddings, etc.)
+    
+    # GPT-5 reasoning control configuration (for all models, but only used by GPT-5)
+    adapter_config['effort'] = args.effort
+    adapter_config['max_completion_tokens'] = args.max_completion_tokens
     
     # Run benchmarks on each level
     all_level_results = {}
