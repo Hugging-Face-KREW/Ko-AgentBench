@@ -42,7 +42,7 @@ class LiteLLMAdapter(BaseAdapter):
         
         # Azure Responses API configuration for GPT-5
         # Responses API provides single-call execution with reasoning control
-        self.is_gpt5 = 'gpt-5' in model_name.lower()
+        self.is_gpt5 = 'gpt-5' in model_name.lower() or 'gpt-5.1' in model_name.lower()
         self.azure_endpoint = os.getenv('AZURE_API_BASE', '')
         self.azure_api_key = os.getenv('AZURE_API_KEY', '')
         self.azure_api_version = os.getenv('AZURE_API_VERSION', '')
