@@ -11,16 +11,16 @@ from ..adapters.base_adapter import BaseAdapter
 
 # Pydantic 모델 정의
 class SRResponse(BaseModel):
-    """SR 메트릭 응답 모델"""
+    """SR 메트릭 응답 모델 - success/fail 이진 판정"""
     model_config = {
         "json_schema_extra": {
             "additionalProperties": False,
             "strict": False  # Gemini 호환성을 위해 strict mode 비활성화
         }
     }
-    
-    score: int = Field(..., ge=1, le=5, description="1-5점 척도 점수")
-    reason: str = Field(..., description="간단한 이유")
+
+    success: bool = Field(..., description="태스크 성공 여부")
+    reason: str = Field(..., description="판정 이유")
 
 class ArgAccResponse(BaseModel):
     """ArgAcc 메트릭 응답 모델"""
@@ -491,36 +491,89 @@ class LLMJudgeMetric(Metric):
 
 #공통 메트릭
 class SRMetric(LLMJudgeMetric):
-    """SR(성공률): LLM Judge로 태스크 완수 여부 평가 (1-5점 척도)"""
+    """SR(성공률): LLM Judge로 태스크 완수 여부 평가 (단일 모델 다중 추론 + 하드 보팅)"""
     name = "SR"
     level = "common"
-    
+    vote_count: int = 3  # 투표 횟수 (기본값)
+
+    def _call_single_model_voting(self, prompt: str, n: int = 3) -> Dict[str, Any]:
+        """단일 모델로 n회 추론 후 하드 보팅으로 최종 판정
+
+        Args:
+            prompt: 평가 프롬프트
+            n: 투표 횟수 (기본값: 3)
+
+        Returns:
+            투표 결과 딕셔너리
+        """
+        if not self.llm_adapter:
+            return {
+                "success": False,
+                "votes": [],
+                "vote_count": {"success": 0, "fail": 0},
+                "reasons": [],
+                "final_reason": "LLM adapter가 설정되지 않음"
+            }
+
+        system_prompt = self.prompt_loader.get_system_prompt('sr')
+        votes = []
+        reasons = []
+
+        for i in range(n):
+            try:
+                result = self._call_structured_judge(
+                    self.llm_adapter,
+                    system_prompt,
+                    prompt,
+                    SRResponse
+                )
+                votes.append(result.get("success", False))
+                reasons.append(result.get("reason", ""))
+            except Exception as e:
+                logging.error(f"SR voting round {i+1} failed: {str(e)}")
+                votes.append(False)
+                reasons.append(f"평가 실패: {str(e)}")
+
+        # 하드 보팅: 과반수 판정
+        success_count = sum(1 for v in votes if v)
+        fail_count = len(votes) - success_count
+        final_success = success_count > fail_count
+
+        return {
+            "success": final_success,
+            "votes": votes,
+            "vote_count": {"success": success_count, "fail": fail_count},
+            "reasons": reasons,
+            "final_reason": f"{success_count}/{len(votes)} 투표로 {'성공' if final_success else '실패'} 판정"
+        }
+
     def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        """LLM Judge를 사용하여 태스크 완수 여부 평가"""
-        
+        """LLM Judge를 사용하여 태스크 완수 여부 평가 (단일 모델 다중 추론)"""
+
         # 필요한 정보 추출
         instruction = ctx.task_schema.get("instruction", "")
         final_response = ctx.logs.get("actual_output") or ctx.logs.get("final_response", "")
-        
+
         # final_response 검증
         if final_response is None:
             final_response = ""
         elif not isinstance(final_response, str):
             final_response = str(final_response)
-        
+
         # 빈 응답 체크
         if not final_response or len(final_response.strip()) < 3:
             return EvaluationResult(
                 self.name,
                 0.0,
                 {
-                    "score": 1,
-                    "normalized_score": 0.0,
-                    "reason": "응답이 생성되지 않음",
-                    "success": False
+                    "success": False,
+                    "votes": [],
+                    "vote_count": {"success": 0, "fail": 0},
+                    "reasons": ["응답이 생성되지 않음"],
+                    "final_reason": "응답이 생성되지 않음"
                 }
             )
-        
+
         # 도구 호출 정보 수집 (응답은 golden_context에서 제공하므로 호출 정보만 포함)
         tool_calls = []
         for action in ctx.action_trace:
@@ -529,14 +582,14 @@ class SRMetric(LLMJudgeMetric):
                 "args": action.get("args", {}),
                 "success": action.get("success", False)
             })
-        
+
         # golden_fields가 있으면 핵심 컨텍스트 추출, 없으면 기본 tool_calls 사용
         golden_fields = ctx.task_schema.get("golden_fields", [])
         golden_context = extract_golden_context(ctx.action_trace, golden_fields)
-        
+
         # LLM Judge 프롬프트 구성
         prompt_template = self.prompt_loader.get_prompt('sr')
-        
+
         # golden_context가 있으면 프롬프트에 포함
         if golden_context:
             prompt = prompt_template.format(
@@ -561,27 +614,22 @@ class SRMetric(LLMJudgeMetric):
                     final_response=final_response,
                     tool_calls=json.dumps(tool_calls, ensure_ascii=False, indent=2)
                 )
-        
-        # Multi-judge 호출 (점수 평가)
-        llm_result = self._call_multi_judge_score(prompt, 'sr', SRResponse, min_score=1, max_score=5)
-        raw_score = llm_result.get("score", 1)
-        
-        # 1-5점을 0.0-1.0 스케일로 정규화
-        normalized_score = max(0.0, (raw_score - 1) / 4.0)
-        
-        # 성공 여부 판단 (3점 이상이면 성공으로 간주)
-        success = raw_score >= 3
-        
+
+        # 단일 모델 다중 추론 + 하드 보팅
+        voting_result = self._call_single_model_voting(prompt, n=self.vote_count)
+
+        # success=True면 1.0, False면 0.0
+        score = 1.0 if voting_result["success"] else 0.0
+
         return EvaluationResult(
             self.name,
-            normalized_score,
+            score,
             {
-                "score": raw_score,
-                "normalized_score": normalized_score,
-                "average_score": llm_result.get("average_score", 0),
-                "success": success,
-                "reason": llm_result.get("reason", ""),
-                "individual_judges": llm_result.get("individual_results", [])
+                "success": voting_result["success"],
+                "votes": voting_result["votes"],
+                "vote_count": voting_result["vote_count"],
+                "reasons": voting_result["reasons"],
+                "final_reason": voting_result["final_reason"]
             }
         )
 
