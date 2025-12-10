@@ -3,7 +3,11 @@
 sr:
   system: "You are an expert evaluator for task completion assessment."
   template: |
-    사용자의 요청이 성공적으로 완수되었는지 SUCCESS/FAIL로 판단하세요.
+    사용자의 요청이 성공적으로 완수되었는지 평가하세요.
+
+    [평가 절차]
+    1. 먼저 아래 판정 기준에 따라 평가 이유를 작성하세요
+    2. 이유를 바탕으로 최종 SUCCESS/FAIL 판정을 내리세요
 
     사용자 요청: {instruction}
 
@@ -25,7 +29,7 @@ sr:
     - 환각(hallucination)으로 거짓 정보를 제공한 경우 FAIL
     - 응답이 없거나 에러만 있는 경우 FAIL
 
-    중요: 평가 이유는 2-3문장으로 간결하게 작성하세요.
+    중요: 반드시 평가 이유를 먼저 작성한 후 판정을 내리세요. 이유는 2-3문장으로 간결하게 작성하세요.
 
 arg_acc:
   system: "You are an expert evaluator for argument accuracy."

@@ -11,7 +11,7 @@ from ..adapters.base_adapter import BaseAdapter
 
 # Pydantic 모델 정의
 class SRResponse(BaseModel):
-    """SR 메트릭 응답 모델 - success/fail 이진 판정"""
+    """SR 메트릭 응답 모델 - success/fail 이진 판정 (reason first)"""
     model_config = {
         "json_schema_extra": {
             "additionalProperties": False,
@@ -19,8 +19,8 @@ class SRResponse(BaseModel):
         }
     }
 
-    success: bool = Field(..., description="태스크 성공 여부")
-    reason: str = Field(..., description="판정 이유")
+    reason: str = Field(..., description="평가 이유 (먼저 작성)")
+    success: bool = Field(..., description="최종 판정 (이유를 바탕으로)")
 
 class ArgAccResponse(BaseModel):
     """ArgAcc 메트릭 응답 모델"""
