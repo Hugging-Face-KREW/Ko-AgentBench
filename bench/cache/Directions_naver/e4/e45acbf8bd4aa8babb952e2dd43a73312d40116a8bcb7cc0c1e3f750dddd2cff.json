@@ -1,0 +1,166 @@
+{
+  "key": "e45acbf8bd4aa8babb952e2dd43a73312d40116a8bcb7cc0c1e3f750dddd2cff",
+  "tool": "Directions_naver",
+  "created_at": "2025-12-14T15:22:30.671359",
+  "input_params": {
+    "goal": "126.45123,37.46349",
+    "option": "traavoidcaronly",
+    "start": "126.97070,37.55360",
+    "waypoints": "126.97688,37.57594|126.92490,37.52190"
+  },
+  "raw_args": {
+    "start": "126.97070,37.55360",
+    "goal": "126.45123,37.46349",
+    "waypoints": "126.97688,37.57594|126.92490,37.52190",
+    "option": "traavoidcaronly"
+  },
+  "data": {
+    "code": 0,
+    "message": "길찾기를 성공하였습니다.",
+    "currentDateTime": "2025-12-15T00:22:30",
+    "route": {
+      "traoptimal": [
+        {
+          "guide": [
+            {
+              "distance": 40,
+              "duration": 15397,
+              "instructions": "오른쪽 4시 방향",
+              "pointIndex": 3,
+              "type": 16
+            },
+            {
+              "distance": 297,
+              "duration": 73620,
+              "instructions": "'청파로' 방면으로 우회전",
+              "pointIndex": 18,
+              "type": 3
+            },
+            {
+              "distance": 180,
+              "duration": 30503,
+              "instructions": "서울역(서부)에서 유턴",
+              "pointIndex": 26,
+              "type": 6
+            },
+            {
+              "distance": 205,
+              "duration": 30825,
+              "instructions": "'공덕오거리' 방면으로 우회전",
+              "pointIndex": 38,
+              "type": 3
+            },
+            {
+              "distance": 2108,
+              "duration": 355329,
+              "instructions": "공덕오거리에서 '마포대교' 방면으로 왼쪽 11시 방향",
+              "pointIndex": 164,
+              "type": 13
+            },
+            {
+              "distance": 851,
+              "duration": 78811,
+              "instructions": "마포대교북단에서 '한남대교, 성산대교' 방면으로 오른쪽 도시고속도로 진입",
+              "pointIndex": 191,
+              "type": 68
+            },
+            {
+              "distance": 277,
+              "duration": 23886,
+              "instructions": "마포대교북단에서 '일산, 성산대교' 방면으로 고가차도 왼쪽 옆길",
+              "pointIndex": 208,
+              "type": 63
+            },
+            {
+              "distance": 2501,
+              "duration": 130223,
+              "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+              "pointIndex": 273,
+              "type": 54
+            },
+            {
+              "distance": 2152,
+              "duration": 96635,
+              "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+              "pointIndex": 311,
+              "type": 54
+            },
+            {
+              "distance": 7458,
+              "duration": 305472,
+              "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+              "pointIndex": 422,
+              "type": 66
+            },
+            {
+              "distance": 16299,
+              "duration": 602748,
+              "instructions": "인천공항톨게이트 (통행료 3,200원)",
+              "pointIndex": 590,
+              "type": 121
+            },
+            {
+              "distance": 21919,
+              "duration": 799235,
+              "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+              "pointIndex": 776,
+              "type": 5
+            },
+            {
+              "distance": 2650,
+              "duration": 195916,
+              "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+              "pointIndex": 818,
+              "type": 2
+            },
+            {
+              "distance": 1381,
+              "duration": 135821,
+              "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+              "pointIndex": 846,
+              "type": 2
+            },
+            {
+              "distance": 13,
+              "duration": 1640,
+              "instructions": "목적지",
+              "pointIndex": 849,
+              "type": 88
+            }
+          ],
+          "summary": {
+            "bbox": [
+              [
+                126.4512293,
+                37.4583495
+              ],
+              [
+                126.9706997,
+                37.598338
+              ]
+            ],
+            "departureTime": "2025-12-15T00:22:30",
+            "distance": 58331,
+            "duration": 2876061,
+            "fuelPrice": 7263,
+            "goal": {
+              "dir": 2,
+              "location": [
+                126.4512293,
+                37.4634894
+              ]
+            },
+            "start": {
+              "location": [
+                126.9706997,
+                37.5535991
+              ]
+            },
+            "taxiFare": 74220,
+            "tollFare": 3200
+          }
+        }
+      ]
+    }
+  }
+}

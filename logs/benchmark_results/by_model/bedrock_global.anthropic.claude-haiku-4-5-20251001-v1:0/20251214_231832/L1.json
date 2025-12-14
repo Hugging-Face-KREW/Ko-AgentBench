@@ -1,0 +1,3116 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-14T23:19:35.044744",
+    "model": "bedrock/global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "level": "L1",
+    "total_tasks": 11,
+    "successful_tasks": 11,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 61.07,
+    "average_execution_time": 5.55,
+    "total_steps": 22,
+    "average_steps": 2.0,
+    "total_tool_calls": 11,
+    "average_tool_calls": 1.0,
+    "total_tokens": 49167,
+    "average_tokens_per_task": 4469.73,
+    "average_prompt_tokens": 4170.82,
+    "average_completion_tokens": 298.91,
+    "average_tps": 805.13,
+    "ttft": {
+      "average": 2.595,
+      "min": 1.7254,
+      "max": 3.682,
+      "unit": "seconds"
+    }
+  },
+  "tool_usage_statistics": {
+    "Directions_naver": {
+      "count": 2,
+      "success": 2,
+      "failure": 0
+    },
+    "CryptoPrice_bithumb": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "WebSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "BlogSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "NewsSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "ItemSearch_aladin": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "VideoSearch_daum": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "PlaceSearch_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "CategorySearch_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "task_id": "L1-001",
+      "instruction": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 8.239699840545654,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "127.108882,37.394274",
+            "goal": "127.07190,37.51130",
+            "option": "traoptimal"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "start": {
+          "type": "string",
+          "required": true
+        },
+        "goal": {
+          "type": "string",
+          "required": true
+        },
+        "waypoints": {
+          "type": "string",
+          "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
+        },
+        "option": {
+          "type": "string",
+          "enum": [
+            "trafast",
+            "tracomfort",
+            "traoptimal",
+            "traavoidtoll",
+            "traavoidcaronly",
+            "trafast:traavoidtoll"
+          ]
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 3938,
+        "completion_tokens": 385,
+        "total_tokens": 4323
+      },
+      "ttft_stats": {
+        "average": 3.678785041673109,
+        "min": 2.460948333144188,
+        "max": 4.89662175020203,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "127.111221,37.395441",
+            "goal": "127.071707,37.514085",
+            "option": "trafast"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "code": 0,
+            "message": "길찾기를 성공하였습니다.",
+            "currentDateTime": "2025-12-14T23:18:37",
+            "route": {
+              "traoptimal": [
+                {
+                  "guide": [
+                    {
+                      "distance": 88,
+                      "duration": 32849,
+                      "instructions": "'대왕판교로606번길' 방면으로 우회전",
+                      "pointIndex": 7,
+                      "type": 3
+                    },
+                    {
+                      "distance": 91,
+                      "duration": 58166,
+                      "instructions": "판교역사거리에서 '양재, 내곡, 동판교IC' 방면으로 좌회전",
+                      "pointIndex": 13,
+                      "type": 2
+                    },
+                    {
+                      "distance": 741,
+                      "duration": 104638,
+                      "instructions": "봇들사거리에서 '시청·시의회' 방면으로 우회전",
+                      "pointIndex": 38,
+                      "type": 3
+                    },
+                    {
+                      "distance": 633,
+                      "duration": 214730,
+                      "instructions": "벌말사거리에서 '서울' 방면으로 좌회전",
+                      "pointIndex": 72,
+                      "type": 2
+                    },
+                    {
+                      "distance": 10665,
+                      "duration": 457439,
+                      "instructions": "수서지하차도에서 지하차도 진입",
+                      "pointIndex": 236,
+                      "type": 56
+                    },
+                    {
+                      "distance": 3294,
+                      "duration": 138336,
+                      "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
+                      "pointIndex": 282,
+                      "type": 69
+                    },
+                    {
+                      "distance": 160,
+                      "duration": 9656,
+                      "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
+                      "pointIndex": 285,
+                      "type": 41
+                    },
+                    {
+                      "distance": 901,
+                      "duration": 54375,
+                      "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
+                      "pointIndex": 302,
+                      "type": 3
+                    },
+                    {
+                      "distance": 289,
+                      "duration": 29258,
+                      "instructions": "종합운동장에서 '장지동, 가락시장' 방면으로 우회전",
+                      "pointIndex": 309,
+                      "type": 3
+                    },
+                    {
+                      "distance": 584,
+                      "duration": 105544,
+                      "instructions": "종합운동장에서 '잠실역' 방면으로 좌회전",
+                      "pointIndex": 323,
+                      "type": 2
+                    },
+                    {
+                      "distance": 635,
+                      "duration": 86115,
+                      "instructions": "종합운동장에서 유턴",
+                      "pointIndex": 329,
+                      "type": 6
+                    },
+                    {
+                      "distance": 384,
+                      "duration": 38831,
+                      "instructions": "우회전",
+                      "pointIndex": 333,
+                      "type": 3
+                    },
+                    {
+                      "distance": 331,
+                      "duration": 65659,
+                      "instructions": "로터리에서 10시 방향",
+                      "pointIndex": 348,
+                      "type": 26
+                    },
+                    {
+                      "distance": 98,
+                      "duration": 23125,
+                      "instructions": "목적지",
+                      "pointIndex": 352,
+                      "type": 88
+                    }
+                  ],
+                  "summary": {
+                    "bbox": [
+                      [
+                        127.0665882,
+                        37.3954403
+                      ],
+                      [
+                        127.1255874,
+                        37.5157448
+                      ]
+                    ],
+                    "departureTime": "2025-12-14T23:18:36",
+                    "distance": 18894,
+                    "duration": 1418721,
+                    "fuelPrice": 2352,
+                    "goal": {
+                      "dir": 2,
+                      "location": [
+                        127.0717062,
+                        37.5140841
+                      ]
+                    },
+                    "start": {
+                      "location": [
+                        127.1112203,
+                        37.3954403
+                      ]
+                    },
+                    "taxiFare": 24840,
+                    "tollFare": 0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "final_response": "판교역에서 잠실야구장까지 자동차로 **약 23분 40초**(1,418,721ms ≈ 23.6분)가 소요됩니다.\n\n**경로 정보:**\n- **거리**: 약 18.9km\n- **주요 경로**: 대왕판교로606번길 → 판교역사거리 → 동판교IC → 수서지하차도 → 강일IC → 올림픽대로 → 잠실야구장\n- **통행료**: 무료\n- **예상 택시요금**: 약 24,840원\n\n현재 시간대(2025년 12월 14일 23시 18분)를 기준으로 한 결과이므로, 실제 소요 시간은 교통 상황에 따라 변동될 수 있습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?"
+          },
+          {
+            "role": "assistant",
+            "content": "판교역에서 잠실야구장까지의 자동차 경로를 조회하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_VW5lzhzlSwyAjg6FRgaNJA",
+            "content": {
+              "code": 0,
+              "message": "길찾기를 성공하였습니다.",
+              "currentDateTime": "2025-12-14T23:18:37",
+              "route": {
+                "traoptimal": [
+                  {
+                    "guide": [
+                      {
+                        "distance": 88,
+                        "duration": 32849,
+                        "instructions": "'대왕판교로606번길' 방면으로 우회전",
+                        "pointIndex": 7,
+                        "type": 3
+                      },
+                      {
+                        "distance": 91,
+                        "duration": 58166,
+                        "instructions": "판교역사거리에서 '양재, 내곡, 동판교IC' 방면으로 좌회전",
+                        "pointIndex": 13,
+                        "type": 2
+                      },
+                      {
+                        "distance": 741,
+                        "duration": 104638,
+                        "instructions": "봇들사거리에서 '시청·시의회' 방면으로 우회전",
+                        "pointIndex": 38,
+                        "type": 3
+                      },
+                      {
+                        "distance": 633,
+                        "duration": 214730,
+                        "instructions": "벌말사거리에서 '서울' 방면으로 좌회전",
+                        "pointIndex": 72,
+                        "type": 2
+                      },
+                      {
+                        "distance": 10665,
+                        "duration": 457439,
+                        "instructions": "수서지하차도에서 지하차도 진입",
+                        "pointIndex": 236,
+                        "type": 56
+                      },
+                      {
+                        "distance": 3294,
+                        "duration": 138336,
+                        "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
+                        "pointIndex": 282,
+                        "type": 69
+                      },
+                      {
+                        "distance": 160,
+                        "duration": 9656,
+                        "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
+                        "pointIndex": 285,
+                        "type": 41
+                      },
+                      {
+                        "distance": 901,
+                        "duration": 54375,
+                        "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
+                        "pointIndex": 302,
+                        "type": 3
+                      },
+                      {
+                        "distance": 289,
+                        "duration": 29258,
+                        "instructions": "종합운동장에서 '장지동, 가락시장' 방면으로 우회전",
+                        "pointIndex": 309,
+                        "type": 3
+                      },
+                      {
+                        "distance": 584,
+                        "duration": 105544,
+                        "instructions": "종합운동장에서 '잠실역' 방면으로 좌회전",
+                        "pointIndex": 323,
+                        "type": 2
+                      },
+                      {
+                        "distance": 635,
+                        "duration": 86115,
+                        "instructions": "종합운동장에서 유턴",
+                        "pointIndex": 329,
+                        "type": 6
+                      },
+                      {
+                        "distance": 384,
+                        "duration": 38831,
+                        "instructions": "우회전",
+                        "pointIndex": 333,
+                        "type": 3
+                      },
+                      {
+                        "distance": 331,
+                        "duration": 65659,
+                        "instructions": "로터리에서 10시 방향",
+                        "pointIndex": 348,
+                        "type": 26
+                      },
+                      {
+                        "distance": 98,
+                        "duration": 23125,
+                        "instructions": "목적지",
+                        "pointIndex": 352,
+                        "type": 88
+                      }
+                    ],
+                    "summary": {
+                      "bbox": [
+                        [
+                          127.0665882,
+                          37.3954403
+                        ],
+                        [
+                          127.1255874,
+                          37.5157448
+                        ]
+                      ],
+                      "departureTime": "2025-12-14T23:18:36",
+                      "distance": 18894,
+                      "duration": 1418721,
+                      "fuelPrice": 2352,
+                      "goal": {
+                        "dir": 2,
+                        "location": [
+                          127.0717062,
+                          37.5140841
+                        ]
+                      },
+                      "start": {
+                        "location": [
+                          127.1112203,
+                          37.3954403
+                        ]
+                      },
+                      "taxiFare": 24840,
+                      "tollFare": 0
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "판교역에서 잠실야구장까지 자동차로 **약 23분 40초**(1,418,721ms ≈ 23.6분)가 소요됩니다.\n\n**경로 정보:**\n- **거리**: 약 18.9km\n- **주요 경로**: 대왕판교로606번길 → 판교역사거리 → 동판교IC → 수서지하차도 → 강일IC → 올림픽대로 → 잠실야구장\n- **통행료**: 무료\n- **예상 택시요금**: 약 24,840원\n\n현재 시간대(2025년 12월 14일 23시 18분)를 기준으로 한 결과이므로, 실제 소요 시간은 교통 상황에 따라 변동될 수 있습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-002",
+      "instruction": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 7.785262823104858,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "start": {
+          "type": "string",
+          "required": true
+        },
+        "goal": {
+          "type": "string",
+          "required": true
+        },
+        "waypoints": {
+          "type": "string",
+          "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
+        },
+        "option": {
+          "type": "string",
+          "enum": [
+            "trafast",
+            "tracomfort",
+            "traoptimal",
+            "traavoidtoll",
+            "traavoidcaronly",
+            "trafast:traavoidtoll"
+          ]
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 4403,
+        "completion_tokens": 584,
+        "total_tokens": 4987
+      },
+      "ttft_stats": {
+        "average": 3.68202616693452,
+        "min": 2.144104791805148,
+        "max": 5.219947542063892,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "code": 0,
+            "message": "길찾기를 성공하였습니다.",
+            "currentDateTime": "2025-12-14T23:18:44",
+            "route": {
+              "traoptimal": [
+                {
+                  "guide": [
+                    {
+                      "distance": 40,
+                      "duration": 17312,
+                      "instructions": "오른쪽 4시 방향",
+                      "pointIndex": 3,
+                      "type": 16
+                    },
+                    {
+                      "distance": 297,
+                      "duration": 74452,
+                      "instructions": "'청파로' 방면으로 우회전",
+                      "pointIndex": 18,
+                      "type": 3
+                    },
+                    {
+                      "distance": 204,
+                      "duration": 37491,
+                      "instructions": "서울역(서부)에서 '공덕오거리, 충정로역' 방면으로 좌회전",
+                      "pointIndex": 28,
+                      "type": 2
+                    },
+                    {
+                      "distance": 67,
+                      "duration": 12064,
+                      "instructions": "'만리재로' 방면으로 좌회전",
+                      "pointIndex": 33,
+                      "type": 2
+                    },
+                    {
+                      "distance": 2247,
+                      "duration": 399288,
+                      "instructions": "공덕오거리에서 '마포대교' 방면으로 왼쪽 11시 방향",
+                      "pointIndex": 164,
+                      "type": 13
+                    },
+                    {
+                      "distance": 851,
+                      "duration": 84300,
+                      "instructions": "마포대교북단에서 '한남대교, 성산대교' 방면으로 오른쪽 도시고속도로 진입",
+                      "pointIndex": 191,
+                      "type": 68
+                    },
+                    {
+                      "distance": 277,
+                      "duration": 25411,
+                      "instructions": "마포대교북단에서 '일산, 성산대교' 방면으로 고가차도 왼쪽 옆길",
+                      "pointIndex": 208,
+                      "type": 63
+                    },
+                    {
+                      "distance": 2501,
+                      "duration": 138758,
+                      "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                      "pointIndex": 273,
+                      "type": 54
+                    },
+                    {
+                      "distance": 2152,
+                      "duration": 105000,
+                      "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                      "pointIndex": 311,
+                      "type": 54
+                    },
+                    {
+                      "distance": 7458,
+                      "duration": 315361,
+                      "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                      "pointIndex": 422,
+                      "type": 66
+                    },
+                    {
+                      "distance": 16299,
+                      "duration": 607033,
+                      "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                      "pointIndex": 590,
+                      "type": 121
+                    },
+                    {
+                      "distance": 21919,
+                      "duration": 790345,
+                      "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                      "pointIndex": 776,
+                      "type": 5
+                    },
+                    {
+                      "distance": 2650,
+                      "duration": 176090,
+                      "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 818,
+                      "type": 2
+                    },
+                    {
+                      "distance": 1381,
+                      "duration": 139730,
+                      "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 846,
+                      "type": 2
+                    },
+                    {
+                      "distance": 13,
+                      "duration": 1855,
+                      "instructions": "목적지",
+                      "pointIndex": 849,
+                      "type": 88
+                    }
+                  ],
+                  "summary": {
+                    "bbox": [
+                      [
+                        126.4512293,
+                        37.4583495
+                      ],
+                      [
+                        126.9706997,
+                        37.598338
+                      ]
+                    ],
+                    "departureTime": "2025-12-14T23:18:44",
+                    "distance": 58356,
+                    "duration": 2924490,
+                    "fuelPrice": 7266,
+                    "goal": {
+                      "dir": 2,
+                      "location": [
+                        126.4512293,
+                        37.4634894
+                      ]
+                    },
+                    "start": {
+                      "location": [
+                        126.9706997,
+                        37.5535991
+                      ]
+                    },
+                    "taxiFare": 73620,
+                    "tollFare": 3200
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "final_response": "경로 조회가 완료되었습니다! 📍\n\n**서울역 → 인천공항 제1터미널 (광화문, 여의도 경유, 유료도로 회피)**\n\n| 항목 | 내용 |\n|------|------|\n| **소요 시간** | **약 49분** (2,924,490초 = 48.7분) |\n| **거리** | 약 58.4km |\n| **통행료** | 3,200원 (일부 구간) |\n| **예상 택시비** | 약 73,620원 |\n\n**주요 경로:**\n1. 서울역 출발\n2. 광화문 경유\n3. 여의도 경유\n4. 공덕오거리 → 마포대교북단 → 성산대교북단 → 일산분기점\n5. 북로분기점 → 인천공항 → 신불IC\n6. 제2여객터미널/화물터미널 방향 → 인천공항 제1터미널 도착\n\n유료도로를 피하려고 했지만, 인천공항 접근 구간에서 일부 통행료(3,200원)가 발생합니다. 대략 **50분 정도**를 예상하시면 됩니다!",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "서울역에서 인천공항 제1터미널까지 광화문과 여의도를 경유하여 유료도로를 피하고 이동하는 경로를 조회하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_MOmrxCKxQ9CFUOm8jNBYKQ",
+            "content": {
+              "code": 0,
+              "message": "길찾기를 성공하였습니다.",
+              "currentDateTime": "2025-12-14T23:18:44",
+              "route": {
+                "traoptimal": [
+                  {
+                    "guide": [
+                      {
+                        "distance": 40,
+                        "duration": 17312,
+                        "instructions": "오른쪽 4시 방향",
+                        "pointIndex": 3,
+                        "type": 16
+                      },
+                      {
+                        "distance": 297,
+                        "duration": 74452,
+                        "instructions": "'청파로' 방면으로 우회전",
+                        "pointIndex": 18,
+                        "type": 3
+                      },
+                      {
+                        "distance": 204,
+                        "duration": 37491,
+                        "instructions": "서울역(서부)에서 '공덕오거리, 충정로역' 방면으로 좌회전",
+                        "pointIndex": 28,
+                        "type": 2
+                      },
+                      {
+                        "distance": 67,
+                        "duration": 12064,
+                        "instructions": "'만리재로' 방면으로 좌회전",
+                        "pointIndex": 33,
+                        "type": 2
+                      },
+                      {
+                        "distance": 2247,
+                        "duration": 399288,
+                        "instructions": "공덕오거리에서 '마포대교' 방면으로 왼쪽 11시 방향",
+                        "pointIndex": 164,
+                        "type": 13
+                      },
+                      {
+                        "distance": 851,
+                        "duration": 84300,
+                        "instructions": "마포대교북단에서 '한남대교, 성산대교' 방면으로 오른쪽 도시고속도로 진입",
+                        "pointIndex": 191,
+                        "type": 68
+                      },
+                      {
+                        "distance": 277,
+                        "duration": 25411,
+                        "instructions": "마포대교북단에서 '일산, 성산대교' 방면으로 고가차도 왼쪽 옆길",
+                        "pointIndex": 208,
+                        "type": 63
+                      },
+                      {
+                        "distance": 2501,
+                        "duration": 138758,
+                        "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                        "pointIndex": 273,
+                        "type": 54
+                      },
+                      {
+                        "distance": 2152,
+                        "duration": 105000,
+                        "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                        "pointIndex": 311,
+                        "type": 54
+                      },
+                      {
+                        "distance": 7458,
+                        "duration": 315361,
+                        "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                        "pointIndex": 422,
+                        "type": 66
+                      },
+                      {
+                        "distance": 16299,
+                        "duration": 607033,
+                        "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                        "pointIndex": 590,
+                        "type": 121
+                      },
+                      {
+                        "distance": 21919,
+                        "duration": 790345,
+                        "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                        "pointIndex": 776,
+                        "type": 5
+                      },
+                      {
+                        "distance": 2650,
+                        "duration": 176090,
+                        "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 818,
+                        "type": 2
+                      },
+                      {
+                        "distance": 1381,
+                        "duration": 139730,
+                        "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 846,
+                        "type": 2
+                      },
+                      {
+                        "distance": 13,
+                        "duration": 1855,
+                        "instructions": "목적지",
+                        "pointIndex": 849,
+                        "type": 88
+                      }
+                    ],
+                    "summary": {
+                      "bbox": [
+                        [
+                          126.4512293,
+                          37.4583495
+                        ],
+                        [
+                          126.9706997,
+                          37.598338
+                        ]
+                      ],
+                      "departureTime": "2025-12-14T23:18:44",
+                      "distance": 58356,
+                      "duration": 2924490,
+                      "fuelPrice": 7266,
+                      "goal": {
+                        "dir": 2,
+                        "location": [
+                          126.4512293,
+                          37.4634894
+                        ]
+                      },
+                      "start": {
+                        "location": [
+                          126.9706997,
+                          37.5535991
+                        ]
+                      },
+                      "taxiFare": 73620,
+                      "tollFare": 3200
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "경로 조회가 완료되었습니다! 📍\n\n**서울역 → 인천공항 제1터미널 (광화문, 여의도 경유, 유료도로 회피)**\n\n| 항목 | 내용 |\n|------|------|\n| **소요 시간** | **약 49분** (2,924,490초 = 48.7분) |\n| **거리** | 약 58.4km |\n| **통행료** | 3,200원 (일부 구간) |\n| **예상 택시비** | 약 73,620원 |\n\n**주요 경로:**\n1. 서울역 출발\n2. 광화문 경유\n3. 여의도 경유\n4. 공덕오거리 → 마포대교북단 → 성산대교북단 → 일산분기점\n5. 북로분기점 → 인천공항 → 신불IC\n6. 제2여객터미널/화물터미널 방향 → 인천공항 제1터미널 도착\n\n유료도로를 피하려고 했지만, 인천공항 접근 구간에서 일부 통행료(3,200원)가 발생합니다. 대략 **50분 정도**를 예상하시면 됩니다!"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-003",
+      "instruction": "빗썸에서 비트코인 원화 현재가 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 5.078958988189697,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "markets": {
+          "type": "string",
+          "enum": [
+            "KRW-BTC",
+            "BTC-ETH"
+          ],
+          "required": true
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2047,
+        "completion_tokens": 358,
+        "total_tokens": 2405
+      },
+      "ttft_stats": {
+        "average": 2.498709166655317,
+        "min": 1.7079468751326203,
+        "max": 3.2894714581780136,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "trade_date": "20251214",
+              "trade_time": "141843",
+              "trade_date_kst": "20251214",
+              "trade_time_kst": "231843",
+              "trade_timestamp": 1765754323728,
+              "opening_price": 134451000,
+              "high_price": 134969000,
+              "low_price": 132700000,
+              "trade_price": 133490000,
+              "prev_closing_price": 134444000,
+              "change": "FALL",
+              "change_price": 954000,
+              "change_rate": 0.0071,
+              "signed_change_price": -954000,
+              "signed_change_rate": -0.0071,
+              "trade_volume": 0.00010863,
+              "acc_trade_price": 37928200304.67922,
+              "acc_trade_price_24h": 39744909142.38345,
+              "acc_trade_volume": 283.04393812,
+              "acc_trade_volume_24h": 296.55136191,
+              "highest_52_week_price": 179734000,
+              "highest_52_week_date": "2025-10-10",
+              "lowest_52_week_price": 111850000,
+              "lowest_52_week_date": "2025-04-08",
+              "timestamp": 1765754323728
+            }
+          ]
+        }
+      ],
+      "final_response": "빗썸에서 조회한 **비트코인(BTC) 원화 현재가**입니다:\n\n📊 **현재 가격: 133,490,000 원**\n\n**주요 정보:**\n- 💹 변동률: -0.71% (하락)\n- 📉 변동가: -954,000원\n- 📈 고가(당일): 134,969,000원\n- 📉 저가(당일): 132,700,000원\n- 🔄 시가(당일): 134,451,000원\n- 📊 전일종가: 134,444,000원\n\n**52주 기준:**\n- 최고가: 179,734,000원 (2025년 10월 10일)\n- 최저가: 111,850,000원 (2025년 4월 8일)\n\n현재 비트코인이 전일 대비 약간 하락한 상태입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 비트코인 원화 현재가 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "비트썸에서 비트코인 원화 현재가를 조회해드리겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_SRhoSzv7Sr63sS6LCxNuuQ",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "trade_date": "20251214",
+                "trade_time": "141843",
+                "trade_date_kst": "20251214",
+                "trade_time_kst": "231843",
+                "trade_timestamp": 1765754323728,
+                "opening_price": 134451000,
+                "high_price": 134969000,
+                "low_price": 132700000,
+                "trade_price": 133490000,
+                "prev_closing_price": 134444000,
+                "change": "FALL",
+                "change_price": 954000,
+                "change_rate": 0.0071,
+                "signed_change_price": -954000,
+                "signed_change_rate": -0.0071,
+                "trade_volume": 0.00010863,
+                "acc_trade_price": 37928200304.67922,
+                "acc_trade_price_24h": 39744909142.38345,
+                "acc_trade_volume": 283.04393812,
+                "acc_trade_volume_24h": 296.55136191,
+                "highest_52_week_price": 179734000,
+                "highest_52_week_date": "2025-10-10",
+                "lowest_52_week_price": 111850000,
+                "lowest_52_week_date": "2025-04-08",
+                "timestamp": 1765754323728
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": "빗썸에서 조회한 **비트코인(BTC) 원화 현재가**입니다:\n\n📊 **현재 가격: 133,490,000 원**\n\n**주요 정보:**\n- 💹 변동률: -0.71% (하락)\n- 📉 변동가: -954,000원\n- 📈 고가(당일): 134,969,000원\n- 📉 저가(당일): 132,700,000원\n- 🔄 시가(당일): 134,451,000원\n- 📊 전일종가: 134,444,000원\n\n**52주 기준:**\n- 최고가: 179,734,000원 (2025년 10월 10일)\n- 최저가: 111,850,000원 (2025년 4월 8일)\n\n현재 비트코인이 전일 대비 약간 하락한 상태입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-004",
+      "instruction": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.228097200393677,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "jisu": {
+          "type": "string",
+          "enum": [
+            "KOSPI",
+            "KOSPI200",
+            "KRX100",
+            "KOSDAQ"
+          ],
+          "required": true
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2445,
+        "completion_tokens": 160,
+        "total_tokens": 2605
+      },
+      "ttft_stats": {
+        "average": 2.039240791928023,
+        "min": 1.7693363749422133,
+        "max": 2.309145208913833,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "t1511OutBlock": {
+              "gubun": "2",
+              "hname": "코스닥 종합",
+              "pricejisu": "937.34",
+              "jniljisu": "934.64",
+              "sign": "2",
+              "change": "2.70",
+              "diffjisu": "0.29",
+              "jnilvolume": 912428,
+              "volume": 1012037,
+              "volumechange": 99609,
+              "volumerate": "110.92",
+              "jnilvalue": 10944398,
+              "value": 12548792,
+              "valuechange": 1604394,
+              "valuerate": "114.66",
+              "openjisu": "933.99",
+              "opendiff": "-0.07",
+              "opentime": "090030",
+              "highjisu": "938.11",
+              "highdiff": "0.37",
+              "hightime": "093820",
+              "lowjisu": "930.21",
+              "lowdiff": "-0.47",
+              "lowtime": "132510",
+              "whjisu": "943.19",
+              "whchange": "-0.62",
+              "whjday": "20251211",
+              "wljisu": "627.01",
+              "wlchange": "49.49",
+              "wljday": "20241209",
+              "yhjisu": "943.19",
+              "yhchange": "-0.62",
+              "yhjday": "20251211",
+              "yljisu": "637.55",
+              "ylchange": "47.02",
+              "yljday": "20250409",
+              "firstjcode": "301",
+              "firstjname": "코스닥 종합",
+              "firstjisu": "937.34",
+              "firsign": "2",
+              "firchange": "2.70",
+              "firdiff": "0.02",
+              "secondjcode": "339",
+              "secondjname": "KOSDAQ100",
+              "secondjisu": "2320.88",
+              "secsign": "5",
+              "secchange": "12.94",
+              "secdiff": "-0.55",
+              "thirdjcode": "405",
+              "thirdjname": "KOSDAQ 150",
+              "thirdjisu": "1588.11",
+              "thrsign": "5",
+              "thrchange": "10.06",
+              "thrdiff": "-0.63",
+              "fourthjcode": "324",
+              "fourthjname": "전 기/전 자",
+              "fourthjisu": "1515.51",
+              "forsign": "2",
+              "forchange": "14.61",
+              "fordiff": "0.97",
+              "highjo": 905,
+              "upjo": 3,
+              "unchgjo": 185,
+              "lowjo": 728,
+              "downjo": 0
+            },
+            "rsp_cd": "00000",
+            "rsp_msg": "정상적으로 조회가 완료되었습니다."
+          }
+        }
+      ],
+      "final_response": "KOSDAQ 지수의 등락률은 **0.29%** 입니다.\n\n현재 KOSDAQ 지수는 937.34로 전일 대비 2.70 포인트 상승했으며, 이는 0.29%의 상승률입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "KOSDAQ 지수 정보를 조회하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_zjes4PTkSxmEY3D7INNmaw",
+            "content": {
+              "t1511OutBlock": {
+                "gubun": "2",
+                "hname": "코스닥 종합",
+                "pricejisu": "937.34",
+                "jniljisu": "934.64",
+                "sign": "2",
+                "change": "2.70",
+                "diffjisu": "0.29",
+                "jnilvolume": 912428,
+                "volume": 1012037,
+                "volumechange": 99609,
+                "volumerate": "110.92",
+                "jnilvalue": 10944398,
+                "value": 12548792,
+                "valuechange": 1604394,
+                "valuerate": "114.66",
+                "openjisu": "933.99",
+                "opendiff": "-0.07",
+                "opentime": "090030",
+                "highjisu": "938.11",
+                "highdiff": "0.37",
+                "hightime": "093820",
+                "lowjisu": "930.21",
+                "lowdiff": "-0.47",
+                "lowtime": "132510",
+                "whjisu": "943.19",
+                "whchange": "-0.62",
+                "whjday": "20251211",
+                "wljisu": "627.01",
+                "wlchange": "49.49",
+                "wljday": "20241209",
+                "yhjisu": "943.19",
+                "yhchange": "-0.62",
+                "yhjday": "20251211",
+                "yljisu": "637.55",
+                "ylchange": "47.02",
+                "yljday": "20250409",
+                "firstjcode": "301",
+                "firstjname": "코스닥 종합",
+                "firstjisu": "937.34",
+                "firsign": "2",
+                "firchange": "2.70",
+                "firdiff": "0.02",
+                "secondjcode": "339",
+                "secondjname": "KOSDAQ100",
+                "secondjisu": "2320.88",
+                "secsign": "5",
+                "secchange": "12.94",
+                "secdiff": "-0.55",
+                "thirdjcode": "405",
+                "thirdjname": "KOSDAQ 150",
+                "thirdjisu": "1588.11",
+                "thrsign": "5",
+                "thrchange": "10.06",
+                "thrdiff": "-0.63",
+                "fourthjcode": "324",
+                "fourthjname": "전 기/전 자",
+                "fourthjisu": "1515.51",
+                "forsign": "2",
+                "forchange": "14.61",
+                "fordiff": "0.97",
+                "highjo": 905,
+                "upjo": 3,
+                "unchgjo": 185,
+                "lowjo": 728,
+                "downjo": 0
+              },
+              "rsp_cd": "00000",
+              "rsp_msg": "정상적으로 조회가 완료되었습니다."
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "KOSDAQ 지수의 등락률은 **0.29%** 입니다.\n\n현재 KOSDAQ 지수는 937.34로 전일 대비 2.70 포인트 상승했으며, 이는 0.29%의 상승률입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-005",
+      "instruction": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.392315864562988,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2359,
+        "completion_tokens": 189,
+        "total_tokens": 2548
+      },
+      "ttft_stats": {
+        "average": 1.7254175413399935,
+        "min": 1.3269384168088436,
+        "max": 2.1238966658711433,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Sun, 14 Dec 2025 23:19:01 +0900",
+            "total": 684854,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "환경부 <b>전기차</b> 급속<b>충전</b>기 <b>충전요금</b> 변경 안내문 - 참여마당 &gt; 공지사항",
+                "link": "https://ev.or.kr/nportal/infoGarden/selectBBSListDtl.do?ARTC_ID=12678&BLBD_ID=notice",
+                "description": "한전의 <b>전기</b><b>요금 인상</b> 등으로 인해 부득이하게 환경부 <b>전기차</b> 급속<b>충전</b>기의 <b>충전요금</b>을 아래와 같이 변경하게 되었음을 알려드리며, 변경<b>요금</b>은 '22년 9월 1일 0시부터 적용됩니다. &lt;환경부..."
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "첫 번째 검색 결과의 제목은 다음과 같습니다:\n\n**\"환경부 전기차 급속충전기 충전요금 변경 안내문 - 참여마당 > 공지사항\"**",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "네이버에서 '전기차 충전 요금 인상'을 검색하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_WLkqLyLRTBCIbLZB-DMfWQ",
+            "content": {
+              "lastBuildDate": "Sun, 14 Dec 2025 23:19:01 +0900",
+              "total": 684854,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "환경부 <b>전기차</b> 급속<b>충전</b>기 <b>충전요금</b> 변경 안내문 - 참여마당 &gt; 공지사항",
+                  "link": "https://ev.or.kr/nportal/infoGarden/selectBBSListDtl.do?ARTC_ID=12678&BLBD_ID=notice",
+                  "description": "한전의 <b>전기</b><b>요금 인상</b> 등으로 인해 부득이하게 환경부 <b>전기차</b> 급속<b>충전</b>기의 <b>충전요금</b>을 아래와 같이 변경하게 되었음을 알려드리며, 변경<b>요금</b>은 '22년 9월 1일 0시부터 적용됩니다. &lt;환경부..."
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "첫 번째 검색 결과의 제목은 다음과 같습니다:\n\n**\"환경부 전기차 급속충전기 충전요금 변경 안내문 - 참여마당 > 공지사항\"**"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-006",
+      "instruction": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 5.466829776763916,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 3880,
+        "completion_tokens": 240,
+        "total_tokens": 4120
+      },
+      "ttft_stats": {
+        "average": 2.400831458158791,
+        "min": 1.83675841614604,
+        "max": 2.964904500171542,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Sun, 14 Dec 2025 23:19:05 +0900",
+            "total": 2468,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "<b>제주</b> 서귀포 <b>여행</b> 위호텔 <b>후기</b> <b>제주</b> 서쪽 <b>가을 여행 코스</b> 지금... ",
+                "link": "https://blog.naver.com/neweunha/224017621667",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 교과서가 쉬워지는 주말여행 - 박은하, 김수진 취미로 먹고산다 여행작가 박은하 원데이 아트트립 미술관여행 컨설팅북 - 박은하 김남경 김수진 차없이 떠나는 주말여행 코스북 - 김남경, 김수진, 박은하 제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금 떠나면 특별한 이유 2025. 9. 22. 16:53 가을을 맞아 제주 여행 1박 2일을 다녀왔어요. 요즘 평일 항공료가 많이 저렴하더라고요. 저는 제주특별자치도 관광협회 공식 항공권과 호텔 예약을 하고, 호텔 주변 가볼만한곳 위주로 서귀포 여행 코스를 짰습니다. 옷귀마 테마타운 승마부터 휴애리 자연생활공원, 카멜리아힐까지. 호텔 주변에서 가을 여행 감성을 느껴볼 수 있는 관광지를 다녀왔습니다. 탐나오 할인 이벤트를 활용해 호텔뿐만 아니라 관광지 티켓을 예약했더니 생각보다 저렴하게 다녀올 수 있었어요. 제주 서귀포 여행 후기와 함께 탐나오 할인 이벤트 소식을 정리해 봤어요. 1. 서귀포 ",
+                "bloggername": "여행작가 박은하",
+                "bloggerlink": "blog.naver.com/neweunha",
+                "postdate": "20250922"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "첫 번째 검색 결과 글의 제목은 다음과 같습니다:\n\n**\"제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금...\"**\n\n이 글은 여행작가 박은하님의 블로그에 2025년 9월 22일에 올려진 글입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_6a7adKTMQZSOriF6SAidnA",
+            "content": {
+              "lastBuildDate": "Sun, 14 Dec 2025 23:19:05 +0900",
+              "total": 2468,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "<b>제주</b> 서귀포 <b>여행</b> 위호텔 <b>후기</b> <b>제주</b> 서쪽 <b>가을 여행 코스</b> 지금... ",
+                  "link": "https://blog.naver.com/neweunha/224017621667",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 교과서가 쉬워지는 주말여행 - 박은하, 김수진 취미로 먹고산다 여행작가 박은하 원데이 아트트립 미술관여행 컨설팅북 - 박은하 김남경 김수진 차없이 떠나는 주말여행 코스북 - 김남경, 김수진, 박은하 제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금 떠나면 특별한 이유 2025. 9. 22. 16:53 가을을 맞아 제주 여행 1박 2일을 다녀왔어요. 요즘 평일 항공료가 많이 저렴하더라고요. 저는 제주특별자치도 관광협회 공식 항공권과 호텔 예약을 하고, 호텔 주변 가볼만한곳 위주로 서귀포 여행 코스를 짰습니다. 옷귀마 테마타운 승마부터 휴애리 자연생활공원, 카멜리아힐까지. 호텔 주변에서 가을 여행 감성을 느껴볼 수 있는 관광지를 다녀왔습니다. 탐나오 할인 이벤트를 활용해 호텔뿐만 아니라 관광지 티켓을 예약했더니 생각보다 저렴하게 다녀올 수 있었어요. 제주 서귀포 여행 후기와 함께 탐나오 할인 이벤트 소식을 정리해 봤어요. 1. 서귀포 ",
+                  "bloggername": "여행작가 박은하",
+                  "bloggerlink": "blog.naver.com/neweunha",
+                  "postdate": "20250922"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "첫 번째 검색 결과 글의 제목은 다음과 같습니다:\n\n**\"제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금...\"**\n\n이 글은 여행작가 박은하님의 블로그에 2025년 9월 22일에 올려진 글입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-007",
+      "instruction": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 5.40121603012085,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "NewsSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "NewsSearch_naver",
+          "args": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 3910,
+        "completion_tokens": 283,
+        "total_tokens": 4193
+      },
+      "ttft_stats": {
+        "average": 2.506917228922248,
+        "min": 1.9391804998740554,
+        "max": 3.0746539579704404,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "NewsSearch_naver",
+          "arguments": {
+            "query": "반도체 수출 전망",
+            "display": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Sun, 14 Dec 2025 23:19:11 +0900",
+            "total": 297029,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "AI 투자 훈풍에 <b>반도체</b>·디스플레이 ‘맑음’…석화·철강은 ‘흐림’",
+                "originallink": "https://www.sedaily.com/NewsView/2H1Q82Z4KL",
+                "link": "https://n.news.naver.com/mnews/article/011/0004567025?sid=101",
+                "description": "AI 투자 훈풍에 반도체·디스플레이 ‘맑음’…석화·철강은 ‘흐림’ 텍스트 음성 변환 서비스 사용하기 이동 통신망을 이용하여 음성을 재생하면 별도의 데이터 통화료가 부과될 수 있습니다. ■상의 ‘2026년 산업 기상도’ 배터리 포함 키워드 'R.E.D'로 정해 中 과잉공급 여파 철강 등은 수출  ↓ 인공지능(AI) 투자 확대에 따라 반도체·디스플레이·배터리 업종이 내년 우리나라 경제를 견인할 것이라는 전망이 나왔다. 반면 중국의 과잉공급과 미국의 관세장벽에 가로막힌 석유화학·철강 등은 내년에도 위기가 지속될 것으로 보인다. 대한상공회의소는 14일 11개 주요 업종별 협회와 ‘2026년 산업 기상도’를 전망해 이 같은 결과를 발표했다. 상의는 반도체와 디스플레이 업종은 맑을 것으로 내다봤으며 배터리·바이오·자동차·조선·섬유패션 산업은 ‘대체로 맑음’, 기계·석유화학·철강·건설은 ‘흐림’으로 전망했다. 이에 따라 상의는 반도체(DRAM)와 에너지저장장치(ESS), 디스플레이(Display",
+                "pubDate": "Sun, 14 Dec 2025 13:21:00 +0900"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "네이버 뉴스에서 검색한 '반도체 수출 전망' 관련 기사의 제목은 다음과 같습니다:\n\n**\"AI 투자 훈풍에 반도체·디스플레이 '빅음'…석화·철강은 '흙음'\"**\n\n이 기사는 AI 투자 확대에 따라 반도체와 디스플레이 업종이 내년 우리나라 경제를 견인할 것이라는 전망을 담고 있습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "네이버 뉴스에서 '반도체 수출 전망' 관련 기사를 검색해드리겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_dbJoJql4TZeR1Szul6_J9A",
+            "content": {
+              "lastBuildDate": "Sun, 14 Dec 2025 23:19:11 +0900",
+              "total": 297029,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "AI 투자 훈풍에 <b>반도체</b>·디스플레이 ‘맑음’…석화·철강은 ‘흐림’",
+                  "originallink": "https://www.sedaily.com/NewsView/2H1Q82Z4KL",
+                  "link": "https://n.news.naver.com/mnews/article/011/0004567025?sid=101",
+                  "description": "AI 투자 훈풍에 반도체·디스플레이 ‘맑음’…석화·철강은 ‘흐림’ 텍스트 음성 변환 서비스 사용하기 이동 통신망을 이용하여 음성을 재생하면 별도의 데이터 통화료가 부과될 수 있습니다. ■상의 ‘2026년 산업 기상도’ 배터리 포함 키워드 'R.E.D'로 정해 中 과잉공급 여파 철강 등은 수출  ↓ 인공지능(AI) 투자 확대에 따라 반도체·디스플레이·배터리 업종이 내년 우리나라 경제를 견인할 것이라는 전망이 나왔다. 반면 중국의 과잉공급과 미국의 관세장벽에 가로막힌 석유화학·철강 등은 내년에도 위기가 지속될 것으로 보인다. 대한상공회의소는 14일 11개 주요 업종별 협회와 ‘2026년 산업 기상도’를 전망해 이 같은 결과를 발표했다. 상의는 반도체와 디스플레이 업종은 맑을 것으로 내다봤으며 배터리·바이오·자동차·조선·섬유패션 산업은 ‘대체로 맑음’, 기계·석유화학·철강·건설은 ‘흐림’으로 전망했다. 이에 따라 상의는 반도체(DRAM)와 에너지저장장치(ESS), 디스플레이(Display",
+                  "pubDate": "Sun, 14 Dec 2025 13:21:00 +0900"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "네이버 뉴스에서 검색한 '반도체 수출 전망' 관련 기사의 제목은 다음과 같습니다:\n\n**\"AI 투자 훈풍에 반도체·디스플레이 '빅음'…석화·철강은 '흙음'\"**\n\n이 기사는 AI 투자 확대에 따라 반도체와 디스플레이 업종이 내년 우리나라 경제를 견인할 것이라는 전망을 담고 있습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-008",
+      "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 6.251182794570923,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "나미야 잡화점의 기적",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "start": 1,
+            "max_results": 1,
+            "sort": "Accuracy",
+            "cover": "Mid",
+            "output": "xml",
+            "outofStockFilter": 0,
+            "opt_result": ""
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "Query": {
+          "type": "string",
+          "required": true
+        },
+        "QueryType": {
+          "type": "string",
+          "enum": [
+            "Keyword",
+            "Title",
+            "Author",
+            "Publisher"
+          ],
+          "default": "Keyword"
+        },
+        "SearchTarget": {
+          "type": "string",
+          "enum": [
+            "Book",
+            "Foreign",
+            "Music",
+            "DVD",
+            "Used",
+            "eBook",
+            "All"
+          ],
+          "default": "Book"
+        },
+        "Start": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "MaxResults": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "Sort": {
+          "type": "string",
+          "enum": [
+            "Accuracy",
+            "PublishTime",
+            "SalesPoint",
+            "CustomerRating",
+            "MyReviewCount"
+          ],
+          "default": "Accuracy"
+        },
+        "Cover": {
+          "type": "string",
+          "enum": [
+            "Big",
+            "MidBig",
+            "Mid",
+            "Small",
+            "Mini",
+            "None"
+          ],
+          "default": "Mid"
+        },
+        "CategoryId": {
+          "type": "integer",
+          "default": 0
+        },
+        "Output": {
+          "type": "string",
+          "enum": [
+            "XML",
+            "JS"
+          ],
+          "default": "XML"
+        },
+        "outofStockFilter": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
+        },
+        "OptResult": {
+          "type": "string",
+          "default": ""
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 13311,
+        "completion_tokens": 328,
+        "total_tokens": 13639
+      },
+      "ttft_stats": {
+        "average": 3.053930457914248,
+        "min": 2.277769290842116,
+        "max": 3.8300916249863803,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "히가시노 게이고",
+            "query_type": "Author",
+            "sort": "SalesPoint",
+            "max_results": 10
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "version": "20131101",
+            "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+            "title": "알라딘 검색결과 - 히가시노 게이고",
+            "link": "http://www.aladin.co.kr/search/wsearchresult.aspx?KeyAuthor=%c8%f7%b0%a1%bd%c3%b3%eb+%b0%d4%c0%cc%b0%ed&amp;SearchTarget=book&amp;partner=openAPI",
+            "pubDate": "Sun, 14 Dec 2025 14:19:16 GMT",
+            "totalResults": 207,
+            "startIndex": 1,
+            "itemsPerPage": 10,
+            "query": "히가시노 게이고",
+            "searchCategoryId": 0,
+            "searchCategoryName": "전체",
+            "item": [
+              {
+                "title": "나미야 잡화점의 기적 (양장)",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=21753305&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                "pubDate": "2012-12-19",
+                "description": "히가시노 게이고 소설. 총 5장으로 구성된 &lt;나미야 잡화점의 기적&gt;은 시공간을 초월하여 편지를 주고받는다는 설정 때문에 판타지 색채가 두드러져 보일 수 있지만 이는 각각의 이야기와 등장인물을 하나의 연결 고리로 모으는 주요 장치로 작용한다.",
+                "isbn": "K912736875",
+                "isbn13": "9788972756194",
+                "itemId": 21753305,
+                "priceSales": 13320,
+                "priceStandard": 14800,
+                "mallType": "BOOK",
+                "stockStatus": "품절",
+                "mileage": 740,
+                "cover": "https://image.aladin.co.kr/product/2175/33/coversum/s842635620_1.jpg",
+                "categoryId": 50998,
+                "categoryName": "국내도서>소설/시/희곡>일본소설>1950년대 이후 일본소설",
+                "publisher": "현대문학",
+                "salesPoint": 110433,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {}
+              },
+              {
+                "title": "가공범",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=367868003&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 김선영 (옮긴이)",
+                "pubDate": "2025-07-21",
+                "description": "‘오늘의 일본을 대표하는 작가’이자 일본 내 ‘단행본 판매 누계 1억 부’ 돌파라는 전대미문의 쾌거를 거둔 히가시노 게이고의 장편소설 『가공범』이 출간되었다. 천재 캐릭터나 기상천외한 범죄 없이도 여러 번 숨을 멎게 하는 히가시노 게이고의 매력이 더욱 빛을 발하는 작품이다.",
+                "isbn": "K472030698",
+                "isbn13": "9791170612759",
+                "itemId": 367868003,
+                "priceSales": 19800,
+                "priceStandard": 22000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1100,
+                "cover": "https://image.aladin.co.kr/product/36786/80/coversum/k472030698_3.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "북다",
+                "salesPoint": 82278,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {}
+              },
+              {
+                "title": "당신이 누군가를 죽였다 (선라이즈 에디션)",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=366279927&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 최고은 (옮긴이)",
+                "pubDate": "2024-07-23",
+                "description": "무차별 살인사건에서 살아남은 사람들이 참극의 진상을 알고자 연 ‘검증회’에 형사 ‘가가 교이치로’가 참석해 그들의 비밀을 파헤치는 이야기로, 명탐정이 활약하는 미스터리 소설이다. 히가시노 게이고라는 장르문학계의 거장이 ‘추리소설의 원점’으로 돌아가 집필한 이 작품은, 본격 미스터리의 장점을 모두 갖추고 있다.",
+                "isbn": "K832030679",
+                "isbn13": "9791170611561",
+                "itemId": 366279927,
+                "priceSales": 17820,
+                "priceStandard": 19800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 990,
+                "cover": "https://image.aladin.co.kr/product/36627/99/coversum/k832030679_1.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "북다",
+                "salesPoint": 41158,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {}
+              },
+              {
+                "title": "장미와 나이프",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=365992755&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 김윤경 (옮긴이)",
+                "pubDate": "2025-06-16",
+                "description": "1985년 《방과 후》로 제31회 에도가와 란포상을 수상하며 작가로서 화려하게 데뷔한 히가시노 게이고. 그의 데뷔 40주년을 기념하여 독자들의 복간 요청이 쇄도했던 숨은 명작 《탐정 클럽》이 《장미와 나이프》라는 새로운 제목과 표지로 반타에서 다시 출간되었다.",
+                "isbn": "K652030767",
+                "isbn13": "9791194930136",
+                "itemId": 365992755,
+                "priceSales": 16200,
+                "priceStandard": 18000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 900,
+                "cover": "https://image.aladin.co.kr/product/36599/27/coversum/s752031340_1.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "반타",
+                "salesPoint": 36037,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {}
+              },
+              {
+                "title": "용의자 X의 헌신 - 제134회 나오키상 수상작",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=116498287&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양억관 (옮긴이)",
+                "pubDate": "2017-08-30",
+                "description": "히가시노 게이고 문학의 정수로 일컬어지는 &lt;용의자 X의 헌신&gt;이 새롭게 번역되어 출간됐다. 일본 문학 전문 번역가 양억관이 자신의 번역을 대폭 손질해 원작이 지닌 문학적 향기와 감동을 오롯이 되살려 냈다.",
+                "isbn": "8990982707",
+                "isbn13": "9788990982704",
+                "itemId": 116498287,
+                "priceSales": 16920,
+                "priceStandard": 18800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 940,
+                "cover": "https://image.aladin.co.kr/product/11649/82/coversum/8990982707_1.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "재인",
+                "salesPoint": 35410,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "seriesInfo": {
+                  "seriesId": 20827,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                  "seriesName": "탐정 갈릴레오 시리즈 3"
+                },
+                "subInfo": {}
+              },
+              {
+                "title": "라플라스의 마녀",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=72885569&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                "pubDate": "2016-01-11",
+                "description": "일본 추리소설계를 대표하는 최고의 베스트셀러 작가 히가시노 게이고가 2015년, 데뷔 30주년 기념작으로 선보인 작품. 가도카와 쇼텐 출판사 창립 70주년 기념작이기도 한 이번 작품은 제31회 에도가와란포상을 수상한 데뷔작 &lt;방과 후&gt; 이후 통산 80번째 단행본이다.",
+                "isbn": "8972757578",
+                "isbn13": "9788972757573",
+                "itemId": 72885569,
+                "priceSales": 15120,
+                "priceStandard": 16800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 840,
+                "cover": "https://image.aladin.co.kr/product/7288/55/coversum/s422635497_1.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "현대문학",
+                "salesPoint": 20871,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 8,
+                "seriesInfo": {
+                  "seriesId": 658852,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=658852&amp;partner=openAPI",
+                  "seriesName": "라플라스 시리즈 "
+                },
+                "subInfo": {}
+              },
+              {
+                "title": "용의자 X의 헌신 - 제134회 나오키상 수상작",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=674731&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양억관 (옮긴이)",
+                "pubDate": "2006-08-11",
+                "description": "<백야행>, <게임의 이름은 유괴>의 작가 히가시노 게이고의 장편소설. 한 여자가 한 남자를 살해한다. 그녀를 너무도 사랑한 천재 수학자는 자신의 모든 인생을 걸고 완전범죄를 보장하고 나선다. 한편, 천재 물리학자가 이 정교한 살인 수식을 집요하게 파헤치기 시작하는데... 2006년 제134회 나오키 상 수상작.",
+                "isbn": "8972753696",
+                "isbn13": "9788972753698",
+                "itemId": 674731,
+                "priceSales": 11700,
+                "priceStandard": 13000,
+                "mallType": "BOOK",
+                "stockStatus": "구판절판",
+                "mileage": 650,
+                "cover": "https://image.aladin.co.kr/product/67/47/coversum/8972753696_3.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "현대문학",
+                "salesPoint": 19431,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "seriesInfo": {
+                  "seriesId": 20827,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                  "seriesName": "탐정 갈릴레오 시리즈 3"
+                },
+                "subInfo": {}
+              },
+              {
+                "title": "가면 산장 살인 사건",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=47455104&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 김난주 (옮긴이)",
+                "pubDate": "2014-09-26",
+                "description": "히가시노 게이고 장편소설. 아버지 소유의 별장 근처 작은 교회에서 결혼식을 올리는 것이 꿈이었던 도모미는 그 꿈이 이루어질 날을 불과 일주일 앞두고 식장으로 예정된 교회에 다녀오다가 운전 부주의로 인해 가드레일을 들이받고 절벽에서 추락해 사망한다.",
+                "isbn": "899098257X",
+                "isbn13": "9788990982575",
+                "itemId": 47455104,
+                "priceSales": 15120,
+                "priceStandard": 16800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 840,
+                "cover": "https://image.aladin.co.kr/product/4745/51/coversum/899098257x_2.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "재인",
+                "salesPoint": 18567,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 8,
+                "seriesInfo": {
+                  "seriesId": 1130802,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=1130802&amp;partner=openAPI",
+                  "seriesName": "히가시노 게이고 산장 3부작 "
+                },
+                "subInfo": {}
+              },
+              {
+                "title": "악의",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=198223504&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                "pubDate": "2019-07-25",
+                "description": "히가시노 게이고의 대표작 '가가 형사 시리즈'가 한국 출간 10여 년 만에 완전히 새로운 모습으로 독자들을 만난다. &lt;악의&gt;는 '가가 형사 시리즈' 3번째 작품으로, 히가시노 게이고의 초기 대표작이자 많은 미스터리 팬들의 필독서 겸 입문서로 사랑받는 소설이다.",
+                "isbn": "8972750034",
+                "isbn13": "9788972750031",
+                "itemId": 198223504,
+                "priceSales": 15120,
+                "priceStandard": 16800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 840,
+                "cover": "https://image.aladin.co.kr/product/19822/35/coversum/8972750034_2.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "현대문학",
+                "salesPoint": 16323,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "seriesInfo": {
+                  "seriesId": 680381,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=680381&amp;partner=openAPI",
+                  "seriesName": "현대문학 가가 형사 시리즈 개정판 "
+                },
+                "subInfo": {}
+              },
+              {
+                "title": "침묵의 퍼레이드",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=360020617&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 김난주 (옮긴이)",
+                "pubDate": "2025-03-07",
+                "description": "미스터리의 제왕 히가시노 게이고의 페르소나 유가와 마나부가 돌아왔다. 전작 『금단의 마술』에서 사건을 해결한 후 홀연히 미국으로 떠났던 그가 이번 신작 『침묵의 퍼레이드』에서 다시 ‘탐정 갈릴레오’로 돌아와 의문의 사건을 해결하러 나선다.",
+                "isbn": "K232037727",
+                "isbn13": "9791192483238",
+                "itemId": 360020617,
+                "priceSales": 19620,
+                "priceStandard": 21800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1090,
+                "cover": "https://image.aladin.co.kr/product/36002/6/coversum/k232037727_1.jpg",
+                "categoryId": 51058,
+                "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                "publisher": "재인",
+                "salesPoint": 16152,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "seriesInfo": {
+                  "seriesId": 20827,
+                  "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                  "seriesName": "탐정 갈릴레오 시리즈 9"
+                },
+                "subInfo": {}
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "검색 결과를 확인했습니다. 히가시노 게이고 작품들을 인기순(판매포인트 기준)으로 정렬한 결과, **첫 번째 책의 제목은 \"나미야 잡화점의 기적 (양장)\"** 입니다.\n\n이 책은 판매포인트 110,433점으로 가장 인기가 높으며, 히가시노 게이고의 대표작 중 하나입니다. 2012년 12월 출판되었고, 현대문학에서 펴냈습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "히가시노 게이고 작품들을 알라딘에서 검색하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_VzXe5dxaT--DHSwz3-lbNA",
+            "content": {
+              "version": "20131101",
+              "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+              "title": "알라딘 검색결과 - 히가시노 게이고",
+              "link": "http://www.aladin.co.kr/search/wsearchresult.aspx?KeyAuthor=%c8%f7%b0%a1%bd%c3%b3%eb+%b0%d4%c0%cc%b0%ed&amp;SearchTarget=book&amp;partner=openAPI",
+              "pubDate": "Sun, 14 Dec 2025 14:19:16 GMT",
+              "totalResults": 207,
+              "startIndex": 1,
+              "itemsPerPage": 10,
+              "query": "히가시노 게이고",
+              "searchCategoryId": 0,
+              "searchCategoryName": "전체",
+              "item": [
+                {
+                  "title": "나미야 잡화점의 기적 (양장)",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=21753305&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                  "pubDate": "2012-12-19",
+                  "description": "히가시노 게이고 소설. 총 5장으로 구성된 &lt;나미야 잡화점의 기적&gt;은 시공간을 초월하여 편지를 주고받는다는 설정 때문에 판타지 색채가 두드러져 보일 수 있지만 이는 각각의 이야기와 등장인물을 하나의 연결 고리로 모으는 주요 장치로 작용한다.",
+                  "isbn": "K912736875",
+                  "isbn13": "9788972756194",
+                  "itemId": 21753305,
+                  "priceSales": 13320,
+                  "priceStandard": 14800,
+                  "mallType": "BOOK",
+                  "stockStatus": "품절",
+                  "mileage": 740,
+                  "cover": "https://image.aladin.co.kr/product/2175/33/coversum/s842635620_1.jpg",
+                  "categoryId": 50998,
+                  "categoryName": "국내도서>소설/시/희곡>일본소설>1950년대 이후 일본소설",
+                  "publisher": "현대문학",
+                  "salesPoint": 110433,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {}
+                },
+                {
+                  "title": "가공범",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=367868003&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 김선영 (옮긴이)",
+                  "pubDate": "2025-07-21",
+                  "description": "‘오늘의 일본을 대표하는 작가’이자 일본 내 ‘단행본 판매 누계 1억 부’ 돌파라는 전대미문의 쾌거를 거둔 히가시노 게이고의 장편소설 『가공범』이 출간되었다. 천재 캐릭터나 기상천외한 범죄 없이도 여러 번 숨을 멎게 하는 히가시노 게이고의 매력이 더욱 빛을 발하는 작품이다.",
+                  "isbn": "K472030698",
+                  "isbn13": "9791170612759",
+                  "itemId": 367868003,
+                  "priceSales": 19800,
+                  "priceStandard": 22000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1100,
+                  "cover": "https://image.aladin.co.kr/product/36786/80/coversum/k472030698_3.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "북다",
+                  "salesPoint": 82278,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {}
+                },
+                {
+                  "title": "당신이 누군가를 죽였다 (선라이즈 에디션)",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=366279927&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 최고은 (옮긴이)",
+                  "pubDate": "2024-07-23",
+                  "description": "무차별 살인사건에서 살아남은 사람들이 참극의 진상을 알고자 연 ‘검증회’에 형사 ‘가가 교이치로’가 참석해 그들의 비밀을 파헤치는 이야기로, 명탐정이 활약하는 미스터리 소설이다. 히가시노 게이고라는 장르문학계의 거장이 ‘추리소설의 원점’으로 돌아가 집필한 이 작품은, 본격 미스터리의 장점을 모두 갖추고 있다.",
+                  "isbn": "K832030679",
+                  "isbn13": "9791170611561",
+                  "itemId": 366279927,
+                  "priceSales": 17820,
+                  "priceStandard": 19800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 990,
+                  "cover": "https://image.aladin.co.kr/product/36627/99/coversum/k832030679_1.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "북다",
+                  "salesPoint": 41158,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {}
+                },
+                {
+                  "title": "장미와 나이프",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=365992755&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 김윤경 (옮긴이)",
+                  "pubDate": "2025-06-16",
+                  "description": "1985년 《방과 후》로 제31회 에도가와 란포상을 수상하며 작가로서 화려하게 데뷔한 히가시노 게이고. 그의 데뷔 40주년을 기념하여 독자들의 복간 요청이 쇄도했던 숨은 명작 《탐정 클럽》이 《장미와 나이프》라는 새로운 제목과 표지로 반타에서 다시 출간되었다.",
+                  "isbn": "K652030767",
+                  "isbn13": "9791194930136",
+                  "itemId": 365992755,
+                  "priceSales": 16200,
+                  "priceStandard": 18000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 900,
+                  "cover": "https://image.aladin.co.kr/product/36599/27/coversum/s752031340_1.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "반타",
+                  "salesPoint": 36037,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {}
+                },
+                {
+                  "title": "용의자 X의 헌신 - 제134회 나오키상 수상작",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=116498287&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양억관 (옮긴이)",
+                  "pubDate": "2017-08-30",
+                  "description": "히가시노 게이고 문학의 정수로 일컬어지는 &lt;용의자 X의 헌신&gt;이 새롭게 번역되어 출간됐다. 일본 문학 전문 번역가 양억관이 자신의 번역을 대폭 손질해 원작이 지닌 문학적 향기와 감동을 오롯이 되살려 냈다.",
+                  "isbn": "8990982707",
+                  "isbn13": "9788990982704",
+                  "itemId": 116498287,
+                  "priceSales": 16920,
+                  "priceStandard": 18800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 940,
+                  "cover": "https://image.aladin.co.kr/product/11649/82/coversum/8990982707_1.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "재인",
+                  "salesPoint": 35410,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "seriesInfo": {
+                    "seriesId": 20827,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                    "seriesName": "탐정 갈릴레오 시리즈 3"
+                  },
+                  "subInfo": {}
+                },
+                {
+                  "title": "라플라스의 마녀",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=72885569&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                  "pubDate": "2016-01-11",
+                  "description": "일본 추리소설계를 대표하는 최고의 베스트셀러 작가 히가시노 게이고가 2015년, 데뷔 30주년 기념작으로 선보인 작품. 가도카와 쇼텐 출판사 창립 70주년 기념작이기도 한 이번 작품은 제31회 에도가와란포상을 수상한 데뷔작 &lt;방과 후&gt; 이후 통산 80번째 단행본이다.",
+                  "isbn": "8972757578",
+                  "isbn13": "9788972757573",
+                  "itemId": 72885569,
+                  "priceSales": 15120,
+                  "priceStandard": 16800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 840,
+                  "cover": "https://image.aladin.co.kr/product/7288/55/coversum/s422635497_1.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "현대문학",
+                  "salesPoint": 20871,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 8,
+                  "seriesInfo": {
+                    "seriesId": 658852,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=658852&amp;partner=openAPI",
+                    "seriesName": "라플라스 시리즈 "
+                  },
+                  "subInfo": {}
+                },
+                {
+                  "title": "용의자 X의 헌신 - 제134회 나오키상 수상작",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=674731&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양억관 (옮긴이)",
+                  "pubDate": "2006-08-11",
+                  "description": "<백야행>, <게임의 이름은 유괴>의 작가 히가시노 게이고의 장편소설. 한 여자가 한 남자를 살해한다. 그녀를 너무도 사랑한 천재 수학자는 자신의 모든 인생을 걸고 완전범죄를 보장하고 나선다. 한편, 천재 물리학자가 이 정교한 살인 수식을 집요하게 파헤치기 시작하는데... 2006년 제134회 나오키 상 수상작.",
+                  "isbn": "8972753696",
+                  "isbn13": "9788972753698",
+                  "itemId": 674731,
+                  "priceSales": 11700,
+                  "priceStandard": 13000,
+                  "mallType": "BOOK",
+                  "stockStatus": "구판절판",
+                  "mileage": 650,
+                  "cover": "https://image.aladin.co.kr/product/67/47/coversum/8972753696_3.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "현대문학",
+                  "salesPoint": 19431,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "seriesInfo": {
+                    "seriesId": 20827,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                    "seriesName": "탐정 갈릴레오 시리즈 3"
+                  },
+                  "subInfo": {}
+                },
+                {
+                  "title": "가면 산장 살인 사건",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=47455104&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 김난주 (옮긴이)",
+                  "pubDate": "2014-09-26",
+                  "description": "히가시노 게이고 장편소설. 아버지 소유의 별장 근처 작은 교회에서 결혼식을 올리는 것이 꿈이었던 도모미는 그 꿈이 이루어질 날을 불과 일주일 앞두고 식장으로 예정된 교회에 다녀오다가 운전 부주의로 인해 가드레일을 들이받고 절벽에서 추락해 사망한다.",
+                  "isbn": "899098257X",
+                  "isbn13": "9788990982575",
+                  "itemId": 47455104,
+                  "priceSales": 15120,
+                  "priceStandard": 16800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 840,
+                  "cover": "https://image.aladin.co.kr/product/4745/51/coversum/899098257x_2.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "재인",
+                  "salesPoint": 18567,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 8,
+                  "seriesInfo": {
+                    "seriesId": 1130802,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=1130802&amp;partner=openAPI",
+                    "seriesName": "히가시노 게이고 산장 3부작 "
+                  },
+                  "subInfo": {}
+                },
+                {
+                  "title": "악의",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=198223504&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                  "pubDate": "2019-07-25",
+                  "description": "히가시노 게이고의 대표작 '가가 형사 시리즈'가 한국 출간 10여 년 만에 완전히 새로운 모습으로 독자들을 만난다. &lt;악의&gt;는 '가가 형사 시리즈' 3번째 작품으로, 히가시노 게이고의 초기 대표작이자 많은 미스터리 팬들의 필독서 겸 입문서로 사랑받는 소설이다.",
+                  "isbn": "8972750034",
+                  "isbn13": "9788972750031",
+                  "itemId": 198223504,
+                  "priceSales": 15120,
+                  "priceStandard": 16800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 840,
+                  "cover": "https://image.aladin.co.kr/product/19822/35/coversum/8972750034_2.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "현대문학",
+                  "salesPoint": 16323,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "seriesInfo": {
+                    "seriesId": 680381,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=680381&amp;partner=openAPI",
+                    "seriesName": "현대문학 가가 형사 시리즈 개정판 "
+                  },
+                  "subInfo": {}
+                },
+                {
+                  "title": "침묵의 퍼레이드",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=360020617&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 김난주 (옮긴이)",
+                  "pubDate": "2025-03-07",
+                  "description": "미스터리의 제왕 히가시노 게이고의 페르소나 유가와 마나부가 돌아왔다. 전작 『금단의 마술』에서 사건을 해결한 후 홀연히 미국으로 떠났던 그가 이번 신작 『침묵의 퍼레이드』에서 다시 ‘탐정 갈릴레오’로 돌아와 의문의 사건을 해결하러 나선다.",
+                  "isbn": "K232037727",
+                  "isbn13": "9791192483238",
+                  "itemId": 360020617,
+                  "priceSales": 19620,
+                  "priceStandard": 21800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1090,
+                  "cover": "https://image.aladin.co.kr/product/36002/6/coversum/k232037727_1.jpg",
+                  "categoryId": 51058,
+                  "categoryName": "국내도서>소설/시/희곡>추리/미스터리소설>일본 추리/미스터리소설",
+                  "publisher": "재인",
+                  "salesPoint": 16152,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "seriesInfo": {
+                    "seriesId": 20827,
+                    "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=20827&amp;partner=openAPI",
+                    "seriesName": "탐정 갈릴레오 시리즈 9"
+                  },
+                  "subInfo": {}
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "검색 결과를 확인했습니다. 히가시노 게이고 작품들을 인기순(판매포인트 기준)으로 정렬한 결과, **첫 번째 책의 제목은 \"나미야 잡화점의 기적 (양장)\"** 입니다.\n\n이 책은 판매포인트 110,433점으로 가장 인기가 높으며, 히가시노 게이고의 대표작 중 하나입니다. 2012년 12월 출판되었고, 현대문학에서 펴냈습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-009",
+      "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.486123085021973,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "VideoSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "VideoSearch_daum",
+          "args": {
+            "query": "손흥민 헤드트릭",
+            "sort": "accuracy",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "accuracy",
+            "recency"
+          ],
+          "default": "accuracy"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1936,
+        "completion_tokens": 263,
+        "total_tokens": 2199
+      },
+      "ttft_stats": {
+        "average": 2.182464895537123,
+        "min": 1.5875209998339415,
+        "max": 2.7774087912403047,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "VideoSearch_daum",
+          "arguments": {
+            "query": "손흥민 헤드트릭",
+            "size": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "documents": [
+              {
+                "author": "스포츠라운지",
+                "datetime": "2025-09-18T21:00:45.000+09:00",
+                "play_time": 31,
+                "thumbnail": "https://search1.kakaocdn.net/argon/138x78_80_pr/L8IqiJuTt9O",
+                "title": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부앙가 고마워\"",
+                "url": "http://www.youtube.com/watch?v=N6_dd1O37EE"
+              }
+            ],
+            "ds": [],
+            "g": [],
+            "m": {},
+            "meta": {
+              "is_end": false,
+              "pageable_count": 4,
+              "total_count": 4
+            }
+          }
+        }
+      ],
+      "final_response": "다음 동영상 검색 결과, 첫 번째 영상의 제목은 다음과 같습니다:\n\n**\"손흥민의 첫 헛트릭을 도와준 \"티미 고마왔, 할링스 고마왔, 부숴가 고마왔\"\"**\n\n이 영상은 2025년 9월 18일에 업로드되었으며, 스포츠라운지 채널에서 제공하고 있습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "다음 동영상에서 '손흥민 헤드트릭'을 검색해드리겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_qnhQPmBCRduaE9jMuEm4gQ",
+            "content": {
+              "documents": [
+                {
+                  "author": "스포츠라운지",
+                  "datetime": "2025-09-18T21:00:45.000+09:00",
+                  "play_time": 31,
+                  "thumbnail": "https://search1.kakaocdn.net/argon/138x78_80_pr/L8IqiJuTt9O",
+                  "title": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부앙가 고마워\"",
+                  "url": "http://www.youtube.com/watch?v=N6_dd1O37EE"
+                }
+              ],
+              "ds": [],
+              "g": [],
+              "m": {},
+              "meta": {
+                "is_end": false,
+                "pageable_count": 4,
+                "total_count": 4
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "다음 동영상 검색 결과, 첫 번째 영상의 제목은 다음과 같습니다:\n\n**\"손흥민의 첫 헛트릭을 도와준 \"티미 고마왔, 할링스 고마왔, 부숴가 고마왔\"\"**\n\n이 영상은 2025년 9월 18일에 업로드되었으며, 스포츠라운지 채널에서 제공하고 있습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-010",
+      "instruction": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 5.3088929653167725,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 1000,
+            "sort": "distance",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "keyword": {
+          "type": "string",
+          "required": true
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "integer",
+          "maximum": 20000
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "accuracy",
+            "distance"
+          ],
+          "default": "accuracy"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 45,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 5545,
+        "completion_tokens": 240,
+        "total_tokens": 5785
+      },
+      "ttft_stats": {
+        "average": 2.602883249754086,
+        "min": 2.4496715827845037,
+        "max": 2.7560949167236686,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.4979
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "keyword": "파스타",
+            "total_count": 30508,
+            "places": [
+              {
+                "name": "라그릴리아 SPC스퀘어점",
+                "latitude": 37.49437283454316,
+                "longitude": 127.02985341955451,
+                "address": "서울 강남구 역삼동 831-23",
+                "road_address": "서울 강남구 강남대로 352",
+                "phone": "02-567-9192",
+                "category": "음식점 > 양식 > 이탈리안 > 라그릴리아",
+                "distance": "440"
+              },
+              {
+                "name": "닥터로빈시그니처 서초점",
+                "latitude": 37.4966332657545,
+                "longitude": 127.026914121286,
+                "address": "서울 서초구 서초동 1320-10",
+                "road_address": "서울 서초구 서초대로74길 11",
+                "phone": "02-522-3101",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "152"
+              },
+              {
+                "name": "마노디셰프 강남점",
+                "latitude": 37.4998701131357,
+                "longitude": 127.03237184760155,
+                "address": "서울 강남구 역삼동 648-9",
+                "road_address": "서울 강남구 테헤란로 129",
+                "phone": "02-553-5311",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "476"
+              },
+              {
+                "name": "노리타",
+                "latitude": 37.5008247672713,
+                "longitude": 127.02682515299,
+                "address": "서울 강남구 역삼동 815-4",
+                "road_address": "서울 강남구 강남대로 428",
+                "phone": "02-566-7776",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "331"
+              },
+              {
+                "name": "이름없는 파스타 강남역점",
+                "latitude": 37.5025509256314,
+                "longitude": 127.027558616199,
+                "address": "서울 강남구 역삼동 619",
+                "road_address": "서울 강남구 봉은사로6길 38",
+                "phone": "02-6326-8987",
+                "category": "음식점 > 양식 > 이탈리안 > 이름없는 파스타",
+                "distance": "516"
+              },
+              {
+                "name": "로리스더프라임립",
+                "latitude": 37.49808140984054,
+                "longitude": 127.02590025308936,
+                "address": "서울 서초구 서초동 1317-23",
+                "road_address": "서울 서초구 서초대로 411",
+                "phone": "02-590-2800",
+                "category": "음식점 > 양식 > 스테이크,립",
+                "distance": "149"
+              },
+              {
+                "name": "마초쉐프 강남본점",
+                "latitude": 37.5034987166465,
+                "longitude": 127.027843963703,
+                "address": "서울 강남구 역삼동 616-14",
+                "road_address": "서울 강남구 강남대로106길 29",
+                "phone": "02-566-8886",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "621"
+              },
+              {
+                "name": "벌툰 엔틱 강남역점",
+                "latitude": 37.5007307950853,
+                "longitude": 127.027978644718,
+                "address": "서울 강남구 역삼동 817-35",
+                "road_address": "서울 강남구 강남대로98길 16",
+                "phone": "02-569-4976",
+                "category": "가정,생활 > 여가시설 > 만화방 > 만화카페 > 벌툰",
+                "distance": "315"
+              },
+              {
+                "name": "벌툰 파리지앵 강남본점",
+                "latitude": 37.50026197173603,
+                "longitude": 127.02531519997575,
+                "address": "서울 서초구 서초동 1307-18",
+                "road_address": "서울 서초구 강남대로65길 7",
+                "phone": "02-533-4976",
+                "category": "가정,생활 > 여가시설 > 만화방 > 만화카페 > 벌툰",
+                "distance": "329"
+              },
+              {
+                "name": "아실라",
+                "latitude": 37.5007307897262,
+                "longitude": 127.02800126286,
+                "address": "서울 강남구 역삼동 817-35",
+                "road_address": "서울 강남구 강남대로98길 16",
+                "phone": "02-508-4665",
+                "category": "음식점 > 술집",
+                "distance": "316"
+              },
+              {
+                "name": "왕스펍",
+                "latitude": 37.5008246112399,
+                "longitude": 127.02750369810458,
+                "address": "서울 강남구 역삼동 619-28",
+                "road_address": "서울 강남구 강남대로98길 11",
+                "phone": "",
+                "category": "음식점 > 술집 > 호프,요리주점",
+                "distance": "324"
+              },
+              {
+                "name": "비어룸",
+                "latitude": 37.500823480875354,
+                "longitude": 127.02847175544984,
+                "address": "서울 강남구 역삼동 817-37",
+                "road_address": "서울 강남구 강남대로98길 22",
+                "phone": "070-8955-5955",
+                "category": "음식점 > 양식",
+                "distance": "333"
+              },
+              {
+                "name": "스페보",
+                "latitude": 37.4978514483675,
+                "longitude": 127.036849196665,
+                "address": "서울 강남구 역삼동 738-43",
+                "road_address": "서울 강남구 논현로81길 13",
+                "phone": "010-5196-5866",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "819"
+              },
+              {
+                "name": "도치피자 강남",
+                "latitude": 37.5009936710604,
+                "longitude": 127.028883471736,
+                "address": "서울 강남구 역삼동 620-17",
+                "road_address": "서울 강남구 강남대로98길 27",
+                "phone": "02-556-8001",
+                "category": "음식점 > 양식 > 피자",
+                "distance": "362"
+              },
+              {
+                "name": "스파게티스토리 역삼역점",
+                "latitude": 37.5020213917172,
+                "longitude": 127.033531976183,
+                "address": "서울 강남구 역삼동 638-17",
+                "road_address": "서울 강남구 논현로95길 30",
+                "phone": "02-555-2727",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "697"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "강남역 근처에서 파스타를 검색한 결과, **첫 번째 가게는 \"라그릴리아 SPC스퀘어점\"** 입니다.\n\n이 가게는 강남역에서 약 440m 떨어진 곳에 위치하고 있으며, 이탈리아 라그릴리아 전문점입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "강남역 근처에서 파스타를 검색해드리겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_gtA_JtUqQk-uMsqJg8Ryug",
+            "content": {
+              "keyword": "파스타",
+              "total_count": 30508,
+              "places": [
+                {
+                  "name": "라그릴리아 SPC스퀘어점",
+                  "latitude": 37.49437283454316,
+                  "longitude": 127.02985341955451,
+                  "address": "서울 강남구 역삼동 831-23",
+                  "road_address": "서울 강남구 강남대로 352",
+                  "phone": "02-567-9192",
+                  "category": "음식점 > 양식 > 이탈리안 > 라그릴리아",
+                  "distance": "440"
+                },
+                {
+                  "name": "닥터로빈시그니처 서초점",
+                  "latitude": 37.4966332657545,
+                  "longitude": 127.026914121286,
+                  "address": "서울 서초구 서초동 1320-10",
+                  "road_address": "서울 서초구 서초대로74길 11",
+                  "phone": "02-522-3101",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "152"
+                },
+                {
+                  "name": "마노디셰프 강남점",
+                  "latitude": 37.4998701131357,
+                  "longitude": 127.03237184760155,
+                  "address": "서울 강남구 역삼동 648-9",
+                  "road_address": "서울 강남구 테헤란로 129",
+                  "phone": "02-553-5311",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "476"
+                },
+                {
+                  "name": "노리타",
+                  "latitude": 37.5008247672713,
+                  "longitude": 127.02682515299,
+                  "address": "서울 강남구 역삼동 815-4",
+                  "road_address": "서울 강남구 강남대로 428",
+                  "phone": "02-566-7776",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "331"
+                },
+                {
+                  "name": "이름없는 파스타 강남역점",
+                  "latitude": 37.5025509256314,
+                  "longitude": 127.027558616199,
+                  "address": "서울 강남구 역삼동 619",
+                  "road_address": "서울 강남구 봉은사로6길 38",
+                  "phone": "02-6326-8987",
+                  "category": "음식점 > 양식 > 이탈리안 > 이름없는 파스타",
+                  "distance": "516"
+                },
+                {
+                  "name": "로리스더프라임립",
+                  "latitude": 37.49808140984054,
+                  "longitude": 127.02590025308936,
+                  "address": "서울 서초구 서초동 1317-23",
+                  "road_address": "서울 서초구 서초대로 411",
+                  "phone": "02-590-2800",
+                  "category": "음식점 > 양식 > 스테이크,립",
+                  "distance": "149"
+                },
+                {
+                  "name": "마초쉐프 강남본점",
+                  "latitude": 37.5034987166465,
+                  "longitude": 127.027843963703,
+                  "address": "서울 강남구 역삼동 616-14",
+                  "road_address": "서울 강남구 강남대로106길 29",
+                  "phone": "02-566-8886",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "621"
+                },
+                {
+                  "name": "벌툰 엔틱 강남역점",
+                  "latitude": 37.5007307950853,
+                  "longitude": 127.027978644718,
+                  "address": "서울 강남구 역삼동 817-35",
+                  "road_address": "서울 강남구 강남대로98길 16",
+                  "phone": "02-569-4976",
+                  "category": "가정,생활 > 여가시설 > 만화방 > 만화카페 > 벌툰",
+                  "distance": "315"
+                },
+                {
+                  "name": "벌툰 파리지앵 강남본점",
+                  "latitude": 37.50026197173603,
+                  "longitude": 127.02531519997575,
+                  "address": "서울 서초구 서초동 1307-18",
+                  "road_address": "서울 서초구 강남대로65길 7",
+                  "phone": "02-533-4976",
+                  "category": "가정,생활 > 여가시설 > 만화방 > 만화카페 > 벌툰",
+                  "distance": "329"
+                },
+                {
+                  "name": "아실라",
+                  "latitude": 37.5007307897262,
+                  "longitude": 127.02800126286,
+                  "address": "서울 강남구 역삼동 817-35",
+                  "road_address": "서울 강남구 강남대로98길 16",
+                  "phone": "02-508-4665",
+                  "category": "음식점 > 술집",
+                  "distance": "316"
+                },
+                {
+                  "name": "왕스펍",
+                  "latitude": 37.5008246112399,
+                  "longitude": 127.02750369810458,
+                  "address": "서울 강남구 역삼동 619-28",
+                  "road_address": "서울 강남구 강남대로98길 11",
+                  "phone": "",
+                  "category": "음식점 > 술집 > 호프,요리주점",
+                  "distance": "324"
+                },
+                {
+                  "name": "비어룸",
+                  "latitude": 37.500823480875354,
+                  "longitude": 127.02847175544984,
+                  "address": "서울 강남구 역삼동 817-37",
+                  "road_address": "서울 강남구 강남대로98길 22",
+                  "phone": "070-8955-5955",
+                  "category": "음식점 > 양식",
+                  "distance": "333"
+                },
+                {
+                  "name": "스페보",
+                  "latitude": 37.4978514483675,
+                  "longitude": 127.036849196665,
+                  "address": "서울 강남구 역삼동 738-43",
+                  "road_address": "서울 강남구 논현로81길 13",
+                  "phone": "010-5196-5866",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "819"
+                },
+                {
+                  "name": "도치피자 강남",
+                  "latitude": 37.5009936710604,
+                  "longitude": 127.028883471736,
+                  "address": "서울 강남구 역삼동 620-17",
+                  "road_address": "서울 강남구 강남대로98길 27",
+                  "phone": "02-556-8001",
+                  "category": "음식점 > 양식 > 피자",
+                  "distance": "362"
+                },
+                {
+                  "name": "스파게티스토리 역삼역점",
+                  "latitude": 37.5020213917172,
+                  "longitude": 127.033531976183,
+                  "address": "서울 강남구 역삼동 638-17",
+                  "road_address": "서울 강남구 논현로95길 30",
+                  "phone": "02-555-2727",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "697"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "강남역 근처에서 파스타를 검색한 결과, **첫 번째 가게는 \"라그릴리아 SPC스퀘어점\"** 입니다.\n\n이 가게는 강남역에서 약 440m 떨어진 곳에 위치하고 있으며, 이탈리아 라그릴리아 전문점입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-011",
+      "instruction": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.428585767745972,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "MT1",
+            "CS2",
+            "PS3",
+            "SC4",
+            "AC5",
+            "PK6",
+            "OL7",
+            "SW8",
+            "BK9",
+            "CT1",
+            "AG2",
+            "PO3",
+            "AT4",
+            "AD5",
+            "FD6",
+            "CE7",
+            "HP8",
+            "PM9"
+          ],
+          "required": true
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000,
+          "default": 1000
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2105,
+        "completion_tokens": 258,
+        "total_tokens": 2363
+      },
+      "ttft_stats": {
+        "average": 2.1734438333660364,
+        "min": 1.6977000418119133,
+        "max": 2.6491876249201596,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CategorySearch_kakao",
+          "arguments": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "size": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "category": "CE7",
+            "total_count": 445,
+            "places": [
+              {
+                "name": "벌툰 봉화당 홍대입구역점",
+                "latitude": 37.5564499530999,
+                "longitude": 126.925146143059,
+                "address": "서울 마포구 동교동 169-11",
+                "phone": "02-333-5111",
+                "distance": "128"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "홍대입구역 기준 500m 안에 있는 카페 중 하나는 **벌새봉화당 홍대입구역점**입니다.\n\n- 거리: 약 128m\n- 주소: 서울 마포구 동교동 169-11\n- 전화: 02-333-5111",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "홍대입구역 기준 500m 안의 카페를 검색하겠습니다."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "tooluse_Z4qQ1muDQ-Cw4eRKXTp4vg",
+            "content": {
+              "category": "CE7",
+              "total_count": 445,
+              "places": [
+                {
+                  "name": "벌툰 봉화당 홍대입구역점",
+                  "latitude": 37.5564499530999,
+                  "longitude": 126.925146143059,
+                  "address": "서울 마포구 동교동 169-11",
+                  "phone": "02-333-5111",
+                  "distance": "128"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "홍대입구역 기준 500m 안에 있는 카페 중 하나는 **벌새봉화당 홍대입구역점**입니다.\n\n- 거리: 약 128m\n- 주소: 서울 마포구 동교동 169-11\n- 전화: 02-333-5111"
+          }
+        ]
+      }
+    }
+  ]
+}

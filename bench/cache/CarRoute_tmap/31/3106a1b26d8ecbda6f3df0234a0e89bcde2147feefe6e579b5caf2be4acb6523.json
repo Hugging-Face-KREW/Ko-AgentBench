@@ -1,0 +1,240 @@
+{
+  "key": "3106a1b26d8ecbda6f3df0234a0e89bcde2147feefe6e579b5caf2be4acb6523",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-12-14T14:27:12.315997",
+  "input_params": {
+    "endX": 127.085529,
+    "endY": 37.511914,
+    "searchOption": 0,
+    "startX": 127.028506,
+    "startY": 37.511941
+  },
+  "raw_args": {
+    "startX": 127.028506,
+    "startY": 37.511941,
+    "endX": 127.085529,
+    "endY": 37.511914
+  },
+  "data": {
+    "usedFavoriteRouteVertices": "45731016,13503291:3,6:-22,40:-81,163:-101,214:75,23:174,55:280,88:185,54:174,54:126,39:117,36:40,12:150,45:518,156:87,28:156,50:259,85:188,59:111,35:90,22:107,34:131,41:51,15:103,31:206,61:229,72:140,43:97,29:195,58:261,82:253,79:189,54:116,34:114,22:206,40:568,106:101,18:376,66:32,5:455,77:81,15:215,40:59,12:118,21:91,16:342,64:71,13:279,48:103,18:143,25:189,33:537,91:982,183:171,30:284,53:109,25:89,-170:19,-33:7,-15:706,-1284:78,-143:101,-187:119,-237:164,-4:138,26:145,25:201,34:107,18:162,28:333,57:298,53:36,6:303,53:122,23:57,10:92,17:198,61:28,4:24,3:1041,94:81,9:213,-1243:88,-584:4,-45:145,21:147,21:1402,234:798,128:244,32:69,4:232,3:240,-9:123,-5:316,-11:539,-25:167,-8:811,-26:69,-2:53,79:-15,57",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "totalDistance": 6345,
+          "totalTime": 1001,
+          "totalFare": 0,
+          "taxiFare": 13100,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "학동로20길을 따라 2m 이동",
+          "nextRoadName": "학동로20길",
+          "turnType": 200,
+          "pointType": "S"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "학동로20길",
+          "description": "학동로20길, 2m",
+          "distance": 2,
+          "time": 57,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "교차로",
+          "description": "교차로에서 10시 방향 좌회전 후 학동로20길을 따라 138m 이동",
+          "nextRoadName": "학동로20길",
+          "turnType": 17,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "학동로20길",
+          "description": "학동로20길, 138m",
+          "distance": 138,
+          "time": 40,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "교차로",
+          "description": "교차로에서 우회전 후 학동로를 따라 2682m 이동",
+          "nextRoadName": "학동로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "학동로",
+          "description": "학동로, 2682m",
+          "distance": 2682,
+          "time": 341,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "경기고교 앞",
+          "description": "경기고교 앞에서 코엑스 방면으로 우회전 후 영동대로를 따라 695m 이동",
+          "nextRoadName": "영동대로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 7,
+          "lineIndex": 3,
+          "name": "영동대로",
+          "description": "영동대로, 695m",
+          "distance": 695,
+          "time": 265,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 8,
+          "pointIndex": 4,
+          "name": "코엑스",
+          "description": "코엑스에서 올림픽대로 방면으로 좌회전 후 봉은사로를 따라 884m 이동",
+          "nextRoadName": "봉은사로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 9,
+          "lineIndex": 4,
+          "name": "봉은사로",
+          "description": "봉은사로, 884m",
+          "distance": 884,
+          "time": 84,
+          "roadType": 7,
+          "facilityType": 1
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 10,
+          "pointIndex": 5,
+          "name": "종합운동장",
+          "description": "종합운동장에서 가락시장 방면으로 우회전 후 탄천동로를 따라 582m 이동",
+          "nextRoadName": "탄천동로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 11,
+          "lineIndex": 5,
+          "name": "탄천동로",
+          "description": "탄천동로, 582m",
+          "distance": 582,
+          "time": 107,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 12,
+          "pointIndex": 6,
+          "name": "종합운동장",
+          "description": "종합운동장에서 잠실역 방면으로 좌회전 후 올림픽로를 따라 1316m 이동",
+          "nextRoadName": "올림픽로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 13,
+          "lineIndex": 6,
+          "name": "올림픽로",
+          "description": "올림픽로, 1316m",
+          "distance": 1316,
+          "time": 104,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 14,
+          "pointIndex": 7,
+          "name": "잠실새내역",
+          "description": "잠실새내역에서 잠실2동 방면으로 좌회전 후 석촌호수로를 따라 46m 이동",
+          "nextRoadName": "석촌호수로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 15,
+          "lineIndex": 7,
+          "name": "석촌호수로",
+          "description": "석촌호수로, 46m",
+          "distance": 46,
+          "time": 3,
+          "roadType": 6,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 16,
+          "pointIndex": 8,
+          "name": "",
+          "description": "도착",
+          "nextRoadName": "",
+          "turnType": 201,
+          "pointType": "E"
+        }
+      }
+    ]
+  }
+}

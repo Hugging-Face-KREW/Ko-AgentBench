@@ -1,0 +1,442 @@
+{
+  "key": "f03b2fc364f0c4b62f5c80f46f0b77dad5755e71a28c84ddf5c32813f5b8e207",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-12-14T13:35:26.015380",
+  "input_params": {
+    "endX": 126.896629,
+    "endY": 37.525689,
+    "searchOption": 0,
+    "startX": 127.047977,
+    "startY": 37.518441
+  },
+  "raw_args": {
+    "startX": 127.047977,
+    "startY": 37.518441,
+    "endX": 126.896629,
+    "endY": 37.525689
+  },
+  "data": {
+    "usedFavoriteRouteVertices": "45738030,13505624:9,2:342,64:71,13:279,48:103,18:-53,105:-29,59:-123,244:-31,55:-157,294:-41,77:-75,139:-75,144:-98,184:-16,28:-33,62:-66,120:-35,65:-53,95:-87,160:-43,82:-27,54:-41,84:-83,165:-103,186:-134,196:-98,86:-230,118:-301,78:-277,73:-209,53:-319,82:-424,108:-163,42:-124,33:-182,47:-240,63:-287,72:-349,88:-172,44:-417,97:-179,32:-366,18:-131,-2:69,469:109,892:-1041,324:-774,164:-909,-133:-1765,-1764:-247,-349:-1789,-1449:-188,-149:-468,-440:-1384,-1310:-1751,-1497:-186,-159:-183,-148:-1043,-681:-1085,-516:-144,-68:-184,-86:-541,-261:-574,-298:-851,-414:-725,-285:-3686,-542:-244,4:-614,10:-1044,169:-562,316:-6067,2832:-1308,380:-1198,423:-257,145:-2246,191:-453,-93:-442,-89:171,151:97,-320:-52,-73:-1462,-323:-93,-41:-374,-57:-128,-17:-426,-60:-1199,-98:-2266,273:-1228,430:-142,48:-282,102:-211,88:-513,213:-1549,1597:-317,458:-400,693:-18,21:-48,59:-103,10:-71,-29:-432,-125:-98,-8:-178,5:-342,42:-149,16:-52,6:-40,4:-80,10:-36,5:-117,14:-192,24:-118,13:-38,4:-96,13:-119,14:-313,62:-245,67:-60,19:-73,19:-97,29:-37,10:-271,77:-94,26:-68,21:-181,53:-419,124:-53,15:-28,9:-34,10:-730,219:51,84:135,169:103,133:-24,90:-73,-93:-75,-95:-123,-178:-53,-89:-16,-48:-22,-107:-3,-52:-17,-65:-54,-229:-52,-203:-19,-84:-1,-3",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "totalDistance": 18469,
+          "totalTime": 1533,
+          "totalFare": 0,
+          "taxiFare": 22100,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "학동로를 따라 202m 이동",
+          "nextRoadName": "학동로",
+          "turnType": 200,
+          "pointType": "S"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "학동로",
+          "description": "학동로, 202m",
+          "distance": 202,
+          "time": 44,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "청담공원 앞",
+          "description": "청담공원 앞에서 청담 사거리 방면으로 좌회전 후 삼성로를 따라 641m 이동",
+          "nextRoadName": "삼성로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "삼성로",
+          "description": "삼성로, 641m",
+          "distance": 641,
+          "time": 85,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 4,
+          "lineIndex": 2,
+          "name": "일반도로",
+          "description": "일반도로, 18m",
+          "distance": 18,
+          "time": 3,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 5,
+          "lineIndex": 3,
+          "name": "압구정로",
+          "description": "압구정로, 1377m",
+          "distance": 1377,
+          "time": 215,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 6,
+          "pointIndex": 2,
+          "name": "성수대교남단",
+          "description": "성수대교남단에서 성수대교 방면으로 우회전 후 언주로를 따라 423m 이동",
+          "nextRoadName": "언주로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 7,
+          "lineIndex": 4,
+          "name": "언주로",
+          "description": "언주로, 423m",
+          "distance": 423,
+          "time": 31,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 8,
+          "pointIndex": 3,
+          "name": "성수대교",
+          "description": "성수대교에서 김포공항 방면으로 오른쪽 도시고속도로 입구 후 올림픽대로를 따라 9575m 이동",
+          "nextRoadName": "올림픽대로",
+          "turnType": 111,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 9,
+          "lineIndex": 5,
+          "name": "올림픽대로",
+          "description": "올림픽대로, 9575m",
+          "distance": 9575,
+          "time": 486,
+          "roadType": 1,
+          "facilityType": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 10,
+          "pointIndex": 4,
+          "name": "여의상류IC",
+          "description": "여의상류IC에서 여의도,63빌딩 방면으로 오른쪽 도시고속도로 출구 후 올림픽대로를 따라 577m 이동",
+          "nextRoadName": "올림픽대로",
+          "turnType": 114,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 11,
+          "lineIndex": 6,
+          "name": "올림픽대로",
+          "description": "올림픽대로, 577m",
+          "distance": 577,
+          "time": 33,
+          "roadType": 1,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 12,
+          "pointIndex": 5,
+          "name": "여의상류IC",
+          "description": "여의상류IC에서 수산시장 방면으로 왼쪽 방향 후 올림픽대로를 따라 227m 이동",
+          "nextRoadName": "올림픽대로",
+          "turnType": 118,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 13,
+          "lineIndex": 7,
+          "name": "올림픽대로",
+          "description": "올림픽대로, 227m",
+          "distance": 227,
+          "time": 16,
+          "roadType": 1,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 14,
+          "pointIndex": 6,
+          "name": "여의상류IC",
+          "description": "여의상류IC에서 수산시장 방면으로 오른쪽 방향 후 올림픽대로를 따라 238m 이동",
+          "nextRoadName": "올림픽대로",
+          "turnType": 117,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 15,
+          "lineIndex": 8,
+          "name": "올림픽대로",
+          "description": "올림픽대로, 238m",
+          "distance": 238,
+          "time": 23,
+          "roadType": 1,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 16,
+          "lineIndex": 9,
+          "name": "일반도로",
+          "description": "일반도로, 101m",
+          "distance": 101,
+          "time": 9,
+          "roadType": 6,
+          "facilityType": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 17,
+          "lineIndex": 10,
+          "name": "노들로",
+          "description": "노들로, 400m",
+          "distance": 400,
+          "time": 28,
+          "roadType": 6,
+          "facilityType": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 18,
+          "pointIndex": 7,
+          "name": "여의상류IC",
+          "description": "여의상류IC에서 영등포 로터리 방면으로 왼쪽 방향 후 노들로를 따라 554m 이동",
+          "nextRoadName": "노들로",
+          "turnType": 118,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 19,
+          "lineIndex": 11,
+          "name": "노들로",
+          "description": "노들로, 554m",
+          "distance": 554,
+          "time": 31,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 20,
+          "pointIndex": 8,
+          "name": "여의교 지하차도",
+          "description": "여의교 지하차도에서 영등포 로터리 방면으로 지하차도 후 노들로를 따라 1214m 이동",
+          "nextRoadName": "노들로",
+          "turnType": 119,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 21,
+          "lineIndex": 12,
+          "name": "노들로",
+          "description": "노들로, 1214m",
+          "distance": 1214,
+          "time": 44,
+          "roadType": 6,
+          "facilityType": 4
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 22,
+          "pointIndex": 9,
+          "name": "노들길 지하차도",
+          "description": "노들길 지하차도에서 양화대교 방면으로 지하차도 후 노들로를 따라 799m 이동",
+          "nextRoadName": "노들로",
+          "turnType": 119,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 23,
+          "lineIndex": 13,
+          "name": "노들로",
+          "description": "노들로, 799m",
+          "distance": 799,
+          "time": 43,
+          "roadType": 6,
+          "facilityType": 4
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 24,
+          "pointIndex": 10,
+          "name": "여의2 지하차도",
+          "description": "여의2 지하차도에서 국회의사당 방면으로 지하차도옆 후 노들로를 따라 265m 이동",
+          "nextRoadName": "노들로",
+          "turnType": 123,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 25,
+          "lineIndex": 14,
+          "name": "노들로",
+          "description": "노들로, 265m",
+          "distance": 265,
+          "time": 115,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 26,
+          "pointIndex": 11,
+          "name": "여의2교 앞",
+          "description": "여의2교 앞에서 인천 방면으로 좌회전 후 국회대로를 따라 1273m 이동",
+          "nextRoadName": "국회대로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 27,
+          "lineIndex": 15,
+          "name": "국회대로",
+          "description": "국회대로, 1273m",
+          "distance": 1273,
+          "time": 150,
+          "roadType": 6,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 28,
+          "pointIndex": 12,
+          "name": "영등포구청",
+          "description": "영등포구청에서 당산역 방면으로 우회전 후 당산로를 따라 139m 이동",
+          "nextRoadName": "당산로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 29,
+          "lineIndex": 16,
+          "name": "당산로",
+          "description": "당산로, 139m",
+          "distance": 139,
+          "time": 83,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 30,
+          "pointIndex": 13,
+          "name": "영등포구청",
+          "description": "영등포구청에서 U턴 후 당산로를 따라 446m 이동",
+          "nextRoadName": "당산로",
+          "turnType": 14,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 31,
+          "lineIndex": 17,
+          "name": "당산로",
+          "description": "당산로, 446m",
+          "distance": 446,
+          "time": 94,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 32,
+          "pointIndex": 14,
+          "name": "",
+          "description": "도착",
+          "nextRoadName": "",
+          "turnType": 201,
+          "pointType": "E"
+        }
+      }
+    ]
+  }
+}
