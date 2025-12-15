@@ -1,0 +1,187 @@
+{
+  "key": "c8e78f6ba671ac95470e585acd347a5a1d885ad622bcbab29b49d960b62f5fd1",
+  "tool": "Directions_naver",
+  "created_at": "2025-12-15T08:39:48.152240",
+  "input_params": {
+    "goal": "126.977022,37.566536",
+    "option": "trafast",
+    "start": "127.027621,37.497942",
+    "waypoints": ""
+  },
+  "raw_args": {
+    "start": "127.027621,37.497942",
+    "goal": "126.977022,37.566536",
+    "waypoints": "",
+    "option": "trafast"
+  },
+  "data": {
+    "code": 0,
+    "message": "길찾기를 성공하였습니다.",
+    "currentDateTime": "2025-12-15T17:39:48",
+    "route": {
+      "traoptimal": [
+        {
+          "guide": [
+            {
+              "distance": 195,
+              "duration": 62369,
+              "instructions": "'강남대로55길' 방면으로 우회전",
+              "pointIndex": 7,
+              "type": 3
+            },
+            {
+              "distance": 315,
+              "duration": 84070,
+              "instructions": "'서운로' 방면으로 우회전",
+              "pointIndex": 31,
+              "type": 3
+            },
+            {
+              "distance": 971,
+              "duration": 459597,
+              "instructions": "'반포IC' 방면으로 좌회전",
+              "pointIndex": 79,
+              "type": 2
+            },
+            {
+              "distance": 581,
+              "duration": 105060,
+              "instructions": "우회전",
+              "pointIndex": 109,
+              "type": 3
+            },
+            {
+              "distance": 71,
+              "duration": 14572,
+              "instructions": "좌회전",
+              "pointIndex": 115,
+              "type": 2
+            },
+            {
+              "distance": 491,
+              "duration": 100783,
+              "instructions": "좌회전",
+              "pointIndex": 150,
+              "type": 2
+            },
+            {
+              "distance": 57,
+              "duration": 11700,
+              "instructions": "'잠원로' 방면으로 우회전",
+              "pointIndex": 154,
+              "type": 3
+            },
+            {
+              "distance": 156,
+              "duration": 250887,
+              "instructions": "고속터미널에서 '이수교차로' 방면으로 좌회전",
+              "pointIndex": 156,
+              "type": 2
+            },
+            {
+              "distance": 622,
+              "duration": 167137,
+              "instructions": "고속터미널에서 '반포대교' 방면으로 오른쪽 방향",
+              "pointIndex": 181,
+              "type": 5
+            },
+            {
+              "distance": 2337,
+              "duration": 254694,
+              "instructions": "'용산구청' 방면으로 오른쪽 방향",
+              "pointIndex": 222,
+              "type": 5
+            },
+            {
+              "distance": 1001,
+              "duration": 97717,
+              "instructions": "이태원지하차도에서 '남산2·3호터널' 방면으로 왼쪽 지하차도 진입",
+              "pointIndex": 252,
+              "type": 64
+            },
+            {
+              "distance": 1204,
+              "duration": 129106,
+              "instructions": "남산3호터널교차로에서 '장충체육관, 남산2호터널' 방면으로 오른쪽 방향",
+              "pointIndex": 290,
+              "type": 5
+            },
+            {
+              "distance": 115,
+              "duration": 12235,
+              "instructions": "'소월로' 방면으로 우회전",
+              "pointIndex": 297,
+              "type": 3
+            },
+            {
+              "distance": 268,
+              "duration": 77030,
+              "instructions": "'소월로' 방면으로 좌회전",
+              "pointIndex": 322,
+              "type": 2
+            },
+            {
+              "distance": 1898,
+              "duration": 226205,
+              "instructions": "'숭례문, 시청' 방면으로 좌회전",
+              "pointIndex": 414,
+              "type": 2
+            },
+            {
+              "distance": 436,
+              "duration": 77486,
+              "instructions": "도동삼거리에서 '시청, 숭례문' 방면으로 우회전",
+              "pointIndex": 434,
+              "type": 3
+            },
+            {
+              "distance": 1587,
+              "duration": 535708,
+              "instructions": "세종대로사거리에서 유턴",
+              "pointIndex": 494,
+              "type": 6
+            },
+            {
+              "distance": 384,
+              "duration": 64750,
+              "instructions": "목적지",
+              "pointIndex": 506,
+              "type": 88
+            }
+          ],
+          "summary": {
+            "bbox": [
+              [
+                126.9757035,
+                37.4952917
+              ],
+              [
+                127.0283598,
+                37.5699612
+              ]
+            ],
+            "departureTime": "2025-12-15T17:39:47",
+            "distance": 12689,
+            "duration": 2731106,
+            "fuelPrice": 1579,
+            "goal": {
+              "dir": 2,
+              "location": [
+                126.9770218,
+                37.5665355
+              ]
+            },
+            "start": {
+              "location": [
+                127.0276208,
+                37.4979413
+              ]
+            },
+            "taxiFare": 16100,
+            "tollFare": 0
+          }
+        }
+      ]
+    }
+  }
+}

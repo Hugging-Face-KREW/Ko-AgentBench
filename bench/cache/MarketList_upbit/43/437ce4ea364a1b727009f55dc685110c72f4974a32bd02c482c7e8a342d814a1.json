@@ -1,13 +1,14 @@
 {
   "key": "437ce4ea364a1b727009f55dc685110c72f4974a32bd02c482c7e8a342d814a1",
   "tool": "MarketList_upbit",
-  "created_at": "2025-12-14T16:22:38.321449",
+  "created_at": "2025-12-15T09:03:50.687806",
   "input_params": {
     "include_event": true,
     "quote": "USDT"
   },
   "raw_args": {
-    "quote": "USDT"
+    "quote": "USDT",
+    "include_event": true
   },
   "data": {
     "quote": "USDT",
@@ -78,6 +79,11 @@
         "english_name": "Livepeer"
       },
       {
+        "market": "USDT-WET",
+        "korean_name": "휴미디파이",
+        "english_name": "HumidiFi"
+      },
+      {
         "market": "USDT-ARPA",
         "korean_name": "알파",
         "english_name": "ARPA"
@@ -106,13 +112,8 @@
         "market": "USDT-FLUID",
         "korean_name": "플루이드",
         "english_name": "Fluid"
-      },
-      {
-        "market": "USDT-SCR",
-        "korean_name": "스크롤",
-        "english_name": "Scroll"
       }
     ],
-    "count": 161
+    "count": 162
   }
 }
