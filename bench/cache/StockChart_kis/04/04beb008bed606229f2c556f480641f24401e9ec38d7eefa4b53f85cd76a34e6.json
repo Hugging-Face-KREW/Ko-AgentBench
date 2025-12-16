@@ -1,20 +1,36 @@
 {
   "key": "04beb008bed606229f2c556f480641f24401e9ec38d7eefa4b53f85cd76a34e6",
   "tool": "StockChart_kis",
-  "created_at": "2025-12-14T15:47:00.816552",
+  "created_at": "2025-12-16T02:47:47.277535",
   "input_params": {
     "count": 30,
     "period": "D",
     "symbol": "035420"
   },
   "raw_args": {
-    "period": "D",
-    "symbol": "035420"
+    "symbol": "035420",
+    "period": "D"
   },
   "data": {
     "symbol": "035420",
     "period": "D",
     "data": [
+      {
+        "date": "20251216",
+        "open": 240500,
+        "high": 240500,
+        "low": 231000,
+        "close": 231500,
+        "volume": 936517
+      },
+      {
+        "date": "20251215",
+        "open": 241500,
+        "high": 244000,
+        "low": 240000,
+        "close": 240500,
+        "volume": 522965
+      },
       {
         "date": "20251212",
         "open": 243000,
@@ -238,22 +254,6 @@
         "low": 256500,
         "close": 278500,
         "volume": 3470467
-      },
-      {
-        "date": "20251104",
-        "open": 272500,
-        "high": 274000,
-        "low": 267000,
-        "close": 267000,
-        "volume": 1325780
-      },
-      {
-        "date": "20251103",
-        "open": 283500,
-        "high": 287500,
-        "low": 271500,
-        "close": 274500,
-        "volume": 2760215
       }
     ]
   }

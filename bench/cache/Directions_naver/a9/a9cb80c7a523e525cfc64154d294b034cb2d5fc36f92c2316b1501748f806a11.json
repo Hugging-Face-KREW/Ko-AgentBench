@@ -1,7 +1,7 @@
 {
   "key": "a9cb80c7a523e525cfc64154d294b034cb2d5fc36f92c2316b1501748f806a11",
   "tool": "Directions_naver",
-  "created_at": "2025-12-14T16:02:29.345923",
+  "created_at": "2025-12-16T01:00:54.638183",
   "input_params": {
     "goal": "127.0592,37.511",
     "start": "126.450517,37.46019"
@@ -13,100 +13,128 @@
   "data": {
     "code": 0,
     "message": "길찾기를 성공하였습니다.",
-    "currentDateTime": "2025-12-15T01:02:29",
+    "currentDateTime": "2025-12-16T10:00:54",
     "route": {
       "traoptimal": [
         {
           "guide": [
             {
               "distance": 1362,
-              "duration": 121962,
+              "duration": 169730,
               "instructions": "자유무역지역사거리에서 '화물터미널(A)' 방면으로 우회전",
               "pointIndex": 31,
               "type": 3
             },
             {
               "distance": 2034,
-              "duration": 129981,
+              "duration": 149838,
               "instructions": "신불IC에서 '제1여객터미널, 서울, 인천대교' 방면으로 오른쪽 방향",
               "pointIndex": 43,
               "type": 5
             },
             {
               "distance": 409,
-              "duration": 20976,
+              "duration": 22200,
               "instructions": "신불IC에서 '서울, 인천대교' 방면으로 왼쪽 도로 주행",
               "pointIndex": 49,
               "type": 41
             },
             {
               "distance": 2149,
-              "duration": 96087,
+              "duration": 100009,
               "instructions": "'인천국제공항고속도로' 방면으로 고속도로 진입",
               "pointIndex": 87,
               "type": 50
             },
             {
               "distance": 714,
-              "duration": 27103,
+              "duration": 27549,
               "instructions": "공항신도시분기점에서 '서울, 북인천' 방면으로 왼쪽 도로 주행",
               "pointIndex": 97,
               "type": 41
             },
             {
               "distance": 19761,
-              "duration": 737233,
+              "duration": 779175,
               "instructions": "인천공항톨게이트 (통행료 3,200원)",
               "pointIndex": 273,
               "type": 121
             },
             {
               "distance": 13470,
-              "duration": 487262,
+              "duration": 530934,
               "instructions": "88분기점에서 '서울, 올림픽대로' 방면으로 오른쪽 고속도로 출구",
               "pointIndex": 390,
               "type": 67
             },
             {
               "distance": 15282,
-              "duration": 655995,
+              "duration": 1901976,
               "instructions": "'종합운동장, 동작대교' 방면으로 분기도로 진입",
               "pointIndex": 608,
               "type": 54
             },
             {
-              "distance": 12517,
-              "duration": 547618,
-              "instructions": "'탄천주차장' 방면으로 오른쪽 도시고속도로 출구",
-              "pointIndex": 828,
+              "distance": 10864,
+              "duration": 1056802,
+              "instructions": "영동대교남단에서 오른쪽 도시고속도로 출구",
+              "pointIndex": 785,
               "type": 69
             },
             {
-              "distance": 900,
-              "duration": 72396,
-              "instructions": "종합운동장에서 '삼성역' 방면으로 우회전",
-              "pointIndex": 857,
+              "distance": 17,
+              "duration": 1990,
+              "instructions": "영동대교남단에서 오른쪽 도로 주행",
+              "pointIndex": 786,
+              "type": 42
+            },
+            {
+              "distance": 532,
+              "duration": 116513,
+              "instructions": "유턴",
+              "pointIndex": 809,
+              "type": 6
+            },
+            {
+              "distance": 232,
+              "duration": 47446,
+              "instructions": "영동대교남단에서 '일원터널, 코엑스' 방면으로 우회전",
+              "pointIndex": 816,
               "type": 3
             },
             {
-              "distance": 1046,
-              "duration": 181121,
-              "instructions": "'테헤란로87길' 방면으로 우회전",
-              "pointIndex": 891,
+              "distance": 1377,
+              "duration": 240807,
+              "instructions": "코엑스에서 '봉은사' 방면으로 우회전",
+              "pointIndex": 851,
               "type": 3
             },
             {
-              "distance": 345,
-              "duration": 50899,
+              "distance": 328,
+              "duration": 149360,
+              "instructions": "봉은사에서 '한국도심공항' 방면으로 좌회전",
+              "pointIndex": 861,
+              "type": 2
+            },
+            {
+              "distance": 361,
+              "duration": 80123,
+              "instructions": "유턴",
+              "pointIndex": 873,
+              "type": 6
+            },
+            {
+              "distance": 14,
+              "duration": 4562,
               "instructions": "우회전",
-              "pointIndex": 903,
+              "pointIndex": 874,
               "type": 3
             },
             {
               "distance": 35,
-              "duration": 9742,
+              "duration": 17397,
               "instructions": "목적지",
-              "pointIndex": 906,
+              "pointIndex": 877,
               "type": 88
             }
           ],
@@ -117,14 +145,14 @@
                 37.4562564
               ],
               [
-                127.070618,
+                127.0600639,
                 37.5857671
               ]
             ],
-            "departureTime": "2025-12-15T01:02:28",
-            "distance": 70024,
-            "duration": 3138375,
-            "fuelPrice": 8719,
+            "departureTime": "2025-12-16T10:00:53",
+            "distance": 68941,
+            "duration": 5396411,
+            "fuelPrice": 8581,
             "goal": {
               "dir": 2,
               "location": [
@@ -138,7 +166,7 @@
                 37.4601896
               ]
             },
-            "taxiFare": 84650,
+            "taxiFare": 62230,
             "tollFare": 3200
           }
         }

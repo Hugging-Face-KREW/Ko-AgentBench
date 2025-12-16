@@ -1,0 +1,75 @@
+{
+  "key": "9dab355196d984c888f808315f602af5dc52c5d2288d1a5dddeef0224cb6596f",
+  "tool": "WalkRoute_tmap",
+  "created_at": "2025-12-15T14:52:51.397511",
+  "input_params": {
+    "endX": 127.0457,
+    "endY": 37.5178,
+    "startX": 127.0456,
+    "startY": 37.5177
+  },
+  "raw_args": {
+    "startY": 37.5177,
+    "startX": 127.0456,
+    "endY": 37.5178,
+    "endX": 127.0457
+  },
+  "data": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "totalDistance": 11,
+          "totalTime": 7,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "학동로를 따라 11m 이동",
+          "direction": "",
+          "nearPoiName": "",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "",
+          "facilityType": "11",
+          "facilityName": "",
+          "turnType": 200,
+          "pointType": "SP"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "학동로",
+          "description": "학동로, 11m",
+          "distance": 11,
+          "time": 7,
+          "roadType": 21,
+          "categoryRoadType": 0,
+          "facilityType": "11",
+          "facilityName": ""
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "도착지",
+          "description": "도착",
+          "direction": "",
+          "nearPoiName": "도착지",
+          "nearPoiX": "0.0",
+          "nearPoiY": "0.0",
+          "intersectionName": "도착지",
+          "facilityType": "",
+          "facilityName": "",
+          "turnType": 201,
+          "pointType": "EP"
+        }
+      }
+    ]
+  }
+}
