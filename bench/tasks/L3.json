@@ -115,7 +115,7 @@
   },
   {
     "task_id": "L3-003",
-    "instruction": "‘정보처리기사 독학 책’에 대한 후기글을 블로그에서 찾아보고, 제일 먼저 나온 책의 가격을 알라딘에서 찾아줘",
+    "instruction": "정보처리기사 독학 책 후기 블로그 글 검색하고, 그 책 가격 알려줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -123,7 +123,7 @@
         "step": 1,
         "tool": "BlogSearch_naver",
         "args": {
-          "query": "정보처리기사 독학 책 후기",
+          "query": "정보처리기사 독학 책 추천",
           "display": 20,
           "sort": "sim"
         }
@@ -262,7 +262,7 @@
   },
   {
     "task_id": "L3-005",
-    "instruction": "강남구 역삼동에서 용산구 이태원동까지 차로 가는 법 알려줘",
+    "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -346,7 +346,7 @@
   },
   {
     "task_id": "L3-006",
-    "instruction": "이번주 알라딘 베스트 셀러를 3권 조회해서, 그 책의 후기를 네이버 블로그에서 찾아줘",
+    "instruction": "이번주 알라딘 베스트 셀러 3권 조회해서 블로그 후기 글 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -396,7 +396,7 @@
   },
   {
     "task_id": "L3-007",
-    "instruction": "남양주를 좌표로 변경해서, 그 지점 1km 내 맛집 검색해주고, 그 맛집 후기 영상을 검색해줘.",
+    "instruction": "남양주 1km 이내 맛집 검색해주고, 후기 영상 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -484,7 +484,7 @@
   },
   {
     "task_id": "L3-008",
-    "instruction": "부산 해운대구의 좌표를 검색해서, 그 지점 근처 편의점 중에 걸어서 10분내에 갈 수 있는 곳 알려줘",
+    "instruction": "부산 해운대구 근처 편의점 중에 걸어서 10분내에 갈 수 있는 곳 알려줘",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -546,7 +546,7 @@
   },
   {
     "task_id": "L3-009",
-    "instruction": "강남구 역삼동에서 송파구 잠실동까지 자동차로 가는 경로와 예상 시간을 알려주세요.",
+    "instruction": "강남역에서 잠실역까지 자동차로 가는 경로와 예상 시간을 알려주세요.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -629,7 +629,7 @@
   },
   {
     "task_id": "L3-010",
-    "instruction": "롯데월드 주변의 주차장 하나만 찾아보고, 그 주차장 가격 후기를 블로그에서 찾아줘.",
+    "instruction": "판교역 주변의 주차장들 중 가장 저렴한 주차장의 블로그 후기를 찾아줘.",
     "task_level": 3,
     "task_category": "Multi Tool Sequential",
     "golden_action": [
@@ -637,9 +637,9 @@
         "step": 1,
         "tool": "PlaceSearch_kakao",
         "args": {
-          "keyword": "롯데월드 주차장",
+          "keyword": "판교역 주차장",
           "sort": "distance",
-          "size": 1
+          "size": 5
         }
       },
       {
