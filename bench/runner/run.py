@@ -19,7 +19,8 @@ class BenchmarkRunner:
                  tool_registry: ToolRegistry,
                  max_steps: int = 10,
                  timeout: int = 300,
-                 max_retries: int = 3):
+                 max_retries: int = 3,
+                 multiturn_mode: str = "seed_replay"):
         """Initialize benchmark runner.
         
         Args:
@@ -34,6 +35,13 @@ class BenchmarkRunner:
         self.max_steps = max_steps
         self.timeout = timeout
         self.max_retries = max_retries
+
+        if multiturn_mode not in {"seed_replay", "full_rollout"}:
+            raise ValueError(
+                "Invalid multiturn_mode. Expected 'seed_replay' or 'full_rollout', "
+                f"got: {multiturn_mode!r}"
+            )
+        self.multiturn_mode = multiturn_mode
         
         self.logger = logging.getLogger(__name__)
     
@@ -344,138 +352,244 @@ class BenchmarkRunner:
             Execution result with all conversation steps
         """
         turns = conversation.get('turns', [])
-        
+
+        # Allow per-task override, otherwise use runner default.
+        mode = task.get('multiturn_mode') or self.multiturn_mode
+        if mode not in {"seed_replay", "full_rollout"}:
+            self.logger.warning(f"[MULTI-TURN] Unknown mode={mode!r}; falling back to 'seed_replay'")
+            mode = "seed_replay"
+
         # Initialize conversation (no system prompt as per requirement)
         messages: List[Dict[str, Any]] = []
-        
-        all_steps = []
+
+        all_steps: List[Dict[str, Any]] = []
         step_counter = 0
-        
+
         # Extract task level for API routing
         task_level = task.get('level')
-        
-        self.logger.info(f"\n{'='*80}")
-        self.logger.info(f"[MULTI-TURN] Multi-turn conversation: {len(turns)} turns")
-        self.logger.info(f"{'='*80}\n")
-        
-        # Process each user turn sequentially
-        for turn_idx, turn in enumerate(turns, 1):
-            role = turn.get('role', '')
-            content = turn.get('content', '')
-            
-            # Skip turns without user content (assistant action markers, etc.)
-            if role != 'user' or not content:
-                continue
-            
-            self.logger.info(f"\n{'─'*80}")
-            self.logger.info(f"[TURN {turn_idx}] Processing user message")
-            self.logger.info(f"{'─'*80}")
-            self.logger.info(f"User: {content[:200]}...")
-            
-            # Add user message to conversation
-            messages.append({"role": "user", "content": content})
-            
-            # Call LLM with current context
-            try:
-                def _drain_tool_calls(initial_response: Dict[str, Any]) -> None:
-                    """Execute tool calls until the assistant returns no tool_calls.
 
-                    This is critical for Azure Responses API: every function_call(call_id)
-                    must have a matching function_call_output(call_id) before the next
-                    request when using previous_response_id.
-                    """
-                    nonlocal step_counter
+        def _drain_tool_calls(initial_response: Dict[str, Any], turn_label: int) -> None:
+            """Execute tool calls until the assistant returns no tool_calls.
 
-                    response_local = initial_response
-                    while True:
-                        message_local = (response_local or {}).get('message', {}) or {}
+            This is critical for Azure Responses API: every function_call(call_id)
+            must have a matching function_call_output(call_id) before the next
+            request when using previous_response_id.
+            """
+            nonlocal step_counter
 
-                        step_counter += 1
-                        step_data_local = {
-                            "step": step_counter,
-                            "turn": turn_idx,
-                            "llm_response": response_local,
-                            "tool_calls": [],
-                            "timestamp": time.time(),
-                            "ttft": (response_local or {}).get('ttft', 0)
-                        }
+            response_local = initial_response
+            while True:
+                message_local = (response_local or {}).get('message', {}) or {}
 
-                        # Log assistant response
-                        assistant_content_local = message_local.get('content', '')
-                        if assistant_content_local:
-                            self.logger.info(f"[ASSISTANT] {assistant_content_local[:200]}...")
+                step_counter += 1
+                step_data_local = {
+                    "step": step_counter,
+                    "turn": turn_label,
+                    "llm_response": response_local,
+                    "tool_calls": [],
+                    "timestamp": time.time(),
+                    "ttft": (response_local or {}).get('ttft', 0)
+                }
 
-                        # Add assistant message to conversation
-                        messages.append(message_local)
+                assistant_content_local = message_local.get('content', '')
+                if assistant_content_local:
+                    self.logger.info(f"[ASSISTANT] {assistant_content_local[:200]}...")
 
-                        tool_calls_local = message_local.get('tool_calls') or []
-                        if tool_calls_local:
-                            self.logger.info(f"[TOOL] Tool calls: {len(tool_calls_local)}")
+                # Add assistant message to conversation
+                messages.append(message_local)
 
-                            for idx, tool_call in enumerate(tool_calls_local, 1):
-                                tool_name = tool_call.get('function', {}).get('name', 'unknown')
-                                tool_args = tool_call.get('function', {}).get('arguments', '{}')
-                                self.logger.info(f"  [{idx}] {tool_name}")
-                                self.logger.info(f"      Args: {str(tool_args)[:150]}...")
+                tool_calls_local = message_local.get('tool_calls') or []
+                if tool_calls_local:
+                    self.logger.info(f"[TOOL] Tool calls: {len(tool_calls_local)}")
 
-                                tool_result = self._execute_tool_call(tool_call, task)
-                                step_data_local['tool_calls'].append(tool_result)
+                    for idx, tool_call in enumerate(tool_calls_local, 1):
+                        tool_name = tool_call.get('function', {}).get('name', 'unknown')
+                        tool_args = tool_call.get('function', {}).get('arguments', '{}')
+                        self.logger.info(f"  [{idx}] {tool_name}")
+                        self.logger.info(f"      Args: {str(tool_args)[:150]}...")
 
-                                if tool_result.get('success'):
-                                    result_preview = str(tool_result.get('result', ''))[:150]
-                                    self.logger.info(f"      [SUCCESS] {result_preview}...")
-                                else:
-                                    self.logger.error(f"      [ERROR] {tool_result.get('error')}")
+                        tool_result = self._execute_tool_call(tool_call, task)
+                        step_data_local['tool_calls'].append(tool_result)
 
-                                # Always append a tool output (even on failure)
-                                result_content = tool_result.get('result')
-                                if result_content is None:
-                                    result_content = {"error": tool_result.get('error', 'Tool execution failed')}
+                        if tool_result.get('success'):
+                            result_preview = str(tool_result.get('result', ''))[:150]
+                            self.logger.info(f"      [SUCCESS] {result_preview}...")
+                        else:
+                            self.logger.error(f"      [ERROR] {tool_result.get('error')}")
 
-                                messages.append({
-                                    "role": "tool",
-                                    "tool_call_id": tool_call['id'],
-                                    "content": json.dumps(result_content)
-                                })
+                        # Always append a tool output (even on failure)
+                        result_content = tool_result.get('result')
+                        if result_content is None:
+                            result_content = {"error": tool_result.get('error', 'Tool execution failed')}
 
-                            all_steps.append(step_data_local)
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tool_call['id'],
+                            "content": json.dumps(result_content)
+                        })
 
-                            # Safety guard: don't exceed max_steps for a task
-                            if step_counter >= self.max_steps:
-                                self.logger.warning(
-                                    f"[WARN] Reached max_steps={self.max_steps} while draining tool calls; "
-                                    "stopping further tool execution to avoid infinite loops."
-                                )
-                                break
+                    all_steps.append(step_data_local)
 
-                            self.logger.info("[INFO] Getting follow-up response after tool execution...")
-                            response_local = self._call_llm_with_retry(messages, tools, task_level)
-                            continue
-
-                        # No tool calls -> conversation for this user turn is complete
-                        all_steps.append(step_data_local)
+                    if step_counter >= self.max_steps:
+                        self.logger.warning(
+                            f"[WARN] Reached max_steps={self.max_steps} while draining tool calls; "
+                            "stopping further tool execution to avoid infinite loops."
+                        )
                         break
 
-                # First assistant response for this user turn
+                    self.logger.info("[INFO] Getting follow-up response after tool execution...")
+                    response_local = self._call_llm_with_retry(messages, tools, task_level)
+                    continue
+
+                # No tool calls -> conversation for this request is complete
+                all_steps.append(step_data_local)
+                break
+
+        self.logger.info(f"\n{'='*80}")
+        self.logger.info(f"[MULTI-TURN] Multi-turn conversation: {len(turns)} turns | mode={mode}")
+        self.logger.info(f"{'='*80}\n")
+
+        if mode == "full_rollout":
+            # Process each user turn sequentially (original behavior)
+            for turn_idx, turn in enumerate(turns, 1):
+                role = turn.get('role', '')
+                content = turn.get('content', '')
+
+                if role != 'user' or not content:
+                    continue
+
+                self.logger.info(f"\n{'─'*80}")
+                self.logger.info(f"[TURN {turn_idx}] Processing user message")
+                self.logger.info(f"{'─'*80}")
+                self.logger.info(f"User: {content[:200]}...")
+
+                messages.append({"role": "user", "content": content})
+
+                try:
+                    first_response = self._call_llm_with_retry(messages, tools, task_level)
+                    _drain_tool_calls(first_response, turn_label=turn_idx)
+                except Exception as e:
+                    self.logger.error(f"[ERROR] Error processing turn {turn_idx}: {e}")
+                    continue
+        else:
+            # Seed replay: reuse dataset-provided assistant/tool results up to the evaluation turn,
+            # then call the model only on that evaluation user turn.
+            evaluation_turn = None
+            eval_ctx = conversation.get('evaluation_context') or {}
+            context_tests = eval_ctx.get('context_tests') or []
+            if isinstance(context_tests, list) and context_tests:
+                try:
+                    evaluation_turn = max(int(t.get('turn')) for t in context_tests if t.get('turn') is not None)
+                except Exception:
+                    evaluation_turn = None
+
+            if evaluation_turn is None:
+                user_turn_numbers = [
+                    int(t.get('turn_number'))
+                    for t in turns
+                    if t.get('role') == 'user' and t.get('turn_number') is not None
+                ]
+                evaluation_turn = max(user_turn_numbers) if user_turn_numbers else 1
+
+            def _append_seeded_assistant_and_tools(seed_turn: Dict[str, Any]) -> None:
+                assistant_msg: Dict[str, Any] = {"role": "assistant"}
+                content_local = seed_turn.get('content', '')
+                if content_local:
+                    assistant_msg["content"] = content_local
+
+                tool_calls_out: List[Dict[str, Any]] = []
+                tool_messages_out: List[Dict[str, Any]] = []
+
+                actions = []
+                if isinstance(seed_turn.get('actions'), list):
+                    actions = seed_turn.get('actions')
+                elif isinstance(seed_turn.get('action'), dict):
+                    actions = [seed_turn.get('action')]
+
+                for idx, action in enumerate(actions, 1):
+                    if not isinstance(action, dict):
+                        continue
+                    tool_name = action.get('tool')
+                    if not tool_name:
+                        continue
+
+                    call_id = f"seed_call_{seed_turn.get('turn_number', 'x')}_{idx}"
+                    tool_calls_out.append({
+                        "id": call_id,
+                        "type": "function",
+                        "function": {
+                            "name": tool_name,
+                            "arguments": json.dumps(action.get('args', {}) or {})
+                        }
+                    })
+
+                    if action.get('result') is not None:
+                        tool_messages_out.append({
+                            "role": "tool",
+                            "tool_call_id": call_id,
+                            "content": json.dumps(action.get('result'))
+                        })
+
+                if tool_calls_out:
+                    assistant_msg["tool_calls"] = tool_calls_out
+
+                # Append assistant message (even if it only contains tool_calls)
+                if assistant_msg.get("content") or assistant_msg.get("tool_calls"):
+                    messages.append(assistant_msg)
+                for tool_msg in tool_messages_out:
+                    messages.append(tool_msg)
+
+            for seed_turn in turns:
+                tn = seed_turn.get('turn_number')
+                try:
+                    tn_int = int(tn) if tn is not None else None
+                except Exception:
+                    tn_int = None
+
+                role = seed_turn.get('role', '')
+                content = seed_turn.get('content', '')
+
+                if tn_int is None:
+                    continue
+
+                if tn_int > evaluation_turn:
+                    break
+
+                if role == 'user':
+                    if content:
+                        messages.append({"role": "user", "content": content})
+                    if tn_int == evaluation_turn:
+                        break
+                elif role == 'assistant':
+                    _append_seeded_assistant_and_tools(seed_turn)
+                elif role == 'tool':
+                    # If the dataset explicitly provides tool messages, preserve them.
+                    if content:
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": seed_turn.get('tool_call_id'),
+                            "content": content
+                        })
+
+            self.logger.info(f"[SEED] Seeded messages: {len(messages)} | evaluation_turn={evaluation_turn}")
+
+            # Call the model once on the evaluation turn context.
+            try:
                 first_response = self._call_llm_with_retry(messages, tools, task_level)
-                _drain_tool_calls(first_response)
-                
+                _drain_tool_calls(first_response, turn_label=evaluation_turn)
             except Exception as e:
-                self.logger.error(f"[ERROR] Error processing turn {turn_idx}: {e}")
-                # Continue to next turn even if this one fails
-                continue
-        
+                self.logger.error(f"[ERROR] Error processing evaluation turn {evaluation_turn}: {e}")
+
         self.logger.info(f"\n{'='*80}")
         self.logger.info(f"[COMPLETE] Multi-turn conversation completed: {len(all_steps)} steps")
         self.logger.info(f"{'='*80}\n")
-        
-        # Get final response from last message
+
         final_response_content = ""
         for msg in reversed(messages):
             if msg.get('role') == 'assistant' and msg.get('content'):
                 final_response_content = msg.get('content', '')
                 break
-        
+
         return {
             "steps": all_steps,
             "final_response": final_response_content,
@@ -708,6 +822,70 @@ class BenchmarkRunner:
                         task_level: Optional[int] = None) -> Dict[str, Any]:
         """Call LLM with retry logic."""
         self.logger.debug(f"Calling LLM with {len(tools)} tools")
+
+        def _is_anthropic_rate_limit(err: Exception) -> bool:
+            name = type(err).__name__
+            text = str(err).lower()
+            model = (getattr(self.adapter, "model_name", "") or "").lower()
+
+            if name == "RateLimitError":
+                # LiteLLM raises this for multiple providers; restrict by hints.
+                return "anthropic" in text or "claude" in text or "anthropic" in model or "claude" in model
+
+            # Fallback heuristic: Anthropic error payload uses 'rate_limit_error'
+            if "rate_limit_error" in text:
+                return "anthropic" in text or "claude" in text or "anthropic" in model or "claude" in model
+
+            return False
+
+        def _extract_retry_after_seconds(err: Exception) -> Optional[float]:
+            """Best-effort extraction of Retry-After from exception/response headers."""
+            # Try common attributes used by httpx/LiteLLM wrappers
+            candidates = []
+            for attr in ("response", "httpx_response"):
+                resp = getattr(err, attr, None)
+                if resp is not None:
+                    candidates.append(resp)
+
+            headers = getattr(err, "headers", None)
+            if headers is None:
+                for resp in candidates:
+                    headers = getattr(resp, "headers", None)
+                    if headers is not None:
+                        break
+
+            if not headers:
+                return None
+
+            # Normalize dict-like headers
+            try:
+                def _get(key: str) -> Optional[str]:
+                    v = headers.get(key) if hasattr(headers, "get") else None
+                    if v is None:
+                        v = headers.get(key.lower()) if hasattr(headers, "get") else None
+                    return str(v) if v is not None else None
+
+                retry_after = _get("retry-after")
+                if retry_after:
+                    try:
+                        return float(retry_after)
+                    except Exception:
+                        return None
+
+                # Some providers use epoch reset timestamps
+                reset = _get("x-ratelimit-reset") or _get("ratelimit-reset")
+                if reset:
+                    try:
+                        reset_ts = float(reset)
+                        now = time.time()
+                        if reset_ts > now:
+                            return max(0.0, reset_ts - now)
+                    except Exception:
+                        return None
+            except Exception:
+                return None
+
+            return None
         
         last_error = None
         
@@ -747,7 +925,17 @@ class BenchmarkRunner:
                 last_error = e
                 self.logger.warning(f"LLM call attempt {attempt + 1} failed: {str(e)}")
                 if attempt < self.max_retries - 1:
-                    time.sleep(2 ** attempt)  # Exponential backoff
+                    # Anthropic TPM rate limits are per-minute; short retries amplify failures.
+                    if _is_anthropic_rate_limit(e):
+                        retry_after = _extract_retry_after_seconds(e)
+                        wait_s = max(60.0, float(retry_after)) if retry_after is not None else 60.0
+                        self.logger.warning(
+                            f"[RATE_LIMIT] Detected Anthropic rate limit; sleeping {wait_s:.1f}s before retry "
+                            f"(attempt {attempt + 2}/{self.max_retries})"
+                        )
+                        time.sleep(wait_s)
+                    else:
+                        time.sleep(2 ** attempt)  # Exponential backoff
         
         raise Exception(f"LLM call failed after {self.max_retries} attempts: {str(last_error)}")
     
