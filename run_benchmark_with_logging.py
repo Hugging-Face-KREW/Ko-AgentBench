@@ -156,6 +156,16 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
     return converted_tasks
 
 
+def _resolve_multiturn_mode(args: argparse.Namespace) -> str:
+    """Resolve multi-turn execution mode.
+
+    Default: seed replay (reuse dataset-provided assistant/tool results and only call
+    the model on the evaluation turn).
+    Opt-in: full rollout (call the model for every user turn).
+    """
+    return "full_rollout" if getattr(args, "full_rollout", False) else "seed_replay"
+
+
 def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
     """Simplify and flatten a single task result for easier analysis.
     
@@ -400,6 +410,7 @@ def run_benchmark_on_dataset(
     log_dir: str = "logs/benchmark_results",
     run_timestamp: str = None,
     repetitions: int = 1,
+    multiturn_mode: str = "seed_replay",
     **adapter_config: Any
 ) -> List[Dict[str, Any]]:
     """Run benchmark on a specific dataset level.
@@ -415,6 +426,7 @@ def run_benchmark_on_dataset(
         log_dir: Directory to save logs
         run_timestamp: Timestamp for the entire run (shared across levels)
         repetitions: Number of repetitions for each task (for pass@k metric)
+        multiturn_mode: (L6/L7) Multi-turn execution mode: 'seed_replay' (default) or 'full_rollout'
         **adapter_config: Additional adapter configuration
         
     Returns:
@@ -498,7 +510,13 @@ def run_benchmark_on_dataset(
             print(f"\n[API] Using LiteLLMAdapter for API inference")
             adapter = LiteLLMAdapter(model_name, **adapter_config)
     
-    runner = BenchmarkRunner(adapter, registry, max_steps=max_steps, timeout=timeout)
+    runner = BenchmarkRunner(
+        adapter,
+        registry,
+        max_steps=max_steps,
+        timeout=timeout,
+        multiturn_mode=multiturn_mode,
+    )
     
     all_results = []
     
@@ -666,6 +684,12 @@ def main():
                         help="Maximum steps per task")
     parser.add_argument("--timeout", type=int, default=60,
                         help="Timeout (seconds) per task")
+    parser.add_argument(
+        "--full-rollout",
+        action="store_true",
+        help="(L6/L7) Execute full multi-turn rollout (call the model for every user turn). "
+             "Default is seed replay (only call the model on the evaluation turn).",
+    )
     parser.add_argument("--no-save-logs", action="store_true",
                         help="Do not save JSON logs to disk")
     parser.add_argument("--model", type=str, default=None,
@@ -705,6 +729,9 @@ def main():
     # Set cache mode from command-line argument
     set_cache_mode(args.cache_mode)
     print(f"Cache mode: {args.cache_mode}")
+
+    multiturn_mode = _resolve_multiturn_mode(args)
+    print(f"Multi-turn mode: {multiturn_mode}")
 
     print("="*80)
     print("Ko-AgentBench Dataset Runner with Tool Call Logging")
@@ -873,6 +900,7 @@ def main():
                 log_dir="logs/benchmark_results",
                 run_timestamp=run_timestamp,
                 repetitions=args.repetitions,
+                multiturn_mode=multiturn_mode,
                 **adapter_config
             )
             all_level_results[level_name] = results
