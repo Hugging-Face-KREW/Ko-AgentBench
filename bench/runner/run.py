@@ -377,85 +377,88 @@ class BenchmarkRunner:
             
             # Call LLM with current context
             try:
-                response = self._call_llm_with_retry(messages, tools, task_level)
-                message = response.get('message', {})
-                
-                step_counter += 1
-                step_data = {
-                    "step": step_counter,
-                    "turn": turn_idx,
-                    "llm_response": response,
-                    "tool_calls": [],
-                    "timestamp": time.time(),
-                    "ttft": response.get('ttft', 0)
-                }
-                
-                # Log assistant response
-                assistant_content = message.get('content', '')
-                if assistant_content:
-                    self.logger.info(f"[ASSISTANT] {assistant_content[:200]}...")
-                
-                # Add assistant message to conversation
-                messages.append(message)
-                
-                # Handle tool calls if present
-                if 'tool_calls' in message and message['tool_calls']:
-                    self.logger.info(f"[TOOL] Tool calls: {len(message['tool_calls'])}")
-                    
-                    for idx, tool_call in enumerate(message['tool_calls'], 1):
-                        tool_name = tool_call.get('function', {}).get('name', 'unknown')
-                        tool_args = tool_call.get('function', {}).get('arguments', '{}')
-                        self.logger.info(f"  [{idx}] {tool_name}")
-                        self.logger.info(f"      Args: {tool_args[:150]}...")
-                        
-                        # Execute tool
-                        tool_result = self._execute_tool_call(tool_call, task)
-                        step_data['tool_calls'].append(tool_result)
-                        
-                        # Log result
-                        if tool_result.get('success'):
-                            result_preview = str(tool_result.get('result', ''))[:150]
-                            self.logger.info(f"      [SUCCESS] {result_preview}...")
-                        else:
-                            self.logger.error(f"      [ERROR] {tool_result.get('error')}")
-                        
-                        # Add tool result to conversation
-                        # Handle both successful and failed tool executions
-                        result_content = tool_result.get('result')
-                        if result_content is None:
-                            # If tool failed, include error message
-                            result_content = {"error": tool_result.get('error', 'Tool execution failed')}
-                        messages.append({
-                            "role": "tool",
-                            "tool_call_id": tool_call['id'],
-                            "content": json.dumps(result_content)
-                        })
-                    
-                    # Get final response after tool execution
-                    self.logger.info(f"[INFO] Getting final response after tool execution...")
-                    final_response = self._call_llm_with_retry(messages, tools, task_level)
-                    final_message = final_response.get('message', {})
-                    
-                    # Log final response
-                    final_content = final_message.get('content', '')
-                    if final_content:
-                        self.logger.info(f"[RESPONSE] Final response: {final_content[:200]}...")
-                    
-                    # Add final response to conversation
-                    messages.append(final_message)
-                    
-                    # Update step data with final response
-                    step_counter += 1
-                    step_data_final = {
-                        "step": step_counter,
-                        "turn": turn_idx,
-                        "llm_response": final_response,
-                        "tool_calls": [],
-                        "timestamp": time.time()
-                    }
-                    all_steps.append(step_data_final)
-                
-                all_steps.append(step_data)
+                def _drain_tool_calls(initial_response: Dict[str, Any]) -> None:
+                    """Execute tool calls until the assistant returns no tool_calls.
+
+                    This is critical for Azure Responses API: every function_call(call_id)
+                    must have a matching function_call_output(call_id) before the next
+                    request when using previous_response_id.
+                    """
+                    nonlocal step_counter
+
+                    response_local = initial_response
+                    while True:
+                        message_local = (response_local or {}).get('message', {}) or {}
+
+                        step_counter += 1
+                        step_data_local = {
+                            "step": step_counter,
+                            "turn": turn_idx,
+                            "llm_response": response_local,
+                            "tool_calls": [],
+                            "timestamp": time.time(),
+                            "ttft": (response_local or {}).get('ttft', 0)
+                        }
+
+                        # Log assistant response
+                        assistant_content_local = message_local.get('content', '')
+                        if assistant_content_local:
+                            self.logger.info(f"[ASSISTANT] {assistant_content_local[:200]}...")
+
+                        # Add assistant message to conversation
+                        messages.append(message_local)
+
+                        tool_calls_local = message_local.get('tool_calls') or []
+                        if tool_calls_local:
+                            self.logger.info(f"[TOOL] Tool calls: {len(tool_calls_local)}")
+
+                            for idx, tool_call in enumerate(tool_calls_local, 1):
+                                tool_name = tool_call.get('function', {}).get('name', 'unknown')
+                                tool_args = tool_call.get('function', {}).get('arguments', '{}')
+                                self.logger.info(f"  [{idx}] {tool_name}")
+                                self.logger.info(f"      Args: {str(tool_args)[:150]}...")
+
+                                tool_result = self._execute_tool_call(tool_call, task)
+                                step_data_local['tool_calls'].append(tool_result)
+
+                                if tool_result.get('success'):
+                                    result_preview = str(tool_result.get('result', ''))[:150]
+                                    self.logger.info(f"      [SUCCESS] {result_preview}...")
+                                else:
+                                    self.logger.error(f"      [ERROR] {tool_result.get('error')}")
+
+                                # Always append a tool output (even on failure)
+                                result_content = tool_result.get('result')
+                                if result_content is None:
+                                    result_content = {"error": tool_result.get('error', 'Tool execution failed')}
+
+                                messages.append({
+                                    "role": "tool",
+                                    "tool_call_id": tool_call['id'],
+                                    "content": json.dumps(result_content)
+                                })
+
+                            all_steps.append(step_data_local)
+
+                            # Safety guard: don't exceed max_steps for a task
+                            if step_counter >= self.max_steps:
+                                self.logger.warning(
+                                    f"[WARN] Reached max_steps={self.max_steps} while draining tool calls; "
+                                    "stopping further tool execution to avoid infinite loops."
+                                )
+                                break
+
+                            self.logger.info("[INFO] Getting follow-up response after tool execution...")
+                            response_local = self._call_llm_with_retry(messages, tools, task_level)
+                            continue
+
+                        # No tool calls -> conversation for this user turn is complete
+                        all_steps.append(step_data_local)
+                        break
+
+                # First assistant response for this user turn
+                first_response = self._call_llm_with_retry(messages, tools, task_level)
+                _drain_tool_calls(first_response)
                 
             except Exception as e:
                 self.logger.error(f"[ERROR] Error processing turn {turn_idx}: {e}")
