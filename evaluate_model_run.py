@@ -723,7 +723,7 @@ def main():
         judge_models = args.judge_models
     else:
         # 기본값: 단일 Judge
-        judge_models = ["openai/gpt-4o-mini"]
+        judge_models = ["openai/gpt-4.1-mini"]
 
     # 레벨 파싱
     levels = None
