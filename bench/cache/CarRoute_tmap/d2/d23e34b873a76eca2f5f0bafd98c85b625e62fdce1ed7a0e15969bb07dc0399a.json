@@ -1,7 +1,7 @@
 {
   "key": "d23e34b873a76eca2f5f0bafd98c85b625e62fdce1ed7a0e15969bb07dc0399a",
   "tool": "CarRoute_tmap",
-  "created_at": "2025-12-14T15:54:35.835516",
+  "created_at": "2025-12-19T04:52:47.984242",
   "input_params": {
     "endX": 127.077502,
     "endY": 37.509275,
@@ -17,16 +17,16 @@
     "searchOption": 0
   },
   "data": {
-    "usedFavoriteRouteVertices": "45728724,13500233:43,-89:18,-37:50,-107:58,-124:-311,-95:-107,219:-8,17:-11,23:-17,35:-67,139:85,30:225,79:187,66:96,28:272,80:25,7:155,48:115,36:93,28:157,49:91,28:209,62:201,60:488,153:73,21:54,16:285,80:81,23:208,61:273,84:269,82:75,23:292,95:193,60:270,80:116,35:124,36:261,77:376,112:327,99:113,34:262,80:71,21:90,26:71,23:113,34:425,122:106,31:126,37:68,20:523,155:205,61:128,39:81,24:126,37:101,31:528,157:168,49:165,47:218,62:95,28:290,83:223,68:228,69:75,21:80,22:158,50:261,72:51,15:345,100:109,32:166,48:132,38:138,25:188,35:56,10:190,31:147,24:394,65:100,16:356,59:109,18:155,28:426,79:14,3:161,28:51,-114:204,-420:340,-610:316,-574:123,-227:188,2:65,24:41,13:115,42:203,83:48,11:322,101:298,75:323,56:63,13:996,180:124,21:145,21:147,21:814,59:455,81:735,127:167,29:324,-92:84,-374:15,-68:17,-75:-42,-6:-228,-40:-175,-133:1,-5",
+    "usedFavoriteRouteVertices": "45728724,13500233:43,-89:18,-37:50,-107:58,-124:-311,-95:-107,219:-8,17:-11,23:-17,35:-67,139:85,30:225,79:187,66:96,28:272,80:25,7:155,48:115,36:167,-347:118,-241:43,-87:21,-47:73,-163:73,-150:105,-213:45,-93:151,-309:70,-143:159,-332:96,-197:98,-20:49,14:163,46:38,10:361,113:285,89:297,92:332,100:298,92:156,48:260,80:613,187:265,72:164,49:35,10:273,91:264,86:497,153:61,17:443,138:267,82:277,79:50,15:177,55:118,36:251,77:431,123:36,12:55,17:511,153:361,111:233,65:49,14:285,88:372,115:391,118:377,120:760,233:202,63:304,98:56,19:124,37:191,59:20,7:206,69:227,70:180,54:61,19:389,130:70,22:293,69:179,50:219,66:118,37:160,51:65,24:41,13:115,42:203,83:48,11:322,101:298,75:323,56:63,13:996,180:124,21:145,21:147,21:814,59:455,81:735,127:167,29:324,-92:84,-374:15,-68:17,-75:-42,-6:-228,-40:-175,-133:1,-5",
     "type": "FeatureCollection",
     "features": [
       {
         "type": "Feature",
         "properties": {
-          "totalDistance": 6367,
-          "totalTime": 851,
+          "totalDistance": 6499,
+          "totalTime": 1726,
           "totalFare": 0,
-          "taxiFare": 12600,
+          "taxiFare": 11900,
           "index": 0,
           "pointIndex": 0,
           "name": "",
@@ -69,7 +69,7 @@
           "name": "서운로26길",
           "description": "서운로26길, 81m",
           "distance": 81,
-          "time": 28,
+          "time": 32,
           "roadType": 8,
           "facilityType": 0
         }
@@ -94,7 +94,7 @@
           "name": "서운로",
           "description": "서운로, 144m",
           "distance": 144,
-          "time": 18,
+          "time": 39,
           "roadType": 6,
           "facilityType": 0
         }
@@ -119,7 +119,7 @@
           "name": "사평대로",
           "description": "사평대로, 307m",
           "distance": 307,
-          "time": 39,
+          "time": 152,
           "roadType": 5,
           "facilityType": 0
         }
@@ -128,24 +128,23 @@
         "type": "Feature",
         "properties": {
           "index": 8,
-          "lineIndex": 4,
-          "name": "일반도로",
-          "description": "일반도로, 24m",
-          "distance": 24,
-          "time": 4,
-          "roadType": 5,
-          "facilityType": 0
+          "pointIndex": 4,
+          "name": "교보타워 사거리",
+          "description": "교보타워 사거리에서 강남역 방면으로 우회전 후 강남대로를 따라 767m 이동",
+          "nextRoadName": "강남대로",
+          "turnType": 13,
+          "pointType": "N"
         }
       },
       {
         "type": "Feature",
         "properties": {
           "index": 9,
-          "lineIndex": 5,
-          "name": "봉은사로",
-          "description": "봉은사로, 3319m",
-          "distance": 3319,
-          "time": 429,
+          "lineIndex": 4,
+          "name": "강남대로",
+          "description": "강남대로, 767m",
+          "distance": 767,
+          "time": 237,
           "roadType": 5,
           "facilityType": 0
         }
@@ -154,35 +153,10 @@
         "type": "Feature",
         "properties": {
           "index": 10,
-          "pointIndex": 4,
-          "name": "코엑스",
-          "description": "코엑스에서 일원터널 방면으로 우회전 후 영동대로를 따라 651m 이동",
-          "nextRoadName": "영동대로",
-          "turnType": 13,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 11,
-          "lineIndex": 6,
-          "name": "영동대로",
-          "description": "영동대로, 651m",
-          "distance": 651,
-          "time": 32,
-          "roadType": 5,
-          "facilityType": 0
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 12,
           "pointIndex": 5,
-          "name": "삼성역",
-          "description": "삼성역에서 종합운동장 방면으로 좌회전 후 테헤란로를 따라 106m 이동",
-          "nextRoadName": "테헤란로",
+          "name": "강남역",
+          "description": "강남역에서 역삼역 방면으로 좌회전 후 강남대로를 따라 25m 이동",
+          "nextRoadName": "강남대로",
           "turnType": 12,
           "pointType": "N"
         }
@@ -190,12 +164,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 13,
-          "lineIndex": 7,
-          "name": "테헤란로",
-          "description": "테헤란로, 106m",
-          "distance": 106,
-          "time": 21,
+          "index": 11,
+          "lineIndex": 5,
+          "name": "강남대로",
+          "description": "강남대로, 25m",
+          "distance": 25,
+          "time": 58,
           "roadType": 6,
           "facilityType": 0
         }
@@ -203,10 +177,23 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 14,
+          "index": 12,
+          "lineIndex": 6,
+          "name": "테헤란로",
+          "description": "테헤란로, 3440m",
+          "distance": 3440,
+          "time": 940,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 13,
           "pointIndex": 6,
           "name": "분기점",
-          "description": "분기점에서 왼쪽 방향 후 테헤란로를 따라 311m 이동",
+          "description": "분기점에서 왼쪽 방향 후 테헤란로를 따라 312m 이동",
           "nextRoadName": "테헤란로",
           "turnType": 118,
           "pointType": "N"
@@ -215,12 +202,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 15,
-          "lineIndex": 8,
+          "index": 14,
+          "lineIndex": 7,
           "name": "테헤란로",
-          "description": "테헤란로, 311m",
-          "distance": 311,
-          "time": 86,
+          "description": "테헤란로, 312m",
+          "distance": 312,
+          "time": 66,
           "roadType": 6,
           "facilityType": 0
         }
@@ -228,12 +215,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 16,
-          "lineIndex": 9,
+          "index": 15,
+          "lineIndex": 8,
           "name": "올림픽로",
-          "description": "올림픽로, 371m",
-          "distance": 371,
-          "time": 41,
+          "description": "올림픽로, 370m",
+          "distance": 370,
+          "time": 49,
           "roadType": 5,
           "facilityType": 1
         }
@@ -241,7 +228,7 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 17,
+          "index": 16,
           "pointIndex": 7,
           "name": "",
           "description": "백제고분로 방면으로 2시 방향 우회전 후 올림픽로를 따라 546m 이동",
@@ -253,12 +240,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 18,
-          "lineIndex": 10,
+          "index": 17,
+          "lineIndex": 9,
           "name": "올림픽로",
           "description": "올림픽로, 546m",
           "distance": 546,
-          "time": 44,
+          "time": 29,
           "roadType": 5,
           "facilityType": 0
         }
@@ -266,7 +253,7 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 19,
+          "index": 18,
           "pointIndex": 8,
           "name": "종합운동장",
           "description": "종합운동장에서 삼전 사거리 방면으로 우회전 후 백제고분로를 따라 258m 이동",
@@ -278,12 +265,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 20,
-          "lineIndex": 11,
+          "index": 19,
+          "lineIndex": 10,
           "name": "백제고분로",
           "description": "백제고분로, 258m",
           "distance": 258,
-          "time": 76,
+          "time": 92,
           "roadType": 6,
           "facilityType": 0
         }
@@ -291,7 +278,7 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 21,
+          "index": 20,
           "pointIndex": 9,
           "name": "교차로",
           "description": "교차로에서 우회전 후 일반도로를 따라 129m 이동",
@@ -303,12 +290,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 22,
-          "lineIndex": 12,
+          "index": 21,
+          "lineIndex": 11,
           "name": "일반도로",
           "description": "일반도로, 129m",
           "distance": 129,
-          "time": 16,
+          "time": 15,
           "roadType": 6,
           "facilityType": 0
         }
@@ -316,7 +303,7 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 23,
+          "index": 22,
           "pointIndex": 10,
           "name": "교차로",
           "description": "교차로에서 좌회전 후 일반도로를 따라 2m 이동",
@@ -328,8 +315,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 24,
-          "lineIndex": 13,
+          "index": 23,
+          "lineIndex": 12,
           "name": "일반도로",
           "description": "일반도로, 2m",
           "distance": 2,
@@ -341,7 +328,7 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 25,
+          "index": 24,
           "pointIndex": 11,
           "name": "",
           "description": "도착",

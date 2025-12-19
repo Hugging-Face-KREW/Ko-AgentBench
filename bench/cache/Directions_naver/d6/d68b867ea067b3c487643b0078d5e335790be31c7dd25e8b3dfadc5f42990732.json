@@ -1,7 +1,7 @@
 {
   "key": "d68b867ea067b3c487643b0078d5e335790be31c7dd25e8b3dfadc5f42990732",
   "tool": "Directions_naver",
-  "created_at": "2025-12-16T03:21:00.525825",
+  "created_at": "2025-12-19T02:37:50.830293",
   "input_params": {
     "goal": "126.977022,37.566536",
     "option": "traoptimal",
@@ -9,113 +9,120 @@
   },
   "raw_args": {
     "start": "127.027621,37.497942",
-    "goal": "126.977022,37.566536",
-    "option": "traoptimal"
+    "option": "traoptimal",
+    "goal": "126.977022,37.566536"
   },
   "data": {
     "code": 0,
     "message": "길찾기를 성공하였습니다.",
-    "currentDateTime": "2025-12-16T12:21:00",
+    "currentDateTime": "2025-12-19T11:37:50",
     "route": {
       "traoptimal": [
         {
           "guide": [
             {
               "distance": 195,
-              "duration": 32626,
+              "duration": 32370,
               "instructions": "'강남대로55길' 방면으로 우회전",
               "pointIndex": 7,
               "type": 3
             },
             {
-              "distance": 315,
-              "duration": 85435,
-              "instructions": "'서운로' 방면으로 우회전",
-              "pointIndex": 31,
+              "distance": 155,
+              "duration": 39281,
+              "instructions": "'서초대로74길' 방면으로 우회전",
+              "pointIndex": 18,
               "type": 3
             },
             {
-              "distance": 971,
-              "duration": 338841,
-              "instructions": "'반포IC' 방면으로 좌회전",
-              "pointIndex": 79,
+              "distance": 179,
+              "duration": 81944,
+              "instructions": "우회전",
+              "pointIndex": 32,
+              "type": 3
+            },
+            {
+              "distance": 153,
+              "duration": 237850,
+              "instructions": "강남역에서 '한남대교' 방면으로 좌회전",
+              "pointIndex": 42,
               "type": 2
             },
             {
-              "distance": 1069,
-              "duration": 298813,
-              "instructions": "'고속터미널, 센트럴시티' 방면으로 오른쪽 방향",
-              "pointIndex": 124,
+              "distance": 1573,
+              "duration": 395521,
+              "instructions": "논현역에서 '고속터미널' 방면으로 좌회전",
+              "pointIndex": 98,
+              "type": 2
+            },
+            {
+              "distance": 1791,
+              "duration": 391617,
+              "instructions": "고속터미널에서 '반포대교' 방면으로 오른쪽 방향",
+              "pointIndex": 160,
               "type": 5
             },
             {
-              "distance": 514,
-              "duration": 61072,
-              "instructions": "서울성모병원에서 우회전",
-              "pointIndex": 142,
-              "type": 3
-            },
-            {
-              "distance": 2675,
-              "duration": 326146,
+              "distance": 2337,
+              "duration": 213604,
               "instructions": "'용산구청' 방면으로 오른쪽 방향",
-              "pointIndex": 195,
+              "pointIndex": 201,
               "type": 5
             },
             {
               "distance": 1001,
-              "duration": 96442,
+              "duration": 100877,
               "instructions": "이태원지하차도에서 '남산2·3호터널' 방면으로 왼쪽 지하차도 진입",
-              "pointIndex": 225,
+              "pointIndex": 231,
               "type": 64
             },
             {
               "distance": 1204,
-              "duration": 113652,
+              "duration": 131889,
               "instructions": "남산3호터널교차로에서 '장충체육관, 남산2호터널' 방면으로 오른쪽 방향",
-              "pointIndex": 263,
+              "pointIndex": 269,
               "type": 5
             },
             {
               "distance": 115,
-              "duration": 11097,
+              "duration": 11675,
               "instructions": "'소월로' 방면으로 우회전",
-              "pointIndex": 270,
+              "pointIndex": 276,
               "type": 3
             },
             {
               "distance": 268,
-              "duration": 66693,
+              "duration": 65825,
               "instructions": "'소월로' 방면으로 좌회전",
-              "pointIndex": 295,
+              "pointIndex": 301,
               "type": 2
             },
             {
               "distance": 1898,
-              "duration": 218600,
+              "duration": 213251,
               "instructions": "'숭례문, 시청' 방면으로 좌회전",
-              "pointIndex": 387,
+              "pointIndex": 392,
               "type": 2
             },
             {
               "distance": 436,
-              "duration": 68055,
+              "duration": 67408,
               "instructions": "도동삼거리에서 '시청, 숭례문' 방면으로 우회전",
-              "pointIndex": 407,
+              "pointIndex": 412,
               "type": 3
             },
             {
-              "distance": 1587,
-              "duration": 343281,
+              "distance": 1589,
+              "duration": 363175,
               "instructions": "세종대로사거리에서 유턴",
-              "pointIndex": 467,
+              "pointIndex": 470,
               "type": 6
             },
             {
               "distance": 384,
-              "duration": 91149,
+              "duration": 129420,
               "instructions": "목적지",
-              "pointIndex": 479,
+              "pointIndex": 482,
               "type": 88
             }
           ],
@@ -123,17 +130,17 @@
             "bbox": [
               [
                 126.9757035,
-                37.4952917
+                37.4958032
               ],
               [
                 127.0283598,
                 37.5699612
               ]
             ],
-            "departureTime": "2025-12-16T12:20:59",
-            "distance": 12632,
-            "duration": 2151902,
-            "fuelPrice": 1572,
+            "departureTime": "2025-12-19T11:37:50",
+            "distance": 13278,
+            "duration": 2475707,
+            "fuelPrice": 1649,
             "goal": {
               "dir": 2,
               "location": [
@@ -147,7 +154,7 @@
                 37.4979413
               ]
             },
-            "taxiFare": 15600,
+            "taxiFare": 16400,
             "tollFare": 0
           }
         }

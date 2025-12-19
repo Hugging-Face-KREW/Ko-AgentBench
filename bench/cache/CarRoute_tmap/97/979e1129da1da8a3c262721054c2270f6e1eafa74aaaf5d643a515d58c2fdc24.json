@@ -1,7 +1,7 @@
 {
   "key": "979e1129da1da8a3c262721054c2270f6e1eafa74aaaf5d643a515d58c2fdc24",
   "tool": "CarRoute_tmap",
-  "created_at": "2025-12-16T03:00:07.929758",
+  "created_at": "2025-12-19T06:13:05.434954",
   "input_params": {
     "endX": 126.989426,
     "endY": 37.539354,
@@ -10,23 +10,23 @@
     "startY": 37.500692
   },
   "raw_args": {
-    "startX": 127.036978,
     "startY": 37.500692,
-    "endX": 126.989426,
+    "startX": 127.036978,
     "endY": 37.539354,
+    "endX": 126.989426,
     "searchOption": 0
   },
   "data": {
-    "usedFavoriteRouteVertices": "45734070,13499240:-3,8:-32,69:-52,115:-43,94:-109,240:-26,58:-83,176:-41,86:-72,155:-216,456:-21,47:-15,30:-11,25:-87,188:-78,176:-17,36:-115,238:-10,25:-37,77:-42,89:-116,-35:-270,-80:-193,-60:-292,-95:-75,-23:-269,-82:-273,-84:-208,-61:-81,-23:-285,-80:-54,-16:-73,-21:-488,-153:-201,-60:-209,-62:-91,-28:-157,-49:-93,-28:-115,-36:-155,-48:-25,-7:-272,-80:-96,-28:-443,-90:-45,-11:-39,-10:-139,-40:-41,-12:-371,-104:-273,-11:-481,66:-832,398:-34,14:-97,35:-1316,144:-60,-8:-188,-25:-59,-11:-75,-18:-99,-31:-124,-47:-1235,-490:-77,-12:-338,-126:-250,-75:-205,-61:-210,112:-23,24:-55,61:-170,188:-810,1340:-62,129:-8,18:6,70:-128,306:-144,284:-122,187:-16,32:-12,25:-294,634:-226,479:-979,2020:-387,1523:-190,409:-42,63:-135,178:-79,102:-27,40:-65,96:-48,70:-24,84:-66,482:-77,624:-18,146:-11,73:-14,95:-92,166:-402,558:-210,285:-886,1200:-5,75:-29,284:-13,174:23,211:111,80:561,205:222,136:49,31:5,3",
+    "usedFavoriteRouteVertices": "45734070,13499240:-3,8:-32,69:-52,115:-43,94:-109,240:-26,58:-83,176:-41,86:-72,155:-216,456:-21,47:-15,30:-11,25:-87,188:-78,176:-17,36:-115,238:-10,25:-37,77:-42,89:-116,-35:-270,-80:-193,-60:-292,-95:-75,-23:-269,-82:-273,-84:-208,-61:-81,-23:-285,-80:-54,-16:-73,-21:-488,-153:-201,-60:-209,-62:-91,-28:-157,-49:-93,-28:-115,-36:-155,-48:-25,-7:-272,-80:-96,-28:-443,-90:-45,-11:-39,-10:-139,-40:-41,-12:-371,-104:-273,-11:-481,66:-832,398:-34,14:-97,35:-1316,144:-320,125:-103,214:-54,112:-174,317:-34,58:-31,50:-86,34:-125,-36:-254,-73:-572,-172:-532,-157:-150,-44:-37,-12:-420,-132:-316,-102:-138,-38:-276,9:-32,73:-31,73:-123,270:-234,469:-128,306:-144,284:-122,187:-16,32:-12,25:-294,634:-226,479:-979,2020:-387,1523:-190,409:-42,63:-135,178:-79,102:-27,40:-65,96:-48,70:-24,84:-66,482:-77,624:-18,146:-11,73:-14,95:-92,166:-402,558:-210,285:-886,1200:-5,75:-29,284:-13,174:23,211:111,80:561,205:222,136:49,31:5,3",
     "type": "FeatureCollection",
     "features": [
       {
         "type": "Feature",
         "properties": {
-          "totalDistance": 8248,
-          "totalTime": 1531,
+          "totalDistance": 8224,
+          "totalTime": 2054,
           "totalFare": 0,
-          "taxiFare": 11800,
+          "taxiFare": 14200,
           "index": 0,
           "pointIndex": 0,
           "name": "",
@@ -44,7 +44,7 @@
           "name": "논현로",
           "description": "논현로, 785m",
           "distance": 785,
-          "time": 351,
+          "time": 584,
           "roadType": 5,
           "facilityType": 0
         }
@@ -69,7 +69,7 @@
           "name": "봉은사로",
           "description": "봉은사로, 877m",
           "distance": 877,
-          "time": 186,
+          "time": 390,
           "roadType": 5,
           "facilityType": 0
         }
@@ -82,7 +82,7 @@
           "name": "일반도로",
           "description": "일반도로, 24m",
           "distance": 24,
-          "time": 10,
+          "time": 11,
           "roadType": 5,
           "facilityType": 0
         }
@@ -93,9 +93,9 @@
           "index": 5,
           "lineIndex": 3,
           "name": "사평대로",
-          "description": "사평대로, 1738m",
-          "distance": 1738,
-          "time": 393,
+          "description": "사평대로, 1244m",
+          "distance": 1244,
+          "time": 281,
           "roadType": 5,
           "facilityType": 0
         }
@@ -105,10 +105,10 @@
         "properties": {
           "index": 6,
           "pointIndex": 2,
-          "name": "사평 지하차도",
-          "description": "사평 지하차도에서 고속터미널 방면으로 지하차도옆 후 사평대로를 따라 20m 이동",
-          "nextRoadName": "사평대로",
-          "turnType": 123,
+          "name": "삼호가든 사거리",
+          "description": "삼호가든 사거리에서 잠원로 방면으로 우회전 후 잠원로를 따라 345m 이동",
+          "nextRoadName": "잠원로",
+          "turnType": 13,
           "pointType": "N"
         }
       },
@@ -117,11 +117,11 @@
         "properties": {
           "index": 7,
           "lineIndex": 4,
-          "name": "사평대로",
-          "description": "사평대로, 20m",
-          "distance": 20,
-          "time": 7,
-          "roadType": 6,
+          "name": "잠원로",
+          "description": "잠원로, 345m",
+          "distance": 345,
+          "time": 239,
+          "roadType": 7,
           "facilityType": 0
         }
       },
@@ -130,10 +130,10 @@
         "properties": {
           "index": 8,
           "pointIndex": 3,
-          "name": "서울성모병원 앞",
-          "description": "서울성모병원 앞에서 오른쪽 방향 후 사평대로를 따라 157m 이동",
-          "nextRoadName": "사평대로",
-          "turnType": 117,
+          "name": "고속터미널",
+          "description": "고속터미널에서 이수 교차로 방면으로 좌회전 후 신반포로를 따라 656m 이동",
+          "nextRoadName": "신반포로",
+          "turnType": 12,
           "pointType": "N"
         }
       },
@@ -142,11 +142,11 @@
         "properties": {
           "index": 9,
           "lineIndex": 5,
-          "name": "사평대로",
-          "description": "사평대로, 157m",
-          "distance": 157,
-          "time": 54,
-          "roadType": 7,
+          "name": "신반포로",
+          "description": "신반포로, 656m",
+          "distance": 656,
+          "time": 99,
+          "roadType": 6,
           "facilityType": 0
         }
       },
@@ -155,10 +155,10 @@
         "properties": {
           "index": 10,
           "pointIndex": 4,
-          "name": "서울성모병원 앞",
-          "description": "서울성모병원 앞에서 왼쪽 방향 후 사평대로를 따라 118m 이동",
-          "nextRoadName": "사평대로",
-          "turnType": 118,
+          "name": "고속터미널",
+          "description": "고속터미널에서 반포대교 방면으로 오른쪽 방향 후 반포대로를 따라 108m 이동",
+          "nextRoadName": "반포대로",
+          "turnType": 117,
           "pointType": "N"
         }
       },
@@ -167,11 +167,11 @@
         "properties": {
           "index": 11,
           "lineIndex": 6,
-          "name": "사평대로",
-          "description": "사평대로, 118m",
-          "distance": 118,
-          "time": 40,
-          "roadType": 6,
+          "name": "반포대로",
+          "description": "반포대로, 108m",
+          "distance": 108,
+          "time": 36,
+          "roadType": 7,
           "facilityType": 0
         }
       },
@@ -180,10 +180,10 @@
         "properties": {
           "index": 12,
           "pointIndex": 5,
-          "name": "강남터미널 고가차도",
-          "description": "강남터미널 고가차도에서 고가도로 후 반포대로를 따라 614m 이동",
+          "name": "고속터미널",
+          "description": "고속터미널에서 우회전 후 반포대로를 따라 1603m 이동",
           "nextRoadName": "반포대로",
-          "turnType": 120,
+          "turnType": 13,
           "pointType": "N"
         }
       },
@@ -193,47 +193,22 @@
           "index": 13,
           "lineIndex": 7,
           "name": "반포대로",
-          "description": "반포대로, 614m",
-          "distance": 614,
-          "time": 94,
-          "roadType": 6,
-          "facilityType": 3
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 14,
-          "pointIndex": 6,
-          "name": "",
-          "description": "반포대교 방면으로 오른쪽 방향 후 반포대로를 따라 1333m 이동",
-          "nextRoadName": "반포대로",
-          "turnType": 117,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 15,
-          "lineIndex": 8,
-          "name": "반포대로",
-          "description": "반포대로, 1333m",
-          "distance": 1333,
-          "time": 111,
-          "roadType": 6,
+          "description": "반포대로, 1603m",
+          "distance": 1603,
+          "time": 153,
+          "roadType": 5,
           "facilityType": 5
         }
       },
       {
         "type": "Feature",
         "properties": {
-          "index": 16,
-          "lineIndex": 9,
+          "index": 14,
+          "lineIndex": 8,
           "name": "녹사평대로",
           "description": "녹사평대로, 1634m",
           "distance": 1634,
-          "time": 164,
+          "time": 139,
           "roadType": 6,
           "facilityType": 1
         }
@@ -241,8 +216,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 17,
-          "pointIndex": 7,
+          "index": 15,
+          "pointIndex": 6,
           "name": "이태원 지하차도",
           "description": "이태원 지하차도에서 남산2,3호터널 방면으로 지하차도 후 녹사평대로를 따라 674m 이동",
           "nextRoadName": "녹사평대로",
@@ -253,12 +228,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 18,
-          "lineIndex": 10,
+          "index": 16,
+          "lineIndex": 9,
           "name": "녹사평대로",
           "description": "녹사평대로, 674m",
           "distance": 674,
-          "time": 78,
+          "time": 57,
           "roadType": 6,
           "facilityType": 4
         }
@@ -266,8 +241,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 19,
-          "pointIndex": 8,
+          "index": 17,
+          "pointIndex": 7,
           "name": "재정관리단 앞",
           "description": "재정관리단 앞에서 이태원2동 방면으로 우회전 후 회나무로를 따라 274m 이동",
           "nextRoadName": "회나무로",
@@ -278,12 +253,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 20,
-          "lineIndex": 11,
+          "index": 18,
+          "lineIndex": 10,
           "name": "회나무로",
           "description": "회나무로, 274m",
           "distance": 274,
-          "time": 43,
+          "time": 65,
           "roadType": 7,
           "facilityType": 0
         }
@@ -291,8 +266,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 21,
-          "pointIndex": 9,
+          "index": 19,
+          "pointIndex": 8,
           "name": "",
           "description": "도착",
           "nextRoadName": "",

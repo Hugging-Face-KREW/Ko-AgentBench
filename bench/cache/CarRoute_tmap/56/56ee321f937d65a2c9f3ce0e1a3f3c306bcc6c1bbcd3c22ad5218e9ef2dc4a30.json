@@ -1,7 +1,7 @@
 {
   "key": "56ee321f937d65a2c9f3ce0e1a3f3c306bcc6c1bbcd3c22ad5218e9ef2dc4a30",
   "tool": "CarRoute_tmap",
-  "created_at": "2025-12-14T15:53:33.214872",
+  "created_at": "2025-12-19T06:28:32.853354",
   "input_params": {
     "endX": 126.995009,
     "endY": 37.531605,
@@ -17,16 +17,16 @@
     "searchOption": 0
   },
   "data": {
-    "usedFavoriteRouteVertices": "45728529,13509102:713,963:284,160:36,-52:54,-77:734,-772:22,-18:192,-161:369,-382:-79,-43:-29,-17:-151,-82:-66,-34:-172,-86:-159,-78:-49,-25:-23,-11:-706,-342:-119,-61:-43,-20:-498,-254:-30,-15:-486,-246:-64,-32:-417,-211:-40,-21:-25,-12:-145,-73:-4,-50:-12,-206:-300,-132:-47,104:-67,123:-89,91:-271,296:-24,12:-118,126:-571,598:-785,831:-912,985:-121,154:-64,93:-10,10:-531,711:-66,48:-89,123:-87,-30:-43,-31:-128,-100:-21,-26:-57,-130:-19,-164:-1,-59:0,-30:16,-229:12,-160:18,-225:3,-43:2,-134:-1,-174:-41,-202:-324,-217:-529,-367:-411,-249:-298,-343:-23,-34:-167,-24:-275,279:-78,90:-204,209:-445,476:-158,165:-207,209:-25,19:-60,41:-285,268:-59,56:-64,65:-498,314:-49,36:-70,87:-8,14",
+    "usedFavoriteRouteVertices": "45728529,13509102:713,963:284,160:36,-52:-290,-409:-144,-191:-401,-537:-127,-174:-443,-349:105,-131:257,-319:290,-368:-486,-246:-64,-32:-417,-211:-40,-21:-25,-12:-145,-73:-4,-50:-12,-206:-300,-132:-47,104:-67,123:-89,91:-271,296:-24,12:-118,126:-571,598:-785,831:-912,985:-121,154:-64,93:-10,10:-373,437:-627,817:-231,357:-73,103:-204,305:-15,23:-207,340:-53,92:-53,141:-148,528:-70,285:-95,236:-53,70:-346,201:-45,15:-197,-107:-10,-46:1,-88:-3,-31:-27,-285:-2,-17:-11,-113:-24,-398:-27,-159:-18,-46:-36,-85:-346,-440:-323,-322:-278,-225:-38,-31:-130,-91:-175,-64:-23,-6:-225,-42:-492,-38:-88,-6:-406,-23:-202,-10:65,-195:118,-316:107,-286:26,-68:68,-137:9,-18:10,-18",
     "type": "FeatureCollection",
     "features": [
       {
         "type": "Feature",
         "properties": {
-          "totalDistance": 5914,
-          "totalTime": 801,
+          "totalDistance": 6276,
+          "totalTime": 1117,
           "totalFare": 0,
-          "taxiFare": 12400,
+          "taxiFare": 9700,
           "index": 0,
           "pointIndex": 0,
           "name": "",
@@ -44,7 +44,7 @@
           "name": "올림픽대로",
           "description": "올림픽대로, 345m",
           "distance": 345,
-          "time": 20,
+          "time": 87,
           "roadType": 1,
           "facilityType": 0
         }
@@ -69,7 +69,7 @@
           "name": "올림픽대로",
           "description": "올림픽대로, 108m",
           "distance": 108,
-          "time": 25,
+          "time": 19,
           "roadType": 1,
           "facilityType": 0
         }
@@ -82,7 +82,7 @@
           "name": "일반도로",
           "description": "일반도로, 18m",
           "distance": 18,
-          "time": 5,
+          "time": 3,
           "roadType": 5,
           "facilityType": 0
         }
@@ -91,22 +91,59 @@
         "type": "Feature",
         "properties": {
           "index": 5,
-          "lineIndex": 3,
-          "name": "논현로",
-          "description": "논현로, 553m",
-          "distance": 553,
-          "time": 49,
-          "roadType": 6,
-          "facilityType": 0
+          "pointIndex": 2,
+          "name": "현대아파트",
+          "description": "현대아파트에서 한강공원,잠원 방면으로 우회전 후 논현로189길을 따라 622m 이동",
+          "nextRoadName": "논현로189길",
+          "turnType": 13,
+          "pointType": "N"
         }
       },
       {
         "type": "Feature",
         "properties": {
           "index": 6,
-          "pointIndex": 2,
-          "name": "압구정역",
-          "description": "압구정역에서 한남대교 방면으로 우회전 후 압구정로를 따라 959m 이동",
+          "lineIndex": 3,
+          "name": "논현로189길",
+          "description": "논현로189길, 622m",
+          "distance": 622,
+          "time": 121,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 7,
+          "pointIndex": 3,
+          "name": "교차로",
+          "description": "교차로에서 좌회전 후 압구정로11길을 따라 299m 이동",
+          "nextRoadName": "압구정로11길",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 8,
+          "lineIndex": 4,
+          "name": "압구정로11길",
+          "description": "압구정로11길, 299m",
+          "distance": 299,
+          "time": 94,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 9,
+          "pointIndex": 4,
+          "name": "교차로",
+          "description": "교차로에서 우회전 후 압구정로를 따라 342m 이동",
           "nextRoadName": "압구정로",
           "turnType": 13,
           "pointType": "N"
@@ -115,12 +152,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 7,
-          "lineIndex": 4,
+          "index": 10,
+          "lineIndex": 5,
           "name": "압구정로",
-          "description": "압구정로, 959m",
-          "distance": 959,
-          "time": 153,
+          "description": "압구정로, 342m",
+          "distance": 342,
+          "time": 110,
           "roadType": 5,
           "facilityType": 0
         }
@@ -128,8 +165,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 8,
-          "pointIndex": 3,
+          "index": 11,
+          "pointIndex": 5,
           "name": "한남대교남단",
           "description": "한남대교남단에서 한남대교 방면으로 좌회전 후 강남대로를 따라 423m 이동",
           "nextRoadName": "강남대로",
@@ -140,12 +177,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 9,
-          "lineIndex": 5,
+          "index": 12,
+          "lineIndex": 6,
           "name": "강남대로",
           "description": "강남대로, 423m",
           "distance": 423,
-          "time": 39,
+          "time": 130,
           "roadType": 7,
           "facilityType": 1
         }
@@ -153,8 +190,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 10,
-          "pointIndex": 4,
+          "index": 13,
+          "pointIndex": 6,
           "name": "한남대교남단",
           "description": "한남대교남단에서 한남대교 방면으로 왼쪽 방향 후 강남대로를 따라 985m 이동",
           "nextRoadName": "강남대로",
@@ -165,12 +202,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 11,
-          "lineIndex": 6,
+          "index": 14,
+          "lineIndex": 7,
           "name": "강남대로",
           "description": "강남대로, 985m",
           "distance": 985,
-          "time": 54,
+          "time": 84,
           "roadType": 7,
           "facilityType": 1
         }
@@ -178,12 +215,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 12,
-          "lineIndex": 7,
+          "index": 15,
+          "lineIndex": 8,
           "name": "한남대로",
           "description": "한남대로, 93m",
           "distance": 93,
-          "time": 5,
+          "time": 9,
           "roadType": 5,
           "facilityType": 1
         }
@@ -191,10 +228,35 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 13,
-          "pointIndex": 5,
+          "index": 16,
+          "pointIndex": 7,
           "name": "한남2 고가차도",
-          "description": "한남2 고가차도에서 금호 사거리 방면으로 고가도로옆 후 한남대로를 따라 255m 이동",
+          "description": "한남2 고가차도에서 장충체육관 방면으로 고가도로 후 한남대로를 따라 880m 이동",
+          "nextRoadName": "한남대로",
+          "turnType": 120,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 17,
+          "lineIndex": 9,
+          "name": "한남대로",
+          "description": "한남대로, 880m",
+          "distance": 880,
+          "time": 59,
+          "roadType": 6,
+          "facilityType": 3
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 18,
+          "pointIndex": 8,
+          "name": "한남1 고가차도",
+          "description": "한남1 고가차도에서 약수역 방면으로 고가도로옆 후 한남대로를 따라 404m 이동",
           "nextRoadName": "한남대로",
           "turnType": 124,
           "pointType": "N"
@@ -203,75 +265,12 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 14,
-          "lineIndex": 8,
-          "name": "한남대로",
-          "description": "한남대로, 255m",
-          "distance": 255,
-          "time": 65,
-          "roadType": 5,
-          "facilityType": 0
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 15,
-          "pointIndex": 6,
-          "name": "한남 오거리",
-          "description": "한남 오거리에서 왼쪽 방향 후 한남대로를 따라 66m 이동",
-          "nextRoadName": "한남대로",
-          "turnType": 118,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 16,
-          "lineIndex": 9,
-          "name": "한남대로",
-          "description": "한남대로, 66m",
-          "distance": 66,
-          "time": 32,
-          "roadType": 7,
-          "facilityType": 0
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 17,
-          "pointIndex": 7,
-          "name": "한남 오거리",
-          "description": "한남 오거리에서 강변북로(마포대교) 방면으로 좌회전 후 독서당로를 따라 134m 이동",
-          "nextRoadName": "독서당로",
-          "turnType": 12,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 18,
-          "lineIndex": 10,
-          "name": "독서당로",
-          "description": "독서당로, 134m",
-          "distance": 134,
-          "time": 18,
-          "roadType": 7,
-          "facilityType": 5
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
           "index": 19,
-          "lineIndex": 11,
-          "name": "독서당로11길",
-          "description": "독서당로11길, 282m",
-          "distance": 282,
-          "time": 56,
+          "lineIndex": 10,
+          "name": "한남대로",
+          "description": "한남대로, 404m",
+          "distance": 404,
+          "time": 57,
           "roadType": 5,
           "facilityType": 0
         }
@@ -280,61 +279,23 @@
         "type": "Feature",
         "properties": {
           "index": 20,
-          "lineIndex": 12,
-          "name": "독서당로",
-          "description": "독서당로, 158m",
-          "distance": 158,
-          "time": 47,
-          "roadType": 5,
-          "facilityType": 0
+          "pointIndex": 9,
+          "name": "북한남 삼거리",
+          "description": "북한남 삼거리에서 이태원역 방면으로 왼쪽 방향 후 한남대로를 따라 118m 이동",
+          "nextRoadName": "한남대로",
+          "turnType": 118,
+          "pointType": "N"
         }
       },
       {
         "type": "Feature",
         "properties": {
           "index": 21,
-          "pointIndex": 8,
-          "name": "한남역",
-          "description": "한남역에서 마포대교 방면으로 2시 방향 우회전 후 서빙고로를 따라 276m 이동",
-          "nextRoadName": "서빙고로",
-          "turnType": 18,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 22,
-          "lineIndex": 13,
-          "name": "서빙고로",
-          "description": "서빙고로, 276m",
-          "distance": 276,
-          "time": 21,
-          "roadType": 5,
-          "facilityType": 0
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 23,
-          "pointIndex": 9,
-          "name": "서빙고 고가차도",
-          "description": "서빙고 고가차도에서 이태원역 방면으로 고가도로옆 후 서빙고로를 따라 268m 이동",
-          "nextRoadName": "서빙고로",
-          "turnType": 124,
-          "pointType": "N"
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "index": 24,
-          "lineIndex": 14,
-          "name": "서빙고로",
-          "description": "서빙고로, 268m",
-          "distance": 268,
-          "time": 19,
+          "lineIndex": 11,
+          "name": "한남대로",
+          "description": "한남대로, 118m",
+          "distance": 118,
+          "time": 28,
           "roadType": 6,
           "facilityType": 0
         }
@@ -342,24 +303,49 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 25,
+          "index": 22,
           "pointIndex": 10,
-          "name": "보광동",
-          "description": "보광동에서 이태원역 방면으로 우회전 후 보광로를 따라 991m 이동",
-          "nextRoadName": "보광로",
-          "turnType": 13,
+          "name": "북한남 삼거리",
+          "description": "북한남 삼거리에서 이태원역 방면으로 좌회전 후 이태원로를 따라 1304m 이동",
+          "nextRoadName": "이태원로",
+          "turnType": 12,
           "pointType": "N"
         }
       },
       {
         "type": "Feature",
         "properties": {
-          "index": 26,
-          "lineIndex": 15,
+          "index": 23,
+          "lineIndex": 12,
+          "name": "이태원로",
+          "description": "이태원로, 1304m",
+          "distance": 1304,
+          "time": 247,
+          "roadType": 6,
+          "facilityType": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 24,
+          "pointIndex": 11,
+          "name": "이태원역",
+          "description": "이태원역에서 좌회전 후 보광로를 따라 335m 이동",
+          "nextRoadName": "보광로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 25,
+          "lineIndex": 13,
           "name": "보광로",
-          "description": "보광로, 991m",
-          "distance": 991,
-          "time": 193,
+          "description": "보광로, 335m",
+          "distance": 335,
+          "time": 69,
           "roadType": 7,
           "facilityType": 0
         }
@@ -367,8 +353,8 @@
       {
         "type": "Feature",
         "properties": {
-          "index": 27,
-          "pointIndex": 11,
+          "index": 26,
+          "pointIndex": 12,
           "name": "",
           "description": "도착",
           "nextRoadName": "",

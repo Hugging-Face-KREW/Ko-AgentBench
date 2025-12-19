@@ -1,0 +1,191 @@
+{
+  "key": "7657ce695128597c98aacc1812fa8333dd587ddf6e7cd772e9981126003a0ee2",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-12-19T05:24:15.049112",
+  "input_params": {
+    "endX": 127.102,
+    "endY": 37.514,
+    "searchOption": 0,
+    "startX": 127.028,
+    "startY": 37.497
+  },
+  "raw_args": {
+    "startX": 127.028,
+    "startY": 37.497,
+    "endX": 127.102,
+    "endY": 37.514,
+    "searchOption": 0
+  },
+  "data": {
+    "usedFavoriteRouteVertices": "45730821,13497901:114,-246:128,-266:70,-147:89,-182:277,-574:6,-13:258,-532:19,-41:134,-278:100,-209:77,-163:89,-5:440,138:84,24:86,26:192,59:296,88:103,31:113,35:507,156:362,113:48,15:402,121:108,33:253,76:182,54:128,38:117,36:179,57:254,77:101,32:390,123:424,130:59,18:42,13:375,95:131,41:63,17:138,44:453,157:84,26:336,143:74,25:259,91:92,31:178,61:364,124:86,28:112,37:114,37:471,153:70,23:236,76:307,100:38,12:435,139:172,58:190,62:122,40:101,32:509,163:100,31:51,17:96,31:474,153:354,114:340,107:104,32:61,20:380,124:210,68:258,84:132,40:90,29:259,83:45,13:1565,501:278,91:214,48:604,340:94,70:109,84:34,25:166,119:21,15:47,36:51,34:13,10:192,155:410,321:14,10:65,53:0,128:-9,33:-42,213:-89,386:-18,79:-33,148:-15,73:-4,18:-23,96:-18,82:-6,25:-110,461:-18,72:232,3:240,-9:123,-5:316,-11:539,-25:167,-8:811,-26:69,-2:69,-1:146,-3:993,-30:1202,120:65,7:51,4:52,8:194,19:534,44:32,3:53,4:226,20:720,141:724,194:67,19:138,33:116,30:107,31:227,74:290,108:1060,355:48,17:408,133:-34,72:-485,-163:-119,-41:-448,-151:-91,-30:-283,-108:-84,-32",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "totalDistance": 9093,
+          "totalTime": 2113,
+          "totalFare": 0,
+          "taxiFare": 13700,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "강남대로를 따라 875m 이동",
+          "nextRoadName": "강남대로",
+          "turnType": 200,
+          "pointType": "S"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "강남대로",
+          "description": "강남대로, 875m",
+          "distance": 875,
+          "time": 219,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "뱅뱅 사거리",
+          "description": "뱅뱅 사거리에서 강남세브란스 방면으로 좌회전 후 도곡로를 따라 4692m 이동",
+          "nextRoadName": "도곡로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "도곡로",
+          "description": "도곡로, 4692m",
+          "distance": 4692,
+          "time": 894,
+          "roadType": 6,
+          "facilityType": 1
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "아시아선수촌아파트",
+          "description": "아시아선수촌아파트에서 종합운동장 방면으로 좌회전 후 백제고분로를 따라 568m 이동",
+          "nextRoadName": "백제고분로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "백제고분로",
+          "description": "백제고분로, 568m",
+          "distance": 568,
+          "time": 362,
+          "roadType": 6,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "종합운동장",
+          "description": "종합운동장에서 잠실역 방면으로 우회전 후 올림픽로를 따라 2126m 이동",
+          "nextRoadName": "올림픽로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 7,
+          "lineIndex": 3,
+          "name": "올림픽로",
+          "description": "올림픽로, 2126m",
+          "distance": 2126,
+          "time": 439,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 8,
+          "pointIndex": 4,
+          "name": "",
+          "description": "도착지 건너편 후 올림픽로를 따라 404m 이동",
+          "nextRoadName": "올림픽로",
+          "turnType": 203,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 9,
+          "lineIndex": 4,
+          "name": "올림픽로",
+          "description": "올림픽로, 404m",
+          "distance": 404,
+          "time": 141,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 10,
+          "pointIndex": 5,
+          "name": "송파구청",
+          "description": "송파구청에서 U턴 후 올림픽로를 따라 428m 이동",
+          "nextRoadName": "올림픽로",
+          "turnType": 14,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 11,
+          "lineIndex": 5,
+          "name": "올림픽로",
+          "description": "올림픽로, 428m",
+          "distance": 428,
+          "time": 58,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 12,
+          "pointIndex": 6,
+          "name": "잠실역",
+          "description": "도착",
+          "nextRoadName": "",
+          "turnType": 201,
+          "pointType": "E"
+        }
+      }
+    ]
+  }
+}
