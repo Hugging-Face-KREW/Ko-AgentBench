@@ -47,7 +47,6 @@ SPECIAL_MAP = {
     "L3_FSM": ("L3", "FSM"),
     "L3_PSM": ("L3", "PSM"),
     "L3_ΔSteps_norm": ("L3", "ΔSteps_norm"),
-    "L3_ProvAcc": ("L3", "ProvAcc"),
     "L4_Coverage": ("L4", "Coverage"),
     "L4_SourceEPR": ("L4", "SourceEPR"),
     "L5_AdaptiveRoutingScore": ("L5", "AdaptiveRoutingScore"),

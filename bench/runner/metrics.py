@@ -1051,98 +1051,6 @@ class DeltaStepsNormMetric(Metric):
         })
 
 
-class ProvAccMetric(Metric):
-    """ProvAcc: 다음 호출 인자의 출처 추적 정확도"""
-    name = "ProvAcc"
-    level = 3
-    
-    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
-        data_flow = ctx.task_schema.get("data_flow", [])
-        action_trace = ctx.action_trace
-        
-        # data_flow가 없으면 측정 불가 (만점 처리)
-        if not data_flow:
-            return EvaluationResult(self.name, 1.0, {
-                "reason": "data_flow 정보 없음",
-                "no_data_flow": True
-            })
-        
-        valid_flows = 0
-        total_flows = len(data_flow)
-        flow_details = []
-        
-        for flow in data_flow:
-            to_step = flow.get("to_step")
-            to_param = flow.get("to_parameter")
-            from_step = flow.get("from_step")
-            from_output = flow.get("from_output")
-            
-            # to_step에 해당하는 실제 액션 찾기
-            target_action = None
-            if isinstance(to_step, int) and to_step > 0:
-                # step 번호로 찾기
-                for action in action_trace:
-                    if action.get("step") == to_step:
-                        target_action = action
-                        break
-            
-            is_valid = False
-            detail = {
-                "to_step": to_step,
-                "to_parameter": to_param,
-                "from_step": from_step,
-                "expected_source": from_output
-            }
-            
-            if target_action:
-                # 실제 사용된 인자값 확인
-                actual_args = target_action.get("args", {})
-                actual_value = actual_args.get(to_param)
-                
-                detail["actual_value"] = actual_value
-                
-                # from_step이 "user_input"인 경우
-                if from_step == "user_input":
-                    # 사용자 입력이 포함되어 있으면 유효
-                    is_valid = actual_value is not None
-                
-                # from_step이 이전 단계인 경우
-                elif isinstance(from_step, int) and from_step > 0:
-                    # 이전 단계의 결과에서 값을 가져왔는지 확인
-                    source_action = None
-                    for action in action_trace:
-                        if action.get("step") == from_step:
-                            source_action = action
-                            break
-                    
-                    # 실제로 값이 일치하는지 확인
-                    if source_action and source_action.get("success"):
-                        source_result = source_action.get("result", {})
-                        expected_value = source_result.get(from_output)
-                        
-                        # 실제 값과 기대 값 비교
-                        is_valid = (actual_value is not None and 
-                                    expected_value is not None and
-                                    str(actual_value) == str(expected_value))
-                
-                detail["is_valid"] = is_valid
-            else:
-                detail["is_valid"] = False
-                detail["reason"] = f"step {to_step}을 찾을 수 없음"
-            
-            if is_valid:
-                valid_flows += 1
-            
-            flow_details.append(detail)
-        
-        score = valid_flows / total_flows if total_flows > 0 else 0.0
-        
-        return EvaluationResult(self.name, score, {
-            "valid_flows": valid_flows,
-            "total_flows": total_flows,
-            "flow_details": flow_details
-        })
-        
 #레벨4 메트릭
 class CoverageMetric(Metric):
     """Coverage: 필수 소스를 모두 성공적으로 조회했는지 비율
@@ -1850,7 +1758,6 @@ METRICS = {
     "FSM": FSMMetric(),
     "PSM": PSMMetric(),
     "ΔSteps_norm": DeltaStepsNormMetric(),
-    "ProvAcc": ProvAccMetric(),
     #레벨4 메트릭
     "Coverage": CoverageMetric(),
     "SourceEPR": SourceEPRMetric(),
