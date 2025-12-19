@@ -208,7 +208,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "market": {"type": "string", "default": "KRW-BTC", "description": "마켓 코드"},
                 "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 1, "description": "캔들 개수"},
                 "to": {"type": "string", "description": "마지막 캔들 시각 (yyyy-MM-dd'T'HH:mm:ss'Z')"},
-                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "default": 1, "description": "분 단위 (time이 minutes일 때만 사용)"}
+                # Vertex function declarations accept enum only for string values.
+                # Keep allowed units as strings and cast back to int in the tool implementation.
+                "unit": {"type": "string", "enum": ["1", "3", "5", "10", "15", "30", "60", "240"], "default": "1", "description": "분 단위 (time이 minutes일 때만 사용)"}
             },
             "required": ["time"]
         }
@@ -263,7 +265,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "symbol": {"type": "string", "description": "암호화폐 심볼 (비트코인 : BTC, 이더리움 : ETH)"},
                 "quote": {"type": "string", "enum": ["KRW", "BTC", "USDT"], "default": "KRW", "description": "기준 통화 (원화: KRW, 비트코인: BTC, 테더: USDT)"},
                 "candle_type": {"type": "string", "enum": ["minutes", "days", "weeks", "months"], "default": "days", "description": "캔들 타입"},
-                "unit": {"type": "integer", "enum": [1, 3, 5, 10, 15, 30, 60, 240], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
+                # Vertex function declarations accept enum only for string values.
+                # Keep allowed units as strings and cast back to int in the tool implementation.
+                "unit": {"type": "string", "enum": ["1", "3", "5", "10", "15", "30", "60", "240"], "description": "분 단위 (candle_type이 minutes일 때만 필요)"},
                 "count": {"type": "integer", "minimum": 1, "maximum": 200, "default": 30, "description": "조회할 캔들 개수"},
                 "to": {"type": "string", "description": "마지막 캔들 시각 (YYYY-MM-DD HH:mm:ss)"}
             },
@@ -365,7 +369,9 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                 "cover": {"type": "string", "enum": ["Big", "MidBig", "Mid", "Small", "Mini", "None"], "default": "Mid", "description": "표지 이미지 크기"},
                 "category_id": {"type": "integer", "description": "카테고리 ID"},
                 "output": {"type": "string", "enum": ["xml", "js"], "default": "js", "description": "출력 형식"},
-                "out_of_stock_filter": {"type": "integer", "enum": [0, 1], "default": 0, "description": "품절/절판 상품 필터링 여부 (1: 제외)"},
+                # Vertex AI function declaration enums must be strings, so keep allowed
+                # values as strings even though the downstream API expects 0/1.
+                "out_of_stock_filter": {"type": "string", "enum": ["0", "1"], "default": "0", "description": "품절/절판 상품 필터링 여부 (1: 제외)"},
                 "opt_result": {"type": "string", "description": "부가 정보 요청. 쉼표로 구분하여 다중 선택. (예: ebookList, usedList)"}
             }, 
             "required": ["query"]
@@ -438,10 +444,10 @@ TOOL_CATALOG: Dict[str, Tuple[Type[Any], str, str, Dict[str, Any]]] = {
                     "default": "js"
                 },
                 "out_of_stock_filter": {
-                    "type": "integer",
-                    "enum": [0, 1],
+                    "type": "string",
+                    "enum": ["0", "1"],
                     "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
-                    "default": 0
+                    "default": "0"
                 }
             },
             "required": ["query_type"]

@@ -64,12 +64,19 @@ class UpbitCrypto(BaseAPI):
         }
 
     def _crypto_candle(self, symbol: str, quote: str = "KRW",
-                       candle_type: str = "days", unit: Optional[int] = None,
+                       candle_type: str = "days", unit: Optional[int | str] = None,
                        count: int = 30, to: Optional[str] = None) -> Dict[str, Any]:
         """캔들 데이터 조회"""
         market = f"{quote}-{symbol}"
 
         if candle_type == "minutes":
+            try:
+                unit = int(unit) if unit is not None else 1
+            except (TypeError, ValueError):
+                return {"error": "unit must be one of 1,3,5,10,15,30,60,240"}
+            valid_units = {1, 3, 5, 10, 15, 30, 60, 240}
+            if unit not in valid_units:
+                return {"error": "unit must be one of 1,3,5,10,15,30,60,240"}
             url = f"{self.base_url}/v1/candles/minutes/{unit}"
         else:
             url = f"{self.base_url}/v1/candles/{candle_type}"

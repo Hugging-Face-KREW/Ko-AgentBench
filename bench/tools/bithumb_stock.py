@@ -113,7 +113,7 @@ class BithumbStock(BaseAPI):
         return response.json()
 
 
-    def _cryptoCandle_bithumb(self, time: str, count: int = 1, to: str = None, market: str = "KRW-BTC", unit: int = 1) -> Dict[str, Any]:
+    def _cryptoCandle_bithumb(self, time: str, count: int = 1, to: str = None, market: str = "KRW-BTC", unit: int | str = 1) -> Dict[str, Any]:
         """
         시간 및 구간 별 빗썸 거래소 가상자산 가격, 거래량 정보 제공
 
@@ -132,6 +132,10 @@ class BithumbStock(BaseAPI):
         if time not in valid_time:
             return {"error": f"Invalid time. Must be one of {valid_time}"}
         elif time == "minutes":
+            try:
+                unit = int(unit)
+            except (TypeError, ValueError):
+                return {"error": "Invalid unit. Must be a number"}
             valid_units = [1, 3, 5, 10, 15, 30, 60, 240]
             if unit not in valid_units:
                 return {"error": f"Invalid unit. Must be one of {valid_units}"}
