@@ -1,0 +1,29 @@
+{
+  "key": "0482ffff58fbb93af5ab65a71597ddf77722a9e5ac65e8176ffcbd8b4d182778",
+  "tool": "CategorySearch_tmap",
+  "created_at": "2025-12-16T00:50:17.130964",
+  "input_params": {
+    "categories": "대학교",
+    "centerLat": 37.580279093795085,
+    "centerLon": 127.04786558187519,
+    "count": 20,
+    "radius": 2000
+  },
+  "raw_args": {
+    "categories": "대학교",
+    "centerLat": 37.580279093795085,
+    "radius": 2000,
+    "centerLon": 127.04786558187519
+  },
+  "data": {
+    "success": false,
+    "error_code": "API_REQUEST_FAILED",
+    "error_message": "카테고리 검색 API 호출 실패: 400 Client Error: Bad Request for url: https://apis.openapi.sk.com/tmap/pois/search/around?version=1&page=1&count=20&categories=%EB%8C%80%ED%95%99%EA%B5%90&centerLon=127.04786558187519&centerLat=37.580279093795085&radius=2000&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&multiPoint=N&sort=distance",
+    "suggested_actions": [
+      "categories 명칭 확인 (예: 카페, 병원, 주유소 등)",
+      "좌표(centerLon/centerLat) 확인",
+      "반경(radius) 1~33 범위 내 설정",
+      "appKey 권한 확인"
+    ]
+  }
+}

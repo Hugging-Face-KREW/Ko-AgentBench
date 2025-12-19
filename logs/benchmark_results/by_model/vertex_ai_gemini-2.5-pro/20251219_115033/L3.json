@@ -1,0 +1,2580 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-19T11:59:25.313993",
+    "model": "vertex_ai/gemini-2.5-pro",
+    "level": "L3",
+    "total_tasks": 10,
+    "successful_tasks": 10,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 232.41,
+    "average_execution_time": 23.24,
+    "total_steps": 23,
+    "average_steps": 2.3,
+    "total_tool_calls": 10,
+    "average_tool_calls": 1.0,
+    "total_tokens": 30227,
+    "average_tokens_per_task": 3022.7,
+    "average_prompt_tokens": 1889.9,
+    "average_completion_tokens": 1132.8,
+    "average_tps": 130.06,
+    "ttft": {
+      "average": 9.9988,
+      "min": 5.1581,
+      "max": 16.2995,
+      "unit": "seconds"
+    }
+  },
+  "tool_usage_statistics": {
+    "PlaceSearch_kakao": {
+      "count": 2,
+      "success": 2,
+      "failure": 0
+    },
+    "MarketList_bithumb": {
+      "count": 2,
+      "success": 2,
+      "failure": 0
+    },
+    "ItemList_aladin": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "AddressToCoord_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "Geocoding_tmap": {
+      "count": 4,
+      "success": 4,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "task_id": "L3-001",
+      "instruction": "청량리역 근처에 있는 대학교 찾아보고, 그 학교 근처에 병원이 몇개 있는지 조사해줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 48.19749402999878,
+      "steps_taken": 4,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao",
+        "CategorySearch_tmap"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "청량리역 근처 대학교",
+            "size": 1
+          }
+        },
+        {
+          "step": 2,
+          "tool": "CategorySearch_tmap",
+          "args": {
+            "categories": "병원",
+            "centerLon": "127.059028",
+            "centerLat": "37.583917",
+            "radius": 10
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "centerLat",
+          "from_step": 1,
+          "from_output": "latitude"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "centerLon",
+          "from_step": 1,
+          "from_output": "longtitude"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 9310,
+        "completion_tokens": 1983,
+        "total_tokens": 11293
+      },
+      "ttft_stats": {
+        "average": 12.015300343977287,
+        "min": 10.043345999903977,
+        "max": 17.146518792025745,
+        "count": 4
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "청량리역"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "keyword": "청량리역",
+            "total_count": 231,
+            "places": [
+              {
+                "name": "청량리역",
+                "latitude": 37.57997010526071,
+                "longitude": 127.04773632414528,
+                "address": "서울 동대문구 전농동 591-92",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 기차,철도 > 기차역 > KTX정차역",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 1호선",
+                "latitude": 37.580037056302906,
+                "longitude": 127.04472723023305,
+                "address": "서울 동대문구 전농동 620-67",
+                "road_address": "서울 동대문구 왕산로 지하 205",
+                "phone": "1577-1234",
+                "category": "교통,수송 > 지하철,전철 > 수도권1호선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 경의중앙선",
+                "latitude": 37.580279093795085,
+                "longitude": 127.04786558187519,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 경의중앙선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 수인분당선",
+                "latitude": 37.5808953806814,
+                "longitude": 127.047847862522,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 수인분당선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 경춘선",
+                "latitude": 37.581273475892466,
+                "longitude": 127.0486360630067,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 경춘선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역롯데캐슬SKY-L65아파트",
+                "latitude": 37.5787422414806,
+                "longitude": 127.04495513706125,
+                "address": "서울 동대문구 전농동 620-47",
+                "road_address": "서울 동대문구 답십리로 27",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역한양수자인그라시엘아파트",
+                "latitude": 37.57724554963043,
+                "longitude": 127.04291199498817,
+                "address": "서울 동대문구 용두동 798",
+                "road_address": "서울 동대문구 고산자로32길 78",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "힐스테이트청량리역오피스텔",
+                "latitude": 37.58304049825194,
+                "longitude": 127.04821152373233,
+                "address": "서울 동대문구 청량리동 235-6",
+                "road_address": "서울 동대문구 왕산로 239",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "롯데마트 청량리점",
+                "latitude": 37.580304002283405,
+                "longitude": 127.04864675346128,
+                "address": "서울 동대문구 전농동 588-1",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "02-3298-2500",
+                "category": "가정,생활 > 대형마트 > 롯데마트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역해링턴플레이스아파트",
+                "latitude": 37.578304485181064,
+                "longitude": 127.04216995862815,
+                "address": "서울 동대문구 용두동 797",
+                "road_address": "서울 동대문구 고산자로34길 70",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역롯데캐슬SKY-L65오피스텔",
+                "latitude": 37.579827504553414,
+                "longitude": 127.0460822314755,
+                "address": "서울 동대문구 전농동 620-47",
+                "road_address": "서울 동대문구 왕산로 200",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "청량리역광장",
+                "latitude": 37.5806543750578,
+                "longitude": 127.046697479517,
+                "address": "서울 동대문구 전농동 591-53",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "",
+                "category": "여행 > 관광,명소 > 광장",
+                "distance": ""
+              },
+              {
+                "name": "청량리역우남SL타워300오피스텔",
+                "latitude": 37.5794985369324,
+                "longitude": 127.043995573143,
+                "address": "서울 동대문구 전농동 620-15",
+                "road_address": "서울 동대문구 왕산로 186",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "청량리역환승센터",
+                "latitude": 37.5802836203783,
+                "longitude": 127.045533439571,
+                "address": "서울 동대문구 전농동 620-67",
+                "road_address": "",
+                "phone": "",
+                "category": "교통,수송 > 교통시설 > 고속,시외버스정류장",
+                "distance": ""
+              },
+              {
+                "name": "다이소 청량리역점",
+                "latitude": 37.5802380078742,
+                "longitude": 127.04464810283949,
+                "address": "서울 동대문구 청량리동 749",
+                "road_address": "서울 동대문구 왕산로 195",
+                "phone": "1522-4400",
+                "category": "가정,생활 > 생활용품점 > 다이소",
+                "distance": ""
+              }
+            ]
+          }
+        },
+        {
+          "step": 3,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "청량리역"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "keyword": "청량리역",
+            "total_count": 231,
+            "places": [
+              {
+                "name": "청량리역",
+                "latitude": 37.57997010526071,
+                "longitude": 127.04773632414528,
+                "address": "서울 동대문구 전농동 591-92",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 기차,철도 > 기차역 > KTX정차역",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 1호선",
+                "latitude": 37.580037056302906,
+                "longitude": 127.04472723023305,
+                "address": "서울 동대문구 전농동 620-67",
+                "road_address": "서울 동대문구 왕산로 지하 205",
+                "phone": "1577-1234",
+                "category": "교통,수송 > 지하철,전철 > 수도권1호선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 경의중앙선",
+                "latitude": 37.580279093795085,
+                "longitude": 127.04786558187519,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 경의중앙선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 수인분당선",
+                "latitude": 37.5808953806814,
+                "longitude": 127.047847862522,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 수인분당선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역 경춘선",
+                "latitude": 37.581273475892466,
+                "longitude": 127.0486360630067,
+                "address": "서울 동대문구 전농동 547",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "1544-7788",
+                "category": "교통,수송 > 지하철,전철 > 경춘선",
+                "distance": ""
+              },
+              {
+                "name": "청량리역롯데캐슬SKY-L65아파트",
+                "latitude": 37.5787422414806,
+                "longitude": 127.04495513706125,
+                "address": "서울 동대문구 전농동 620-47",
+                "road_address": "서울 동대문구 답십리로 27",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역한양수자인그라시엘아파트",
+                "latitude": 37.57724554963043,
+                "longitude": 127.04291199498817,
+                "address": "서울 동대문구 용두동 798",
+                "road_address": "서울 동대문구 고산자로32길 78",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "힐스테이트청량리역오피스텔",
+                "latitude": 37.58304049825194,
+                "longitude": 127.04821152373233,
+                "address": "서울 동대문구 청량리동 235-6",
+                "road_address": "서울 동대문구 왕산로 239",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "롯데마트 청량리점",
+                "latitude": 37.580304002283405,
+                "longitude": 127.04864675346128,
+                "address": "서울 동대문구 전농동 588-1",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "02-3298-2500",
+                "category": "가정,생활 > 대형마트 > 롯데마트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역해링턴플레이스아파트",
+                "latitude": 37.578304485181064,
+                "longitude": 127.04216995862815,
+                "address": "서울 동대문구 용두동 797",
+                "road_address": "서울 동대문구 고산자로34길 70",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 아파트",
+                "distance": ""
+              },
+              {
+                "name": "청량리역롯데캐슬SKY-L65오피스텔",
+                "latitude": 37.579827504553414,
+                "longitude": 127.0460822314755,
+                "address": "서울 동대문구 전농동 620-47",
+                "road_address": "서울 동대문구 왕산로 200",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "청량리역광장",
+                "latitude": 37.5806543750578,
+                "longitude": 127.046697479517,
+                "address": "서울 동대문구 전농동 591-53",
+                "road_address": "서울 동대문구 왕산로 214",
+                "phone": "",
+                "category": "여행 > 관광,명소 > 광장",
+                "distance": ""
+              },
+              {
+                "name": "청량리역우남SL타워300오피스텔",
+                "latitude": 37.5794985369324,
+                "longitude": 127.043995573143,
+                "address": "서울 동대문구 전농동 620-15",
+                "road_address": "서울 동대문구 왕산로 186",
+                "phone": "",
+                "category": "부동산 > 주거시설 > 오피스텔",
+                "distance": ""
+              },
+              {
+                "name": "청량리역환승센터",
+                "latitude": 37.5802836203783,
+                "longitude": 127.045533439571,
+                "address": "서울 동대문구 전농동 620-67",
+                "road_address": "",
+                "phone": "",
+                "category": "교통,수송 > 교통시설 > 고속,시외버스정류장",
+                "distance": ""
+              },
+              {
+                "name": "다이소 청량리역점",
+                "latitude": 37.5802380078742,
+                "longitude": 127.04464810283949,
+                "address": "서울 동대문구 청량리동 749",
+                "road_address": "서울 동대문구 왕산로 195",
+                "phone": "1522-4400",
+                "category": "가정,생활 > 생활용품점 > 다이소",
+                "distance": ""
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": null,
+      "conversation_log": {
+        "total_messages": 7,
+        "messages": [
+          {
+            "role": "user",
+            "content": "청량리역 근처에 있는 대학교 찾아보고, 그 학교 근처에 병원이 몇개 있는지 조사해줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_004ac1d23db2494da0967b94f485",
+            "content": {
+              "keyword": "청량리역",
+              "total_count": 231,
+              "places": [
+                {
+                  "name": "청량리역",
+                  "latitude": 37.57997010526071,
+                  "longitude": 127.04773632414528,
+                  "address": "서울 동대문구 전농동 591-92",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 기차,철도 > 기차역 > KTX정차역",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 1호선",
+                  "latitude": 37.580037056302906,
+                  "longitude": 127.04472723023305,
+                  "address": "서울 동대문구 전농동 620-67",
+                  "road_address": "서울 동대문구 왕산로 지하 205",
+                  "phone": "1577-1234",
+                  "category": "교통,수송 > 지하철,전철 > 수도권1호선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 경의중앙선",
+                  "latitude": 37.580279093795085,
+                  "longitude": 127.04786558187519,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 경의중앙선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 수인분당선",
+                  "latitude": 37.5808953806814,
+                  "longitude": 127.047847862522,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 수인분당선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 경춘선",
+                  "latitude": 37.581273475892466,
+                  "longitude": 127.0486360630067,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 경춘선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역롯데캐슬SKY-L65아파트",
+                  "latitude": 37.5787422414806,
+                  "longitude": 127.04495513706125,
+                  "address": "서울 동대문구 전농동 620-47",
+                  "road_address": "서울 동대문구 답십리로 27",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역한양수자인그라시엘아파트",
+                  "latitude": 37.57724554963043,
+                  "longitude": 127.04291199498817,
+                  "address": "서울 동대문구 용두동 798",
+                  "road_address": "서울 동대문구 고산자로32길 78",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "힐스테이트청량리역오피스텔",
+                  "latitude": 37.58304049825194,
+                  "longitude": 127.04821152373233,
+                  "address": "서울 동대문구 청량리동 235-6",
+                  "road_address": "서울 동대문구 왕산로 239",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "롯데마트 청량리점",
+                  "latitude": 37.580304002283405,
+                  "longitude": 127.04864675346128,
+                  "address": "서울 동대문구 전농동 588-1",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "02-3298-2500",
+                  "category": "가정,생활 > 대형마트 > 롯데마트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역해링턴플레이스아파트",
+                  "latitude": 37.578304485181064,
+                  "longitude": 127.04216995862815,
+                  "address": "서울 동대문구 용두동 797",
+                  "road_address": "서울 동대문구 고산자로34길 70",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역롯데캐슬SKY-L65오피스텔",
+                  "latitude": 37.579827504553414,
+                  "longitude": 127.0460822314755,
+                  "address": "서울 동대문구 전농동 620-47",
+                  "road_address": "서울 동대문구 왕산로 200",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역광장",
+                  "latitude": 37.5806543750578,
+                  "longitude": 127.046697479517,
+                  "address": "서울 동대문구 전농동 591-53",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "",
+                  "category": "여행 > 관광,명소 > 광장",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역우남SL타워300오피스텔",
+                  "latitude": 37.5794985369324,
+                  "longitude": 127.043995573143,
+                  "address": "서울 동대문구 전농동 620-15",
+                  "road_address": "서울 동대문구 왕산로 186",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역환승센터",
+                  "latitude": 37.5802836203783,
+                  "longitude": 127.045533439571,
+                  "address": "서울 동대문구 전농동 620-67",
+                  "road_address": "",
+                  "phone": "",
+                  "category": "교통,수송 > 교통시설 > 고속,시외버스정류장",
+                  "distance": ""
+                },
+                {
+                  "name": "다이소 청량리역점",
+                  "latitude": 37.5802380078742,
+                  "longitude": 127.04464810283949,
+                  "address": "서울 동대문구 청량리동 749",
+                  "road_address": "서울 동대문구 왕산로 195",
+                  "phone": "1522-4400",
+                  "category": "가정,생활 > 생활용품점 > 다이소",
+                  "distance": ""
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_e031ba329d5b4a0dbc87716a7b5b",
+            "content": {
+              "keyword": "청량리역",
+              "total_count": 231,
+              "places": [
+                {
+                  "name": "청량리역",
+                  "latitude": 37.57997010526071,
+                  "longitude": 127.04773632414528,
+                  "address": "서울 동대문구 전농동 591-92",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 기차,철도 > 기차역 > KTX정차역",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 1호선",
+                  "latitude": 37.580037056302906,
+                  "longitude": 127.04472723023305,
+                  "address": "서울 동대문구 전농동 620-67",
+                  "road_address": "서울 동대문구 왕산로 지하 205",
+                  "phone": "1577-1234",
+                  "category": "교통,수송 > 지하철,전철 > 수도권1호선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 경의중앙선",
+                  "latitude": 37.580279093795085,
+                  "longitude": 127.04786558187519,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 경의중앙선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 수인분당선",
+                  "latitude": 37.5808953806814,
+                  "longitude": 127.047847862522,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 수인분당선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역 경춘선",
+                  "latitude": 37.581273475892466,
+                  "longitude": 127.0486360630067,
+                  "address": "서울 동대문구 전농동 547",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "1544-7788",
+                  "category": "교통,수송 > 지하철,전철 > 경춘선",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역롯데캐슬SKY-L65아파트",
+                  "latitude": 37.5787422414806,
+                  "longitude": 127.04495513706125,
+                  "address": "서울 동대문구 전농동 620-47",
+                  "road_address": "서울 동대문구 답십리로 27",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역한양수자인그라시엘아파트",
+                  "latitude": 37.57724554963043,
+                  "longitude": 127.04291199498817,
+                  "address": "서울 동대문구 용두동 798",
+                  "road_address": "서울 동대문구 고산자로32길 78",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "힐스테이트청량리역오피스텔",
+                  "latitude": 37.58304049825194,
+                  "longitude": 127.04821152373233,
+                  "address": "서울 동대문구 청량리동 235-6",
+                  "road_address": "서울 동대문구 왕산로 239",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "롯데마트 청량리점",
+                  "latitude": 37.580304002283405,
+                  "longitude": 127.04864675346128,
+                  "address": "서울 동대문구 전농동 588-1",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "02-3298-2500",
+                  "category": "가정,생활 > 대형마트 > 롯데마트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역해링턴플레이스아파트",
+                  "latitude": 37.578304485181064,
+                  "longitude": 127.04216995862815,
+                  "address": "서울 동대문구 용두동 797",
+                  "road_address": "서울 동대문구 고산자로34길 70",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 아파트",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역롯데캐슬SKY-L65오피스텔",
+                  "latitude": 37.579827504553414,
+                  "longitude": 127.0460822314755,
+                  "address": "서울 동대문구 전농동 620-47",
+                  "road_address": "서울 동대문구 왕산로 200",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역광장",
+                  "latitude": 37.5806543750578,
+                  "longitude": 127.046697479517,
+                  "address": "서울 동대문구 전농동 591-53",
+                  "road_address": "서울 동대문구 왕산로 214",
+                  "phone": "",
+                  "category": "여행 > 관광,명소 > 광장",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역우남SL타워300오피스텔",
+                  "latitude": 37.5794985369324,
+                  "longitude": 127.043995573143,
+                  "address": "서울 동대문구 전농동 620-15",
+                  "road_address": "서울 동대문구 왕산로 186",
+                  "phone": "",
+                  "category": "부동산 > 주거시설 > 오피스텔",
+                  "distance": ""
+                },
+                {
+                  "name": "청량리역환승센터",
+                  "latitude": 37.5802836203783,
+                  "longitude": 127.045533439571,
+                  "address": "서울 동대문구 전농동 620-67",
+                  "road_address": "",
+                  "phone": "",
+                  "category": "교통,수송 > 교통시설 > 고속,시외버스정류장",
+                  "distance": ""
+                },
+                {
+                  "name": "다이소 청량리역점",
+                  "latitude": 37.5802380078742,
+                  "longitude": 127.04464810283949,
+                  "address": "서울 동대문구 청량리동 749",
+                  "road_address": "서울 동대문구 왕산로 195",
+                  "phone": "1522-4400",
+                  "category": "가정,생활 > 생활용품점 > 다이소",
+                  "distance": ""
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-002",
+      "instruction": "빗썸의 KRW 마켓에 상장된 암호화폐 10개를 조사하고, 그 현재가를 조회해줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 34.643879890441895,
+      "steps_taken": 4,
+      "error": null,
+      "expected_tools": [
+        "MarketList_bithumb",
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "MarketList_bithumb",
+          "args": {
+            "isDetails": false
+          }
+        },
+        {
+          "step": 2,
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "{markets}"
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "markets",
+          "from_step": 1,
+          "from_output": "market_list"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2252,
+        "completion_tokens": 1258,
+        "total_tokens": 3510
+      },
+      "ttft_stats": {
+        "average": 8.641378479078412,
+        "min": 5.8175130831077695,
+        "max": 10.456202249974012,
+        "count": 4
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketList_bithumb",
+          "arguments": {},
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "korean_name": "비트코인",
+              "english_name": "Bitcoin"
+            },
+            {
+              "market": "KRW-ETH",
+              "korean_name": "이더리움",
+              "english_name": "Ethereum"
+            },
+            {
+              "market": "KRW-ETC",
+              "korean_name": "이더리움 클래식",
+              "english_name": "Ethereum Classic"
+            },
+            {
+              "market": "KRW-XRP",
+              "korean_name": "엑스알피 [리플]",
+              "english_name": "XRP"
+            },
+            {
+              "market": "KRW-BCH",
+              "korean_name": "비트코인 캐시",
+              "english_name": "Bitcoin Cash"
+            },
+            {
+              "market": "KRW-QTUM",
+              "korean_name": "퀀텀",
+              "english_name": "Qtum"
+            },
+            {
+              "market": "KRW-A",
+              "korean_name": "볼타",
+              "english_name": "Vaulta"
+            },
+            {
+              "market": "KRW-ICX",
+              "korean_name": "아이콘",
+              "english_name": "ICON"
+            },
+            {
+              "market": "KRW-TRX",
+              "korean_name": "트론",
+              "english_name": "TRON"
+            },
+            {
+              "market": "KRW-ELF",
+              "korean_name": "엘프",
+              "english_name": "aelf"
+            },
+            {
+              "market": "KRW-KNC",
+              "korean_name": "카이버 네트워크",
+              "english_name": "Kyber Network"
+            },
+            {
+              "market": "KRW-GLM",
+              "korean_name": "골렘",
+              "english_name": "Golem"
+            },
+            {
+              "market": "KRW-ZIL",
+              "korean_name": "질리카",
+              "english_name": "Zilliqa"
+            },
+            {
+              "market": "KRW-WAXP",
+              "korean_name": "왁스",
+              "english_name": "WAXP"
+            },
+            {
+              "market": "KRW-POWR",
+              "korean_name": "파워렛저",
+              "english_name": "Powerledger"
+            },
+            {
+              "market": "KRW-LRC",
+              "korean_name": "루프링",
+              "english_name": "Loopring"
+            },
+            {
+              "market": "KRW-STEEM",
+              "korean_name": "스팀",
+              "english_name": "Steem"
+            },
+            {
+              "market": "KRW-ZRX",
+              "korean_name": "제로엑스",
+              "english_name": "0x"
+            },
+            {
+              "market": "KRW-SNT",
+              "korean_name": "스테이터스네트워크토큰",
+              "english_name": "Status Network"
+            },
+            {
+              "market": "KRW-ADA",
+              "korean_name": "에이다",
+              "english_name": "Cardano"
+            }
+          ]
+        },
+        {
+          "step": 3,
+          "tool_name": "MarketList_bithumb",
+          "arguments": {},
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "korean_name": "비트코인",
+              "english_name": "Bitcoin"
+            },
+            {
+              "market": "KRW-ETH",
+              "korean_name": "이더리움",
+              "english_name": "Ethereum"
+            },
+            {
+              "market": "KRW-ETC",
+              "korean_name": "이더리움 클래식",
+              "english_name": "Ethereum Classic"
+            },
+            {
+              "market": "KRW-XRP",
+              "korean_name": "엑스알피 [리플]",
+              "english_name": "XRP"
+            },
+            {
+              "market": "KRW-BCH",
+              "korean_name": "비트코인 캐시",
+              "english_name": "Bitcoin Cash"
+            },
+            {
+              "market": "KRW-QTUM",
+              "korean_name": "퀀텀",
+              "english_name": "Qtum"
+            },
+            {
+              "market": "KRW-A",
+              "korean_name": "볼타",
+              "english_name": "Vaulta"
+            },
+            {
+              "market": "KRW-ICX",
+              "korean_name": "아이콘",
+              "english_name": "ICON"
+            },
+            {
+              "market": "KRW-TRX",
+              "korean_name": "트론",
+              "english_name": "TRON"
+            },
+            {
+              "market": "KRW-ELF",
+              "korean_name": "엘프",
+              "english_name": "aelf"
+            },
+            {
+              "market": "KRW-KNC",
+              "korean_name": "카이버 네트워크",
+              "english_name": "Kyber Network"
+            },
+            {
+              "market": "KRW-GLM",
+              "korean_name": "골렘",
+              "english_name": "Golem"
+            },
+            {
+              "market": "KRW-ZIL",
+              "korean_name": "질리카",
+              "english_name": "Zilliqa"
+            },
+            {
+              "market": "KRW-WAXP",
+              "korean_name": "왁스",
+              "english_name": "WAXP"
+            },
+            {
+              "market": "KRW-POWR",
+              "korean_name": "파워렛저",
+              "english_name": "Powerledger"
+            },
+            {
+              "market": "KRW-LRC",
+              "korean_name": "루프링",
+              "english_name": "Loopring"
+            },
+            {
+              "market": "KRW-STEEM",
+              "korean_name": "스팀",
+              "english_name": "Steem"
+            },
+            {
+              "market": "KRW-ZRX",
+              "korean_name": "제로엑스",
+              "english_name": "0x"
+            },
+            {
+              "market": "KRW-SNT",
+              "korean_name": "스테이터스네트워크토큰",
+              "english_name": "Status Network"
+            },
+            {
+              "market": "KRW-ADA",
+              "korean_name": "에이다",
+              "english_name": "Cardano"
+            }
+          ]
+        }
+      ],
+      "final_response": null,
+      "conversation_log": {
+        "total_messages": 7,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸의 KRW 마켓에 상장된 암호화폐 10개를 조사하고, 그 현재가를 조회해줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_cc848d7bdac04acd8e36691e8575",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "korean_name": "비트코인",
+                "english_name": "Bitcoin"
+              },
+              {
+                "market": "KRW-ETH",
+                "korean_name": "이더리움",
+                "english_name": "Ethereum"
+              },
+              {
+                "market": "KRW-ETC",
+                "korean_name": "이더리움 클래식",
+                "english_name": "Ethereum Classic"
+              },
+              {
+                "market": "KRW-XRP",
+                "korean_name": "엑스알피 [리플]",
+                "english_name": "XRP"
+              },
+              {
+                "market": "KRW-BCH",
+                "korean_name": "비트코인 캐시",
+                "english_name": "Bitcoin Cash"
+              },
+              {
+                "market": "KRW-QTUM",
+                "korean_name": "퀀텀",
+                "english_name": "Qtum"
+              },
+              {
+                "market": "KRW-A",
+                "korean_name": "볼타",
+                "english_name": "Vaulta"
+              },
+              {
+                "market": "KRW-ICX",
+                "korean_name": "아이콘",
+                "english_name": "ICON"
+              },
+              {
+                "market": "KRW-TRX",
+                "korean_name": "트론",
+                "english_name": "TRON"
+              },
+              {
+                "market": "KRW-ELF",
+                "korean_name": "엘프",
+                "english_name": "aelf"
+              },
+              {
+                "market": "KRW-KNC",
+                "korean_name": "카이버 네트워크",
+                "english_name": "Kyber Network"
+              },
+              {
+                "market": "KRW-GLM",
+                "korean_name": "골렘",
+                "english_name": "Golem"
+              },
+              {
+                "market": "KRW-ZIL",
+                "korean_name": "질리카",
+                "english_name": "Zilliqa"
+              },
+              {
+                "market": "KRW-WAXP",
+                "korean_name": "왁스",
+                "english_name": "WAXP"
+              },
+              {
+                "market": "KRW-POWR",
+                "korean_name": "파워렛저",
+                "english_name": "Powerledger"
+              },
+              {
+                "market": "KRW-LRC",
+                "korean_name": "루프링",
+                "english_name": "Loopring"
+              },
+              {
+                "market": "KRW-STEEM",
+                "korean_name": "스팀",
+                "english_name": "Steem"
+              },
+              {
+                "market": "KRW-ZRX",
+                "korean_name": "제로엑스",
+                "english_name": "0x"
+              },
+              {
+                "market": "KRW-SNT",
+                "korean_name": "스테이터스네트워크토큰",
+                "english_name": "Status Network"
+              },
+              {
+                "market": "KRW-ADA",
+                "korean_name": "에이다",
+                "english_name": "Cardano"
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_ff4ebd4721614de28fc945e9a70f",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "korean_name": "비트코인",
+                "english_name": "Bitcoin"
+              },
+              {
+                "market": "KRW-ETH",
+                "korean_name": "이더리움",
+                "english_name": "Ethereum"
+              },
+              {
+                "market": "KRW-ETC",
+                "korean_name": "이더리움 클래식",
+                "english_name": "Ethereum Classic"
+              },
+              {
+                "market": "KRW-XRP",
+                "korean_name": "엑스알피 [리플]",
+                "english_name": "XRP"
+              },
+              {
+                "market": "KRW-BCH",
+                "korean_name": "비트코인 캐시",
+                "english_name": "Bitcoin Cash"
+              },
+              {
+                "market": "KRW-QTUM",
+                "korean_name": "퀀텀",
+                "english_name": "Qtum"
+              },
+              {
+                "market": "KRW-A",
+                "korean_name": "볼타",
+                "english_name": "Vaulta"
+              },
+              {
+                "market": "KRW-ICX",
+                "korean_name": "아이콘",
+                "english_name": "ICON"
+              },
+              {
+                "market": "KRW-TRX",
+                "korean_name": "트론",
+                "english_name": "TRON"
+              },
+              {
+                "market": "KRW-ELF",
+                "korean_name": "엘프",
+                "english_name": "aelf"
+              },
+              {
+                "market": "KRW-KNC",
+                "korean_name": "카이버 네트워크",
+                "english_name": "Kyber Network"
+              },
+              {
+                "market": "KRW-GLM",
+                "korean_name": "골렘",
+                "english_name": "Golem"
+              },
+              {
+                "market": "KRW-ZIL",
+                "korean_name": "질리카",
+                "english_name": "Zilliqa"
+              },
+              {
+                "market": "KRW-WAXP",
+                "korean_name": "왁스",
+                "english_name": "WAXP"
+              },
+              {
+                "market": "KRW-POWR",
+                "korean_name": "파워렛저",
+                "english_name": "Powerledger"
+              },
+              {
+                "market": "KRW-LRC",
+                "korean_name": "루프링",
+                "english_name": "Loopring"
+              },
+              {
+                "market": "KRW-STEEM",
+                "korean_name": "스팀",
+                "english_name": "Steem"
+              },
+              {
+                "market": "KRW-ZRX",
+                "korean_name": "제로엑스",
+                "english_name": "0x"
+              },
+              {
+                "market": "KRW-SNT",
+                "korean_name": "스테이터스네트워크토큰",
+                "english_name": "Status Network"
+              },
+              {
+                "market": "KRW-ADA",
+                "korean_name": "에이다",
+                "english_name": "Cardano"
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-003",
+      "instruction": "정보처리기사 독학 책 후기 블로그 글 검색하고, 그 책 가격 알려줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 10.953214883804321,
+      "steps_taken": 1,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver",
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "정보처리기사 독학 책 추천",
+            "display": 20,
+            "sort": "sim"
+          }
+        },
+        {
+          "step": 2,
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "{book_title}"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "query",
+          "from_step": 1,
+          "from_output": "book_title"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 211,
+        "completion_tokens": 1016,
+        "total_tokens": 1227
+      },
+      "ttft_stats": {
+        "average": 10.951292833779007,
+        "min": 10.951292833779007,
+        "max": 10.951292833779007,
+        "count": 1
+      },
+      "tool_calls": [],
+      "final_response": "정보처리기사 독학 책 후기 관련 블로그 글을 먼저 검색해 드릴게요. 해당 블로그에 언급된 책의 가격을 검색해 알려드리겠습니다.",
+      "conversation_log": {
+        "total_messages": 2,
+        "messages": [
+          {
+            "role": "user",
+            "content": "정보처리기사 독학 책 후기 블로그 글 검색하고, 그 책 가격 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "정보처리기사 독학 책 후기 관련 블로그 글을 먼저 검색해 드릴게요. 해당 블로그에 언급된 책의 가격을 검색해 알려드리겠습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-004",
+      "instruction": "강남역에서 가장 가까운 애플 매장까지 걸어서 얼마나 걸리는지 알려줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 9.42029619216919,
+      "steps_taken": 1,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao",
+        "WalkRoute_tmap"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "강남역",
+            "size": 1,
+            "sort": "accuracy"
+          }
+        },
+        {
+          "step": 2,
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "애플 매장",
+            "x": "{x}",
+            "y": "{y}",
+            "sort": "accuracy",
+            "size": 1
+          }
+        },
+        {
+          "step": 3,
+          "tool": "WalkRoute_tmap",
+          "args": {
+            "startX": "{startX}",
+            "startY": "{startY}",
+            "endX": "{endX}",
+            "endY": "{endY}"
+          }
+        }
+      ],
+      "minimum_steps": 3,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "x",
+          "from_step": 1,
+          "from_output": "longitude"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "y",
+          "from_step": 1,
+          "from_output": "latitude"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "startX",
+          "from_step": 1,
+          "from_output": "longitude"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "startY",
+          "from_step": 1,
+          "from_output": "latitude"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "endX",
+          "from_step": 2,
+          "from_output": "longitude"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "endY",
+          "from_step": 2,
+          "from_output": "latitude"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 107,
+        "completion_tokens": 933,
+        "total_tokens": 1040
+      },
+      "ttft_stats": {
+        "average": 9.419722917024046,
+        "min": 9.419722917024046,
+        "max": 9.419722917024046,
+        "count": 1
+      },
+      "tool_calls": [],
+      "final_response": "정확한 위치를 알아야 가장 가까운 애플 매장을 찾을 수 있어요. 주소를 알려주시겠어요?",
+      "conversation_log": {
+        "total_messages": 2,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역에서 가장 가까운 애플 매장까지 걸어서 얼마나 걸리는지 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": "정확한 위치를 알아야 가장 가까운 애플 매장을 찾을 수 있어요. 주소를 알려주시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-005",
+      "instruction": "강남역에서 이태원역까지 차로 가는 법 알려줘",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 9.46865200996399,
+      "steps_taken": 1,
+      "error": null,
+      "expected_tools": [
+        "Geocoding_tmap",
+        "CarRoute_tmap"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "Geocoding_tmap",
+          "args": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          }
+        },
+        {
+          "step": 1,
+          "tool": "Geocoding_tmap",
+          "args": {
+            "city_do": "서울특별시",
+            "gu_gun": "용산구",
+            "dong": "이태원동"
+          }
+        },
+        {
+          "step": 2,
+          "tool": "CarRoute_tmap",
+          "args": {
+            "startX": "{startX}",
+            "startY": "{startY}",
+            "endX": "{endX}",
+            "endY": "{endY}",
+            "searchOption": 0
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "startX",
+          "from_step": 1,
+          "from_output": "lon"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "startY",
+          "from_step": 1,
+          "from_output": "lat"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "endX",
+          "from_step": 1,
+          "from_output": "lon"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "endY",
+          "from_step": 1,
+          "from_output": "lat"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 165,
+        "completion_tokens": 981,
+        "total_tokens": 1146
+      },
+      "ttft_stats": {
+        "average": 9.467689624987543,
+        "min": 9.467689624987543,
+        "max": 9.467689624987543,
+        "count": 1
+      },
+      "tool_calls": [],
+      "final_response": "강남역과 이태원역의 정확한 주소를 알려주시겠어요?",
+      "conversation_log": {
+        "total_messages": 2,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역에서 이태원역까지 차로 가는 법 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": "강남역과 이태원역의 정확한 주소를 알려주시겠어요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-006",
+      "instruction": "이번주 알라딘 베스트 셀러 3권 조회해서 블로그 후기 글 알려줘",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 22.093542098999023,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemList_aladin",
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "ItemList_aladin",
+          "args": {
+            "query_type": "Bestseller",
+            "max_results": 1
+          }
+        },
+        {
+          "step": 2,
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "{title}후기"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "query",
+          "from_step": 1,
+          "from_output": "title"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 4220,
+        "completion_tokens": 1887,
+        "total_tokens": 6107
+      },
+      "ttft_stats": {
+        "average": 11.029499145923182,
+        "min": 10.505512374918908,
+        "max": 11.553485916927457,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemList_aladin",
+          "arguments": {
+            "query_type": "Bestseller",
+            "max_results": 3
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "version": "20131101",
+            "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+            "title": "알라딘 베스트셀러 리스트 - 국내도서",
+            "link": "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&amp;BranchType=1&amp;Year=2025&amp;Month=12&amp;Week=3&amp;partner=openAPI",
+            "pubDate": "Fri, 19 Dec 2025 02:57:38 GMT",
+            "totalResults": 1000,
+            "startIndex": 1,
+            "itemsPerPage": 3,
+            "query": "QueryType=BESTSELLER;SearchTarget=Book;Year=2025;Month=12;Week=3",
+            "searchCategoryId": 0,
+            "searchCategoryName": "국내도서",
+            "item": [
+              {
+                "title": "할매",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379665189&amp;partner=openAPI&amp;start=api",
+                "author": "황석영 (지은이)",
+                "pubDate": "2025-12-12",
+                "description": "한국문학의 가장 높은 산, 만해문학상·대산문학상·에밀 기메 아시아문학상 수상에 빛나는 황석영이 장편소설 『할매』로 돌아왔다. 인터내셔널 부커상 최종후보에 오르며 전세계를 열광시킨 『철도원 삼대』(창비 2020) 이후 5년 만의 신작이다.",
+                "isbn": "893643988X",
+                "isbn13": "9788936439880",
+                "itemId": 379665189,
+                "priceSales": 15120,
+                "priceStandard": 16800,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 840,
+                "cover": "https://image.aladin.co.kr/product/37966/51/coversum/893643988x_1.jpg",
+                "categoryId": 50993,
+                "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                "publisher": "창비",
+                "salesPoint": 118510,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "bestRank": 1,
+                "subInfo": {}
+              },
+              {
+                "title": "혼모노",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=361016676&amp;partner=openAPI&amp;start=api",
+                "author": "성해나 (지은이)",
+                "pubDate": "2025-03-28",
+                "description": "작품마다 치밀한 취재와 정교한 구성을 바탕으로 한 개성적인 캐릭터와 강렬하고도 서늘한 서사로 평단과 독자의 주목을 고루 받으며 새로운 세대의 리얼리즘을 열어가고 있다 평가받는 작가 성해나가 두번째 소설집 『혼모노』를 선보인다.",
+                "isbn": "893643974X",
+                "isbn13": "9788936439743",
+                "itemId": 361016676,
+                "priceSales": 16200,
+                "priceStandard": 18000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 900,
+                "cover": "https://image.aladin.co.kr/product/36101/66/coversum/k152033655_2.jpg",
+                "categoryId": 50993,
+                "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                "publisher": "창비",
+                "salesPoint": 370255,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "bestDuration": "종합 1위 8주",
+                "bestRank": 2,
+                "subInfo": {}
+              },
+              {
+                "title": "최소한의 삼국지 - 최태성의 삼국지 고전 특강",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=377732124&amp;partner=openAPI&amp;start=api",
+                "author": "최태성 (지은이), 이성원 (감수)",
+                "pubDate": "2025-11-18",
+                "description": "인생의 필독서로 손꼽히는 ‘삼국지’를 단 한 권으로 정리한 삼국지 입문서. 동양 최고의 고전에 담긴 지혜와 통찰을 쉽고 재미있게 전하기 위해 누적 수강생 700만 명의 명강사 최태성이 나섰다. 방대한 분량과 수많은 등장인물 때문에 시작을 망설였던 사람들을 위해 꼭 알아야 할 핵심 사건과 인물만을 한 권에 담아, 누구나 단숨에 이해할 수 있는 《최소한의 삼국지》를 완성했다.",
+                "isbn": "K002033562",
+                "isbn13": "9791193401583",
+                "itemId": 377732124,
+                "priceSales": 17550,
+                "priceStandard": 19500,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 970,
+                "cover": "https://image.aladin.co.kr/product/37773/21/coversum/k002033562_2.jpg",
+                "categoryId": 51378,
+                "categoryName": "국내도서>인문학>교양 인문학",
+                "publisher": "프런트페이지",
+                "salesPoint": 146415,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestDuration": "종합 10위 2주",
+                "bestRank": 3,
+                "subInfo": {}
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "이번주 베스트셀러 3권의 책과 블로그 리뷰를 알려드릴게요.\n\n### 1. 할매\n* [블로그 리뷰](https",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "이번주 알라딘 베스트 셀러 3권 조회해서 블로그 후기 글 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": "이번주 베스트셀러 3권을 조회하고, 각 책에 대한 블로그 리뷰를 찾아드릴게요. 잠시만 기다려주세요."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_42e47c9e824e47f0b1571e0ba1b5",
+            "content": {
+              "version": "20131101",
+              "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+              "title": "알라딘 베스트셀러 리스트 - 국내도서",
+              "link": "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&amp;BranchType=1&amp;Year=2025&amp;Month=12&amp;Week=3&amp;partner=openAPI",
+              "pubDate": "Fri, 19 Dec 2025 02:57:38 GMT",
+              "totalResults": 1000,
+              "startIndex": 1,
+              "itemsPerPage": 3,
+              "query": "QueryType=BESTSELLER;SearchTarget=Book;Year=2025;Month=12;Week=3",
+              "searchCategoryId": 0,
+              "searchCategoryName": "국내도서",
+              "item": [
+                {
+                  "title": "할매",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379665189&amp;partner=openAPI&amp;start=api",
+                  "author": "황석영 (지은이)",
+                  "pubDate": "2025-12-12",
+                  "description": "한국문학의 가장 높은 산, 만해문학상·대산문학상·에밀 기메 아시아문학상 수상에 빛나는 황석영이 장편소설 『할매』로 돌아왔다. 인터내셔널 부커상 최종후보에 오르며 전세계를 열광시킨 『철도원 삼대』(창비 2020) 이후 5년 만의 신작이다.",
+                  "isbn": "893643988X",
+                  "isbn13": "9788936439880",
+                  "itemId": 379665189,
+                  "priceSales": 15120,
+                  "priceStandard": 16800,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 840,
+                  "cover": "https://image.aladin.co.kr/product/37966/51/coversum/893643988x_1.jpg",
+                  "categoryId": 50993,
+                  "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                  "publisher": "창비",
+                  "salesPoint": 118510,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "bestRank": 1,
+                  "subInfo": {}
+                },
+                {
+                  "title": "혼모노",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=361016676&amp;partner=openAPI&amp;start=api",
+                  "author": "성해나 (지은이)",
+                  "pubDate": "2025-03-28",
+                  "description": "작품마다 치밀한 취재와 정교한 구성을 바탕으로 한 개성적인 캐릭터와 강렬하고도 서늘한 서사로 평단과 독자의 주목을 고루 받으며 새로운 세대의 리얼리즘을 열어가고 있다 평가받는 작가 성해나가 두번째 소설집 『혼모노』를 선보인다.",
+                  "isbn": "893643974X",
+                  "isbn13": "9788936439743",
+                  "itemId": 361016676,
+                  "priceSales": 16200,
+                  "priceStandard": 18000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 900,
+                  "cover": "https://image.aladin.co.kr/product/36101/66/coversum/k152033655_2.jpg",
+                  "categoryId": 50993,
+                  "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                  "publisher": "창비",
+                  "salesPoint": 370255,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "bestDuration": "종합 1위 8주",
+                  "bestRank": 2,
+                  "subInfo": {}
+                },
+                {
+                  "title": "최소한의 삼국지 - 최태성의 삼국지 고전 특강",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=377732124&amp;partner=openAPI&amp;start=api",
+                  "author": "최태성 (지은이), 이성원 (감수)",
+                  "pubDate": "2025-11-18",
+                  "description": "인생의 필독서로 손꼽히는 ‘삼국지’를 단 한 권으로 정리한 삼국지 입문서. 동양 최고의 고전에 담긴 지혜와 통찰을 쉽고 재미있게 전하기 위해 누적 수강생 700만 명의 명강사 최태성이 나섰다. 방대한 분량과 수많은 등장인물 때문에 시작을 망설였던 사람들을 위해 꼭 알아야 할 핵심 사건과 인물만을 한 권에 담아, 누구나 단숨에 이해할 수 있는 《최소한의 삼국지》를 완성했다.",
+                  "isbn": "K002033562",
+                  "isbn13": "9791193401583",
+                  "itemId": 377732124,
+                  "priceSales": 17550,
+                  "priceStandard": 19500,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 970,
+                  "cover": "https://image.aladin.co.kr/product/37773/21/coversum/k002033562_2.jpg",
+                  "categoryId": 51378,
+                  "categoryName": "국내도서>인문학>교양 인문학",
+                  "publisher": "프런트페이지",
+                  "salesPoint": 146415,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestDuration": "종합 10위 2주",
+                  "bestRank": 3,
+                  "subInfo": {}
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "이번주 베스트셀러 3권의 책과 블로그 리뷰를 알려드릴게요.\n\n### 1. 할매\n* [블로그 리뷰](https"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-007",
+      "instruction": "남양주 1km 이내 맛집 검색해주고, 후기 영상 찾아줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 5.15945291519165,
+      "steps_taken": 1,
+      "error": null,
+      "expected_tools": [
+        "AddressToCoord_kakao",
+        "PlaceSearch_kakao",
+        "VideoSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "AddressToCoord_kakao",
+          "args": {
+            "keyword": "남양주",
+            "size": 5
+          }
+        },
+        {
+          "step": 2,
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "맛집",
+            "x": 127.216475764948,
+            "y": 37.6360236390492,
+            "size": 5
+          }
+        },
+        {
+          "step": 3,
+          "tool": "VideoSearch_daum",
+          "args": {
+            "query": "{places[0].name} 후기"
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "x",
+          "from_step": 1,
+          "from_output": "longitude"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "y",
+          "from_step": 1,
+          "from_output": "latitude"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "query",
+          "from_step": 2,
+          "from_output": "places[0].name"
+        },
+        {
+          "to_step": 3,
+          "to_parameter": "query",
+          "from_step": 2,
+          "from_output": "places[0].name"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 127,
+        "completion_tokens": 438,
+        "total_tokens": 565
+      },
+      "ttft_stats": {
+        "average": 5.158066290896386,
+        "min": 5.158066290896386,
+        "max": 5.158066290896386,
+        "count": 1
+      },
+      "tool_calls": [],
+      "final_response": "남양주 어디를 중심으로 맛집을 검색해드릴까요? 상세 주소를 알려주시면 그 위치를 기반으로 1km 이내 맛집을 찾아드리겠습니다.",
+      "conversation_log": {
+        "total_messages": 2,
+        "messages": [
+          {
+            "role": "user",
+            "content": "남양주 1km 이내 맛집 검색해주고, 후기 영상 찾아줘."
+          },
+          {
+            "role": "assistant",
+            "content": "남양주 어디를 중심으로 맛집을 검색해드릴까요? 상세 주소를 알려주시면 그 위치를 기반으로 1km 이내 맛집을 찾아드리겠습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-008",
+      "instruction": "부산 해운대구 근처 편의점 중에 걸어서 10분내에 갈 수 있는 곳 알려줘",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 27.773528814315796,
+      "steps_taken": 3,
+      "error": null,
+      "expected_tools": [
+        "AddressToCoord_kakao",
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "AddressToCoord_kakao",
+          "args": {
+            "address": "부산광역시 해운대구"
+          }
+        },
+        {
+          "step": 2,
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CS2",
+            "x": "{longitude}",
+            "y": "{latitude}",
+            "radius": 500
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "x",
+          "from_step": 1,
+          "from_output": "longitude"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "y",
+          "from_step": 1,
+          "from_output": "latitude"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 505,
+        "completion_tokens": 1668,
+        "total_tokens": 2173
+      },
+      "ttft_stats": {
+        "average": 9.236094764278581,
+        "min": 8.438261750154197,
+        "max": 10.297428000252694,
+        "count": 3
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "AddressToCoord_kakao",
+          "arguments": {
+            "address": "부산 해운대구"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "address": "부산 해운대구",
+            "latitude": 35.1630666685464,
+            "longitude": 129.163596084009,
+            "address_name": "부산 해운대구"
+          }
+        }
+      ],
+      "final_response": "정확한 검색을 위해 찾으려는 반경을 미터(m) 단위로 알려주세요.",
+      "conversation_log": {
+        "total_messages": 5,
+        "messages": [
+          {
+            "role": "user",
+            "content": "부산 해운대구 근처 편의점 중에 걸어서 10분내에 갈 수 있는 곳 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": "정확한 위치를 알 수 없어, 우선 부산 해운대구의 좌표를 찾겠습니다.\n"
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_da50d87eec954c119205aa425a14",
+            "content": {
+              "address": "부산 해운대구",
+              "latitude": 35.1630666685464,
+              "longitude": 129.163596084009,
+              "address_name": "부산 해운대구"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "assistant",
+            "content": "정확한 검색을 위해 찾으려는 반경을 미터(m) 단위로 알려주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-009",
+      "instruction": "강남역에서 잠실역까지 자동차로 가는 경로와 예상 시간을 알려주세요.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 32.09117102622986,
+      "steps_taken": 4,
+      "error": null,
+      "expected_tools": [
+        "Geocoding_tmap",
+        "CarRoute_tmap"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "Geocoding_tmap",
+          "args": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          }
+        },
+        {
+          "step": 1,
+          "tool": "Geocoding_tmap",
+          "args": {
+            "city_do": "서울특별시",
+            "gu_gun": "송파구",
+            "dong": "잠실동"
+          }
+        },
+        {
+          "step": 2,
+          "tool": "CarRoute_tmap",
+          "args": {
+            "startX": "{step1.lon}",
+            "startY": "{step1.lat}",
+            "endX": "{step2.lon}",
+            "endY": "{step2.lat}"
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "startX",
+          "from_step": 1,
+          "from_output": "lon"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "startY",
+          "from_step": 1,
+          "from_output": "lat"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "endX",
+          "from_step": 1,
+          "from_output": "lon"
+        },
+        {
+          "to_step": 2,
+          "to_parameter": "endY",
+          "from_step": 1,
+          "from_output": "lat"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1726,
+        "completion_tokens": 1164,
+        "total_tokens": 2890
+      },
+      "ttft_stats": {
+        "average": 7.769717802177183,
+        "min": 4.624548708088696,
+        "max": 9.318394292145967,
+        "count": 4
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Geocoding_tmap",
+          "arguments": {
+            "dong": "역삼동",
+            "city_do": "서울특별시",
+            "gu_gun": "강남구"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "coordinateInfo": {
+              "coordType": "WGS84GEO",
+              "addressFlag": "F01",
+              "matchFlag": "M33",
+              "lat": "37.500692",
+              "lon": "127.036978",
+              "city_do": "서울",
+              "gu_gun": "강남구",
+              "eup_myun": "",
+              "legalDong": "역삼동",
+              "legalDongCode": "1168010100",
+              "adminDong": "역삼1동",
+              "adminDongCode": "1168064000",
+              "ri": "",
+              "bunji": "0",
+              "newMatchFlag": "",
+              "newLat": "",
+              "newLon": "",
+              "newRoadName": "",
+              "newBuildingIndex": "",
+              "newBuildingName": "",
+              "newBuildingCateName": "",
+              "remainder": ""
+            }
+          }
+        },
+        {
+          "step": 1,
+          "tool_name": "Geocoding_tmap",
+          "arguments": {
+            "gu_gun": "송파구",
+            "dong": "신천동",
+            "city_do": "서울특별시"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "coordinateInfo": {
+              "coordType": "WGS84GEO",
+              "addressFlag": "F01",
+              "matchFlag": "M33",
+              "lat": "37.518719",
+              "lon": "127.104999",
+              "city_do": "서울",
+              "gu_gun": "송파구",
+              "eup_myun": "",
+              "legalDong": "신천동",
+              "legalDongCode": "1171010200",
+              "adminDong": "잠실4동",
+              "adminDongCode": "1171069000",
+              "ri": "",
+              "bunji": "0",
+              "newMatchFlag": "",
+              "newLat": "",
+              "newLon": "",
+              "newRoadName": "",
+              "newBuildingIndex": "",
+              "newBuildingName": "",
+              "newBuildingCateName": "",
+              "remainder": ""
+            }
+          }
+        },
+        {
+          "step": 3,
+          "tool_name": "Geocoding_tmap",
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "강남구",
+            "dong": "역삼동"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "coordinateInfo": {
+              "coordType": "WGS84GEO",
+              "addressFlag": "F01",
+              "matchFlag": "M33",
+              "lat": "37.500692",
+              "lon": "127.036978",
+              "city_do": "서울",
+              "gu_gun": "강남구",
+              "eup_myun": "",
+              "legalDong": "역삼동",
+              "legalDongCode": "1168010100",
+              "adminDong": "역삼1동",
+              "adminDongCode": "1168064000",
+              "ri": "",
+              "bunji": "0",
+              "newMatchFlag": "",
+              "newLat": "",
+              "newLon": "",
+              "newRoadName": "",
+              "newBuildingIndex": "",
+              "newBuildingName": "",
+              "newBuildingCateName": "",
+              "remainder": ""
+            }
+          }
+        },
+        {
+          "step": 3,
+          "tool_name": "Geocoding_tmap",
+          "arguments": {
+            "city_do": "서울특별시",
+            "gu_gun": "송파구",
+            "dong": "신천동"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "coordinateInfo": {
+              "coordType": "WGS84GEO",
+              "addressFlag": "F01",
+              "matchFlag": "M33",
+              "lat": "37.518719",
+              "lon": "127.104999",
+              "city_do": "서울",
+              "gu_gun": "송파구",
+              "eup_myun": "",
+              "legalDong": "신천동",
+              "legalDongCode": "1171010200",
+              "adminDong": "잠실4동",
+              "adminDongCode": "1171069000",
+              "ri": "",
+              "bunji": "0",
+              "newMatchFlag": "",
+              "newLat": "",
+              "newLon": "",
+              "newRoadName": "",
+              "newBuildingIndex": "",
+              "newBuildingName": "",
+              "newBuildingCateName": "",
+              "remainder": ""
+            }
+          }
+        }
+      ],
+      "final_response": null,
+      "conversation_log": {
+        "total_messages": 9,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역에서 잠실역까지 자동차로 가는 경로와 예상 시간을 알려주세요."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_62cc06d65d5d4a3193506dda782d",
+            "content": {
+              "coordinateInfo": {
+                "coordType": "WGS84GEO",
+                "addressFlag": "F01",
+                "matchFlag": "M33",
+                "lat": "37.500692",
+                "lon": "127.036978",
+                "city_do": "서울",
+                "gu_gun": "강남구",
+                "eup_myun": "",
+                "legalDong": "역삼동",
+                "legalDongCode": "1168010100",
+                "adminDong": "역삼1동",
+                "adminDongCode": "1168064000",
+                "ri": "",
+                "bunji": "0",
+                "newMatchFlag": "",
+                "newLat": "",
+                "newLon": "",
+                "newRoadName": "",
+                "newBuildingIndex": "",
+                "newBuildingName": "",
+                "newBuildingCateName": "",
+                "remainder": ""
+              }
+            }
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_c9675d0bac0946f8a95ac53bc684",
+            "content": {
+              "coordinateInfo": {
+                "coordType": "WGS84GEO",
+                "addressFlag": "F01",
+                "matchFlag": "M33",
+                "lat": "37.518719",
+                "lon": "127.104999",
+                "city_do": "서울",
+                "gu_gun": "송파구",
+                "eup_myun": "",
+                "legalDong": "신천동",
+                "legalDongCode": "1171010200",
+                "adminDong": "잠실4동",
+                "adminDongCode": "1171069000",
+                "ri": "",
+                "bunji": "0",
+                "newMatchFlag": "",
+                "newLat": "",
+                "newLon": "",
+                "newRoadName": "",
+                "newBuildingIndex": "",
+                "newBuildingName": "",
+                "newBuildingCateName": "",
+                "remainder": ""
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_3b0f5aa3668b400b9c0bf33a4f31",
+            "content": {
+              "coordinateInfo": {
+                "coordType": "WGS84GEO",
+                "addressFlag": "F01",
+                "matchFlag": "M33",
+                "lat": "37.500692",
+                "lon": "127.036978",
+                "city_do": "서울",
+                "gu_gun": "강남구",
+                "eup_myun": "",
+                "legalDong": "역삼동",
+                "legalDongCode": "1168010100",
+                "adminDong": "역삼1동",
+                "adminDongCode": "1168064000",
+                "ri": "",
+                "bunji": "0",
+                "newMatchFlag": "",
+                "newLat": "",
+                "newLon": "",
+                "newRoadName": "",
+                "newBuildingIndex": "",
+                "newBuildingName": "",
+                "newBuildingCateName": "",
+                "remainder": ""
+              }
+            }
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_9f2a5ac7be904895b058e165d7b2",
+            "content": {
+              "coordinateInfo": {
+                "coordType": "WGS84GEO",
+                "addressFlag": "F01",
+                "matchFlag": "M33",
+                "lat": "37.518719",
+                "lon": "127.104999",
+                "city_do": "서울",
+                "gu_gun": "송파구",
+                "eup_myun": "",
+                "legalDong": "신천동",
+                "legalDongCode": "1171010200",
+                "adminDong": "잠실4동",
+                "adminDongCode": "1171069000",
+                "ri": "",
+                "bunji": "0",
+                "newMatchFlag": "",
+                "newLat": "",
+                "newLon": "",
+                "newRoadName": "",
+                "newBuildingIndex": "",
+                "newBuildingName": "",
+                "newBuildingCateName": "",
+                "remainder": ""
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L3-010",
+      "instruction": "판교역 주변의 주차장들 중 가장 저렴한 주차장의 블로그 후기를 찾아줘.",
+      "level": 3,
+      "category": "Multi Tool Sequential",
+      "success": true,
+      "execution_time": 32.60600399971008,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao",
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "step": 1,
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "판교역 주차장",
+            "sort": "distance",
+            "size": 5
+          }
+        },
+        {
+          "step": 2,
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "{places[0].name} 가격 후기"
+          }
+        }
+      ],
+      "minimum_steps": 2,
+      "data_flow": [
+        {
+          "to_step": 2,
+          "to_parameter": "query",
+          "from_step": 1,
+          "from_output": "places[0].name"
+        }
+      ],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 276,
+        "completion_tokens": 0,
+        "total_tokens": 276
+      },
+      "ttft_stats": {
+        "average": 16.299503187881783,
+        "min": 12.271243792027235,
+        "max": 20.32776258373633,
+        "count": 2
+      },
+      "tool_calls": [],
+      "final_response": null,
+      "conversation_log": {
+        "total_messages": 3,
+        "messages": [
+          {
+            "role": "user",
+            "content": "판교역 주변의 주차장들 중 가장 저렴한 주차장의 블로그 후기를 찾아줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          }
+        ]
+      }
+    }
+  ]
+}

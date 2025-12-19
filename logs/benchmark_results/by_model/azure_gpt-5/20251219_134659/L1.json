@@ -1,0 +1,2890 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-19T13:48:02.049150",
+    "model": "azure/gpt-5",
+    "level": "L1",
+    "total_tasks": 11,
+    "successful_tasks": 11,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 62.02,
+    "average_execution_time": 5.64,
+    "total_steps": 23,
+    "average_steps": 2.09,
+    "total_tool_calls": 12,
+    "average_tool_calls": 1.09,
+    "total_tokens": 25368,
+    "average_tokens_per_task": 2306.18,
+    "average_prompt_tokens": 2004.64,
+    "average_completion_tokens": 301.55,
+    "average_tps": 409.06,
+    "ttft": {
+      "average": 2.4414,
+      "min": 1.2612,
+      "max": 4.5082,
+      "unit": "seconds"
+    }
+  },
+  "tool_usage_statistics": {
+    "Directions_naver": {
+      "count": 3,
+      "success": 3,
+      "failure": 0
+    },
+    "CryptoPrice_bithumb": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "WebSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "BlogSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "NewsSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "ItemSearch_aladin": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "VideoSearch_daum": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "PlaceSearch_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "CategorySearch_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "task_id": "L1-001",
+      "instruction": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 6.565312147140503,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "127.108882,37.394274",
+            "goal": "127.07190,37.51130",
+            "option": "traoptimal"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "start": {
+          "type": "string",
+          "required": true
+        },
+        "goal": {
+          "type": "string",
+          "required": true
+        },
+        "waypoints": {
+          "type": "string",
+          "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
+        },
+        "option": {
+          "type": "string",
+          "enum": [
+            "trafast",
+            "tracomfort",
+            "traoptimal",
+            "traavoidtoll",
+            "traavoidcaronly",
+            "trafast:traavoidtoll"
+          ]
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2529,
+        "completion_tokens": 288,
+        "total_tokens": 2817
+      },
+      "ttft_stats": {
+        "average": 2.7728161045815796,
+        "min": 2.2876572092063725,
+        "max": 3.2579749999567866,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "127.111221,37.395441",
+            "goal": "127.071707,37.514085",
+            "waypoints": "",
+            "option": "trafast"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "code": 0,
+            "message": "길찾기를 성공하였습니다.",
+            "currentDateTime": "2025-12-19T13:47:03",
+            "route": {
+              "traoptimal": [
+                {
+                  "guide": [
+                    {
+                      "distance": 88,
+                      "duration": 39680,
+                      "instructions": "'대왕판교로606번길' 방면으로 우회전",
+                      "pointIndex": 7,
+                      "type": 3
+                    },
+                    {
+                      "distance": 425,
+                      "duration": 145650,
+                      "instructions": "보평초교사거리에서 '판교IC' 방면으로 우회전",
+                      "pointIndex": 28,
+                      "type": 3
+                    },
+                    {
+                      "distance": 487,
+                      "duration": 126983,
+                      "instructions": "동판교로사거리에서 '분당수서로' 방면으로 좌회전",
+                      "pointIndex": 44,
+                      "type": 2
+                    },
+                    {
+                      "distance": 331,
+                      "duration": 79963,
+                      "instructions": "매송사거리에서 '시청·시의회' 방면으로 좌회전",
+                      "pointIndex": 59,
+                      "type": 2
+                    },
+                    {
+                      "distance": 356,
+                      "duration": 40982,
+                      "instructions": "'서울, 성남시청·성남시의회' 방면으로 왼쪽 도시고속도로 진입",
+                      "pointIndex": 69,
+                      "type": 59
+                    },
+                    {
+                      "distance": 1185,
+                      "duration": 108660,
+                      "instructions": "벌말지하차도에서 지하차도 진입",
+                      "pointIndex": 86,
+                      "type": 56
+                    },
+                    {
+                      "distance": 10706,
+                      "duration": 766550,
+                      "instructions": "수서지하차도에서 지하차도 진입",
+                      "pointIndex": 245,
+                      "type": 56
+                    },
+                    {
+                      "distance": 3294,
+                      "duration": 416576,
+                      "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
+                      "pointIndex": 291,
+                      "type": 69
+                    },
+                    {
+                      "distance": 160,
+                      "duration": 11476,
+                      "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
+                      "pointIndex": 294,
+                      "type": 41
+                    },
+                    {
+                      "distance": 901,
+                      "duration": 64626,
+                      "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
+                      "pointIndex": 311,
+                      "type": 3
+                    },
+                    {
+                      "distance": 289,
+                      "duration": 66553,
+                      "instructions": "종합운동장에서 '김포공항, 강일IC' 방면으로 좌회전",
+                      "pointIndex": 318,
+                      "type": 2
+                    },
+                    {
+                      "distance": 117,
+                      "duration": 15733,
+                      "instructions": "'강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 진입",
+                      "pointIndex": 323,
+                      "type": 68
+                    },
+                    {
+                      "distance": 673,
+                      "duration": 57150,
+                      "instructions": "종합운동장분기점에서 '종합운동장' 방면으로 오른쪽 도시고속도로 출구",
+                      "pointIndex": 342,
+                      "type": 69
+                    },
+                    {
+                      "distance": 107,
+                      "duration": 9032,
+                      "instructions": "종합운동장분기점에서 우회전",
+                      "pointIndex": 344,
+                      "type": 3
+                    },
+                    {
+                      "distance": 152,
+                      "duration": 19363,
+                      "instructions": "우회전",
+                      "pointIndex": 348,
+                      "type": 3
+                    },
+                    {
+                      "distance": 499,
+                      "duration": 91978,
+                      "instructions": "로터리에서 1시 방향",
+                      "pointIndex": 369,
+                      "type": 29
+                    },
+                    {
+                      "distance": 98,
+                      "duration": 21215,
+                      "instructions": "목적지",
+                      "pointIndex": 373,
+                      "type": 88
+                    }
+                  ],
+                  "summary": {
+                    "bbox": [
+                      [
+                        127.0665882,
+                        37.3912994
+                      ],
+                      [
+                        127.1255874,
+                        37.5181462
+                      ]
+                    ],
+                    "departureTime": "2025-12-19T13:47:02",
+                    "distance": 19868,
+                    "duration": 2082170,
+                    "fuelPrice": 2467,
+                    "goal": {
+                      "dir": 2,
+                      "location": [
+                        127.0717062,
+                        37.5140841
+                      ]
+                    },
+                    "start": {
+                      "location": [
+                        127.1112203,
+                        37.3954403
+                      ]
+                    },
+                    "taxiFare": 20300,
+                    "tollFare": 0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "final_response": "네이버 길찾기 기준 실시간 최적 경로로 약 35분(약 19.9km) 걸립니다. 교통 상황에 따라 변동될 수 있어요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_wZu1EW0qHWWXyDvkIJmY0Q5s",
+            "content": {
+              "code": 0,
+              "message": "길찾기를 성공하였습니다.",
+              "currentDateTime": "2025-12-19T13:47:03",
+              "route": {
+                "traoptimal": [
+                  {
+                    "guide": [
+                      {
+                        "distance": 88,
+                        "duration": 39680,
+                        "instructions": "'대왕판교로606번길' 방면으로 우회전",
+                        "pointIndex": 7,
+                        "type": 3
+                      },
+                      {
+                        "distance": 425,
+                        "duration": 145650,
+                        "instructions": "보평초교사거리에서 '판교IC' 방면으로 우회전",
+                        "pointIndex": 28,
+                        "type": 3
+                      },
+                      {
+                        "distance": 487,
+                        "duration": 126983,
+                        "instructions": "동판교로사거리에서 '분당수서로' 방면으로 좌회전",
+                        "pointIndex": 44,
+                        "type": 2
+                      },
+                      {
+                        "distance": 331,
+                        "duration": 79963,
+                        "instructions": "매송사거리에서 '시청·시의회' 방면으로 좌회전",
+                        "pointIndex": 59,
+                        "type": 2
+                      },
+                      {
+                        "distance": 356,
+                        "duration": 40982,
+                        "instructions": "'서울, 성남시청·성남시의회' 방면으로 왼쪽 도시고속도로 진입",
+                        "pointIndex": 69,
+                        "type": 59
+                      },
+                      {
+                        "distance": 1185,
+                        "duration": 108660,
+                        "instructions": "벌말지하차도에서 지하차도 진입",
+                        "pointIndex": 86,
+                        "type": 56
+                      },
+                      {
+                        "distance": 10706,
+                        "duration": 766550,
+                        "instructions": "수서지하차도에서 지하차도 진입",
+                        "pointIndex": 245,
+                        "type": 56
+                      },
+                      {
+                        "distance": 3294,
+                        "duration": 416576,
+                        "instructions": "'김포공항, 강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 출구",
+                        "pointIndex": 291,
+                        "type": 69
+                      },
+                      {
+                        "distance": 160,
+                        "duration": 11476,
+                        "instructions": "'강일IC, 잠실대교' 방면으로 왼쪽 도로 주행",
+                        "pointIndex": 294,
+                        "type": 41
+                      },
+                      {
+                        "distance": 901,
+                        "duration": 64626,
+                        "instructions": "봉은교에서 '올림픽대로(김포공항·강일IC), 코엑스·삼성역' 방면으로 우회전",
+                        "pointIndex": 311,
+                        "type": 3
+                      },
+                      {
+                        "distance": 289,
+                        "duration": 66553,
+                        "instructions": "종합운동장에서 '김포공항, 강일IC' 방면으로 좌회전",
+                        "pointIndex": 318,
+                        "type": 2
+                      },
+                      {
+                        "distance": 117,
+                        "duration": 15733,
+                        "instructions": "'강일IC, 잠실대교' 방면으로 오른쪽 도시고속도로 진입",
+                        "pointIndex": 323,
+                        "type": 68
+                      },
+                      {
+                        "distance": 673,
+                        "duration": 57150,
+                        "instructions": "종합운동장분기점에서 '종합운동장' 방면으로 오른쪽 도시고속도로 출구",
+                        "pointIndex": 342,
+                        "type": 69
+                      },
+                      {
+                        "distance": 107,
+                        "duration": 9032,
+                        "instructions": "종합운동장분기점에서 우회전",
+                        "pointIndex": 344,
+                        "type": 3
+                      },
+                      {
+                        "distance": 152,
+                        "duration": 19363,
+                        "instructions": "우회전",
+                        "pointIndex": 348,
+                        "type": 3
+                      },
+                      {
+                        "distance": 499,
+                        "duration": 91978,
+                        "instructions": "로터리에서 1시 방향",
+                        "pointIndex": 369,
+                        "type": 29
+                      },
+                      {
+                        "distance": 98,
+                        "duration": 21215,
+                        "instructions": "목적지",
+                        "pointIndex": 373,
+                        "type": 88
+                      }
+                    ],
+                    "summary": {
+                      "bbox": [
+                        [
+                          127.0665882,
+                          37.3912994
+                        ],
+                        [
+                          127.1255874,
+                          37.5181462
+                        ]
+                      ],
+                      "departureTime": "2025-12-19T13:47:02",
+                      "distance": 19868,
+                      "duration": 2082170,
+                      "fuelPrice": 2467,
+                      "goal": {
+                        "dir": 2,
+                        "location": [
+                          127.0717062,
+                          37.5140841
+                        ]
+                      },
+                      "start": {
+                        "location": [
+                          127.1112203,
+                          37.3954403
+                        ]
+                      },
+                      "taxiFare": 20300,
+                      "tollFare": 0
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "네이버 길찾기 기준 실시간 최적 경로로 약 35분(약 19.9km) 걸립니다. 교통 상황에 따라 변동될 수 있어요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-002",
+      "instruction": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 14.19792103767395,
+      "steps_taken": 3,
+      "error": null,
+      "expected_tools": [
+        "Directions_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "Directions_naver",
+          "args": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "start": {
+          "type": "string",
+          "required": true
+        },
+        "goal": {
+          "type": "string",
+          "required": true
+        },
+        "waypoints": {
+          "type": "string",
+          "pattern": "^([0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?)(\\|[0-9.]+,[0-9.]+(:[0-9.]+,[0-9.]+)?){0,4}$"
+        },
+        "option": {
+          "type": "string",
+          "enum": [
+            "trafast",
+            "tracomfort",
+            "traoptimal",
+            "traavoidtoll",
+            "traavoidcaronly",
+            "trafast:traavoidtoll"
+          ]
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 7887,
+        "completion_tokens": 951,
+        "total_tokens": 8838
+      },
+      "ttft_stats": {
+        "average": 4.508219819826384,
+        "min": 2.4543453752994537,
+        "max": 6.580406667198986,
+        "count": 3
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "trafast:traavoidtoll"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "code": 0,
+            "message": "길찾기를 성공하였습니다.",
+            "currentDateTime": "2025-12-19T13:47:09",
+            "route": {
+              "traoptimal": [
+                {
+                  "guide": [
+                    {
+                      "distance": 40,
+                      "duration": 14679,
+                      "instructions": "오른쪽 4시 방향",
+                      "pointIndex": 3,
+                      "type": 16
+                    },
+                    {
+                      "distance": 297,
+                      "duration": 97639,
+                      "instructions": "'청파로' 방면으로 우회전",
+                      "pointIndex": 18,
+                      "type": 3
+                    },
+                    {
+                      "distance": 180,
+                      "duration": 38853,
+                      "instructions": "서울역(서부)에서 유턴",
+                      "pointIndex": 26,
+                      "type": 6
+                    },
+                    {
+                      "distance": 2314,
+                      "duration": 419854,
+                      "instructions": "욱천고가차도에서 왼쪽 고가차도 진입",
+                      "pointIndex": 104,
+                      "type": 62
+                    },
+                    {
+                      "distance": 1582,
+                      "duration": 205330,
+                      "instructions": "'강변북로(마포대교), 이촌2동' 방면으로 오른쪽 방향",
+                      "pointIndex": 160,
+                      "type": 5
+                    },
+                    {
+                      "distance": 4148,
+                      "duration": 416977,
+                      "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                      "pointIndex": 281,
+                      "type": 54
+                    },
+                    {
+                      "distance": 2152,
+                      "duration": 153793,
+                      "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                      "pointIndex": 319,
+                      "type": 54
+                    },
+                    {
+                      "distance": 7458,
+                      "duration": 398929,
+                      "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                      "pointIndex": 430,
+                      "type": 66
+                    },
+                    {
+                      "distance": 16299,
+                      "duration": 630127,
+                      "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                      "pointIndex": 598,
+                      "type": 121
+                    },
+                    {
+                      "distance": 21919,
+                      "duration": 801267,
+                      "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                      "pointIndex": 784,
+                      "type": 5
+                    },
+                    {
+                      "distance": 2650,
+                      "duration": 204685,
+                      "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 826,
+                      "type": 2
+                    },
+                    {
+                      "distance": 1381,
+                      "duration": 155049,
+                      "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 854,
+                      "type": 2
+                    },
+                    {
+                      "distance": 13,
+                      "duration": 4375,
+                      "instructions": "목적지",
+                      "pointIndex": 857,
+                      "type": 88
+                    }
+                  ],
+                  "summary": {
+                    "bbox": [
+                      [
+                        126.4512293,
+                        37.4583495
+                      ],
+                      [
+                        126.970873,
+                        37.598338
+                      ]
+                    ],
+                    "departureTime": "2025-12-19T13:47:09",
+                    "distance": 60433,
+                    "duration": 3541557,
+                    "fuelPrice": 7505,
+                    "goal": {
+                      "dir": 2,
+                      "location": [
+                        126.4512293,
+                        37.4634894
+                      ]
+                    },
+                    "start": {
+                      "location": [
+                        126.9706997,
+                        37.5535991
+                      ]
+                    },
+                    "taxiFare": 57180,
+                    "tollFare": 3200
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": 2,
+          "tool_name": "Directions_naver",
+          "arguments": {
+            "start": "126.97070,37.55360",
+            "goal": "126.45123,37.46349",
+            "waypoints": "126.97688,37.57594|126.92490,37.52190",
+            "option": "traavoidtoll"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "code": 0,
+            "message": "길찾기를 성공하였습니다.",
+            "currentDateTime": "2025-12-19T13:47:14",
+            "route": {
+              "traoptimal": [
+                {
+                  "guide": [
+                    {
+                      "distance": 40,
+                      "duration": 14679,
+                      "instructions": "오른쪽 4시 방향",
+                      "pointIndex": 3,
+                      "type": 16
+                    },
+                    {
+                      "distance": 297,
+                      "duration": 97639,
+                      "instructions": "'청파로' 방면으로 우회전",
+                      "pointIndex": 18,
+                      "type": 3
+                    },
+                    {
+                      "distance": 180,
+                      "duration": 38853,
+                      "instructions": "서울역(서부)에서 유턴",
+                      "pointIndex": 26,
+                      "type": 6
+                    },
+                    {
+                      "distance": 2314,
+                      "duration": 419408,
+                      "instructions": "욱천고가차도에서 왼쪽 고가차도 진입",
+                      "pointIndex": 104,
+                      "type": 62
+                    },
+                    {
+                      "distance": 1582,
+                      "duration": 205238,
+                      "instructions": "'강변북로(마포대교), 이촌2동' 방면으로 오른쪽 방향",
+                      "pointIndex": 160,
+                      "type": 5
+                    },
+                    {
+                      "distance": 4148,
+                      "duration": 416797,
+                      "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                      "pointIndex": 281,
+                      "type": 54
+                    },
+                    {
+                      "distance": 2152,
+                      "duration": 153717,
+                      "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                      "pointIndex": 319,
+                      "type": 54
+                    },
+                    {
+                      "distance": 7458,
+                      "duration": 398870,
+                      "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                      "pointIndex": 430,
+                      "type": 66
+                    },
+                    {
+                      "distance": 16299,
+                      "duration": 630136,
+                      "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                      "pointIndex": 598,
+                      "type": 121
+                    },
+                    {
+                      "distance": 21919,
+                      "duration": 801321,
+                      "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                      "pointIndex": 784,
+                      "type": 5
+                    },
+                    {
+                      "distance": 2650,
+                      "duration": 204679,
+                      "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 826,
+                      "type": 2
+                    },
+                    {
+                      "distance": 1381,
+                      "duration": 155061,
+                      "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                      "pointIndex": 854,
+                      "type": 2
+                    },
+                    {
+                      "distance": 13,
+                      "duration": 4370,
+                      "instructions": "목적지",
+                      "pointIndex": 857,
+                      "type": 88
+                    }
+                  ],
+                  "summary": {
+                    "bbox": [
+                      [
+                        126.4512293,
+                        37.4583495
+                      ],
+                      [
+                        126.970873,
+                        37.598338
+                      ]
+                    ],
+                    "departureTime": "2025-12-19T13:47:13",
+                    "distance": 60433,
+                    "duration": 3540768,
+                    "fuelPrice": 7505,
+                    "goal": {
+                      "dir": 2,
+                      "location": [
+                        126.4512293,
+                        37.4634894
+                      ]
+                    },
+                    "start": {
+                      "location": [
+                        126.9706997,
+                        37.5535991
+                      ]
+                    },
+                    "taxiFare": 57180,
+                    "tollFare": 3200
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "final_response": "약 59분 걸려요.\n\n참고: 유료도로 회피 옵션으로 경로를 조회했지만, 공항 진입 구간(인천공항 톨게이트, 3,200원)은 회피가 불가능한 것으로 나옵니다. 경유지: 광화문 → 여의도 포함, 총 거리 약 60.4km 기준입니다. 교통 상황에 따라 변동될 수 있어요.",
+      "conversation_log": {
+        "total_messages": 6,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_2tya59NVtUDhvHx7bxhIYwJh",
+            "content": {
+              "code": 0,
+              "message": "길찾기를 성공하였습니다.",
+              "currentDateTime": "2025-12-19T13:47:09",
+              "route": {
+                "traoptimal": [
+                  {
+                    "guide": [
+                      {
+                        "distance": 40,
+                        "duration": 14679,
+                        "instructions": "오른쪽 4시 방향",
+                        "pointIndex": 3,
+                        "type": 16
+                      },
+                      {
+                        "distance": 297,
+                        "duration": 97639,
+                        "instructions": "'청파로' 방면으로 우회전",
+                        "pointIndex": 18,
+                        "type": 3
+                      },
+                      {
+                        "distance": 180,
+                        "duration": 38853,
+                        "instructions": "서울역(서부)에서 유턴",
+                        "pointIndex": 26,
+                        "type": 6
+                      },
+                      {
+                        "distance": 2314,
+                        "duration": 419854,
+                        "instructions": "욱천고가차도에서 왼쪽 고가차도 진입",
+                        "pointIndex": 104,
+                        "type": 62
+                      },
+                      {
+                        "distance": 1582,
+                        "duration": 205330,
+                        "instructions": "'강변북로(마포대교), 이촌2동' 방면으로 오른쪽 방향",
+                        "pointIndex": 160,
+                        "type": 5
+                      },
+                      {
+                        "distance": 4148,
+                        "duration": 416977,
+                        "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                        "pointIndex": 281,
+                        "type": 54
+                      },
+                      {
+                        "distance": 2152,
+                        "duration": 153793,
+                        "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                        "pointIndex": 319,
+                        "type": 54
+                      },
+                      {
+                        "distance": 7458,
+                        "duration": 398929,
+                        "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                        "pointIndex": 430,
+                        "type": 66
+                      },
+                      {
+                        "distance": 16299,
+                        "duration": 630127,
+                        "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                        "pointIndex": 598,
+                        "type": 121
+                      },
+                      {
+                        "distance": 21919,
+                        "duration": 801267,
+                        "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                        "pointIndex": 784,
+                        "type": 5
+                      },
+                      {
+                        "distance": 2650,
+                        "duration": 204685,
+                        "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 826,
+                        "type": 2
+                      },
+                      {
+                        "distance": 1381,
+                        "duration": 155049,
+                        "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 854,
+                        "type": 2
+                      },
+                      {
+                        "distance": 13,
+                        "duration": 4375,
+                        "instructions": "목적지",
+                        "pointIndex": 857,
+                        "type": 88
+                      }
+                    ],
+                    "summary": {
+                      "bbox": [
+                        [
+                          126.4512293,
+                          37.4583495
+                        ],
+                        [
+                          126.970873,
+                          37.598338
+                        ]
+                      ],
+                      "departureTime": "2025-12-19T13:47:09",
+                      "distance": 60433,
+                      "duration": 3541557,
+                      "fuelPrice": 7505,
+                      "goal": {
+                        "dir": 2,
+                        "location": [
+                          126.4512293,
+                          37.4634894
+                        ]
+                      },
+                      "start": {
+                        "location": [
+                          126.9706997,
+                          37.5535991
+                        ]
+                      },
+                      "taxiFare": 57180,
+                      "tollFare": 3200
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_SNdP489mUs4M90duCE81y4u2",
+            "content": {
+              "code": 0,
+              "message": "길찾기를 성공하였습니다.",
+              "currentDateTime": "2025-12-19T13:47:14",
+              "route": {
+                "traoptimal": [
+                  {
+                    "guide": [
+                      {
+                        "distance": 40,
+                        "duration": 14679,
+                        "instructions": "오른쪽 4시 방향",
+                        "pointIndex": 3,
+                        "type": 16
+                      },
+                      {
+                        "distance": 297,
+                        "duration": 97639,
+                        "instructions": "'청파로' 방면으로 우회전",
+                        "pointIndex": 18,
+                        "type": 3
+                      },
+                      {
+                        "distance": 180,
+                        "duration": 38853,
+                        "instructions": "서울역(서부)에서 유턴",
+                        "pointIndex": 26,
+                        "type": 6
+                      },
+                      {
+                        "distance": 2314,
+                        "duration": 419408,
+                        "instructions": "욱천고가차도에서 왼쪽 고가차도 진입",
+                        "pointIndex": 104,
+                        "type": 62
+                      },
+                      {
+                        "distance": 1582,
+                        "duration": 205238,
+                        "instructions": "'강변북로(마포대교), 이촌2동' 방면으로 오른쪽 방향",
+                        "pointIndex": 160,
+                        "type": 5
+                      },
+                      {
+                        "distance": 4148,
+                        "duration": 416797,
+                        "instructions": "'일산, 성산대교' 방면으로 분기도로 진입",
+                        "pointIndex": 281,
+                        "type": 54
+                      },
+                      {
+                        "distance": 2152,
+                        "duration": 153717,
+                        "instructions": "성산대교북단에서 '일산, 가양대교' 방면으로 분기도로 진입",
+                        "pointIndex": 319,
+                        "type": 54
+                      },
+                      {
+                        "distance": 7458,
+                        "duration": 398870,
+                        "instructions": "북로분기점에서 '인천공항, 청라' 방면으로 오른쪽 고속도로 진입",
+                        "pointIndex": 430,
+                        "type": 66
+                      },
+                      {
+                        "distance": 16299,
+                        "duration": 630136,
+                        "instructions": "인천공항톨게이트 (통행료 3,200원)",
+                        "pointIndex": 598,
+                        "type": 121
+                      },
+                      {
+                        "distance": 21919,
+                        "duration": 801321,
+                        "instructions": "신불IC에서 '제2여객터미널, 화물터미널, 영종' 방면으로 오른쪽 방향",
+                        "pointIndex": 784,
+                        "type": 5
+                      },
+                      {
+                        "distance": 2650,
+                        "duration": 204679,
+                        "instructions": "자유무역지역사거리에서 '화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 826,
+                        "type": 2
+                      },
+                      {
+                        "distance": 1381,
+                        "duration": 155061,
+                        "instructions": "'서울, 인천, 화물터미널B·C' 방면으로 좌회전",
+                        "pointIndex": 854,
+                        "type": 2
+                      },
+                      {
+                        "distance": 13,
+                        "duration": 4370,
+                        "instructions": "목적지",
+                        "pointIndex": 857,
+                        "type": 88
+                      }
+                    ],
+                    "summary": {
+                      "bbox": [
+                        [
+                          126.4512293,
+                          37.4583495
+                        ],
+                        [
+                          126.970873,
+                          37.598338
+                        ]
+                      ],
+                      "departureTime": "2025-12-19T13:47:13",
+                      "distance": 60433,
+                      "duration": 3540768,
+                      "fuelPrice": 7505,
+                      "goal": {
+                        "dir": 2,
+                        "location": [
+                          126.4512293,
+                          37.4634894
+                        ]
+                      },
+                      "start": {
+                        "location": [
+                          126.9706997,
+                          37.5535991
+                        ]
+                      },
+                      "taxiFare": 57180,
+                      "tollFare": 3200
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "약 59분 걸려요.\n\n참고: 유료도로 회피 옵션으로 경로를 조회했지만, 공항 진입 구간(인천공항 톨게이트, 3,200원)은 회피가 불가능한 것으로 나옵니다. 경유지: 광화문 → 여의도 포함, 총 거리 약 60.4km 기준입니다. 교통 상황에 따라 변동될 수 있어요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-003",
+      "instruction": "빗썸에서 비트코인 원화 현재가 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.9837827682495117,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "markets": {
+          "type": "string",
+          "enum": [
+            "KRW-BTC",
+            "BTC-ETH"
+          ],
+          "required": true
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 767,
+        "completion_tokens": 192,
+        "total_tokens": 959
+      },
+      "ttft_stats": {
+        "average": 1.9742260626517236,
+        "min": 1.8023255411535501,
+        "max": 2.146126584149897,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "trade_date": "20251219",
+              "trade_time": "044716",
+              "trade_date_kst": "20251219",
+              "trade_time_kst": "134716",
+              "trade_timestamp": 1766152036538,
+              "opening_price": 131284000,
+              "high_price": 132570000,
+              "low_price": 126200000,
+              "trade_price": 129590000,
+              "prev_closing_price": 131285000,
+              "change": "FALL",
+              "change_price": 1695000,
+              "change_rate": 0.0129,
+              "signed_change_price": -1695000,
+              "signed_change_rate": -0.0129,
+              "trade_volume": 0.0004,
+              "acc_trade_price": 105039157333.59515,
+              "acc_trade_price_24h": 165518513582.3157,
+              "acc_trade_volume": 817.92558111,
+              "acc_trade_volume_24h": 1280.98692935,
+              "highest_52_week_price": 179734000,
+              "highest_52_week_date": "2025-10-10",
+              "lowest_52_week_price": 111850000,
+              "lowest_52_week_date": "2025-04-08",
+              "timestamp": 1766152036538
+            }
+          ]
+        }
+      ],
+      "final_response": "빗썸 KRW-BTC 현재가: 129,590,000원\n- 전일 대비: -1,695,000원 (-1.29%, 하락)\n- 금일 범위: 126,200,000원 ~ 132,570,000원\n- 기준 시각(KST): 2025-12-19 13:47:16\n\n참고: 시세는 실시간으로 변동됩니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 비트코인 원화 현재가 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_8oGwCsgtMYsgLjq4JCrj7obO",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "trade_date": "20251219",
+                "trade_time": "044716",
+                "trade_date_kst": "20251219",
+                "trade_time_kst": "134716",
+                "trade_timestamp": 1766152036538,
+                "opening_price": 131284000,
+                "high_price": 132570000,
+                "low_price": 126200000,
+                "trade_price": 129590000,
+                "prev_closing_price": 131285000,
+                "change": "FALL",
+                "change_price": 1695000,
+                "change_rate": 0.0129,
+                "signed_change_price": -1695000,
+                "signed_change_rate": -0.0129,
+                "trade_volume": 0.0004,
+                "acc_trade_price": 105039157333.59515,
+                "acc_trade_price_24h": 165518513582.3157,
+                "acc_trade_volume": 817.92558111,
+                "acc_trade_volume_24h": 1280.98692935,
+                "highest_52_week_price": 179734000,
+                "highest_52_week_date": "2025-10-10",
+                "lowest_52_week_price": 111850000,
+                "lowest_52_week_date": "2025-04-08",
+                "timestamp": 1766152036538
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": "빗썸 KRW-BTC 현재가: 129,590,000원\n- 전일 대비: -1,695,000원 (-1.29%, 하락)\n- 금일 범위: 126,200,000원 ~ 132,570,000원\n- 기준 시각(KST): 2025-12-19 13:47:16\n\n참고: 시세는 실시간으로 변동됩니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-004",
+      "instruction": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.684393882751465,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "jisu": {
+          "type": "string",
+          "enum": [
+            "KOSPI",
+            "KOSPI200",
+            "KRX100",
+            "KOSDAQ"
+          ],
+          "required": true
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1180,
+        "completion_tokens": 227,
+        "total_tokens": 1407
+      },
+      "ttft_stats": {
+        "average": 1.8069327920675278,
+        "min": 1.468988916836679,
+        "max": 2.1448766672983766,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "t1511OutBlock": {
+              "gubun": "2",
+              "hname": "코스닥 종합",
+              "pricejisu": "919.82",
+              "jniljisu": "901.33",
+              "sign": "2",
+              "change": "18.49",
+              "diffjisu": "2.05",
+              "jnilvolume": 900507,
+              "volume": 773683,
+              "volumechange": -126824,
+              "volumerate": "85.92",
+              "jnilvalue": 10091584,
+              "value": 9084701,
+              "valuechange": -1006883,
+              "valuerate": "90.02",
+              "openjisu": "909.70",
+              "opendiff": "0.93",
+              "opentime": "090030",
+              "highjisu": "919.86",
+              "highdiff": "2.06",
+              "hightime": "132530",
+              "lowjisu": "899.25",
+              "lowdiff": "-0.23",
+              "lowtime": "095030",
+              "whjisu": "943.19",
+              "whchange": "-2.48",
+              "whjday": "20251211",
+              "wljisu": "637.55",
+              "wlchange": "44.27",
+              "wljday": "20250409",
+              "yhjisu": "943.19",
+              "yhchange": "-2.48",
+              "yhjday": "20251211",
+              "yljisu": "637.55",
+              "ylchange": "44.27",
+              "yljday": "20250409",
+              "firstjcode": "301",
+              "firstjname": "코스닥 종합",
+              "firstjisu": "919.82",
+              "firsign": "2",
+              "firchange": "18.49",
+              "firdiff": "0.20",
+              "secondjcode": "339",
+              "secondjname": "KOSDAQ100",
+              "secondjisu": "2255.94",
+              "secsign": "2",
+              "secchange": "48.91",
+              "secdiff": "2.22",
+              "thirdjcode": "405",
+              "thirdjname": "KOSDAQ 150",
+              "thirdjisu": "1546.24",
+              "thrsign": "2",
+              "thrchange": "35.06",
+              "thrdiff": "2.32",
+              "fourthjcode": "324",
+              "fourthjname": "전 기/전 자",
+              "fourthjisu": "1444.66",
+              "forsign": "2",
+              "forchange": "19.76",
+              "fordiff": "1.39",
+              "highjo": 1141,
+              "upjo": 3,
+              "unchgjo": 172,
+              "lowjo": 509,
+              "downjo": 0
+            },
+            "rsp_cd": "00000",
+            "rsp_msg": "정상적으로 조회가 완료되었습니다."
+          }
+        }
+      ],
+      "final_response": "2.05%",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_oOnDlLtl4EFdSglb23nmYxc4",
+            "content": {
+              "t1511OutBlock": {
+                "gubun": "2",
+                "hname": "코스닥 종합",
+                "pricejisu": "919.82",
+                "jniljisu": "901.33",
+                "sign": "2",
+                "change": "18.49",
+                "diffjisu": "2.05",
+                "jnilvolume": 900507,
+                "volume": 773683,
+                "volumechange": -126824,
+                "volumerate": "85.92",
+                "jnilvalue": 10091584,
+                "value": 9084701,
+                "valuechange": -1006883,
+                "valuerate": "90.02",
+                "openjisu": "909.70",
+                "opendiff": "0.93",
+                "opentime": "090030",
+                "highjisu": "919.86",
+                "highdiff": "2.06",
+                "hightime": "132530",
+                "lowjisu": "899.25",
+                "lowdiff": "-0.23",
+                "lowtime": "095030",
+                "whjisu": "943.19",
+                "whchange": "-2.48",
+                "whjday": "20251211",
+                "wljisu": "637.55",
+                "wlchange": "44.27",
+                "wljday": "20250409",
+                "yhjisu": "943.19",
+                "yhchange": "-2.48",
+                "yhjday": "20251211",
+                "yljisu": "637.55",
+                "ylchange": "44.27",
+                "yljday": "20250409",
+                "firstjcode": "301",
+                "firstjname": "코스닥 종합",
+                "firstjisu": "919.82",
+                "firsign": "2",
+                "firchange": "18.49",
+                "firdiff": "0.20",
+                "secondjcode": "339",
+                "secondjname": "KOSDAQ100",
+                "secondjisu": "2255.94",
+                "secsign": "2",
+                "secchange": "48.91",
+                "secdiff": "2.22",
+                "thirdjcode": "405",
+                "thirdjname": "KOSDAQ 150",
+                "thirdjisu": "1546.24",
+                "thrsign": "2",
+                "thrchange": "35.06",
+                "thrdiff": "2.32",
+                "fourthjcode": "324",
+                "fourthjname": "전 기/전 자",
+                "fourthjisu": "1444.66",
+                "forsign": "2",
+                "forchange": "19.76",
+                "fordiff": "1.39",
+                "highjo": 1141,
+                "upjo": 3,
+                "unchgjo": 172,
+                "lowjo": 509,
+                "downjo": 0
+              },
+              "rsp_cd": "00000",
+              "rsp_msg": "정상적으로 조회가 완료되었습니다."
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "2.05%"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-005",
+      "instruction": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.2475478649139404,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_naver",
+          "args": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 917,
+        "completion_tokens": 67,
+        "total_tokens": 984
+      },
+      "ttft_stats": {
+        "average": 1.2611542085651308,
+        "min": 1.112946541979909,
+        "max": 1.4093618751503527,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_naver",
+          "arguments": {
+            "query": "전기차 충전 요금 인상",
+            "display": 1,
+            "start": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Fri, 19 Dec 2025 13:47:30 +0900",
+            "total": 658510,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "환경부 <b>전기차</b> 급속<b>충전</b>기 <b>충전요금</b> 변경 안내문 - 참여마당 &gt; 공지사항",
+                "link": "https://ev.or.kr/nportal/infoGarden/selectBBSListDtl.do?ARTC_ID=12678&BLBD_ID=notice",
+                "description": "한전의 <b>전기</b><b>요금 인상</b> 등으로 인해 부득이하게 환경부 <b>전기차</b> 급속<b>충전</b>기의 <b>충전요금</b>을 아래와 같이 변경하게 되었음을 알려드리며, 변경<b>요금</b>은 '22년 9월 1일 0시부터 적용됩니다. &lt;환경부..."
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "환경부 전기차 급속충전기 충전요금 변경 안내문 - 참여마당 > 공지사항",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_EZeXo5v4fkAeqf491WXBiIBq",
+            "content": {
+              "lastBuildDate": "Fri, 19 Dec 2025 13:47:30 +0900",
+              "total": 658510,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "환경부 <b>전기차</b> 급속<b>충전</b>기 <b>충전요금</b> 변경 안내문 - 참여마당 &gt; 공지사항",
+                  "link": "https://ev.or.kr/nportal/infoGarden/selectBBSListDtl.do?ARTC_ID=12678&BLBD_ID=notice",
+                  "description": "한전의 <b>전기</b><b>요금 인상</b> 등으로 인해 부득이하게 환경부 <b>전기차</b> 급속<b>충전</b>기의 <b>충전요금</b>을 아래와 같이 변경하게 되었음을 알려드리며, 변경<b>요금</b>은 '22년 9월 1일 0시부터 적용됩니다. &lt;환경부..."
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "환경부 전기차 급속충전기 충전요금 변경 안내문 - 참여마당 > 공지사항"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-006",
+      "instruction": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.216915845870972,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2001,
+        "completion_tokens": 195,
+        "total_tokens": 2196
+      },
+      "ttft_stats": {
+        "average": 1.8999992499593645,
+        "min": 1.4404286672361195,
+        "max": 2.3595698326826096,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "제주 가을 여행 코스 후기",
+            "display": 1,
+            "start": 1,
+            "sort": "sim"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Fri, 19 Dec 2025 13:47:33 +0900",
+            "total": 2471,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "<b>제주</b> 서귀포 <b>여행</b> 위호텔 <b>후기</b> <b>제주</b> 서쪽 <b>가을 여행 코스</b> 지금... ",
+                "link": "https://blog.naver.com/neweunha/224017621667",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 교과서가 쉬워지는 주말여행 - 박은하, 김수진 취미로 먹고산다 여행작가 박은하 원데이 아트트립 미술관여행 컨설팅북 - 박은하 김남경 김수진 차없이 떠나는 주말여행 코스북 - 김남경, 김수진, 박은하 제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금 떠나면 특별한 이유 2025. 9. 22. 16:53 가을을 맞아 제주 여행 1박 2일을 다녀왔어요. 요즘 평일 항공료가 많이 저렴하더라고요. 저는 제주특별자치도 관광협회 공식 항공권과 호텔 예약을 하고, 호텔 주변 가볼만한곳 위주로 서귀포 여행 코스를 짰습니다. 옷귀마 테마타운 승마부터 휴애리 자연생활공원, 카멜리아힐까지. 호텔 주변에서 가을 여행 감성을 느껴볼 수 있는 관광지를 다녀왔습니다. 탐나오 할인 이벤트를 활용해 호텔뿐만 아니라 관광지 티켓을 예약했더니 생각보다 저렴하게 다녀올 수 있었어요. 제주 서귀포 여행 후기와 함께 탐나오 할인 이벤트 소식을 정리해 봤어요. 1. 서귀포 ",
+                "bloggername": "여행작가 박은하",
+                "bloggerlink": "blog.naver.com/neweunha",
+                "postdate": "20250922"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금...",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_8Qxk7zHmKntoQTmA9Mp2Bb5Q",
+            "content": {
+              "lastBuildDate": "Fri, 19 Dec 2025 13:47:33 +0900",
+              "total": 2471,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "<b>제주</b> 서귀포 <b>여행</b> 위호텔 <b>후기</b> <b>제주</b> 서쪽 <b>가을 여행 코스</b> 지금... ",
+                  "link": "https://blog.naver.com/neweunha/224017621667",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 교과서가 쉬워지는 주말여행 - 박은하, 김수진 취미로 먹고산다 여행작가 박은하 원데이 아트트립 미술관여행 컨설팅북 - 박은하 김남경 김수진 차없이 떠나는 주말여행 코스북 - 김남경, 김수진, 박은하 제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금 떠나면 특별한 이유 2025. 9. 22. 16:53 가을을 맞아 제주 여행 1박 2일을 다녀왔어요. 요즘 평일 항공료가 많이 저렴하더라고요. 저는 제주특별자치도 관광협회 공식 항공권과 호텔 예약을 하고, 호텔 주변 가볼만한곳 위주로 서귀포 여행 코스를 짰습니다. 옷귀마 테마타운 승마부터 휴애리 자연생활공원, 카멜리아힐까지. 호텔 주변에서 가을 여행 감성을 느껴볼 수 있는 관광지를 다녀왔습니다. 탐나오 할인 이벤트를 활용해 호텔뿐만 아니라 관광지 티켓을 예약했더니 생각보다 저렴하게 다녀올 수 있었어요. 제주 서귀포 여행 후기와 함께 탐나오 할인 이벤트 소식을 정리해 봤어요. 1. 서귀포 ",
+                  "bloggername": "여행작가 박은하",
+                  "bloggerlink": "blog.naver.com/neweunha",
+                  "postdate": "20250922"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "제주 서귀포 여행 위호텔 후기 제주 서쪽 가을 여행 코스 지금..."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-007",
+      "instruction": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 5.227447748184204,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "NewsSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "NewsSearch_naver",
+          "args": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "start": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "display": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "start": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 1
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1024,
+        "completion_tokens": 324,
+        "total_tokens": 1348
+      },
+      "ttft_stats": {
+        "average": 2.5161256035789847,
+        "min": 1.6394307911396027,
+        "max": 3.392820416018367,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "NewsSearch_naver",
+          "arguments": {
+            "query": "반도체 수출 전망",
+            "display": 1,
+            "start": 1,
+            "sort": "date"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Fri, 19 Dec 2025 13:47:37 +0900",
+            "total": 297793,
+            "start": 1,
+            "display": 1,
+            "items": [
+              {
+                "title": "대만, 올해 경제성장률 <b>전망</b>치 상향 조정…4.55→7.31%",
+                "originallink": "https://www.widedaily.com/news/articleView.html?idxno=285297",
+                "link": "https://www.widedaily.com/news/articleView.html?idxno=285297",
+                "description": "대만 중앙은행이 <b>반도체 수출</b> 호조 등을 배경으로 올해 경제성장률 <b>전망</b>치를 크게 상향 조정했다. 18일 대만 중앙통신에 따르면 대만 중앙은행은 이날 올해 국내총생산(GDP) 성장률 <b>전망</b>치를 7.31%로 제시했다. 이는 지난... ",
+                "pubDate": "Fri, 19 Dec 2025 13:38:00 +0900"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "대만, 올해 경제성장률 전망치 상향 조정…4.55→7.31%",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_vZynK6VsgVpuXgB8Gy1tgIAl",
+            "content": {
+              "lastBuildDate": "Fri, 19 Dec 2025 13:47:37 +0900",
+              "total": 297793,
+              "start": 1,
+              "display": 1,
+              "items": [
+                {
+                  "title": "대만, 올해 경제성장률 <b>전망</b>치 상향 조정…4.55→7.31%",
+                  "originallink": "https://www.widedaily.com/news/articleView.html?idxno=285297",
+                  "link": "https://www.widedaily.com/news/articleView.html?idxno=285297",
+                  "description": "대만 중앙은행이 <b>반도체 수출</b> 호조 등을 배경으로 올해 경제성장률 <b>전망</b>치를 크게 상향 조정했다. 18일 대만 중앙통신에 따르면 대만 중앙은행은 이날 올해 국내총생산(GDP) 성장률 <b>전망</b>치를 7.31%로 제시했다. 이는 지난... ",
+                  "pubDate": "Fri, 19 Dec 2025 13:38:00 +0900"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "대만, 올해 경제성장률 전망치 상향 조정…4.55→7.31%"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-008",
+      "instruction": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.7507660388946533,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemSearch_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemSearch_aladin",
+          "args": {
+            "query": "나미야 잡화점의 기적",
+            "query_type": "Keyword",
+            "search_target": "Book",
+            "start": 1,
+            "max_results": 1,
+            "sort": "Accuracy",
+            "cover": "Mid",
+            "output": "xml",
+            "outofStockFilter": 0,
+            "opt_result": ""
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "Query": {
+          "type": "string",
+          "required": true
+        },
+        "QueryType": {
+          "type": "string",
+          "enum": [
+            "Keyword",
+            "Title",
+            "Author",
+            "Publisher"
+          ],
+          "default": "Keyword"
+        },
+        "SearchTarget": {
+          "type": "string",
+          "enum": [
+            "Book",
+            "Foreign",
+            "Music",
+            "DVD",
+            "Used",
+            "eBook",
+            "All"
+          ],
+          "default": "Book"
+        },
+        "Start": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "MaxResults": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "Sort": {
+          "type": "string",
+          "enum": [
+            "Accuracy",
+            "PublishTime",
+            "SalesPoint",
+            "CustomerRating",
+            "MyReviewCount"
+          ],
+          "default": "Accuracy"
+        },
+        "Cover": {
+          "type": "string",
+          "enum": [
+            "Big",
+            "MidBig",
+            "Mid",
+            "Small",
+            "Mini",
+            "None"
+          ],
+          "default": "Mid"
+        },
+        "CategoryId": {
+          "type": "integer",
+          "default": 0
+        },
+        "Output": {
+          "type": "string",
+          "enum": [
+            "XML",
+            "JS"
+          ],
+          "default": "XML"
+        },
+        "outofStockFilter": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
+        },
+        "OptResult": {
+          "type": "string",
+          "default": ""
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1838,
+        "completion_tokens": 154,
+        "total_tokens": 1992
+      },
+      "ttft_stats": {
+        "average": 1.783968749921769,
+        "min": 1.3821512078866363,
+        "max": 2.1857862919569016,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemSearch_aladin",
+          "arguments": {
+            "query": "히가시노 게이고",
+            "query_type": "Author",
+            "max_results": 1,
+            "start": 1,
+            "sort": "SalesPoint",
+            "cover": "None",
+            "category_id": 0,
+            "output": "js",
+            "out_of_stock_filter": "0",
+            "opt_result": ""
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "version": "20131101",
+            "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+            "title": "알라딘 검색결과 - 히가시노 게이고",
+            "link": "http://www.aladin.co.kr/search/wsearchresult.aspx?KeyAuthor=%c8%f7%b0%a1%bd%c3%b3%eb+%b0%d4%c0%cc%b0%ed&amp;SearchTarget=book&amp;partner=openAPI",
+            "pubDate": "Fri, 19 Dec 2025 04:47:43 GMT",
+            "totalResults": 207,
+            "startIndex": 1,
+            "itemsPerPage": 1,
+            "query": "히가시노 게이고",
+            "searchCategoryId": 0,
+            "searchCategoryName": "전체",
+            "item": [
+              {
+                "title": "나미야 잡화점의 기적 (양장)",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=21753305&amp;partner=openAPI&amp;start=api",
+                "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                "pubDate": "2012-12-19",
+                "description": "히가시노 게이고 소설. 총 5장으로 구성된 &lt;나미야 잡화점의 기적&gt;은 시공간을 초월하여 편지를 주고받는다는 설정 때문에 판타지 색채가 두드러져 보일 수 있지만 이는 각각의 이야기와 등장인물을 하나의 연결 고리로 모으는 주요 장치로 작용한다.",
+                "isbn": "K912736875",
+                "isbn13": "9788972756194",
+                "itemId": 21753305,
+                "priceSales": 13320,
+                "priceStandard": 14800,
+                "mallType": "BOOK",
+                "stockStatus": "품절",
+                "mileage": 740,
+                "cover": "https://image.aladin.co.kr/product/2175/33/coversum/s842635620_1.jpg",
+                "categoryId": 50998,
+                "categoryName": "국내도서>소설/시/희곡>일본소설>1950년대 이후 일본소설",
+                "publisher": "현대문학",
+                "salesPoint": 110433,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {}
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "나미야 잡화점의 기적 (양장)",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_acDdPNkWbvWKL3seGgkiIF9n",
+            "content": {
+              "version": "20131101",
+              "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+              "title": "알라딘 검색결과 - 히가시노 게이고",
+              "link": "http://www.aladin.co.kr/search/wsearchresult.aspx?KeyAuthor=%c8%f7%b0%a1%bd%c3%b3%eb+%b0%d4%c0%cc%b0%ed&amp;SearchTarget=book&amp;partner=openAPI",
+              "pubDate": "Fri, 19 Dec 2025 04:47:43 GMT",
+              "totalResults": 207,
+              "startIndex": 1,
+              "itemsPerPage": 1,
+              "query": "히가시노 게이고",
+              "searchCategoryId": 0,
+              "searchCategoryName": "전체",
+              "item": [
+                {
+                  "title": "나미야 잡화점의 기적 (양장)",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=21753305&amp;partner=openAPI&amp;start=api",
+                  "author": "히가시노 게이고 (지은이), 양윤옥 (옮긴이)",
+                  "pubDate": "2012-12-19",
+                  "description": "히가시노 게이고 소설. 총 5장으로 구성된 &lt;나미야 잡화점의 기적&gt;은 시공간을 초월하여 편지를 주고받는다는 설정 때문에 판타지 색채가 두드러져 보일 수 있지만 이는 각각의 이야기와 등장인물을 하나의 연결 고리로 모으는 주요 장치로 작용한다.",
+                  "isbn": "K912736875",
+                  "isbn13": "9788972756194",
+                  "itemId": 21753305,
+                  "priceSales": 13320,
+                  "priceStandard": 14800,
+                  "mallType": "BOOK",
+                  "stockStatus": "품절",
+                  "mileage": 740,
+                  "cover": "https://image.aladin.co.kr/product/2175/33/coversum/s842635620_1.jpg",
+                  "categoryId": 50998,
+                  "categoryName": "국내도서>소설/시/희곡>일본소설>1950년대 이후 일본소설",
+                  "publisher": "현대문학",
+                  "salesPoint": 110433,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {}
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "나미야 잡화점의 기적 (양장)"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-009",
+      "instruction": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 8.548846960067749,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "VideoSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "VideoSearch_daum",
+          "args": {
+            "query": "손흥민 헤드트릭",
+            "sort": "accuracy",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "query": {
+          "type": "string",
+          "required": true
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "accuracy",
+            "recency"
+          ],
+          "default": "accuracy"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 761,
+        "completion_tokens": 530,
+        "total_tokens": 1291
+      },
+      "ttft_stats": {
+        "average": 4.10852324985899,
+        "min": 2.897850291803479,
+        "max": 5.319196207914501,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "VideoSearch_daum",
+          "arguments": {
+            "query": "손흥민 헤드트릭",
+            "sort": "accuracy",
+            "page": 1,
+            "size": 1
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "documents": [
+              {
+                "author": "스포츠라운지",
+                "datetime": "2025-09-18T21:00:45.000+09:00",
+                "play_time": 31,
+                "thumbnail": "https://search1.kakaocdn.net/argon/138x78_80_pr/L8IqiJuTt9O",
+                "title": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부앙가 고마워\"",
+                "url": "http://www.youtube.com/watch?v=N6_dd1O37EE"
+              }
+            ],
+            "ds": [],
+            "g": [],
+            "m": {},
+            "meta": {
+              "is_end": false,
+              "pageable_count": 4,
+              "total_count": 4
+            }
+          }
+        }
+      ],
+      "final_response": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부싼가 고마워\"",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_q8b3UxlPfxQxhKRXFIPp6ujN",
+            "content": {
+              "documents": [
+                {
+                  "author": "스포츠라운지",
+                  "datetime": "2025-09-18T21:00:45.000+09:00",
+                  "play_time": 31,
+                  "thumbnail": "https://search1.kakaocdn.net/argon/138x78_80_pr/L8IqiJuTt9O",
+                  "title": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부앙가 고마워\"",
+                  "url": "http://www.youtube.com/watch?v=N6_dd1O37EE"
+                }
+              ],
+              "ds": [],
+              "g": [],
+              "m": {},
+              "meta": {
+                "is_end": false,
+                "pageable_count": 4,
+                "total_count": 4
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "손흥민의 첫 해트트릭을 도와준 \"티미 고마워, 홀링스 고마워,  부싼가 고마워\""
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-010",
+      "instruction": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 4.730319976806641,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "PlaceSearch_kakao",
+          "args": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.49794,
+            "radius": 1000,
+            "sort": "distance",
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "keyword": {
+          "type": "string",
+          "required": true
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "integer",
+          "maximum": 20000
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "accuracy",
+            "distance"
+          ],
+          "default": "accuracy"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 45,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 857,
+        "completion_tokens": 198,
+        "total_tokens": 1055
+      },
+      "ttft_stats": {
+        "average": 2.3217032086104155,
+        "min": 1.7356334999203682,
+        "max": 2.9077729173004627,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "PlaceSearch_kakao",
+          "arguments": {
+            "keyword": "파스타",
+            "x": 127.02758,
+            "y": 37.4979,
+            "page": 1,
+            "size": 1,
+            "radius": 1000,
+            "sort": "accuracy"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "keyword": "파스타",
+            "total_count": 180,
+            "places": [
+              {
+                "name": "닥터로빈시그니처 서초점",
+                "latitude": 37.4966332657545,
+                "longitude": 127.026914121286,
+                "address": "서울 서초구 서초동 1320-10",
+                "road_address": "서울 서초구 서초대로74길 11",
+                "phone": "02-522-3101",
+                "category": "음식점 > 양식 > 이탈리안",
+                "distance": "152"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "덥터로빈시그니처 서초점",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_D8UmbYJsVPz8YzNGW1sEDVa1",
+            "content": {
+              "keyword": "파스타",
+              "total_count": 180,
+              "places": [
+                {
+                  "name": "닥터로빈시그니처 서초점",
+                  "latitude": 37.4966332657545,
+                  "longitude": 127.026914121286,
+                  "address": "서울 서초구 서초동 1320-10",
+                  "road_address": "서울 서초구 서초대로74길 11",
+                  "phone": "02-522-3101",
+                  "category": "음식점 > 양식 > 이탈리안",
+                  "distance": "152"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "덥터로빈시그니처 서초점"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L1-011",
+      "instruction": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
+      "level": 1,
+      "category": "Single Tool",
+      "success": true,
+      "execution_time": 3.861955165863037,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "page": 1,
+            "size": 1
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {
+        "type": "string"
+      },
+      "arg_schema": {
+        "category": {
+          "type": "string",
+          "enum": [
+            "MT1",
+            "CS2",
+            "PS3",
+            "SC4",
+            "AC5",
+            "PK6",
+            "OL7",
+            "SW8",
+            "BK9",
+            "CT1",
+            "AG2",
+            "PO3",
+            "AT4",
+            "AD5",
+            "FD6",
+            "CE7",
+            "HP8",
+            "PM9"
+          ],
+          "required": true
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20000,
+          "default": 1000
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 15,
+          "default": 15
+        }
+      },
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2290,
+        "completion_tokens": 191,
+        "total_tokens": 2481
+      },
+      "ttft_stats": {
+        "average": 1.9016946875490248,
+        "min": 1.6103464169427752,
+        "max": 2.1930429581552744,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CategorySearch_kakao",
+          "arguments": {
+            "category": "CE7",
+            "x": 126.9237,
+            "y": 37.5563,
+            "radius": 500,
+            "size": 15
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "category": "CE7",
+            "total_count": 445,
+            "places": [
+              {
+                "name": "벌툰 봉화당 홍대입구역점",
+                "latitude": 37.5564499530999,
+                "longitude": 126.925146143059,
+                "address": "서울 마포구 동교동 169-11",
+                "phone": "02-333-5111",
+                "distance": "128"
+              },
+              {
+                "name": "레드버튼 홍대점",
+                "latitude": 37.5540084192114,
+                "longitude": 126.922613551217,
+                "address": "서울 마포구 서교동 358-1",
+                "phone": "02-333-3799",
+                "distance": "272"
+              },
+              {
+                "name": "놀숲 프리미엄홍대점",
+                "latitude": 37.5522899275144,
+                "longitude": 126.92217397074651,
+                "address": "서울 마포구 서교동 364-26",
+                "phone": "02-336-7001",
+                "distance": "465"
+              },
+              {
+                "name": "히어로보드게임카페 홍대2호점",
+                "latitude": 37.55534916196303,
+                "longitude": 126.92270270334447,
+                "address": "서울 마포구 동교동 162-3",
+                "phone": "02-3142-7767",
+                "distance": "137"
+              },
+              {
+                "name": "히어로보드게임카페 홍대1호점",
+                "latitude": 37.55209599632931,
+                "longitude": 126.92184598443768,
+                "address": "서울 마포구 서교동 364-22",
+                "phone": "02-6368-6001",
+                "distance": "494"
+              },
+              {
+                "name": "홈즈앤루팡 홍대점",
+                "latitude": 37.5541414020202,
+                "longitude": 126.922058874058,
+                "address": "서울 마포구 서교동 356-3",
+                "phone": "02-336-8708",
+                "distance": "280"
+              },
+              {
+                "name": "레드버튼 레이어드 홍대점",
+                "latitude": 37.5526020758834,
+                "longitude": 126.921422203806,
+                "address": "서울 마포구 서교동 369-4",
+                "phone": "02-336-3779",
+                "distance": "457"
+              },
+              {
+                "name": "943킹스크로스",
+                "latitude": 37.552989095652656,
+                "longitude": 126.92080954986005,
+                "address": "서울 마포구 서교동 369-1",
+                "phone": "0502-5552-8898",
+                "distance": "447"
+              },
+              {
+                "name": "데블다이스 홍대점",
+                "latitude": 37.5549495465089,
+                "longitude": 126.923358385336,
+                "address": "서울 마포구 서교동 345-6",
+                "phone": "070-4234-3912",
+                "distance": "153"
+              },
+              {
+                "name": "카페장쌤",
+                "latitude": 37.5557374557051,
+                "longitude": 126.926889731852,
+                "address": "서울 마포구 서교동 333-30",
+                "phone": "070-4084-3414",
+                "distance": "288"
+              },
+              {
+                "name": "이미커피",
+                "latitude": 37.55747500027613,
+                "longitude": 126.92191959031598,
+                "address": "서울 마포구 동교동 201-10",
+                "phone": "02-6368-5228",
+                "distance": "204"
+              },
+              {
+                "name": "땡스네이쳐카페",
+                "latitude": 37.5535983096117,
+                "longitude": 126.923759261108,
+                "address": "서울 마포구 서교동 486",
+                "phone": "02-332-7470",
+                "distance": "300"
+              },
+              {
+                "name": "카페공명 연남점",
+                "latitude": 37.5598708965573,
+                "longitude": 126.926352615326,
+                "address": "서울 마포구 동교동 146-8",
+                "phone": "070-8869-6304",
+                "distance": "460"
+              },
+              {
+                "name": "카툰플러스 만화카페 24H (구 놀숲플러스)",
+                "latitude": 37.5531929633346,
+                "longitude": 126.921171477897,
+                "address": "서울 마포구 서교동 357-5",
+                "phone": "02-337-6588",
+                "distance": "411"
+              },
+              {
+                "name": "터틀힙",
+                "latitude": 37.55979694723278,
+                "longitude": 126.92068463815171,
+                "address": "서울 마포구 연남동 565-19",
+                "phone": "02-332-5854",
+                "distance": "470"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "벌툰 봉화당 홍대입구역점",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘."
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_96C05P9IRah5Z2bx2rRyoZdU",
+            "content": {
+              "category": "CE7",
+              "total_count": 445,
+              "places": [
+                {
+                  "name": "벌툰 봉화당 홍대입구역점",
+                  "latitude": 37.5564499530999,
+                  "longitude": 126.925146143059,
+                  "address": "서울 마포구 동교동 169-11",
+                  "phone": "02-333-5111",
+                  "distance": "128"
+                },
+                {
+                  "name": "레드버튼 홍대점",
+                  "latitude": 37.5540084192114,
+                  "longitude": 126.922613551217,
+                  "address": "서울 마포구 서교동 358-1",
+                  "phone": "02-333-3799",
+                  "distance": "272"
+                },
+                {
+                  "name": "놀숲 프리미엄홍대점",
+                  "latitude": 37.5522899275144,
+                  "longitude": 126.92217397074651,
+                  "address": "서울 마포구 서교동 364-26",
+                  "phone": "02-336-7001",
+                  "distance": "465"
+                },
+                {
+                  "name": "히어로보드게임카페 홍대2호점",
+                  "latitude": 37.55534916196303,
+                  "longitude": 126.92270270334447,
+                  "address": "서울 마포구 동교동 162-3",
+                  "phone": "02-3142-7767",
+                  "distance": "137"
+                },
+                {
+                  "name": "히어로보드게임카페 홍대1호점",
+                  "latitude": 37.55209599632931,
+                  "longitude": 126.92184598443768,
+                  "address": "서울 마포구 서교동 364-22",
+                  "phone": "02-6368-6001",
+                  "distance": "494"
+                },
+                {
+                  "name": "홈즈앤루팡 홍대점",
+                  "latitude": 37.5541414020202,
+                  "longitude": 126.922058874058,
+                  "address": "서울 마포구 서교동 356-3",
+                  "phone": "02-336-8708",
+                  "distance": "280"
+                },
+                {
+                  "name": "레드버튼 레이어드 홍대점",
+                  "latitude": 37.5526020758834,
+                  "longitude": 126.921422203806,
+                  "address": "서울 마포구 서교동 369-4",
+                  "phone": "02-336-3779",
+                  "distance": "457"
+                },
+                {
+                  "name": "943킹스크로스",
+                  "latitude": 37.552989095652656,
+                  "longitude": 126.92080954986005,
+                  "address": "서울 마포구 서교동 369-1",
+                  "phone": "0502-5552-8898",
+                  "distance": "447"
+                },
+                {
+                  "name": "데블다이스 홍대점",
+                  "latitude": 37.5549495465089,
+                  "longitude": 126.923358385336,
+                  "address": "서울 마포구 서교동 345-6",
+                  "phone": "070-4234-3912",
+                  "distance": "153"
+                },
+                {
+                  "name": "카페장쌤",
+                  "latitude": 37.5557374557051,
+                  "longitude": 126.926889731852,
+                  "address": "서울 마포구 서교동 333-30",
+                  "phone": "070-4084-3414",
+                  "distance": "288"
+                },
+                {
+                  "name": "이미커피",
+                  "latitude": 37.55747500027613,
+                  "longitude": 126.92191959031598,
+                  "address": "서울 마포구 동교동 201-10",
+                  "phone": "02-6368-5228",
+                  "distance": "204"
+                },
+                {
+                  "name": "땡스네이쳐카페",
+                  "latitude": 37.5535983096117,
+                  "longitude": 126.923759261108,
+                  "address": "서울 마포구 서교동 486",
+                  "phone": "02-332-7470",
+                  "distance": "300"
+                },
+                {
+                  "name": "카페공명 연남점",
+                  "latitude": 37.5598708965573,
+                  "longitude": 126.926352615326,
+                  "address": "서울 마포구 동교동 146-8",
+                  "phone": "070-8869-6304",
+                  "distance": "460"
+                },
+                {
+                  "name": "카툰플러스 만화카페 24H (구 놀숲플러스)",
+                  "latitude": 37.5531929633346,
+                  "longitude": 126.921171477897,
+                  "address": "서울 마포구 서교동 357-5",
+                  "phone": "02-337-6588",
+                  "distance": "411"
+                },
+                {
+                  "name": "터틀힙",
+                  "latitude": 37.55979694723278,
+                  "longitude": 126.92068463815171,
+                  "address": "서울 마포구 연남동 565-19",
+                  "phone": "02-332-5854",
+                  "distance": "470"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "벌툰 봉화당 홍대입구역점"
+          }
+        ]
+      }
+    }
+  ]
+}

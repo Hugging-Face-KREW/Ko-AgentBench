@@ -1,0 +1,159 @@
+{
+  "key": "1900c2d8feadc56c361b47b57360d76f886b3cb0f63d6a53a55659f4345ef1b9",
+  "tool": "Directions_naver",
+  "created_at": "2025-12-19T05:02:51.373167",
+  "input_params": {
+    "goal": "127.0592,37.511",
+    "option": "traoptimal",
+    "start": "126.450517,37.46019",
+    "waypoints": ""
+  },
+  "raw_args": {
+    "start": "126.450517,37.46019",
+    "goal": "127.0592,37.511",
+    "waypoints": "",
+    "option": "traoptimal"
+  },
+  "data": {
+    "code": 0,
+    "message": "길찾기를 성공하였습니다.",
+    "currentDateTime": "2025-12-19T14:02:51",
+    "route": {
+      "traoptimal": [
+        {
+          "guide": [
+            {
+              "distance": 1362,
+              "duration": 158605,
+              "instructions": "자유무역지역사거리에서 '화물터미널(A)' 방면으로 우회전",
+              "pointIndex": 31,
+              "type": 3
+            },
+            {
+              "distance": 2034,
+              "duration": 152287,
+              "instructions": "신불IC에서 '제1여객터미널, 서울, 인천대교' 방면으로 오른쪽 방향",
+              "pointIndex": 43,
+              "type": 5
+            },
+            {
+              "distance": 409,
+              "duration": 23191,
+              "instructions": "신불IC에서 '서울, 인천대교' 방면으로 왼쪽 도로 주행",
+              "pointIndex": 49,
+              "type": 41
+            },
+            {
+              "distance": 2149,
+              "duration": 102002,
+              "instructions": "'인천국제공항고속도로' 방면으로 고속도로 진입",
+              "pointIndex": 87,
+              "type": 50
+            },
+            {
+              "distance": 714,
+              "duration": 27114,
+              "instructions": "공항신도시분기점에서 '서울, 북인천' 방면으로 왼쪽 도로 주행",
+              "pointIndex": 97,
+              "type": 41
+            },
+            {
+              "distance": 19761,
+              "duration": 751614,
+              "instructions": "인천공항톨게이트 (통행료 3,200원)",
+              "pointIndex": 273,
+              "type": 121
+            },
+            {
+              "distance": 13470,
+              "duration": 514815,
+              "instructions": "88분기점에서 '서울, 올림픽대로' 방면으로 오른쪽 고속도로 출구",
+              "pointIndex": 390,
+              "type": 67
+            },
+            {
+              "distance": 15282,
+              "duration": 1543331,
+              "instructions": "'종합운동장, 동작대교' 방면으로 분기도로 진입",
+              "pointIndex": 608,
+              "type": 54
+            },
+            {
+              "distance": 12158,
+              "duration": 1535748,
+              "instructions": "'코엑스, 강남경찰서, 서울의료원' 방면으로 오른쪽 도시고속도로 출구",
+              "pointIndex": 818,
+              "type": 69
+            },
+            {
+              "distance": 455,
+              "duration": 87433,
+              "instructions": "서울의료원에서 '코엑스' 방면으로 우회전",
+              "pointIndex": 835,
+              "type": 3
+            },
+            {
+              "distance": 864,
+              "duration": 412869,
+              "instructions": "봉은사에서 '한국도심공항' 방면으로 좌회전",
+              "pointIndex": 859,
+              "type": 2
+            },
+            {
+              "distance": 361,
+              "duration": 155517,
+              "instructions": "유턴",
+              "pointIndex": 871,
+              "type": 6
+            },
+            {
+              "distance": 14,
+              "duration": 5929,
+              "instructions": "우회전",
+              "pointIndex": 872,
+              "type": 3
+            },
+            {
+              "distance": 35,
+              "duration": 22034,
+              "instructions": "목적지",
+              "pointIndex": 875,
+              "type": 88
+            }
+          ],
+          "summary": {
+            "bbox": [
+              [
+                126.4505167,
+                37.4562564
+              ],
+              [
+                127.0661927,
+                37.5857671
+              ]
+            ],
+            "departureTime": "2025-12-19T14:02:49",
+            "distance": 69068,
+            "duration": 5492489,
+            "fuelPrice": 8577,
+            "goal": {
+              "dir": 2,
+              "location": [
+                127.0591992,
+                37.5109996
+              ]
+            },
+            "start": {
+              "location": [
+                126.4505167,
+                37.4601896
+              ]
+            },
+            "taxiFare": 63560,
+            "tollFare": 3200
+          }
+        }
+      ]
+    }
+  }
+}

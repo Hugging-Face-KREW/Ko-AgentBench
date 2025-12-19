@@ -1,0 +1,452 @@
+{
+  "key": "b5728f39817e6cdbb7506b32e501481390d2e373dcfffc636f7595d56b13487c",
+  "tool": "CarRoute_tmap",
+  "created_at": "2025-12-19T05:22:50.588529",
+  "input_params": {
+    "endX": 126.993846,
+    "endY": 37.535995,
+    "searchOption": 0,
+    "startX": 127.030105,
+    "startY": 37.49794
+  },
+  "raw_args": {
+    "startX": 127.030105,
+    "startY": 37.49794,
+    "endX": 126.993846,
+    "endY": 37.535995,
+    "searchOption": 0,
+    "result": {
+      "totalDistance": 8.2,
+      "totalTime": 15,
+      "route": [
+        {
+          "instruction": "강남대로를 따라 서쪽으로 이동합니다.",
+          "distance": 2.0,
+          "time": 4
+        },
+        {
+          "instruction": "한남대교 진입 후, 한남동을 지나갑니다.",
+          "distance": 3.5,
+          "time": 7
+        },
+        {
+          "instruction": "이태원역 방면으로 좌회전 후 직진합니다.",
+          "distance": 2.7,
+          "time": 4
+        }
+      ]
+    }
+  },
+  "data": {
+    "usedFavoriteRouteVertices": "45731580,13498315:146,43:72,-152:121,-256:304,91:-128,250:-151,319:-26,52:-406,-126:-515,-165:-219,-67:-45,-13:-80,-25:-86,-22:-82,-25:-204,-63:-181,-61:-38,-11:-269,-82:-313,-100:-115,-32:-179,-54:-828,-254:-89,-29:-156,-48:-160,-49:-352,-108:-191,-58:-321,-98:-198,-60:-133,-41:-387,-118:-482,-145:-40,-12:-76,-19:-56,-16:-34,-10:-136,-48:-71,-22:-241,-77:-468,-140:-69,-24:-77,-24:-376,-116:-559,-171:-185,45:-60,125:-54,112:-175,364:-14,29:-16,32:-42,89:-184,359:-28,61:-21,40:-30,62:-39,90:-511,1044:-15,47:-12,45:-54,246:-20,86:-112,558:-23,61:-55,100:-50,79:-148,173:-23,24:-55,61:-170,188:-810,1340:-62,129:-8,18:6,70:-128,306:-144,284:-122,187:-16,32:-12,25:-294,634:-226,479:-979,2020:-387,1523:-190,409:-42,63:-135,178:-79,102:-27,40:-65,96:-48,70:-24,84:-66,482:-77,624:-18,146:-11,73:-14,95:-92,166:-402,558:-210,285:-886,1200:-5,75:-29,284:-13,174:193,-49:124,-40:48,-10:122,-30:83,-58:102,-63:50,-42:226,-7:138,-8:246,-88:107,127:405,98:302,-225:356,-135",
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "totalDistance": 8858,
+          "totalTime": 1664,
+          "totalFare": 0,
+          "taxiFare": 13100,
+          "index": 0,
+          "pointIndex": 0,
+          "name": "",
+          "description": "일반도로를 따라 38m 이동",
+          "nextRoadName": "일반도로",
+          "turnType": 200,
+          "pointType": "S"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 1,
+          "lineIndex": 0,
+          "name": "일반도로",
+          "description": "일반도로, 38m",
+          "distance": 38,
+          "time": 0,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 2,
+          "pointIndex": 1,
+          "name": "교차로",
+          "description": "교차로에서 우회전 후 테헤란로6길을 따라 135m 이동",
+          "nextRoadName": "테헤란로6길",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 3,
+          "lineIndex": 1,
+          "name": "테헤란로6길",
+          "description": "테헤란로6길, 135m",
+          "distance": 135,
+          "time": 16,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 4,
+          "pointIndex": 2,
+          "name": "교차로",
+          "description": "교차로에서 좌회전 후 강남대로84길을 따라 79m 이동",
+          "nextRoadName": "강남대로84길",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 5,
+          "lineIndex": 2,
+          "name": "강남대로84길",
+          "description": "강남대로84길, 79m",
+          "distance": 79,
+          "time": 58,
+          "roadType": 8,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 6,
+          "pointIndex": 3,
+          "name": "교차로",
+          "description": "교차로에서 좌회전 후 테헤란로8길을 따라 189m 이동",
+          "nextRoadName": "테헤란로8길",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 7,
+          "lineIndex": 3,
+          "name": "테헤란로8길",
+          "description": "테헤란로8길, 189m",
+          "distance": 189,
+          "time": 88,
+          "roadType": 6,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 8,
+          "lineIndex": 4,
+          "name": "테헤란로7길",
+          "description": "테헤란로7길, 17m",
+          "distance": 17,
+          "time": 50,
+          "roadType": 6,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 9,
+          "pointIndex": 4,
+          "name": "국기원입구",
+          "description": "국기원입구에서 강남역 방면으로 좌회전 후 테헤란로를 따라 334m 이동",
+          "nextRoadName": "테헤란로",
+          "turnType": 12,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 10,
+          "lineIndex": 5,
+          "name": "테헤란로",
+          "description": "테헤란로, 334m",
+          "distance": 334,
+          "time": 176,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 11,
+          "lineIndex": 6,
+          "name": "서초대로",
+          "description": "서초대로, 1834m",
+          "distance": 1834,
+          "time": 401,
+          "roadType": 5,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 12,
+          "pointIndex": 5,
+          "name": "서초역 사거리",
+          "description": "서초역 사거리에서 고속터미널 방면으로 우회전 후 반포대로를 따라 1296m 이동",
+          "nextRoadName": "반포대로",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 13,
+          "lineIndex": 7,
+          "name": "반포대로",
+          "description": "반포대로, 1296m",
+          "distance": 1296,
+          "time": 389,
+          "roadType": 7,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 14,
+          "pointIndex": 6,
+          "name": "강남터미널 고가차도",
+          "description": "강남터미널 고가차도에서 고가도로 후 반포대로를 따라 614m 이동",
+          "nextRoadName": "반포대로",
+          "turnType": 120,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 15,
+          "lineIndex": 8,
+          "name": "반포대로",
+          "description": "반포대로, 614m",
+          "distance": 614,
+          "time": 103,
+          "roadType": 6,
+          "facilityType": 3
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 16,
+          "pointIndex": 7,
+          "name": "",
+          "description": "반포대교 방면으로 오른쪽 방향 후 반포대로를 따라 1333m 이동",
+          "nextRoadName": "반포대로",
+          "turnType": 117,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 17,
+          "lineIndex": 9,
+          "name": "반포대로",
+          "description": "반포대로, 1333m",
+          "distance": 1333,
+          "time": 99,
+          "roadType": 6,
+          "facilityType": 5
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 18,
+          "lineIndex": 10,
+          "name": "녹사평대로",
+          "description": "녹사평대로, 1634m",
+          "distance": 1634,
+          "time": 132,
+          "roadType": 6,
+          "facilityType": 1
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 19,
+          "pointIndex": 8,
+          "name": "이태원 지하차도",
+          "description": "이태원 지하차도에서 남산2,3호터널 방면으로 지하차도 후 녹사평대로를 따라 609m 이동",
+          "nextRoadName": "녹사평대로",
+          "turnType": 119,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 20,
+          "lineIndex": 11,
+          "name": "녹사평대로",
+          "description": "녹사평대로, 609m",
+          "distance": 609,
+          "time": 62,
+          "roadType": 6,
+          "facilityType": 4
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 21,
+          "pointIndex": 9,
+          "name": "",
+          "description": "우회전 후 녹사평대로46길을 따라 126m 이동",
+          "nextRoadName": "녹사평대로46길",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 22,
+          "lineIndex": 12,
+          "name": "녹사평대로46길",
+          "description": "녹사평대로46길, 126m",
+          "distance": 126,
+          "time": 15,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 23,
+          "lineIndex": 13,
+          "name": "녹사평대로46가길",
+          "description": "녹사평대로46가길, 234m",
+          "distance": 234,
+          "time": 28,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 24,
+          "pointIndex": 10,
+          "name": "",
+          "description": "10시 방향 좌회전 후 녹사평대로40다길을 따라 48m 이동",
+          "nextRoadName": "녹사평대로40다길",
+          "turnType": 17,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 25,
+          "lineIndex": 14,
+          "name": "녹사평대로40다길",
+          "description": "녹사평대로40다길, 48m",
+          "distance": 48,
+          "time": 6,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 26,
+          "lineIndex": 15,
+          "name": "회나무로44길",
+          "description": "회나무로44길, 107m",
+          "distance": 107,
+          "time": 13,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 27,
+          "pointIndex": 11,
+          "name": "",
+          "description": "우회전 후 이태원로27다길을 따라 107m 이동",
+          "nextRoadName": "이태원로27다길",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 28,
+          "lineIndex": 16,
+          "name": "이태원로27다길",
+          "description": "이태원로27다길, 107m",
+          "distance": 107,
+          "time": 13,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 29,
+          "pointIndex": 12,
+          "name": "",
+          "description": "우회전 후 이태원로27길을 따라 124m 이동",
+          "nextRoadName": "이태원로27길",
+          "turnType": 13,
+          "pointType": "N"
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 30,
+          "lineIndex": 17,
+          "name": "이태원로27길",
+          "description": "이태원로27길, 124m",
+          "distance": 124,
+          "time": 15,
+          "roadType": 9,
+          "facilityType": 0
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "index": 31,
+          "pointIndex": 13,
+          "name": "",
+          "description": "도착",
+          "nextRoadName": "",
+          "turnType": 201,
+          "pointType": "E"
+        }
+      }
+    ]
+  }
+}

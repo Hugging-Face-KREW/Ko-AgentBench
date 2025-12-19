@@ -1,0 +1,4008 @@
+{
+  "metadata": {
+    "timestamp": "2025-12-19T11:55:32.892265",
+    "model": "vertex_ai/gemini-2.5-pro",
+    "level": "L2",
+    "total_tasks": 15,
+    "successful_tasks": 15,
+    "failed_tasks": 0,
+    "success_rate": 100.0,
+    "total_execution_time": 178.43,
+    "average_execution_time": 11.9,
+    "total_steps": 30,
+    "average_steps": 2.0,
+    "total_tool_calls": 15,
+    "average_tool_calls": 1.0,
+    "total_tokens": 73214,
+    "average_tokens_per_task": 4880.93,
+    "average_prompt_tokens": 3923.47,
+    "average_completion_tokens": 957.47,
+    "average_tps": 410.31,
+    "ttft": {
+      "average": 5.6138,
+      "min": 2.7295,
+      "max": 9.5976,
+      "unit": "seconds"
+    }
+  },
+  "tool_usage_statistics": {
+    "OrderBook_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "StockChart_kis": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "AddressToCoord_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "USStockPrice_kis": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "MarketIndex_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "ItemLookup_aladin": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "CryptoPrice_bithumb": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "CategorySearch_kakao": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "Geocoding_tmap": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "OrderBook_bithumb": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "ItemList_aladin": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "MarketList_upbit": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "StockTrades_ls": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "BlogSearch_naver": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    },
+    "WebSearch_daum": {
+      "count": 1,
+      "success": 1,
+      "failure": 0
+    }
+  },
+  "results": [
+    {
+      "task_id": "L2-001",
+      "instruction": "POSCO홀딩스(005490) 주식의 현재 호가창을 확인하고 싶어",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 14.408838987350464,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "OrderBook_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "OrderBook_ls",
+          "args": {
+            "shcode": "005490",
+            "exchgubun": "K"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1215,
+        "completion_tokens": 1265,
+        "total_tokens": 2480
+      },
+      "ttft_stats": {
+        "average": 7.155972354114056,
+        "min": 3.2907390003092587,
+        "max": 11.021205707918853,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "OrderBook_ls",
+          "arguments": {
+            "shcode": "005490"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "t1101OutBlock": {
+              "hname": "POSCO홀딩스",
+              "price": 298500,
+              "sign": "5",
+              "change": 4500,
+              "diff": "-1.49",
+              "volume": 196305,
+              "jnilclose": 303000,
+              "offerho1": 299000,
+              "bidho1": 298500,
+              "offerrem1": 244,
+              "bidrem1": 363,
+              "preoffercha1": 0,
+              "prebidcha1": 0,
+              "offerho2": 299500,
+              "bidho2": 298000,
+              "offerrem2": 526,
+              "bidrem2": 3171,
+              "preoffercha2": 0,
+              "prebidcha2": 0,
+              "offerho3": 300000,
+              "bidho3": 297500,
+              "offerrem3": 1004,
+              "bidrem3": 1154,
+              "preoffercha3": 10,
+              "prebidcha3": 0,
+              "offerho4": 300500,
+              "bidho4": 297000,
+              "offerrem4": 560,
+              "bidrem4": 2300,
+              "preoffercha4": 0,
+              "prebidcha4": 0,
+              "offerho5": 301000,
+              "bidho5": 296500,
+              "offerrem5": 811,
+              "bidrem5": 1947,
+              "preoffercha5": 0,
+              "prebidcha5": 0,
+              "offerho6": 301500,
+              "bidho6": 296000,
+              "offerrem6": 270,
+              "bidrem6": 5732,
+              "preoffercha6": 0,
+              "prebidcha6": 0,
+              "offerho7": 302000,
+              "bidho7": 295500,
+              "offerrem7": 365,
+              "bidrem7": 5202,
+              "preoffercha7": 0,
+              "prebidcha7": 0,
+              "offerho8": 302500,
+              "bidho8": 295000,
+              "offerrem8": 444,
+              "bidrem8": 14368,
+              "preoffercha8": 0,
+              "prebidcha8": 0,
+              "offerho9": 303000,
+              "bidho9": 294500,
+              "offerrem9": 341,
+              "bidrem9": 1923,
+              "preoffercha9": 0,
+              "prebidcha9": 0,
+              "offerho10": 303500,
+              "bidho10": 294000,
+              "offerrem10": 176,
+              "bidrem10": 2466,
+              "preoffercha10": 0,
+              "prebidcha10": 0,
+              "offer": 4741,
+              "bid": 38626,
+              "preoffercha": 10,
+              "prebidcha": 10,
+              "hotime": "11523977",
+              "yeprice": 0,
+              "yevolume": 0,
+              "yesign": "3",
+              "yechange": 0,
+              "yediff": "0.00",
+              "tmoffer": 0,
+              "tmbid": 0,
+              "ho_status": "1",
+              "shcode": "005490",
+              "uplmtprice": 393500,
+              "dnlmtprice": 212500,
+              "open": 306000,
+              "high": 307000,
+              "low": 295000,
+              "krx_midprice": 298750,
+              "krx_offermidsumrem": 0,
+              "krx_bidmidsumrem": 0,
+              "krx_midsumrem": 0,
+              "krx_midsumremgubun": ""
+            },
+            "rsp_cd": "00000",
+            "rsp_msg": "정상적으로 조회가 완료되었습니다."
+          }
+        }
+      ],
+      "final_response": "POSCO홀딩스(005490)의 현재 호가 정보는 다음과 같습니다.\n\n**현재가:** 298,500원 (전일 대비 4,500원 하락, -1.49%)\n\n**호가창:**\n\n| 매도잔량 | 매도호가 | 매수호가 | 매수잔량 |\n| --- | --- | --- | --- |\n| 244 | 299,000 | 298,500 | 363 |\n| 526 | 299,500 | 298,000 | 3,171 |\n| 1,004 | 300,000 | 297,500 | 1,154 |\n| 560 | 300,500 | 297,000 | 2,300 |\n| 811 | 301,000 | 296,500 | 1,947 |\n| 270 | 301,500 | 296,000 | 5,732 |\n| 365 | 302,000 | 295,500 | 5,202 |\n| 444 | 302,500 | 295,000 | 14,368 |\n| 341 | 303,000 | 294,500 | 1,923 |\n| 176 | 30",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "POSCO홀딩스(005490) 주식의 현재 호가창을 확인하고 싶어"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_1f4be75b2d0d49ea8c076fdb779b",
+            "content": {
+              "t1101OutBlock": {
+                "hname": "POSCO홀딩스",
+                "price": 298500,
+                "sign": "5",
+                "change": 4500,
+                "diff": "-1.49",
+                "volume": 196305,
+                "jnilclose": 303000,
+                "offerho1": 299000,
+                "bidho1": 298500,
+                "offerrem1": 244,
+                "bidrem1": 363,
+                "preoffercha1": 0,
+                "prebidcha1": 0,
+                "offerho2": 299500,
+                "bidho2": 298000,
+                "offerrem2": 526,
+                "bidrem2": 3171,
+                "preoffercha2": 0,
+                "prebidcha2": 0,
+                "offerho3": 300000,
+                "bidho3": 297500,
+                "offerrem3": 1004,
+                "bidrem3": 1154,
+                "preoffercha3": 10,
+                "prebidcha3": 0,
+                "offerho4": 300500,
+                "bidho4": 297000,
+                "offerrem4": 560,
+                "bidrem4": 2300,
+                "preoffercha4": 0,
+                "prebidcha4": 0,
+                "offerho5": 301000,
+                "bidho5": 296500,
+                "offerrem5": 811,
+                "bidrem5": 1947,
+                "preoffercha5": 0,
+                "prebidcha5": 0,
+                "offerho6": 301500,
+                "bidho6": 296000,
+                "offerrem6": 270,
+                "bidrem6": 5732,
+                "preoffercha6": 0,
+                "prebidcha6": 0,
+                "offerho7": 302000,
+                "bidho7": 295500,
+                "offerrem7": 365,
+                "bidrem7": 5202,
+                "preoffercha7": 0,
+                "prebidcha7": 0,
+                "offerho8": 302500,
+                "bidho8": 295000,
+                "offerrem8": 444,
+                "bidrem8": 14368,
+                "preoffercha8": 0,
+                "prebidcha8": 0,
+                "offerho9": 303000,
+                "bidho9": 294500,
+                "offerrem9": 341,
+                "bidrem9": 1923,
+                "preoffercha9": 0,
+                "prebidcha9": 0,
+                "offerho10": 303500,
+                "bidho10": 294000,
+                "offerrem10": 176,
+                "bidrem10": 2466,
+                "preoffercha10": 0,
+                "prebidcha10": 0,
+                "offer": 4741,
+                "bid": 38626,
+                "preoffercha": 10,
+                "prebidcha": 10,
+                "hotime": "11523977",
+                "yeprice": 0,
+                "yevolume": 0,
+                "yesign": "3",
+                "yechange": 0,
+                "yediff": "0.00",
+                "tmoffer": 0,
+                "tmbid": 0,
+                "ho_status": "1",
+                "shcode": "005490",
+                "uplmtprice": 393500,
+                "dnlmtprice": 212500,
+                "open": 306000,
+                "high": 307000,
+                "low": 295000,
+                "krx_midprice": 298750,
+                "krx_offermidsumrem": 0,
+                "krx_bidmidsumrem": 0,
+                "krx_midsumrem": 0,
+                "krx_midsumremgubun": ""
+              },
+              "rsp_cd": "00000",
+              "rsp_msg": "정상적으로 조회가 완료되었습니다."
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "POSCO홀딩스(005490)의 현재 호가 정보는 다음과 같습니다.\n\n**현재가:** 298,500원 (전일 대비 4,500원 하락, -1.49%)\n\n**호가창:**\n\n| 매도잔량 | 매도호가 | 매수호가 | 매수잔량 |\n| --- | --- | --- | --- |\n| 244 | 299,000 | 298,500 | 363 |\n| 526 | 299,500 | 298,000 | 3,171 |\n| 1,004 | 300,000 | 297,500 | 1,154 |\n| 560 | 300,500 | 297,000 | 2,300 |\n| 811 | 301,000 | 296,500 | 1,947 |\n| 270 | 301,500 | 296,000 | 5,732 |\n| 365 | 302,000 | 295,500 | 5,202 |\n| 444 | 302,500 | 295,000 | 14,368 |\n| 341 | 303,000 | 294,500 | 1,923 |\n| 176 | 30"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-002",
+      "instruction": "네이버 주식(035420)의 일봉 차트 데이터를 보여줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 8.599546670913696,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "StockChart_kis"
+      ],
+      "golden_action": [
+        {
+          "tool": "StockChart_kis",
+          "args": {
+            "symbol": "035420",
+            "period": "D",
+            "count": 30
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2252,
+        "completion_tokens": 698,
+        "total_tokens": 2950
+      },
+      "ttft_stats": {
+        "average": 4.202875770861283,
+        "min": 3.6916455826722085,
+        "max": 4.714105959050357,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "StockChart_kis",
+          "arguments": {
+            "period": "D",
+            "symbol": "035420"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "symbol": "035420",
+            "period": "D",
+            "data": [
+              {
+                "date": "20251219",
+                "open": 232500,
+                "high": 235500,
+                "low": 231500,
+                "close": 232250,
+                "volume": 349699
+              },
+              {
+                "date": "20251218",
+                "open": 227500,
+                "high": 233250,
+                "low": 226500,
+                "close": 230500,
+                "volume": 744015
+              },
+              {
+                "date": "20251217",
+                "open": 233000,
+                "high": 233000,
+                "low": 229500,
+                "close": 231000,
+                "volume": 769339
+              },
+              {
+                "date": "20251216",
+                "open": 240500,
+                "high": 240500,
+                "low": 231000,
+                "close": 231500,
+                "volume": 1520556
+              },
+              {
+                "date": "20251215",
+                "open": 241500,
+                "high": 244000,
+                "low": 240000,
+                "close": 240500,
+                "volume": 522965
+              },
+              {
+                "date": "20251212",
+                "open": 243000,
+                "high": 245000,
+                "low": 241500,
+                "close": 244500,
+                "volume": 485052
+              },
+              {
+                "date": "20251211",
+                "open": 245500,
+                "high": 246000,
+                "low": 241000,
+                "close": 243500,
+                "volume": 1056918
+              },
+              {
+                "date": "20251210",
+                "open": 248000,
+                "high": 248000,
+                "low": 244000,
+                "close": 244500,
+                "volume": 654772
+              },
+              {
+                "date": "20251209",
+                "open": 248000,
+                "high": 248500,
+                "low": 246000,
+                "close": 248000,
+                "volume": 497708
+              },
+              {
+                "date": "20251208",
+                "open": 250500,
+                "high": 250500,
+                "low": 247000,
+                "close": 249000,
+                "volume": 466382
+              },
+              {
+                "date": "20251205",
+                "open": 247500,
+                "high": 250000,
+                "low": 246000,
+                "close": 249500,
+                "volume": 575298
+              },
+              {
+                "date": "20251204",
+                "open": 245500,
+                "high": 248500,
+                "low": 244500,
+                "close": 247000,
+                "volume": 487370
+              },
+              {
+                "date": "20251203",
+                "open": 246500,
+                "high": 248500,
+                "low": 245500,
+                "close": 246500,
+                "volume": 630018
+              },
+              {
+                "date": "20251202",
+                "open": 243000,
+                "high": 245000,
+                "low": 241500,
+                "close": 243000,
+                "volume": 618439
+              },
+              {
+                "date": "20251201",
+                "open": 246500,
+                "high": 247500,
+                "low": 242500,
+                "close": 243000,
+                "volume": 666662
+              },
+              {
+                "date": "20251128",
+                "open": 253500,
+                "high": 254000,
+                "low": 243500,
+                "close": 244000,
+                "volume": 1580887
+              },
+              {
+                "date": "20251127",
+                "open": 259500,
+                "high": 261500,
+                "low": 250500,
+                "close": 251500,
+                "volume": 2028550
+              },
+              {
+                "date": "20251126",
+                "open": 255000,
+                "high": 264500,
+                "low": 252000,
+                "close": 263500,
+                "volume": 944519
+              },
+              {
+                "date": "20251125",
+                "open": 262500,
+                "high": 262500,
+                "low": 250500,
+                "close": 253000,
+                "volume": 1218659
+              },
+              {
+                "date": "20251124",
+                "open": 267500,
+                "high": 269500,
+                "low": 259000,
+                "close": 261000,
+                "volume": 1673646
+              },
+              {
+                "date": "20251121",
+                "open": 251000,
+                "high": 265000,
+                "low": 249500,
+                "close": 262500,
+                "volume": 1278706
+              },
+              {
+                "date": "20251120",
+                "open": 260000,
+                "high": 263000,
+                "low": 254500,
+                "close": 257000,
+                "volume": 970537
+              },
+              {
+                "date": "20251119",
+                "open": 250500,
+                "high": 251000,
+                "low": 243000,
+                "close": 248500,
+                "volume": 570754
+              },
+              {
+                "date": "20251118",
+                "open": 251500,
+                "high": 260500,
+                "low": 248500,
+                "close": 249000,
+                "volume": 959645
+              },
+              {
+                "date": "20251117",
+                "open": 256500,
+                "high": 257000,
+                "low": 254000,
+                "close": 255000,
+                "volume": 507818
+              },
+              {
+                "date": "20251114",
+                "open": 258000,
+                "high": 260000,
+                "low": 253000,
+                "close": 253500,
+                "volume": 923411
+              },
+              {
+                "date": "20251113",
+                "open": 262500,
+                "high": 266000,
+                "low": 258500,
+                "close": 265500,
+                "volume": 724253
+              },
+              {
+                "date": "20251112",
+                "open": 265500,
+                "high": 265500,
+                "low": 262000,
+                "close": 263500,
+                "volume": 600486
+              },
+              {
+                "date": "20251111",
+                "open": 261500,
+                "high": 270500,
+                "low": 261000,
+                "close": 263000,
+                "volume": 1341337
+              },
+              {
+                "date": "20251110",
+                "open": 263500,
+                "high": 264000,
+                "low": 258000,
+                "close": 260000,
+                "volume": 974635
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "2025년 12월 19일 NAVER(035420)의 일봉 차트 데이터입니다.\n\n* 시가: 232,500원\n* 고가: 235,500원\n* 저가: 231,500원\n* 종가: 232,250원\n* 거래량: 349,699\n\n더 많은 데이터를 원하시면 말씀해주세요.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "네이버 주식(035420)의 일봉 차트 데이터를 보여줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_51f1e6e4f0c842e3b5f5c9e01854",
+            "content": {
+              "symbol": "035420",
+              "period": "D",
+              "data": [
+                {
+                  "date": "20251219",
+                  "open": 232500,
+                  "high": 235500,
+                  "low": 231500,
+                  "close": 232250,
+                  "volume": 349699
+                },
+                {
+                  "date": "20251218",
+                  "open": 227500,
+                  "high": 233250,
+                  "low": 226500,
+                  "close": 230500,
+                  "volume": 744015
+                },
+                {
+                  "date": "20251217",
+                  "open": 233000,
+                  "high": 233000,
+                  "low": 229500,
+                  "close": 231000,
+                  "volume": 769339
+                },
+                {
+                  "date": "20251216",
+                  "open": 240500,
+                  "high": 240500,
+                  "low": 231000,
+                  "close": 231500,
+                  "volume": 1520556
+                },
+                {
+                  "date": "20251215",
+                  "open": 241500,
+                  "high": 244000,
+                  "low": 240000,
+                  "close": 240500,
+                  "volume": 522965
+                },
+                {
+                  "date": "20251212",
+                  "open": 243000,
+                  "high": 245000,
+                  "low": 241500,
+                  "close": 244500,
+                  "volume": 485052
+                },
+                {
+                  "date": "20251211",
+                  "open": 245500,
+                  "high": 246000,
+                  "low": 241000,
+                  "close": 243500,
+                  "volume": 1056918
+                },
+                {
+                  "date": "20251210",
+                  "open": 248000,
+                  "high": 248000,
+                  "low": 244000,
+                  "close": 244500,
+                  "volume": 654772
+                },
+                {
+                  "date": "20251209",
+                  "open": 248000,
+                  "high": 248500,
+                  "low": 246000,
+                  "close": 248000,
+                  "volume": 497708
+                },
+                {
+                  "date": "20251208",
+                  "open": 250500,
+                  "high": 250500,
+                  "low": 247000,
+                  "close": 249000,
+                  "volume": 466382
+                },
+                {
+                  "date": "20251205",
+                  "open": 247500,
+                  "high": 250000,
+                  "low": 246000,
+                  "close": 249500,
+                  "volume": 575298
+                },
+                {
+                  "date": "20251204",
+                  "open": 245500,
+                  "high": 248500,
+                  "low": 244500,
+                  "close": 247000,
+                  "volume": 487370
+                },
+                {
+                  "date": "20251203",
+                  "open": 246500,
+                  "high": 248500,
+                  "low": 245500,
+                  "close": 246500,
+                  "volume": 630018
+                },
+                {
+                  "date": "20251202",
+                  "open": 243000,
+                  "high": 245000,
+                  "low": 241500,
+                  "close": 243000,
+                  "volume": 618439
+                },
+                {
+                  "date": "20251201",
+                  "open": 246500,
+                  "high": 247500,
+                  "low": 242500,
+                  "close": 243000,
+                  "volume": 666662
+                },
+                {
+                  "date": "20251128",
+                  "open": 253500,
+                  "high": 254000,
+                  "low": 243500,
+                  "close": 244000,
+                  "volume": 1580887
+                },
+                {
+                  "date": "20251127",
+                  "open": 259500,
+                  "high": 261500,
+                  "low": 250500,
+                  "close": 251500,
+                  "volume": 2028550
+                },
+                {
+                  "date": "20251126",
+                  "open": 255000,
+                  "high": 264500,
+                  "low": 252000,
+                  "close": 263500,
+                  "volume": 944519
+                },
+                {
+                  "date": "20251125",
+                  "open": 262500,
+                  "high": 262500,
+                  "low": 250500,
+                  "close": 253000,
+                  "volume": 1218659
+                },
+                {
+                  "date": "20251124",
+                  "open": 267500,
+                  "high": 269500,
+                  "low": 259000,
+                  "close": 261000,
+                  "volume": 1673646
+                },
+                {
+                  "date": "20251121",
+                  "open": 251000,
+                  "high": 265000,
+                  "low": 249500,
+                  "close": 262500,
+                  "volume": 1278706
+                },
+                {
+                  "date": "20251120",
+                  "open": 260000,
+                  "high": 263000,
+                  "low": 254500,
+                  "close": 257000,
+                  "volume": 970537
+                },
+                {
+                  "date": "20251119",
+                  "open": 250500,
+                  "high": 251000,
+                  "low": 243000,
+                  "close": 248500,
+                  "volume": 570754
+                },
+                {
+                  "date": "20251118",
+                  "open": 251500,
+                  "high": 260500,
+                  "low": 248500,
+                  "close": 249000,
+                  "volume": 959645
+                },
+                {
+                  "date": "20251117",
+                  "open": 256500,
+                  "high": 257000,
+                  "low": 254000,
+                  "close": 255000,
+                  "volume": 507818
+                },
+                {
+                  "date": "20251114",
+                  "open": 258000,
+                  "high": 260000,
+                  "low": 253000,
+                  "close": 253500,
+                  "volume": 923411
+                },
+                {
+                  "date": "20251113",
+                  "open": 262500,
+                  "high": 266000,
+                  "low": 258500,
+                  "close": 265500,
+                  "volume": 724253
+                },
+                {
+                  "date": "20251112",
+                  "open": 265500,
+                  "high": 265500,
+                  "low": 262000,
+                  "close": 263500,
+                  "volume": 600486
+                },
+                {
+                  "date": "20251111",
+                  "open": 261500,
+                  "high": 270500,
+                  "low": 261000,
+                  "close": 263000,
+                  "volume": 1341337
+                },
+                {
+                  "date": "20251110",
+                  "open": 263500,
+                  "high": 264000,
+                  "low": 258000,
+                  "close": 260000,
+                  "volume": 974635
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "2025년 12월 19일 NAVER(035420)의 일봉 차트 데이터입니다.\n\n* 시가: 232,500원\n* 고가: 235,500원\n* 저가: 231,500원\n* 종가: 232,250원\n* 거래량: 349,699\n\n더 많은 데이터를 원하시면 말씀해주세요."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-003",
+      "instruction": "서울특별시 강남구 테헤란로 152 주소를 좌표로 변환해줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 7.937236070632935,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "AddressToCoord_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "AddressToCoord_kakao",
+          "args": {
+            "address": "서울특별시 강남구 테헤란로 152"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 269,
+        "completion_tokens": 642,
+        "total_tokens": 911
+      },
+      "ttft_stats": {
+        "average": 3.9391227709129453,
+        "min": 2.7624365417286754,
+        "max": 5.115809000097215,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "AddressToCoord_kakao",
+          "arguments": {
+            "address": "서울특별시 강남구 테헤란로 152"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "address": "서울특별시 강남구 테헤란로 152",
+            "latitude": 37.5000242405515,
+            "longitude": 127.036508620542,
+            "address_name": "서울 강남구 테헤란로 152"
+          }
+        }
+      ],
+      "final_response": "주소: 서울특별시 강남구 테헤란로 152\n위도: 37.5000242405515\n경도: 127.036508620542",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울특별시 강남구 테헤란로 152 주소를 좌표로 변환해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_9cf6a5b0624d40d48a00de7dd677",
+            "content": {
+              "address": "서울특별시 강남구 테헤란로 152",
+              "latitude": 37.5000242405515,
+              "longitude": 127.036508620542,
+              "address_name": "서울 강남구 테헤란로 152"
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "주소: 서울특별시 강남구 테헤란로 152\n위도: 37.5000242405515\n경도: 127.036508620542"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-004",
+      "instruction": "테슬라(TSLA) 주가를 확인하고 싶어",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 6.235188961029053,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "USStockPrice_kis"
+      ],
+      "golden_action": [
+        {
+          "tool": "USStockPrice_kis",
+          "args": {
+            "symbol": "TSLA",
+            "exchange": "NASDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 212,
+        "completion_tokens": 387,
+        "total_tokens": 599
+      },
+      "ttft_stats": {
+        "average": 3.0967263961210847,
+        "min": 1.4024421251378953,
+        "max": 4.791010667104274,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "USStockPrice_kis",
+          "arguments": {
+            "exchange": "NASDAQ",
+            "symbol": "TSLA"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "symbol": "TSLA",
+            "exchange": "NASDAQ",
+            "current_price": 483.37,
+            "change_rate": 3.45,
+            "volume": 95168446
+          }
+        }
+      ],
+      "final_response": "테슬라(TSLA)의 현재 주가는 483.37달러이며, 등락률은 3.45%입니다. 거래량은 95,168,446주입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "테슬라(TSLA) 주가를 확인하고 싶어"
+          },
+          {
+            "role": "assistant",
+            "content": "테슬라 주가를 조회해드릴게요."
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_013ef934af0b4917ab8e2fcb5b75",
+            "content": {
+              "symbol": "TSLA",
+              "exchange": "NASDAQ",
+              "current_price": 483.37,
+              "change_rate": 3.45,
+              "volume": 95168446
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "테슬라(TSLA)의 현재 주가는 483.37달러이며, 등락률은 3.45%입니다. 거래량은 95,168,446주입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-005",
+      "instruction": "코스닥 지수 현재 상황을 알려줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 9.815757751464844,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketIndex_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketIndex_ls",
+          "args": {
+            "jisu": "KOSDAQ"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1091,
+        "completion_tokens": 843,
+        "total_tokens": 1934
+      },
+      "ttft_stats": {
+        "average": 4.886058520991355,
+        "min": 3.0459137498401105,
+        "max": 6.7262032921426,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketIndex_ls",
+          "arguments": {
+            "jisu": "KOSDAQ"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "t1511OutBlock": {
+              "gubun": "2",
+              "hname": "코스닥 종합",
+              "pricejisu": "913.27",
+              "jniljisu": "901.33",
+              "sign": "2",
+              "change": "11.94",
+              "diffjisu": "1.32",
+              "jnilvolume": 900507,
+              "volume": 558124,
+              "volumechange": -342383,
+              "volumerate": "61.98",
+              "jnilvalue": 10091584,
+              "value": 6728564,
+              "valuechange": -3363020,
+              "valuerate": "66.68",
+              "openjisu": "909.70",
+              "opendiff": "0.93",
+              "opentime": "090030",
+              "highjisu": "916.57",
+              "highdiff": "1.69",
+              "hightime": "112530",
+              "lowjisu": "899.25",
+              "lowdiff": "-0.23",
+              "lowtime": "095030",
+              "whjisu": "943.19",
+              "whchange": "-3.17",
+              "whjday": "20251211",
+              "wljisu": "637.55",
+              "wlchange": "43.25",
+              "wljday": "20250409",
+              "yhjisu": "943.19",
+              "yhchange": "-3.17",
+              "yhjday": "20251211",
+              "yljisu": "637.55",
+              "ylchange": "43.25",
+              "yljday": "20250409",
+              "firstjcode": "301",
+              "firstjname": "코스닥 종합",
+              "firstjisu": "913.27",
+              "firsign": "2",
+              "firchange": "11.94",
+              "firdiff": "0.13",
+              "secondjcode": "339",
+              "secondjname": "KOSDAQ100",
+              "secondjisu": "2240.56",
+              "secsign": "2",
+              "secchange": "33.53",
+              "secdiff": "1.52",
+              "thirdjcode": "405",
+              "thirdjname": "KOSDAQ 150",
+              "thirdjisu": "1534.86",
+              "thrsign": "2",
+              "thrchange": "23.68",
+              "thrdiff": "1.57",
+              "fourthjcode": "324",
+              "fourthjname": "전 기/전 자",
+              "fourthjisu": "1431.37",
+              "forsign": "2",
+              "forchange": "6.47",
+              "fordiff": "0.45",
+              "highjo": 932,
+              "upjo": 2,
+              "unchgjo": 206,
+              "lowjo": 685,
+              "downjo": 0
+            },
+            "rsp_cd": "00000",
+            "rsp_msg": "정상적으로 조회가 완료되었습니다."
+          }
+        }
+      ],
+      "final_response": "현재 코스닥 지수는 913.27이며, 어제보다 11.94포인트(1.32%) 상승했습니다. 거래량은 5억5812만주, 거래대금은 6조7285억원을 기록하고 있습니다. 오늘 코스닥 지수는 909.70으로 시작하여, 장중 최고 916.57, 최저 899.25를 기록했습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "코스닥 지수 현재 상황을 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_21feea6c3b354c65961d2a21ed27",
+            "content": {
+              "t1511OutBlock": {
+                "gubun": "2",
+                "hname": "코스닥 종합",
+                "pricejisu": "913.27",
+                "jniljisu": "901.33",
+                "sign": "2",
+                "change": "11.94",
+                "diffjisu": "1.32",
+                "jnilvolume": 900507,
+                "volume": 558124,
+                "volumechange": -342383,
+                "volumerate": "61.98",
+                "jnilvalue": 10091584,
+                "value": 6728564,
+                "valuechange": -3363020,
+                "valuerate": "66.68",
+                "openjisu": "909.70",
+                "opendiff": "0.93",
+                "opentime": "090030",
+                "highjisu": "916.57",
+                "highdiff": "1.69",
+                "hightime": "112530",
+                "lowjisu": "899.25",
+                "lowdiff": "-0.23",
+                "lowtime": "095030",
+                "whjisu": "943.19",
+                "whchange": "-3.17",
+                "whjday": "20251211",
+                "wljisu": "637.55",
+                "wlchange": "43.25",
+                "wljday": "20250409",
+                "yhjisu": "943.19",
+                "yhchange": "-3.17",
+                "yhjday": "20251211",
+                "yljisu": "637.55",
+                "ylchange": "43.25",
+                "yljday": "20250409",
+                "firstjcode": "301",
+                "firstjname": "코스닥 종합",
+                "firstjisu": "913.27",
+                "firsign": "2",
+                "firchange": "11.94",
+                "firdiff": "0.13",
+                "secondjcode": "339",
+                "secondjname": "KOSDAQ100",
+                "secondjisu": "2240.56",
+                "secsign": "2",
+                "secchange": "33.53",
+                "secdiff": "1.52",
+                "thirdjcode": "405",
+                "thirdjname": "KOSDAQ 150",
+                "thirdjisu": "1534.86",
+                "thrsign": "2",
+                "thrchange": "23.68",
+                "thrdiff": "1.57",
+                "fourthjcode": "324",
+                "fourthjname": "전 기/전 자",
+                "fourthjisu": "1431.37",
+                "forsign": "2",
+                "forchange": "6.47",
+                "fordiff": "0.45",
+                "highjo": 932,
+                "upjo": 2,
+                "unchgjo": 206,
+                "lowjo": 685,
+                "downjo": 0
+              },
+              "rsp_cd": "00000",
+              "rsp_msg": "정상적으로 조회가 완료되었습니다."
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "현재 코스닥 지수는 913.27이며, 어제보다 11.94포인트(1.32%) 상승했습니다. 거래량은 5억5812만주, 거래대금은 6조7285억원을 기록하고 있습니다. 오늘 코스닥 지수는 909.70으로 시작하여, 장중 최고 916.57, 최저 899.25를 기록했습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-006",
+      "instruction": "ISBN 9788936434267 책의 상세 정보를 알려줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 19.24326205253601,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemLookup_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemLookup_aladin",
+          "args": {
+            "item_id": "9788936434267",
+            "item_id_type": "ISBN13"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1694,
+        "completion_tokens": 1902,
+        "total_tokens": 3596
+      },
+      "ttft_stats": {
+        "average": 9.597648958442733,
+        "min": 9.416858042124659,
+        "max": 9.778439874760807,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemLookup_aladin",
+          "arguments": {
+            "item_id": "9788936434267",
+            "opt_result": "Toc",
+            "item_id_type": "ISBN13",
+            "cover": "Big"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "version": "20131101",
+            "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+            "title": "알라딘 상품정보 - 아몬드 (양장 특별 한정판)",
+            "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=168390448&amp;partner=openAPI",
+            "pubDate": "Fri, 19 Dec 2025 02:53:33 GMT",
+            "totalResults": 1,
+            "startIndex": 1,
+            "itemsPerPage": 1,
+            "query": "isbn13=9788936434267",
+            "searchCategoryId": 0,
+            "searchCategoryName": "",
+            "item": [
+              {
+                "title": "아몬드 (양장 특별 한정판) - 제10회 창비 청소년문학상 수상작",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=168390448&amp;partner=openAPI&amp;start=api",
+                "author": "손원평 (지은이)",
+                "pubDate": "2017-03-31",
+                "description": "제10회 창비청소년문학상을 수상하며 등단한 손원평 작가의 첫 장편소설 &lt;아몬드&gt;가 출간 1년 만에 20만부를 맞아 선물용 특별판 &lt;아몬드&gt;를 선보인다. 세대를 넘나들며 독자들의 큰 사랑을 받은 &lt;아몬드&gt;는 문학성과 대중성을 아우르며 10대부터 60대까지 다양한 독자들을 단숨에 사로잡았다.",
+                "isbn": "K132635166",
+                "isbn13": "9788936434267",
+                "itemId": 168390448,
+                "priceSales": 10800,
+                "priceStandard": 12000,
+                "mallType": "BOOK",
+                "stockStatus": "절판",
+                "mileage": 600,
+                "cover": "https://image.aladin.co.kr/product/16839/4/cover200/k492534773_1.jpg",
+                "categoryId": 50993,
+                "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                "publisher": "창비",
+                "salesPoint": 33434,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "subInfo": {
+                  "subTitle": "제10회 창비 청소년문학상 수상작",
+                  "originalTitle": "",
+                  "itemPage": 264
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "다음은 ISBN 9788936434267에 해당하는 책의 상세 정보입니다.\n\n**아몬드 (양장 특별 한정판)**\n\n* **",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "ISBN 9788936434267 책의 상세 정보를 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_90b3d3e5ba0a4d9da72762aa446b",
+            "content": {
+              "version": "20131101",
+              "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+              "title": "알라딘 상품정보 - 아몬드 (양장 특별 한정판)",
+              "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=168390448&amp;partner=openAPI",
+              "pubDate": "Fri, 19 Dec 2025 02:53:33 GMT",
+              "totalResults": 1,
+              "startIndex": 1,
+              "itemsPerPage": 1,
+              "query": "isbn13=9788936434267",
+              "searchCategoryId": 0,
+              "searchCategoryName": "",
+              "item": [
+                {
+                  "title": "아몬드 (양장 특별 한정판) - 제10회 창비 청소년문학상 수상작",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=168390448&amp;partner=openAPI&amp;start=api",
+                  "author": "손원평 (지은이)",
+                  "pubDate": "2017-03-31",
+                  "description": "제10회 창비청소년문학상을 수상하며 등단한 손원평 작가의 첫 장편소설 &lt;아몬드&gt;가 출간 1년 만에 20만부를 맞아 선물용 특별판 &lt;아몬드&gt;를 선보인다. 세대를 넘나들며 독자들의 큰 사랑을 받은 &lt;아몬드&gt;는 문학성과 대중성을 아우르며 10대부터 60대까지 다양한 독자들을 단숨에 사로잡았다.",
+                  "isbn": "K132635166",
+                  "isbn13": "9788936434267",
+                  "itemId": 168390448,
+                  "priceSales": 10800,
+                  "priceStandard": 12000,
+                  "mallType": "BOOK",
+                  "stockStatus": "절판",
+                  "mileage": 600,
+                  "cover": "https://image.aladin.co.kr/product/16839/4/cover200/k492534773_1.jpg",
+                  "categoryId": 50993,
+                  "categoryName": "국내도서>소설/시/희곡>한국소설>2000년대 이후 한국소설",
+                  "publisher": "창비",
+                  "salesPoint": 33434,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "subInfo": {
+                    "subTitle": "제10회 창비 청소년문학상 수상작",
+                    "originalTitle": "",
+                    "itemPage": 264
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "다음은 ISBN 9788936434267에 해당하는 책의 상세 정보입니다.\n\n**아몬드 (양장 특별 한정판)**\n\n* **"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-007",
+      "instruction": "빗썸에서 비트코인 현재가를 알려줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 7.891055107116699,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "CryptoPrice_bithumb",
+          "args": {
+            "markets": "KRW-BTC"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 609,
+        "completion_tokens": 653,
+        "total_tokens": 1262
+      },
+      "ttft_stats": {
+        "average": 3.921432104194537,
+        "min": 2.8113055410794914,
+        "max": 5.031558667309582,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CryptoPrice_bithumb",
+          "arguments": {
+            "markets": "KRW-BTC"
+          },
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-BTC",
+              "trade_date": "20251219",
+              "trade_time": "025344",
+              "trade_date_kst": "20251219",
+              "trade_time_kst": "115344",
+              "trade_timestamp": 1766145224688,
+              "opening_price": 131284000,
+              "high_price": 132570000,
+              "low_price": 126200000,
+              "trade_price": 127849000,
+              "prev_closing_price": 131285000,
+              "change": "FALL",
+              "change_price": 3436000,
+              "change_rate": 0.0262,
+              "signed_change_price": -3436000,
+              "signed_change_rate": -0.0262,
+              "trade_volume": 0.01415961,
+              "acc_trade_price": 80104025832.16266,
+              "acc_trade_price_24h": 143576975305.93433,
+              "acc_trade_volume": 625.34268485,
+              "acc_trade_volume_24h": 1111.60496365,
+              "highest_52_week_price": 179734000,
+              "highest_52_week_date": "2025-10-10",
+              "lowest_52_week_price": 111850000,
+              "lowest_52_week_date": "2025-04-08",
+              "timestamp": 1766145224688
+            }
+          ]
+        }
+      ],
+      "final_response": "빗썸에서 비트코인(BTC)의 현재가는 127,849,000원입니다. 이는 전일 대비 3,436,000원(2.62%) 하락한 가격입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 비트코인 현재가를 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_7966ccb48b584681bf8c0a289c01",
+            "content": [
+              {
+                "market": "KRW-BTC",
+                "trade_date": "20251219",
+                "trade_time": "025344",
+                "trade_date_kst": "20251219",
+                "trade_time_kst": "115344",
+                "trade_timestamp": 1766145224688,
+                "opening_price": 131284000,
+                "high_price": 132570000,
+                "low_price": 126200000,
+                "trade_price": 127849000,
+                "prev_closing_price": 131285000,
+                "change": "FALL",
+                "change_price": 3436000,
+                "change_rate": 0.0262,
+                "signed_change_price": -3436000,
+                "signed_change_rate": -0.0262,
+                "trade_volume": 0.01415961,
+                "acc_trade_price": 80104025832.16266,
+                "acc_trade_price_24h": 143576975305.93433,
+                "acc_trade_volume": 625.34268485,
+                "acc_trade_volume_24h": 1111.60496365,
+                "highest_52_week_price": 179734000,
+                "highest_52_week_date": "2025-10-10",
+                "lowest_52_week_price": 111850000,
+                "lowest_52_week_date": "2025-04-08",
+                "timestamp": 1766145224688
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": "빗썸에서 비트코인(BTC)의 현재가는 127,849,000원입니다. 이는 전일 대비 3,436,000원(2.62%) 하락한 가격입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-008",
+      "instruction": "강남역(127.027621, 37.498095) 주변 카페를 찾아줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 12.044731140136719,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "CategorySearch_kakao"
+      ],
+      "golden_action": [
+        {
+          "tool": "CategorySearch_kakao",
+          "args": {
+            "category": "CE7",
+            "x": 127.027621,
+            "y": 37.498095,
+            "radius": 500
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 2615,
+        "completion_tokens": 945,
+        "total_tokens": 3560
+      },
+      "ttft_stats": {
+        "average": 5.9850994783919305,
+        "min": 4.354714666027576,
+        "max": 7.615484290756285,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "CategorySearch_kakao",
+          "arguments": {
+            "x": 127.027621,
+            "y": 37.498095,
+            "category": "CE7"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "category": "CE7",
+            "total_count": 589,
+            "places": [
+              {
+                "name": "벌툰 엔틱 강남역점",
+                "latitude": 37.5007307950853,
+                "longitude": 127.027978644718,
+                "address": "서울 강남구 역삼동 817-35",
+                "phone": "02-569-4976",
+                "distance": "294"
+              },
+              {
+                "name": "놀숲 강남역점",
+                "latitude": 37.50098127819602,
+                "longitude": 127.02796403633766,
+                "address": "서울 강남구 역삼동 620-9",
+                "phone": "02-558-5846",
+                "distance": "321"
+              },
+              {
+                "name": "벌툰 파리지앵 강남본점",
+                "latitude": 37.50026197173603,
+                "longitude": 127.02531519997575,
+                "address": "서울 서초구 서초동 1307-18",
+                "phone": "02-533-4976",
+                "distance": "315"
+              },
+              {
+                "name": "레드버튼 시네마강남점",
+                "latitude": 37.5003940501115,
+                "longitude": 127.026984456104,
+                "address": "서울 강남구 역삼동 816",
+                "phone": "02-556-3799",
+                "distance": "261"
+              },
+              {
+                "name": "레드버튼 강남점",
+                "latitude": 37.501931286572834,
+                "longitude": 127.0264523435014,
+                "address": "서울 강남구 역삼동 814-5",
+                "phone": "02-566-3799",
+                "distance": "437"
+              },
+              {
+                "name": "놀숲 강남교보타워점",
+                "latitude": 37.502548906046734,
+                "longitude": 127.02445419990524,
+                "address": "서울 서초구 서초동 1303-36",
+                "phone": "02-533-7533",
+                "distance": "567"
+              },
+              {
+                "name": "레드버튼 강남2호점",
+                "latitude": 37.4998154950733,
+                "longitude": 127.027458092239,
+                "address": "서울 강남구 역삼동 816-4",
+                "phone": "02-553-3799",
+                "distance": "191"
+              },
+              {
+                "name": "홈즈앤루팡 강남점",
+                "latitude": 37.5014554146078,
+                "longitude": 127.027074180594,
+                "address": "서울 강남구 역삼동 619-16",
+                "phone": "02-567-8707",
+                "distance": "375"
+              },
+              {
+                "name": "토즈모임센터 강남역토즈타워점",
+                "latitude": 37.4967332799105,
+                "longitude": 127.030605241506,
+                "address": "서울 강남구 역삼동 827-3",
+                "phone": "02-3454-0116",
+                "distance": "304"
+              },
+              {
+                "name": "데블다이스 강남점",
+                "latitude": 37.5001074514454,
+                "longitude": 127.027327015002,
+                "address": "서울 강남구 역삼동 816-6",
+                "phone": "0507-1370-3912",
+                "distance": "224"
+              },
+              {
+                "name": "데블다이스 강남대로점",
+                "latitude": 37.500743715131364,
+                "longitude": 127.0266554878841,
+                "address": "서울 강남구 역삼동 815-4",
+                "phone": "0507-1371-3912",
+                "distance": "306"
+              },
+              {
+                "name": "알베르",
+                "latitude": 37.50305626160175,
+                "longitude": 127.02810278517197,
+                "address": "서울 강남구 역삼동 618-11",
+                "phone": "02-566-6181",
+                "distance": "552"
+              },
+              {
+                "name": "키이스케이프 강남점",
+                "latitude": 37.5001035869388,
+                "longitude": 127.028430769789,
+                "address": "서울 강남구 역삼동 817-21",
+                "phone": "010-7456-6082",
+                "distance": "234"
+              },
+              {
+                "name": "스타벅스 강남R점",
+                "latitude": 37.4976744709989,
+                "longitude": 127.028443419181,
+                "address": "서울 강남구 역삼동 825",
+                "phone": "1522-3232",
+                "distance": "86"
+              },
+              {
+                "name": "장꼬방",
+                "latitude": 37.498331428974,
+                "longitude": 127.023807097178,
+                "address": "서울 서초구 서초동 1316",
+                "phone": "02-597-5511",
+                "distance": "338"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "강남역 주변 카페를 찾았습니다.\n\n* 벌툰 엔팅 강남역점\n* 놀숲 강남역점\n* 벌툰 파리지앵 강남본점\n* 레드버튼 시네마강남점\n* 레드버튼 강남점\n* 놀숲 강남교보타워점\n* 레드버튼 강남2호점\n* 홈즈앤루팡 강남점\n* 토즈모임센터 강남역토즈타워점\n* 데블다이스 강남점\n\n이 외에도 많은 카페가 있습니다. 다른 장소를 찾아드릴까요?",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "강남역(127.027621, 37.498095) 주변 카페를 찾아줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_202f84e9d3d8493abedea170c4e9",
+            "content": {
+              "category": "CE7",
+              "total_count": 589,
+              "places": [
+                {
+                  "name": "벌툰 엔틱 강남역점",
+                  "latitude": 37.5007307950853,
+                  "longitude": 127.027978644718,
+                  "address": "서울 강남구 역삼동 817-35",
+                  "phone": "02-569-4976",
+                  "distance": "294"
+                },
+                {
+                  "name": "놀숲 강남역점",
+                  "latitude": 37.50098127819602,
+                  "longitude": 127.02796403633766,
+                  "address": "서울 강남구 역삼동 620-9",
+                  "phone": "02-558-5846",
+                  "distance": "321"
+                },
+                {
+                  "name": "벌툰 파리지앵 강남본점",
+                  "latitude": 37.50026197173603,
+                  "longitude": 127.02531519997575,
+                  "address": "서울 서초구 서초동 1307-18",
+                  "phone": "02-533-4976",
+                  "distance": "315"
+                },
+                {
+                  "name": "레드버튼 시네마강남점",
+                  "latitude": 37.5003940501115,
+                  "longitude": 127.026984456104,
+                  "address": "서울 강남구 역삼동 816",
+                  "phone": "02-556-3799",
+                  "distance": "261"
+                },
+                {
+                  "name": "레드버튼 강남점",
+                  "latitude": 37.501931286572834,
+                  "longitude": 127.0264523435014,
+                  "address": "서울 강남구 역삼동 814-5",
+                  "phone": "02-566-3799",
+                  "distance": "437"
+                },
+                {
+                  "name": "놀숲 강남교보타워점",
+                  "latitude": 37.502548906046734,
+                  "longitude": 127.02445419990524,
+                  "address": "서울 서초구 서초동 1303-36",
+                  "phone": "02-533-7533",
+                  "distance": "567"
+                },
+                {
+                  "name": "레드버튼 강남2호점",
+                  "latitude": 37.4998154950733,
+                  "longitude": 127.027458092239,
+                  "address": "서울 강남구 역삼동 816-4",
+                  "phone": "02-553-3799",
+                  "distance": "191"
+                },
+                {
+                  "name": "홈즈앤루팡 강남점",
+                  "latitude": 37.5014554146078,
+                  "longitude": 127.027074180594,
+                  "address": "서울 강남구 역삼동 619-16",
+                  "phone": "02-567-8707",
+                  "distance": "375"
+                },
+                {
+                  "name": "토즈모임센터 강남역토즈타워점",
+                  "latitude": 37.4967332799105,
+                  "longitude": 127.030605241506,
+                  "address": "서울 강남구 역삼동 827-3",
+                  "phone": "02-3454-0116",
+                  "distance": "304"
+                },
+                {
+                  "name": "데블다이스 강남점",
+                  "latitude": 37.5001074514454,
+                  "longitude": 127.027327015002,
+                  "address": "서울 강남구 역삼동 816-6",
+                  "phone": "0507-1370-3912",
+                  "distance": "224"
+                },
+                {
+                  "name": "데블다이스 강남대로점",
+                  "latitude": 37.500743715131364,
+                  "longitude": 127.0266554878841,
+                  "address": "서울 강남구 역삼동 815-4",
+                  "phone": "0507-1371-3912",
+                  "distance": "306"
+                },
+                {
+                  "name": "알베르",
+                  "latitude": 37.50305626160175,
+                  "longitude": 127.02810278517197,
+                  "address": "서울 강남구 역삼동 618-11",
+                  "phone": "02-566-6181",
+                  "distance": "552"
+                },
+                {
+                  "name": "키이스케이프 강남점",
+                  "latitude": 37.5001035869388,
+                  "longitude": 127.028430769789,
+                  "address": "서울 강남구 역삼동 817-21",
+                  "phone": "010-7456-6082",
+                  "distance": "234"
+                },
+                {
+                  "name": "스타벅스 강남R점",
+                  "latitude": 37.4976744709989,
+                  "longitude": 127.028443419181,
+                  "address": "서울 강남구 역삼동 825",
+                  "phone": "1522-3232",
+                  "distance": "86"
+                },
+                {
+                  "name": "장꼬방",
+                  "latitude": 37.498331428974,
+                  "longitude": 127.023807097178,
+                  "address": "서울 서초구 서초동 1316",
+                  "phone": "02-597-5511",
+                  "distance": "338"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "강남역 주변 카페를 찾았습니다.\n\n* 벌툰 엔팅 강남역점\n* 놀숲 강남역점\n* 벌툰 파리지앵 강남본점\n* 레드버튼 시네마강남점\n* 레드버튼 강남점\n* 놀숲 강남교보타워점\n* 레드버튼 강남2호점\n* 홈즈앤루팡 강남점\n* 토즈모임센터 강남역토즈타워점\n* 데블다이스 강남점\n\n이 외에도 많은 카페가 있습니다. 다른 장소를 찾아드릴까요?"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-009",
+      "instruction": "서울 마포구 상암동의 경위도 좌표를 T맵으로 알려줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 5.784308910369873,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "Geocoding_tmap"
+      ],
+      "golden_action": [
+        {
+          "tool": "Geocoding_tmap",
+          "args": {
+            "city_do": "서울특별시",
+            "gu_gun": "마포구",
+            "dong": "상암동"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 459,
+        "completion_tokens": 385,
+        "total_tokens": 844
+      },
+      "ttft_stats": {
+        "average": 2.72953477059491,
+        "min": 1.3434217502363026,
+        "max": 4.115647790953517,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "Geocoding_tmap",
+          "arguments": {
+            "city_do": "서울특별시",
+            "dong": "상암동",
+            "gu_gun": "마포구"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "coordinateInfo": {
+              "coordType": "WGS84GEO",
+              "addressFlag": "F01",
+              "matchFlag": "M33",
+              "lat": "37.578599",
+              "lon": "126.894768",
+              "city_do": "서울",
+              "gu_gun": "마포구",
+              "eup_myun": "",
+              "legalDong": "상암동",
+              "legalDongCode": "1144012700",
+              "adminDong": "상암동",
+              "adminDongCode": "1144074000",
+              "ri": "",
+              "bunji": "0",
+              "newMatchFlag": "",
+              "newLat": "",
+              "newLon": "",
+              "newRoadName": "",
+              "newBuildingIndex": "",
+              "newBuildingName": "",
+              "newBuildingCateName": "",
+              "remainder": ""
+            }
+          }
+        }
+      ],
+      "final_response": "서울 마포구 상암동의 좌표는 위도 37.578599, 경도 126.894768 입니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "서울 마포구 상암동의 경위도 좌표를 T맵으로 알려줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_87523b244a1d4fb7b16a69e923d4",
+            "content": {
+              "coordinateInfo": {
+                "coordType": "WGS84GEO",
+                "addressFlag": "F01",
+                "matchFlag": "M33",
+                "lat": "37.578599",
+                "lon": "126.894768",
+                "city_do": "서울",
+                "gu_gun": "마포구",
+                "eup_myun": "",
+                "legalDong": "상암동",
+                "legalDongCode": "1144012700",
+                "adminDong": "상암동",
+                "adminDongCode": "1144074000",
+                "ri": "",
+                "bunji": "0",
+                "newMatchFlag": "",
+                "newLat": "",
+                "newLon": "",
+                "newRoadName": "",
+                "newBuildingIndex": "",
+                "newBuildingName": "",
+                "newBuildingCateName": "",
+                "remainder": ""
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "서울 마포구 상암동의 좌표는 위도 37.578599, 경도 126.894768 입니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-010",
+      "instruction": "빗썸에서 이더리움 매수/매도 호가를 보여줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 8.784797191619873,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "OrderBook_bithumb"
+      ],
+      "golden_action": [
+        {
+          "tool": "OrderBook_bithumb",
+          "args": {
+            "markets": "KRW-ETH"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1858,
+        "completion_tokens": 699,
+        "total_tokens": 2557
+      },
+      "ttft_stats": {
+        "average": 4.369224291527644,
+        "min": 3.303882082924247,
+        "max": 5.434566500131041,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "OrderBook_bithumb",
+          "arguments": {
+            "markets": "KRW-ETH"
+          },
+          "success": true,
+          "error": null,
+          "result": [
+            {
+              "market": "KRW-ETH",
+              "timestamp": 1766112851561,
+              "total_ask_size": 127335000,
+              "total_bid_size": 389.9632,
+              "orderbook_units": [
+                {
+                  "ask_price": 4230000,
+                  "bid_price": 4229000,
+                  "ask_size": 0.0878,
+                  "bid_size": 0.6222
+                },
+                {
+                  "ask_price": 4231000,
+                  "bid_price": 4228000,
+                  "ask_size": 12.3416,
+                  "bid_size": 1.4189
+                },
+                {
+                  "ask_price": 4232000,
+                  "bid_price": 4227000,
+                  "ask_size": 34.1406,
+                  "bid_size": 4.3138
+                },
+                {
+                  "ask_price": 4233000,
+                  "bid_price": 4226000,
+                  "ask_size": 10.5328,
+                  "bid_size": 8.3203
+                },
+                {
+                  "ask_price": 4234000,
+                  "bid_price": 4225000,
+                  "ask_size": 8.9776,
+                  "bid_size": 19.9112
+                },
+                {
+                  "ask_price": 4235000,
+                  "bid_price": 4224000,
+                  "ask_size": 14.0014,
+                  "bid_size": 3.719
+                },
+                {
+                  "ask_price": 4236000,
+                  "bid_price": 4223000,
+                  "ask_size": 19.8997,
+                  "bid_size": 28.1312
+                },
+                {
+                  "ask_price": 4237000,
+                  "bid_price": 4222000,
+                  "ask_size": 8.6792,
+                  "bid_size": 20.7928
+                },
+                {
+                  "ask_price": 4238000,
+                  "bid_price": 4221000,
+                  "ask_size": 12.386,
+                  "bid_size": 6.9031
+                },
+                {
+                  "ask_price": 4239000,
+                  "bid_price": 4220000,
+                  "ask_size": 7.7595,
+                  "bid_size": 38.3306
+                },
+                {
+                  "ask_price": 4240000,
+                  "bid_price": 4219000,
+                  "ask_size": 3.6918,
+                  "bid_size": 9.1402
+                },
+                {
+                  "ask_price": 4241000,
+                  "bid_price": 4218000,
+                  "ask_size": 0.6463,
+                  "bid_size": 9.7638
+                },
+                {
+                  "ask_price": 4242000,
+                  "bid_price": 4217000,
+                  "ask_size": 5.054,
+                  "bid_size": 11.7364
+                },
+                {
+                  "ask_price": 4243000,
+                  "bid_price": 4216000,
+                  "ask_size": 0.5732,
+                  "bid_size": 0.4459
+                },
+                {
+                  "ask_price": 4244000,
+                  "bid_price": 4215000,
+                  "ask_size": 0.7476,
+                  "bid_size": 19.6469
+                },
+                {
+                  "ask_price": 4245000,
+                  "bid_price": 4214000,
+                  "ask_size": 17.5527,
+                  "bid_size": 2.6476
+                },
+                {
+                  "ask_price": 4246000,
+                  "bid_price": 4213000,
+                  "ask_size": 22.3344,
+                  "bid_size": 14.171
+                },
+                {
+                  "ask_price": 4247000,
+                  "bid_price": 4212000,
+                  "ask_size": 24.2188,
+                  "bid_size": 0.7701
+                },
+                {
+                  "ask_price": 4248000,
+                  "bid_price": 4211000,
+                  "ask_size": 57.7721,
+                  "bid_size": 2.9627
+                },
+                {
+                  "ask_price": 4249000,
+                  "bid_price": 4210000,
+                  "ask_size": 3.6924,
+                  "bid_size": 4.4361
+                },
+                {
+                  "ask_price": 4250000,
+                  "bid_price": 4209000,
+                  "ask_size": 6.7727,
+                  "bid_size": 0.294
+                },
+                {
+                  "ask_price": 4251000,
+                  "bid_price": 4208000,
+                  "ask_size": 1.3601,
+                  "bid_size": 18.0416
+                },
+                {
+                  "ask_price": 4252000,
+                  "bid_price": 4207000,
+                  "ask_size": 0.7187,
+                  "bid_size": 23.3598
+                },
+                {
+                  "ask_price": 4253000,
+                  "bid_price": 4206000,
+                  "ask_size": 0.8343,
+                  "bid_size": 22.9005
+                },
+                {
+                  "ask_price": 4254000,
+                  "bid_price": 4205000,
+                  "ask_size": 3.5965,
+                  "bid_size": 60.8389
+                },
+                {
+                  "ask_price": 4255000,
+                  "bid_price": 4204000,
+                  "ask_size": 0.285,
+                  "bid_size": 0.0911
+                },
+                {
+                  "ask_price": 4256000,
+                  "bid_price": 4203000,
+                  "ask_size": 1.5499,
+                  "bid_size": 0.1518
+                },
+                {
+                  "ask_price": 4257000,
+                  "bid_price": 4202000,
+                  "ask_size": 0.5563,
+                  "bid_size": 0.9523
+                },
+                {
+                  "ask_price": 4258000,
+                  "bid_price": 4201000,
+                  "ask_size": 0.9056,
+                  "bid_size": 5.087
+                },
+                {
+                  "ask_price": 4259000,
+                  "bid_price": 4200000,
+                  "ask_size": 0.631,
+                  "bid_size": 50.0624
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "final_response": "빗썸 이더리움(KRW-ETH)의 현재 시세 정보입니다.\n\n매도 호가: 4,230,000 KRW / 매수 호가: 4,229,000 KRW\n매도 호가: 4,231,000 KRW / 매수 호가: 4,228,000 KRW\n매도 호가: 4,232,000 KRW / 매수 호가: 4,227,000 KRW\n매도 호가: 4,233,000 KRW / 매수 호가: 4,226,000 KRW\n매도 호가: 4,234,000 KRW / 매수 호가: 4,225,000 KRW",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "빗썸에서 이더리움 매수/매도 호가를 보여줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_a95ed41192c74cd6a02f1c2fa076",
+            "content": [
+              {
+                "market": "KRW-ETH",
+                "timestamp": 1766112851561,
+                "total_ask_size": 127335000,
+                "total_bid_size": 389.9632,
+                "orderbook_units": [
+                  {
+                    "ask_price": 4230000,
+                    "bid_price": 4229000,
+                    "ask_size": 0.0878,
+                    "bid_size": 0.6222
+                  },
+                  {
+                    "ask_price": 4231000,
+                    "bid_price": 4228000,
+                    "ask_size": 12.3416,
+                    "bid_size": 1.4189
+                  },
+                  {
+                    "ask_price": 4232000,
+                    "bid_price": 4227000,
+                    "ask_size": 34.1406,
+                    "bid_size": 4.3138
+                  },
+                  {
+                    "ask_price": 4233000,
+                    "bid_price": 4226000,
+                    "ask_size": 10.5328,
+                    "bid_size": 8.3203
+                  },
+                  {
+                    "ask_price": 4234000,
+                    "bid_price": 4225000,
+                    "ask_size": 8.9776,
+                    "bid_size": 19.9112
+                  },
+                  {
+                    "ask_price": 4235000,
+                    "bid_price": 4224000,
+                    "ask_size": 14.0014,
+                    "bid_size": 3.719
+                  },
+                  {
+                    "ask_price": 4236000,
+                    "bid_price": 4223000,
+                    "ask_size": 19.8997,
+                    "bid_size": 28.1312
+                  },
+                  {
+                    "ask_price": 4237000,
+                    "bid_price": 4222000,
+                    "ask_size": 8.6792,
+                    "bid_size": 20.7928
+                  },
+                  {
+                    "ask_price": 4238000,
+                    "bid_price": 4221000,
+                    "ask_size": 12.386,
+                    "bid_size": 6.9031
+                  },
+                  {
+                    "ask_price": 4239000,
+                    "bid_price": 4220000,
+                    "ask_size": 7.7595,
+                    "bid_size": 38.3306
+                  },
+                  {
+                    "ask_price": 4240000,
+                    "bid_price": 4219000,
+                    "ask_size": 3.6918,
+                    "bid_size": 9.1402
+                  },
+                  {
+                    "ask_price": 4241000,
+                    "bid_price": 4218000,
+                    "ask_size": 0.6463,
+                    "bid_size": 9.7638
+                  },
+                  {
+                    "ask_price": 4242000,
+                    "bid_price": 4217000,
+                    "ask_size": 5.054,
+                    "bid_size": 11.7364
+                  },
+                  {
+                    "ask_price": 4243000,
+                    "bid_price": 4216000,
+                    "ask_size": 0.5732,
+                    "bid_size": 0.4459
+                  },
+                  {
+                    "ask_price": 4244000,
+                    "bid_price": 4215000,
+                    "ask_size": 0.7476,
+                    "bid_size": 19.6469
+                  },
+                  {
+                    "ask_price": 4245000,
+                    "bid_price": 4214000,
+                    "ask_size": 17.5527,
+                    "bid_size": 2.6476
+                  },
+                  {
+                    "ask_price": 4246000,
+                    "bid_price": 4213000,
+                    "ask_size": 22.3344,
+                    "bid_size": 14.171
+                  },
+                  {
+                    "ask_price": 4247000,
+                    "bid_price": 4212000,
+                    "ask_size": 24.2188,
+                    "bid_size": 0.7701
+                  },
+                  {
+                    "ask_price": 4248000,
+                    "bid_price": 4211000,
+                    "ask_size": 57.7721,
+                    "bid_size": 2.9627
+                  },
+                  {
+                    "ask_price": 4249000,
+                    "bid_price": 4210000,
+                    "ask_size": 3.6924,
+                    "bid_size": 4.4361
+                  },
+                  {
+                    "ask_price": 4250000,
+                    "bid_price": 4209000,
+                    "ask_size": 6.7727,
+                    "bid_size": 0.294
+                  },
+                  {
+                    "ask_price": 4251000,
+                    "bid_price": 4208000,
+                    "ask_size": 1.3601,
+                    "bid_size": 18.0416
+                  },
+                  {
+                    "ask_price": 4252000,
+                    "bid_price": 4207000,
+                    "ask_size": 0.7187,
+                    "bid_size": 23.3598
+                  },
+                  {
+                    "ask_price": 4253000,
+                    "bid_price": 4206000,
+                    "ask_size": 0.8343,
+                    "bid_size": 22.9005
+                  },
+                  {
+                    "ask_price": 4254000,
+                    "bid_price": 4205000,
+                    "ask_size": 3.5965,
+                    "bid_size": 60.8389
+                  },
+                  {
+                    "ask_price": 4255000,
+                    "bid_price": 4204000,
+                    "ask_size": 0.285,
+                    "bid_size": 0.0911
+                  },
+                  {
+                    "ask_price": 4256000,
+                    "bid_price": 4203000,
+                    "ask_size": 1.5499,
+                    "bid_size": 0.1518
+                  },
+                  {
+                    "ask_price": 4257000,
+                    "bid_price": 4202000,
+                    "ask_size": 0.5563,
+                    "bid_size": 0.9523
+                  },
+                  {
+                    "ask_price": 4258000,
+                    "bid_price": 4201000,
+                    "ask_size": 0.9056,
+                    "bid_size": 5.087
+                  },
+                  {
+                    "ask_price": 4259000,
+                    "bid_price": 4200000,
+                    "ask_size": 0.631,
+                    "bid_size": 50.0624
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": "빗썸 이더리움(KRW-ETH)의 현재 시세 정보입니다.\n\n매도 호가: 4,230,000 KRW / 매수 호가: 4,229,000 KRW\n매도 호가: 4,231,000 KRW / 매수 호가: 4,228,000 KRW\n매도 호가: 4,232,000 KRW / 매수 호가: 4,227,000 KRW\n매도 호가: 4,233,000 KRW / 매수 호가: 4,226,000 KRW\n매도 호가: 4,234,000 KRW / 매수 호가: 4,225,000 KRW"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-011",
+      "instruction": "이번 주 경제경영 베스트셀러 목록을 보여줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 16.979583024978638,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "ItemList_aladin"
+      ],
+      "golden_action": [
+        {
+          "tool": "ItemList_aladin",
+          "args": {
+            "query_type": "Bestseller",
+            "category_id": 170
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 12027,
+        "completion_tokens": 1670,
+        "total_tokens": 13697
+      },
+      "ttft_stats": {
+        "average": 8.437487999442965,
+        "min": 6.664004790596664,
+        "max": 10.210971208289266,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "ItemList_aladin",
+          "arguments": {
+            "category_id": 170,
+            "query_type": "Bestseller"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "version": "20131101",
+            "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+            "title": "알라딘 베스트셀러 리스트 - 경제경영",
+            "link": "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&amp;BranchType=1&amp;CID=170&amp;Year=2025&amp;Month=12&amp;Week=3&amp;partner=openAPI",
+            "pubDate": "Fri, 19 Dec 2025 02:54:24 GMT",
+            "totalResults": 1000,
+            "startIndex": 1,
+            "itemsPerPage": 10,
+            "query": "QueryType=BESTSELLER;CategoryId=170;Year=2025;Month=12;Week=3",
+            "searchCategoryId": 170,
+            "searchCategoryName": "경제경영",
+            "item": [
+              {
+                "title": "진보를 위한 주식투자 - 광수네 복덕방, 모두의 투자 이야기",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379685661&amp;partner=openAPI&amp;start=api",
+                "author": "이광수 (지은이)",
+                "pubDate": "2025-12-17",
+                "description": "광수네 복덕방 대표이자 경제 분야의 핵심 ‘진보 패널’로 꼽히는 이광수는 〈뉴스공장〉, 〈매불쇼〉 등 굵직한 시사·경제 채널에서 주식의 본질을 ‘시장 참여’와 ‘주권 행위’로 설명해온 해설자다. 이 책은 그의 메시지를 본격적으로 체계화한 첫 결과물이자, 진보가 자본을 통해 세상을 바꾸기 위해 반드시 알아야 할 원칙과 전략을 담은 첫 안내서다.",
+                "isbn": "K712034767",
+                "isbn13": "9791173576577",
+                "itemId": 379685661,
+                "priceSales": 19800,
+                "priceStandard": 22000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1100,
+                "cover": "https://image.aladin.co.kr/product/37968/56/coversum/k712034767_1.jpg",
+                "categoryId": 174,
+                "categoryName": "국내도서>경제경영>재테크/투자>주식/펀드",
+                "publisher": "21세기북스",
+                "salesPoint": 57770,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 8,
+                "bestRank": 1,
+                "subInfo": {}
+              },
+              {
+                "title": "박곰희 연금 부자 수업 (10만 부 기념 스페셜 에디션) - 4개의 통장으로 월 300만 원 만들기",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379721322&amp;partner=openAPI&amp;start=api",
+                "author": "박곰희 (지은이)",
+                "pubDate": "2025-06-25",
+                "description": "출간 직후 전 서점 베스트셀러에 등극한 《박곰희 연금 부자 수업》이 6개월 만에 누적 10만 부 돌파를 기념하며 스페셜 에디션을 선보인다. 노후 자산 설계에 대한 전 국민의 관심 속에 ‘연금 투자 입문서’로 자리 잡은 이 책은 ‘개인파산 신청자 86%가 50대 이상’ ‘성인 4명 중 1명 노후 준비 포기’라는 현실적 위기 속에서 누구나 적용할 수 있는 가장 현실적인 대안으로 주목받고 있다.",
+                "isbn": "K492034866",
+                "isbn13": "9791168342941",
+                "itemId": 379721322,
+                "priceSales": 18900,
+                "priceStandard": 21000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1050,
+                "cover": "https://image.aladin.co.kr/product/37972/13/coversum/k492034866_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "인플루엔셜(주)",
+                "salesPoint": 178838,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 2,
+                "subInfo": {}
+              },
+              {
+                "title": "박곰희 연금 부자 수업 - 4개의 통장으로 월 300만 원 만들기",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=366615290&amp;partner=openAPI&amp;start=api",
+                "author": "박곰희 (지은이)",
+                "pubDate": "2025-06-25",
+                "description": "베스트셀러 《박곰희 투자법》 출간 5년 만에 돌아온 금융 유튜버 박곰희가 이번엔 연금으로 평생 월급 받는 비밀을 공개한다. 절실한 질문들에 대한 현실적이고 구체적인 답변을 《박곰희 연금 부자 수업》에 녹여냈다.",
+                "isbn": "K972030181",
+                "isbn13": "9791168342941",
+                "itemId": 366615290,
+                "priceSales": 18900,
+                "priceStandard": 21000,
+                "mallType": "BOOK",
+                "stockStatus": "품절",
+                "mileage": 1050,
+                "cover": "https://image.aladin.co.kr/product/36661/52/coversum/k972030181_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "인플루엔셜(주)",
+                "salesPoint": 135298,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 3,
+                "subInfo": {}
+              },
+              {
+                "title": "트렌드 코리아 2026 - 2026 대한민국 소비트렌드 전망",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=371447935&amp;partner=openAPI&amp;start=api",
+                "author": "김난도, 전미영, 최지혜, 권정윤, 한다혜, 이혜원, 이수진, 서유현, 전다현, 이준영, 이향은, 김나은 (지은이)",
+                "pubDate": "2025-09-25",
+                "description": "세상은 작용과 반작용, 치열한 정반합(正反合)의 소용돌이가 거세게 휘몰아치고 있다. 방향을 잡기 어려울 정도로 속도가 빠르고 정신이 없다. 그렇다면 우리의 방향타는 어디에 있는가? 거센 풍랑과 어디서 불어올지 모르는 태풍을 피하기 위해 우리는 어디에 닻을 내리고 있어야 하는가?",
+                "isbn": "K442031479",
+                "isbn13": "9791193638859",
+                "itemId": 371447935,
+                "priceSales": 18000,
+                "priceStandard": 20000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1000,
+                "cover": "https://image.aladin.co.kr/product/37144/79/coversum/k442031479_3.jpg",
+                "categoryId": 263,
+                "categoryName": "국내도서>경제경영>트렌드/미래전망>트렌드/미래전망 일반",
+                "publisher": "미래의창",
+                "salesPoint": 211665,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 9,
+                "bestRank": 4,
+                "subInfo": {}
+              },
+              {
+                "title": "달러 자산 1억으로 평생 월급 완성하라 - 집 한 채에 갇힐 것인가, 현금 부자로 살 것인가, 부록 : 이재명 시대 자산 시장 대전환 가이드북, 지금 사야 할 주식·ETF 비공개 강의",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=369730967&amp;partner=openAPI&amp;start=api",
+                "author": "채부심(채상욱) (지은이)",
+                "pubDate": "2025-08-25",
+                "description": "주식, ETF, 연금, 디지털 자산 등 다양한 자산군을 다루지만, 중심에는 ‘지속 가능한 현금 흐름을 만드는 전략’이 있다. 저자는 투자에 쓰는 시간을 줄이고, 현업과 삶의 균형을 지키면서도 자산이 성장하도록 돕는 구체적 방법을 제시한다.",
+                "isbn": "K532030823",
+                "isbn13": "9791199229976",
+                "itemId": 369730967,
+                "priceSales": 18900,
+                "priceStandard": 21000,
+                "mallType": "BOOK",
+                "stockStatus": "품절",
+                "mileage": 1050,
+                "cover": "https://image.aladin.co.kr/product/36973/9/coversum/k532030823_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "몽스북",
+                "salesPoint": 8540,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 5,
+                "subInfo": {}
+              },
+              {
+                "title": "ETF 투자의 모든 것 - 배당수익과 주가수익 다 잡는 제2의 소득 파이프라인",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=368941145&amp;partner=openAPI&amp;start=api",
+                "author": "문일호 (지은이)",
+                "pubDate": "2025-08-11",
+                "description": "ETF는 분산투자의 장점을 살린 안전하면서도 수익률 높은 재테크다. 증권전문기자의 정보와 경험을 바탕으로, 본격적인 시작점에 있는 사람들이 당장 맞닥뜨리는 ETF 투자의 A부터 Z까지 조목조목 담아낸 책이 나왔다.",
+                "isbn": "K322030913",
+                "isbn13": "9791164847983",
+                "itemId": 368941145,
+                "priceSales": 18900,
+                "priceStandard": 21000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1050,
+                "cover": "https://image.aladin.co.kr/product/36894/11/coversum/k322030913_1.jpg",
+                "categoryId": 174,
+                "categoryName": "국내도서>경제경영>재테크/투자>주식/펀드",
+                "publisher": "매일경제신문사",
+                "salesPoint": 68043,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 6,
+                "subInfo": {}
+              },
+              {
+                "title": "평생 부자 머니 플랜 - 20대부터 노후까지 ‘돈 걱정 ZERO’ 로드맵",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379265046&amp;partner=openAPI&amp;start=api",
+                "author": "조기윤, 장경훈, 풍백(임다혜) (지은이)",
+                "pubDate": "2025-12-01",
+                "description": "재무설계사인 저자 세 명이 주식, 부동산, 세무 등 각자의 전문 분야를 살려 함께 쓴 현실형 자산관리 가이드다. 이 책은 단순히 돈을 많이 버는 법이 아니라, 지금 가진 돈부터 어떻게 다루고, 지키고, 흐름을 만들어낼 것인가, 다시 말해 ‘돈의 구조’를 설계하는 데 집중한다.",
+                "isbn": "K202033036",
+                "isbn13": "9791162544488",
+                "itemId": 379265046,
+                "priceSales": 17100,
+                "priceStandard": 19000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 950,
+                "cover": "https://image.aladin.co.kr/product/37926/50/coversum/k202033036_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "비즈니스북스",
+                "salesPoint": 21370,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 7,
+                "subInfo": {}
+              },
+              {
+                "title": "부에 이르는 가장 단순한 길 - 경제적 독립과 자유를 위한 콜린스의 3원칙",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379392258&amp;partner=openAPI&amp;start=api",
+                "author": "JL 콜린스 (지은이), 이준걸 (옮긴이)",
+                "pubDate": "2025-12-18",
+                "description": "전 세계에 파이어(Fire) 운동, 이른바 경제독립 및 조기은퇴 운동을 일으킨 장본인이자, 재정교육의 대가로 불리는 JL 콜린스의 역작 《부에 이르는 가장 단순한 길》이 10년 만에 ‘전면 개정판’으로 돌아왔다.",
+                "isbn": "K612033353",
+                "isbn13": "9791193904664",
+                "itemId": 379392258,
+                "priceSales": 22500,
+                "priceStandard": 25000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1250,
+                "cover": "https://image.aladin.co.kr/product/37939/22/coversum/k612033353_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "서삼독",
+                "salesPoint": 11760,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 0,
+                "bestRank": 8,
+                "subInfo": {}
+              },
+              {
+                "title": "자본주의 시대에서 살아남기 위한 최소한의 경제 공부",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379077056&amp;partner=openAPI&amp;start=api",
+                "author": "백억남(김욱현) (지은이)",
+                "pubDate": "2025-12-04",
+                "description": "5년 만에 1,500만 원을 10억 원으로 만든 투자자가 금리-환율-물가-정책을 일상의 언어로 풀어 경제와 투자를 하나의 흐름으로 설명한다. 부동산과 산업 구조, 재무제표까지 기본 체력을 세우는 데 집중해 스스로 판단하는 경제인으로 성장하도록 돕는다.",
+                "isbn": "K332033938",
+                "isbn13": "9791193282533",
+                "itemId": 379077056,
+                "priceSales": 25200,
+                "priceStandard": 28000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 1400,
+                "cover": "https://image.aladin.co.kr/product/37907/70/coversum/k332033938_1.jpg",
+                "categoryId": 2225,
+                "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                "publisher": "하이스트",
+                "salesPoint": 16270,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 10,
+                "bestRank": 9,
+                "subInfo": {}
+              },
+              {
+                "title": "저소비 생활",
+                "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=371178617&amp;partner=openAPI&amp;start=api",
+                "author": "가제노타미 (지은이), 정지영 (옮긴이)",
+                "pubDate": "2025-09-17",
+                "description": "늘지 않는 월급과 줄지 않는 카드값 사이에서 결단이 필요한 모두에게 제안하는 ‘저소비 생활’. 《저소비 생활》의 저자가 월세 포함 70만 원으로 한 달을 보내며 얻은 것은 단지 ‘돈’이 아니었다. 경제적 불안에서 해방되는 것은 물론 돈을 쉽게 쓰며 잃었던 작은 기쁨과 취향을 되찾을 수 있었다.",
+                "isbn": "8925573229",
+                "isbn13": "9788925573229",
+                "itemId": 371178617,
+                "priceSales": 17100,
+                "priceStandard": 19000,
+                "mallType": "BOOK",
+                "stockStatus": "",
+                "mileage": 950,
+                "cover": "https://image.aladin.co.kr/product/37117/86/coversum/8925573229_1.jpg",
+                "categoryId": 70216,
+                "categoryName": "국내도서>자기계발>성공>성공학",
+                "publisher": "알에이치코리아(RHK)",
+                "salesPoint": 67465,
+                "adult": false,
+                "fixedPrice": true,
+                "customerReviewRank": 8,
+                "bestRank": 10,
+                "subInfo": {}
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "이번 주 경제경영 베스트셀러 목록입니다.\n\n1. 진보를 위한 주식투자 - 광수네 복덕방, 모두의 투자 이야기\n2. 박곰희 연금 부자 수업 (10만 부 기념 스페셜 에디션) - 4개의 통장으로 월 300만 원 만들기\n3. 박곰희 연금 부자 수업 - 4개의 통장으로 월 300만 원 만들기\n4. 트렌드 코리아 2026 - 2026 대한민국 소비트렌드 전망\n5. 달러 자산 1억으로 평생 월급 완성하라 - 집 한 채에 갇힐 것인가, 현금 부자로 살 것인가, 부록 : 이재명 시대 자산 시장 대전환 가이드북, 지금 사야 할 주식·ETF 비공개 강의\n6. ETF 투자의 모든 것 - 배당수익과 주가수익 다 잡는 제2의 소득 파이프라인\n7. 평생 부자 머니 플랜 - 20대부터 노후까지 ‘",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "이번 주 경제경영 베스트셀러 목록을 보여줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_ea7dc4cb2ba74c7b94bdd4a9dd75",
+            "content": {
+              "version": "20131101",
+              "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+              "title": "알라딘 베스트셀러 리스트 - 경제경영",
+              "link": "https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&amp;BranchType=1&amp;CID=170&amp;Year=2025&amp;Month=12&amp;Week=3&amp;partner=openAPI",
+              "pubDate": "Fri, 19 Dec 2025 02:54:24 GMT",
+              "totalResults": 1000,
+              "startIndex": 1,
+              "itemsPerPage": 10,
+              "query": "QueryType=BESTSELLER;CategoryId=170;Year=2025;Month=12;Week=3",
+              "searchCategoryId": 170,
+              "searchCategoryName": "경제경영",
+              "item": [
+                {
+                  "title": "진보를 위한 주식투자 - 광수네 복덕방, 모두의 투자 이야기",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379685661&amp;partner=openAPI&amp;start=api",
+                  "author": "이광수 (지은이)",
+                  "pubDate": "2025-12-17",
+                  "description": "광수네 복덕방 대표이자 경제 분야의 핵심 ‘진보 패널’로 꼽히는 이광수는 〈뉴스공장〉, 〈매불쇼〉 등 굵직한 시사·경제 채널에서 주식의 본질을 ‘시장 참여’와 ‘주권 행위’로 설명해온 해설자다. 이 책은 그의 메시지를 본격적으로 체계화한 첫 결과물이자, 진보가 자본을 통해 세상을 바꾸기 위해 반드시 알아야 할 원칙과 전략을 담은 첫 안내서다.",
+                  "isbn": "K712034767",
+                  "isbn13": "9791173576577",
+                  "itemId": 379685661,
+                  "priceSales": 19800,
+                  "priceStandard": 22000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1100,
+                  "cover": "https://image.aladin.co.kr/product/37968/56/coversum/k712034767_1.jpg",
+                  "categoryId": 174,
+                  "categoryName": "국내도서>경제경영>재테크/투자>주식/펀드",
+                  "publisher": "21세기북스",
+                  "salesPoint": 57770,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 8,
+                  "bestRank": 1,
+                  "subInfo": {}
+                },
+                {
+                  "title": "박곰희 연금 부자 수업 (10만 부 기념 스페셜 에디션) - 4개의 통장으로 월 300만 원 만들기",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379721322&amp;partner=openAPI&amp;start=api",
+                  "author": "박곰희 (지은이)",
+                  "pubDate": "2025-06-25",
+                  "description": "출간 직후 전 서점 베스트셀러에 등극한 《박곰희 연금 부자 수업》이 6개월 만에 누적 10만 부 돌파를 기념하며 스페셜 에디션을 선보인다. 노후 자산 설계에 대한 전 국민의 관심 속에 ‘연금 투자 입문서’로 자리 잡은 이 책은 ‘개인파산 신청자 86%가 50대 이상’ ‘성인 4명 중 1명 노후 준비 포기’라는 현실적 위기 속에서 누구나 적용할 수 있는 가장 현실적인 대안으로 주목받고 있다.",
+                  "isbn": "K492034866",
+                  "isbn13": "9791168342941",
+                  "itemId": 379721322,
+                  "priceSales": 18900,
+                  "priceStandard": 21000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1050,
+                  "cover": "https://image.aladin.co.kr/product/37972/13/coversum/k492034866_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "인플루엔셜(주)",
+                  "salesPoint": 178838,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 2,
+                  "subInfo": {}
+                },
+                {
+                  "title": "박곰희 연금 부자 수업 - 4개의 통장으로 월 300만 원 만들기",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=366615290&amp;partner=openAPI&amp;start=api",
+                  "author": "박곰희 (지은이)",
+                  "pubDate": "2025-06-25",
+                  "description": "베스트셀러 《박곰희 투자법》 출간 5년 만에 돌아온 금융 유튜버 박곰희가 이번엔 연금으로 평생 월급 받는 비밀을 공개한다. 절실한 질문들에 대한 현실적이고 구체적인 답변을 《박곰희 연금 부자 수업》에 녹여냈다.",
+                  "isbn": "K972030181",
+                  "isbn13": "9791168342941",
+                  "itemId": 366615290,
+                  "priceSales": 18900,
+                  "priceStandard": 21000,
+                  "mallType": "BOOK",
+                  "stockStatus": "품절",
+                  "mileage": 1050,
+                  "cover": "https://image.aladin.co.kr/product/36661/52/coversum/k972030181_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "인플루엔셜(주)",
+                  "salesPoint": 135298,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 3,
+                  "subInfo": {}
+                },
+                {
+                  "title": "트렌드 코리아 2026 - 2026 대한민국 소비트렌드 전망",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=371447935&amp;partner=openAPI&amp;start=api",
+                  "author": "김난도, 전미영, 최지혜, 권정윤, 한다혜, 이혜원, 이수진, 서유현, 전다현, 이준영, 이향은, 김나은 (지은이)",
+                  "pubDate": "2025-09-25",
+                  "description": "세상은 작용과 반작용, 치열한 정반합(正反合)의 소용돌이가 거세게 휘몰아치고 있다. 방향을 잡기 어려울 정도로 속도가 빠르고 정신이 없다. 그렇다면 우리의 방향타는 어디에 있는가? 거센 풍랑과 어디서 불어올지 모르는 태풍을 피하기 위해 우리는 어디에 닻을 내리고 있어야 하는가?",
+                  "isbn": "K442031479",
+                  "isbn13": "9791193638859",
+                  "itemId": 371447935,
+                  "priceSales": 18000,
+                  "priceStandard": 20000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1000,
+                  "cover": "https://image.aladin.co.kr/product/37144/79/coversum/k442031479_3.jpg",
+                  "categoryId": 263,
+                  "categoryName": "국내도서>경제경영>트렌드/미래전망>트렌드/미래전망 일반",
+                  "publisher": "미래의창",
+                  "salesPoint": 211665,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 9,
+                  "bestRank": 4,
+                  "subInfo": {}
+                },
+                {
+                  "title": "달러 자산 1억으로 평생 월급 완성하라 - 집 한 채에 갇힐 것인가, 현금 부자로 살 것인가, 부록 : 이재명 시대 자산 시장 대전환 가이드북, 지금 사야 할 주식·ETF 비공개 강의",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=369730967&amp;partner=openAPI&amp;start=api",
+                  "author": "채부심(채상욱) (지은이)",
+                  "pubDate": "2025-08-25",
+                  "description": "주식, ETF, 연금, 디지털 자산 등 다양한 자산군을 다루지만, 중심에는 ‘지속 가능한 현금 흐름을 만드는 전략’이 있다. 저자는 투자에 쓰는 시간을 줄이고, 현업과 삶의 균형을 지키면서도 자산이 성장하도록 돕는 구체적 방법을 제시한다.",
+                  "isbn": "K532030823",
+                  "isbn13": "9791199229976",
+                  "itemId": 369730967,
+                  "priceSales": 18900,
+                  "priceStandard": 21000,
+                  "mallType": "BOOK",
+                  "stockStatus": "품절",
+                  "mileage": 1050,
+                  "cover": "https://image.aladin.co.kr/product/36973/9/coversum/k532030823_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "몽스북",
+                  "salesPoint": 8540,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 5,
+                  "subInfo": {}
+                },
+                {
+                  "title": "ETF 투자의 모든 것 - 배당수익과 주가수익 다 잡는 제2의 소득 파이프라인",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=368941145&amp;partner=openAPI&amp;start=api",
+                  "author": "문일호 (지은이)",
+                  "pubDate": "2025-08-11",
+                  "description": "ETF는 분산투자의 장점을 살린 안전하면서도 수익률 높은 재테크다. 증권전문기자의 정보와 경험을 바탕으로, 본격적인 시작점에 있는 사람들이 당장 맞닥뜨리는 ETF 투자의 A부터 Z까지 조목조목 담아낸 책이 나왔다.",
+                  "isbn": "K322030913",
+                  "isbn13": "9791164847983",
+                  "itemId": 368941145,
+                  "priceSales": 18900,
+                  "priceStandard": 21000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1050,
+                  "cover": "https://image.aladin.co.kr/product/36894/11/coversum/k322030913_1.jpg",
+                  "categoryId": 174,
+                  "categoryName": "국내도서>경제경영>재테크/투자>주식/펀드",
+                  "publisher": "매일경제신문사",
+                  "salesPoint": 68043,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 6,
+                  "subInfo": {}
+                },
+                {
+                  "title": "평생 부자 머니 플랜 - 20대부터 노후까지 ‘돈 걱정 ZERO’ 로드맵",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379265046&amp;partner=openAPI&amp;start=api",
+                  "author": "조기윤, 장경훈, 풍백(임다혜) (지은이)",
+                  "pubDate": "2025-12-01",
+                  "description": "재무설계사인 저자 세 명이 주식, 부동산, 세무 등 각자의 전문 분야를 살려 함께 쓴 현실형 자산관리 가이드다. 이 책은 단순히 돈을 많이 버는 법이 아니라, 지금 가진 돈부터 어떻게 다루고, 지키고, 흐름을 만들어낼 것인가, 다시 말해 ‘돈의 구조’를 설계하는 데 집중한다.",
+                  "isbn": "K202033036",
+                  "isbn13": "9791162544488",
+                  "itemId": 379265046,
+                  "priceSales": 17100,
+                  "priceStandard": 19000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 950,
+                  "cover": "https://image.aladin.co.kr/product/37926/50/coversum/k202033036_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "비즈니스북스",
+                  "salesPoint": 21370,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 7,
+                  "subInfo": {}
+                },
+                {
+                  "title": "부에 이르는 가장 단순한 길 - 경제적 독립과 자유를 위한 콜린스의 3원칙",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379392258&amp;partner=openAPI&amp;start=api",
+                  "author": "JL 콜린스 (지은이), 이준걸 (옮긴이)",
+                  "pubDate": "2025-12-18",
+                  "description": "전 세계에 파이어(Fire) 운동, 이른바 경제독립 및 조기은퇴 운동을 일으킨 장본인이자, 재정교육의 대가로 불리는 JL 콜린스의 역작 《부에 이르는 가장 단순한 길》이 10년 만에 ‘전면 개정판’으로 돌아왔다.",
+                  "isbn": "K612033353",
+                  "isbn13": "9791193904664",
+                  "itemId": 379392258,
+                  "priceSales": 22500,
+                  "priceStandard": 25000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1250,
+                  "cover": "https://image.aladin.co.kr/product/37939/22/coversum/k612033353_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "서삼독",
+                  "salesPoint": 11760,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 0,
+                  "bestRank": 8,
+                  "subInfo": {}
+                },
+                {
+                  "title": "자본주의 시대에서 살아남기 위한 최소한의 경제 공부",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=379077056&amp;partner=openAPI&amp;start=api",
+                  "author": "백억남(김욱현) (지은이)",
+                  "pubDate": "2025-12-04",
+                  "description": "5년 만에 1,500만 원을 10억 원으로 만든 투자자가 금리-환율-물가-정책을 일상의 언어로 풀어 경제와 투자를 하나의 흐름으로 설명한다. 부동산과 산업 구조, 재무제표까지 기본 체력을 세우는 데 집중해 스스로 판단하는 경제인으로 성장하도록 돕는다.",
+                  "isbn": "K332033938",
+                  "isbn13": "9791193282533",
+                  "itemId": 379077056,
+                  "priceSales": 25200,
+                  "priceStandard": 28000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 1400,
+                  "cover": "https://image.aladin.co.kr/product/37907/70/coversum/k332033938_1.jpg",
+                  "categoryId": 2225,
+                  "categoryName": "국내도서>경제경영>재테크/투자>재테크/투자 일반",
+                  "publisher": "하이스트",
+                  "salesPoint": 16270,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 10,
+                  "bestRank": 9,
+                  "subInfo": {}
+                },
+                {
+                  "title": "저소비 생활",
+                  "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=371178617&amp;partner=openAPI&amp;start=api",
+                  "author": "가제노타미 (지은이), 정지영 (옮긴이)",
+                  "pubDate": "2025-09-17",
+                  "description": "늘지 않는 월급과 줄지 않는 카드값 사이에서 결단이 필요한 모두에게 제안하는 ‘저소비 생활’. 《저소비 생활》의 저자가 월세 포함 70만 원으로 한 달을 보내며 얻은 것은 단지 ‘돈’이 아니었다. 경제적 불안에서 해방되는 것은 물론 돈을 쉽게 쓰며 잃었던 작은 기쁨과 취향을 되찾을 수 있었다.",
+                  "isbn": "8925573229",
+                  "isbn13": "9788925573229",
+                  "itemId": 371178617,
+                  "priceSales": 17100,
+                  "priceStandard": 19000,
+                  "mallType": "BOOK",
+                  "stockStatus": "",
+                  "mileage": 950,
+                  "cover": "https://image.aladin.co.kr/product/37117/86/coversum/8925573229_1.jpg",
+                  "categoryId": 70216,
+                  "categoryName": "국내도서>자기계발>성공>성공학",
+                  "publisher": "알에이치코리아(RHK)",
+                  "salesPoint": 67465,
+                  "adult": false,
+                  "fixedPrice": true,
+                  "customerReviewRank": 8,
+                  "bestRank": 10,
+                  "subInfo": {}
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "이번 주 경제경영 베스트셀러 목록입니다.\n\n1. 진보를 위한 주식투자 - 광수네 복덕방, 모두의 투자 이야기\n2. 박곰희 연금 부자 수업 (10만 부 기념 스페셜 에디션) - 4개의 통장으로 월 300만 원 만들기\n3. 박곰희 연금 부자 수업 - 4개의 통장으로 월 300만 원 만들기\n4. 트렌드 코리아 2026 - 2026 대한민국 소비트렌드 전망\n5. 달러 자산 1억으로 평생 월급 완성하라 - 집 한 채에 갇힐 것인가, 현금 부자로 살 것인가, 부록 : 이재명 시대 자산 시장 대전환 가이드북, 지금 사야 할 주식·ETF 비공개 강의\n6. ETF 투자의 모든 것 - 배당수익과 주가수익 다 잡는 제2의 소득 파이프라인\n7. 평생 부자 머니 플랜 - 20대부터 노후까지 ‘"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-012",
+      "instruction": "업비트에서 거래 가능한 암호화폐 목록 10개만 보여줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 12.780272006988525,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "MarketList_upbit"
+      ],
+      "golden_action": [
+        {
+          "tool": "MarketList_upbit",
+          "args": {}
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 1080,
+        "completion_tokens": 1056,
+        "total_tokens": 2136
+      },
+      "ttft_stats": {
+        "average": 6.349020833615214,
+        "min": 4.794924875255674,
+        "max": 7.903116791974753,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "MarketList_upbit",
+          "arguments": {},
+          "success": true,
+          "error": null,
+          "result": {
+            "quote": "KRW",
+            "markets": [
+              {
+                "market": "KRW-WAXP",
+                "korean_name": "왁스",
+                "english_name": "WAX"
+              },
+              {
+                "market": "KRW-CARV",
+                "korean_name": "카브",
+                "english_name": "CARV"
+              },
+              {
+                "market": "KRW-LSK",
+                "korean_name": "리스크",
+                "english_name": "Lisk"
+              },
+              {
+                "market": "KRW-0G",
+                "korean_name": "제로지",
+                "english_name": "0G"
+              },
+              {
+                "market": "KRW-BORA",
+                "korean_name": "보라",
+                "english_name": "BORA"
+              },
+              {
+                "market": "KRW-PUNDIX",
+                "korean_name": "펀디엑스",
+                "english_name": "Pundi X"
+              },
+              {
+                "market": "KRW-USD1",
+                "korean_name": "월드리버티파이낸셜유에스디",
+                "english_name": "World Liberty Financial USD"
+              },
+              {
+                "market": "KRW-BAT",
+                "korean_name": "베이직어텐션토큰",
+                "english_name": "Basic Attention Token"
+              },
+              {
+                "market": "KRW-HUNT",
+                "korean_name": "헌트",
+                "english_name": "HUNT"
+              },
+              {
+                "market": "KRW-PENGU",
+                "korean_name": "펏지펭귄",
+                "english_name": "Pudgy Penguins"
+              },
+              {
+                "market": "KRW-FIL",
+                "korean_name": "파일코인",
+                "english_name": "Filecoin"
+              },
+              {
+                "market": "KRW-BEAM",
+                "korean_name": "빔",
+                "english_name": "Beam"
+              },
+              {
+                "market": "KRW-DOOD",
+                "korean_name": "두들즈",
+                "english_name": "Doodles"
+              },
+              {
+                "market": "KRW-WAVES",
+                "korean_name": "웨이브",
+                "english_name": "Waves"
+              },
+              {
+                "market": "KRW-USDC",
+                "korean_name": "유에스디코인",
+                "english_name": "USD Coin"
+              },
+              {
+                "market": "KRW-MOVE",
+                "korean_name": "무브먼트",
+                "english_name": "Movement"
+              },
+              {
+                "market": "KRW-TREE",
+                "korean_name": "트리하우스",
+                "english_name": "Treehouse"
+              },
+              {
+                "market": "KRW-AERGO",
+                "korean_name": "아르고",
+                "english_name": "Aergo"
+              },
+              {
+                "market": "KRW-WET",
+                "korean_name": "휴미디파이",
+                "english_name": "HumidiFi"
+              },
+              {
+                "market": "KRW-USDT",
+                "korean_name": "테더",
+                "english_name": "Tether"
+              }
+            ],
+            "count": 230
+          }
+        }
+      ],
+      "final_response": "업비트에서 거래 가능한 암호화폐 목록 10개는 다음과 같습니다.\n\n1. 왁스 (WAX)\n2. 카브 (CARV)\n3. 리스크 (Lisk)\n4. 제로지 (0G)\n5. 보라 (BORA)\n6. 펀디엑스 (Pundi X)\n7. 월드리버티파이낸셜유에스디 (World Liberty Financial USD)\n8. 베이직어텐션토큰 (Basic Attention Token)\n9. 헌트 (HUNT)\n10. 펭지펭귄 (Pudgy Penguins)",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "업비트에서 거래 가능한 암호화폐 목록 10개만 보여줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_412b4511432145e6819a56c543d2",
+            "content": {
+              "quote": "KRW",
+              "markets": [
+                {
+                  "market": "KRW-WAXP",
+                  "korean_name": "왁스",
+                  "english_name": "WAX"
+                },
+                {
+                  "market": "KRW-CARV",
+                  "korean_name": "카브",
+                  "english_name": "CARV"
+                },
+                {
+                  "market": "KRW-LSK",
+                  "korean_name": "리스크",
+                  "english_name": "Lisk"
+                },
+                {
+                  "market": "KRW-0G",
+                  "korean_name": "제로지",
+                  "english_name": "0G"
+                },
+                {
+                  "market": "KRW-BORA",
+                  "korean_name": "보라",
+                  "english_name": "BORA"
+                },
+                {
+                  "market": "KRW-PUNDIX",
+                  "korean_name": "펀디엑스",
+                  "english_name": "Pundi X"
+                },
+                {
+                  "market": "KRW-USD1",
+                  "korean_name": "월드리버티파이낸셜유에스디",
+                  "english_name": "World Liberty Financial USD"
+                },
+                {
+                  "market": "KRW-BAT",
+                  "korean_name": "베이직어텐션토큰",
+                  "english_name": "Basic Attention Token"
+                },
+                {
+                  "market": "KRW-HUNT",
+                  "korean_name": "헌트",
+                  "english_name": "HUNT"
+                },
+                {
+                  "market": "KRW-PENGU",
+                  "korean_name": "펏지펭귄",
+                  "english_name": "Pudgy Penguins"
+                },
+                {
+                  "market": "KRW-FIL",
+                  "korean_name": "파일코인",
+                  "english_name": "Filecoin"
+                },
+                {
+                  "market": "KRW-BEAM",
+                  "korean_name": "빔",
+                  "english_name": "Beam"
+                },
+                {
+                  "market": "KRW-DOOD",
+                  "korean_name": "두들즈",
+                  "english_name": "Doodles"
+                },
+                {
+                  "market": "KRW-WAVES",
+                  "korean_name": "웨이브",
+                  "english_name": "Waves"
+                },
+                {
+                  "market": "KRW-USDC",
+                  "korean_name": "유에스디코인",
+                  "english_name": "USD Coin"
+                },
+                {
+                  "market": "KRW-MOVE",
+                  "korean_name": "무브먼트",
+                  "english_name": "Movement"
+                },
+                {
+                  "market": "KRW-TREE",
+                  "korean_name": "트리하우스",
+                  "english_name": "Treehouse"
+                },
+                {
+                  "market": "KRW-AERGO",
+                  "korean_name": "아르고",
+                  "english_name": "Aergo"
+                },
+                {
+                  "market": "KRW-WET",
+                  "korean_name": "휴미디파이",
+                  "english_name": "HumidiFi"
+                },
+                {
+                  "market": "KRW-USDT",
+                  "korean_name": "테더",
+                  "english_name": "Tether"
+                }
+              ],
+              "count": 230
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "업비트에서 거래 가능한 암호화폐 목록 10개는 다음과 같습니다.\n\n1. 왁스 (WAX)\n2. 카브 (CARV)\n3. 리스크 (Lisk)\n4. 제로지 (0G)\n5. 보라 (BORA)\n6. 펀디엑스 (Pundi X)\n7. 월드리버티파이낸셜유에스디 (World Liberty Financial USD)\n8. 베이직어텐션토큰 (Basic Attention Token)\n9. 헌트 (HUNT)\n10. 펭지펭귄 (Pudgy Penguins)"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-013",
+      "instruction": "카카오(035720) 최근 체결 내역 보여줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 8.45650315284729,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "StockTrades_ls"
+      ],
+      "golden_action": [
+        {
+          "tool": "StockTrades_ls",
+          "args": {
+            "shcode": "035720"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 269,
+        "completion_tokens": 767,
+        "total_tokens": 1036
+      },
+      "ttft_stats": {
+        "average": 4.196352395461872,
+        "min": 3.377728832885623,
+        "max": 5.0149759580381215,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "StockTrades_ls",
+          "arguments": {
+            "shcode": "035720"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "t8454OutBlock": {
+              "cts_time": "",
+              "ex_shcode": "N035720"
+            },
+            "t8454OutBlock1": [],
+            "rsp_cd": "00000",
+            "rsp_msg": "해당자료가 없습니다."
+          }
+        }
+      ],
+      "final_response": "카카오(035720)의 최근 체결 내역이 없습니다.",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "카카오(035720) 최근 체결 내역 보여줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_a99d58051bd84449bc5d3be333c8",
+            "content": {
+              "t8454OutBlock": {
+                "cts_time": "",
+                "ex_shcode": "N035720"
+              },
+              "t8454OutBlock1": [],
+              "rsp_cd": "00000",
+              "rsp_msg": "해당자료가 없습니다."
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "카카오(035720)의 최근 체결 내역이 없습니다."
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-014",
+      "instruction": "아이폰 15 프로 실사용 후기 찾아줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 21.291986227035522,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "BlogSearch_naver"
+      ],
+      "golden_action": [
+        {
+          "tool": "BlogSearch_naver",
+          "args": {
+            "query": "아이폰 15 프로 실사용 후기",
+            "sort": "sim"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 18620,
+        "completion_tokens": 1270,
+        "total_tokens": 19890
+      },
+      "ttft_stats": {
+        "average": 8.08685200009495,
+        "min": 3.2350624171085656,
+        "max": 12.938641583081335,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "BlogSearch_naver",
+          "arguments": {
+            "query": "아이폰 15 프로 실사용 후기"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "lastBuildDate": "Fri, 19 Dec 2025 11:54:58 +0900",
+            "total": 67961,
+            "start": 1,
+            "display": 10,
+            "items": [
+              {
+                "title": "<b>아이폰15 프로</b> vs <b>아이폰</b> 16 <b>프로 실사용 후기</b> 기변할 가치가... ",
+                "link": "https://blog.naver.com/kkwrkdrk2/223954333111",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰15 프로 vs 아이폰 16 프로 실사용 후기 기변할 가치가 있을까? 2025. 7. 31. 23:05 안녕하세요! 여러분의 테크 생활을 마스터하도록 도와드리는 테크 인플루언서 강기웅입니다. 오늘은 조금 특별한 리뷰를 준비했습니다. 바로 메인 폰으로 사용해온 와 그 직전에 사용했던 를 직접 비교하며 느낀 점들을 솔직하게 풀어보려고 합니다. 아이폰16 프로가 출시되자마자 15 프로에서 기기 변경을 했는데요. 과연 이 업그레이드는 가치가 있었을까요? 아니면 15 프로에 머무르는 것이 더 현명한 선택이었을까요? 실사용 후기를 통해 그 답을 찾아보겠습니다. 더 커진 화면 묵직해진 존재감 가장 먼저 눈에 띄는 변화는 역시 디스플레이 크기입니다. 아이폰15 프로의 6.1인치 화면은 아이폰16 프로에서 6.3인치로 커졌습니다. 베젤이 눈에 띄게 얇아지면서, 폰의 전체적인 크기는 크게 늘리지 않고도 꽉 찬 화면을 자랑했습니다. 덕분에 콘텐츠를 소비할 때",
+                "bloggername": "웅이 일상",
+                "bloggerlink": "blog.naver.com/kkwrkdrk2",
+                "postdate": "20250731"
+              },
+              {
+                "title": "<b>아이폰 15 프로</b>맥스 가격 크기 무게 배터리 <b>실사용 후기</b>",
+                "link": "https://blog.naver.com/saporo2373/223562333202",
+                "description": "메피의 알기 쉬운 IT 꿀팁 메피의 알기 쉬운 IT 꿀팁 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 15 프로맥스 가격 크기 무게 배터리 실사용 후기 2024. 8. 27. 13:10 아이폰 16 출시를 앞두고 전 시리즈들을 구매할지 고민하시는 분들이 많은 거 같더라고요. 그래서 오늘은 아이폰 15 프로맥스 가격부터 크기, 무게, 배터리 등 100시간 동안 직접 사용해 보고 느낀 것들에 대해 알려드리고자 합니다. 아이폰 15 프로맥스 구매를 희망하시는 분들께 좋은 정보가 될 거예요. - 아이폰 15 프로맥스 실사용 후기 - 아이폰 15 프로맥스 블루 티타늄 을 구매해 사용해 봤습니다. 티타늄 자체가 지문이나 땀, 기름에 약하다 보니 변색이 된다고 하더라고요. 결론부터 말씀드리자면, 아직까진 변색되지 않았습니다. 혹여나 변색이 발생할 수도 있으니, 케이스를 끼우는 것을 추천드려요. 블루 티타늄은 색이 어둡다 보니, 지문이나 유분이 많이 묻어나긴 했습니다. 지문에 민감하니 분들은 밝",
+                "bloggername": "메피의 알기 쉬운 IT 꿀팁",
+                "bloggerlink": "blog.naver.com/saporo2373",
+                "postdate": "20240827"
+              },
+              {
+                "title": "<b>아이폰 15프로</b> 16<b>프로</b> 차이 <b>실사용</b> 변화와 구매 팁",
+                "link": "https://blog.naver.com/newprimian/223959544616",
+                "description": "아이진 [ This or That] 이거나저거 아이진 [ This or That] 이거나저거 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 갤럭시 S25 울트라 가격 지금 사면 좋은 이유와 구매 기준 정리 아이폰17 기기변경 최저가로 사는 법 완전 정리 갤25 울트라 스펙 성능 비교부터 성지 시세표로 싸게 사는 방법까지 갤럭시 플립7 공시지원금 통신사별 비교와 성지 개통 꿀팁 갤럭시 Z폴드7 가격 현실적인 차이 아이폰 15프로 16프로 차이 실사용 변화와 구매 팁 2025. 8. 5. 13:00 아이폰 15프로와 16프로로 겉보기엔 비슷해 보여도 실제로 써보면 조금씩 달라진 점이 느껴집니다. 그래서 이번 글에서는 단순한 스펙 비교가 아니라, 실생활에서 체감 가능한 아이폰 15프로 16프로 차이에 대해 이야기해보려고 합니다. 디자인과 색상에서 달라진 점 아이폰 15프로를 쓰다가 16프로로 바꿨을 때 가장 먼저 느낀 건 손에 잡히는 감각이 조금 부드러워졌다는 점입니다. 테두리 마감이 확실히 더",
+                "bloggername": "아이진 [ This or That] 이거나저거",
+                "bloggerlink": "blog.naver.com/newprimian",
+                "postdate": "20250805"
+              },
+              {
+                "title": "내돈내산 <b>아이폰15 프로</b> PRO <b>실사용 후기</b>",
+                "link": "https://blog.naver.com/flythfk2/223345681563",
+                "description": "마케팅 브랜딩 전문가 새벽리더 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 새벽리더 \"초고속 블로그 수익화 전략\" 책 출간 기념 서평 체험단 이벤트![모집마감] 내돈내산 아이폰15 프로 PRO 실사용 후기 2024. 2. 6. 16:00 갤럭시S24 시리즈가 출시되었지만, 여전히 아이폰의 인기는 고공행진 중입니다. 출시한지 어느덧 4달이 가까워지고 있는데요. 가격이 많이 다운되어 있는 상태라 지금이 구매하기 좋은 시기가 아닐까 싶습니다. 아이폰15프로 좋은 점, 아쉬운점 까지 실사용 후기 지금부터 들려드리도록 하겠습니다. 먼저 디자인은 정말 군더더기 없이 깔끔하게 제작되었는데요. 전작에서는 약간의 각진 느낌이 있었다면 이번 아이폰15프로 에서는 완벽한 둥근 프레임으로 변경되었습니다. 소재 또한 티타늄 소재를 적용하여 실질적으로 느끼는 무게감 또한 상당히 가벼워졌다고 할 수 있습니다. 실제로 10% 가까이 무게를 줄였기 때문에 전작대비 훨씬 가벼워졌다고 보시면 됩니다. 컬러는 블랙, 블루,",
+                "bloggername": "마케팅 브랜딩 전문가 새벽리더",
+                "bloggerlink": "blog.naver.com/flythfk2",
+                "postdate": "20240206"
+              },
+              {
+                "title": "<b>아이폰</b> 16 <b>프로</b> 자급제 <b>실사용 후기</b> 및 구매 꿀팁!",
+                "link": "https://blog.naver.com/gh20002000/223991083829",
+                "description": "en reve cake 《✅》 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 16 프로 자급제 실사용 후기 및 구매 꿀팁! 2025. 9. 1. 16:20 아이폰 16 프로 자급제 실사용 후기 및 구매 꿀팁! 사실 지금 아이폰 16 프로 자급제를 구매하는 건 시기상 늦긴 늦었죠 ㅎㅎㅎ 저렴하게 사는 걸 좋아하는 편이라서 새로운 상품이 나오면 이전 상품을 구매하는 편 이에요. 그래서 이번에도 그렇게 사서 사용하고 있는데 너무 만족하고 있답니다. 사실 성능은 이미 이전에 나온 걸로도 충분하기 때문에 딱히 부족함을 못 느끼겠더라고요! 지금 브랜드 프로모션 기간이라서 저렴하게 구매가 가능하다고 하니 고민하셨던 분들은 기간 내에 사보셔도 좋을 것 같아요. 아이폰 16 프로 자급제 최저가 구매 >> 관심 있으신 분들은 참고하시구요! 1. 아이폰 16 프로 자급제 선택 이유 제가 아이폰 16 프로 자급제를 선택한 이유는 단순하게 3가지 정도 있는 것 같아요. 아마 다른 분들도 비슷한 이유로 선택",
+                "bloggername": "en reve cake 《✅》",
+                "bloggerlink": "blog.naver.com/gh20002000",
+                "postdate": "20250901"
+              },
+              {
+                "title": "<b>아이폰15프로 실사용 후기</b>/아이폰15프로 블랙 티타늄",
+                "link": "https://blog.naver.com/mellifluous_0115/223358199944",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 내돈내산 갤럭시 S25 사용 후기(feat.아이폰에서 갤럭시로) 사전예약 갤럭시 S25 아이스블루 색상 언박싱(feat. 투명 맥세이프 케이스 및 그립톡 추천) 미래내일 일경험 후기(feat. 관련 정보, 신청방법, 지원금 정보 및 지급 일자, 직무 교육 후기, 실무 후기까지! ) 청년월세 한시 특별지원 신청 및 결과(feat.지급일자는?, 묵시적 갱신 서류도 가능?) 한국장학재단 국가근로장학 교외 근로 후기 및 간단한 팁(feat. 도서관 근무) 아이폰15프로 실사용 후기/아이폰15프로 블랙 티타늄 2024. 2. 19. 12:37 이번 포스팅은, 아이폰 15프로 실사용 후기입니다! 아이폰 15프로를 사용하며 느낀 이 모델로의 기기 변경을 고민하는 분들께 찐 감격이라 적어본 포스팅인데, 뮤즈무드 soft love bunny (expoxy) 케이스 구매 후기 (분위기 있는 가성비 케이스를 찾고 있다면! feat.내돈내산) 이번 글은, 최근 소비",
+                "bloggername": "취향모음집",
+                "bloggerlink": "blog.naver.com/mellifluous_0115",
+                "postdate": "20240219"
+              },
+              {
+                "title": "<b>아이폰15프로</b> 무게 <b>실사용</b> 체감은",
+                "link": "https://blog.naver.com/socool_rin/223940468928",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 현금완납폰이라고 했는데, 할부가 남아 있었다면? 아이폰15프로 무게 실사용 체감은 2025. 7. 20. 16:19 새롭게 출시된 아이폰15프로는 다양한 개선점과 함께 무게 변화도 눈길을 끌고 있습니다. 스마트폰을 고를 때 무게는 생각보다 중요한 요소인데요. 손에 오래 쥐고 있는 기기인 만큼 무겁거나 무게 배분이 잘못된 제품은 체감 피로도가 상당히 크기 때문입니다. 이번 아이폰15프로는 무게뿐 아니라 소재와 구조까지 변화가 있었기 때문에 단순한 수치 이상의 느낌 차이가 있을 수밖에 없습니다. 그럼 실제로 어떤 무게인지, 그리고 어떤 사람들이 이 변화를 더 민감하게 느낄 수 있을지 함께 살펴보겠습니다. 😊 1. 티타늄으로 바뀌며 무게가 줄었다는 건? 2. 아이폰15프로의 실사용 체감 3. 무게 중심의 변화가 중요한 이유 4. 구매 전 확인 팁과 실속 조건 찾기 1. 티타늄으로 바뀌며 무게가 줄었다는 건? 기존 아이폰14프로가 스테인리스 프레임을 ",
+                "bloggername": "성지의구조",
+                "bloggerlink": "blog.naver.com/socool_rin",
+                "postdate": "20250720"
+              },
+              {
+                "title": "<b>아이폰15프로</b> 맥스 필름 강화유리, 개봉·부착 <b>실사용 후기</b>",
+                "link": "https://blog.naver.com/kasakyu/224081517244",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 네고네고 아이폰15프로 맥스 필름 강화유리, 개봉·부착 실사용 후기 2025. 11. 19. 21:23 본 포스팅은 네이버 브랜드커넥트를 통해 제품을 무상으로 제공받아 작성되었습니다. 스마트폰을 바꾸면 제일 먼저 하는 게 필름 부착이죠. 특히 요즘은 강화유리 필름이 워낙 다양하다 보니 선택이 더 어려운데요, 이번에는 좋은 기회로 강화유리만 17년간 연구한 브랜드, 네고네고코리아의 필름을 체험하게 되어 제가 사용하고 있는 아이폰15프로 맥스용 강화유리 필름을 직접 사용해봤습니다. 직접 개봉해서 붙이고, 며칠간 실사용해본 결과를 바탕으로 실제 사용자의 시선에서 상세하게 정리해봅니다. 제품을 처음 받아들었을 때 가장 먼저 눈에 들어온 건 블랙 패키지에 선명한 색감으로 포인트를 준 디자인은 꽤 믿음직한 첫인상이었어요. 아이폰15프로 맥스 전용 강화유리 필름 2매 알콜 스왑 / 극세사 융 / 먼지 제거 스티커 꼼꼼한 포장으로 택배 배송 중 파손 위험도 ",
+                "bloggername": "준&코 가족일상",
+                "bloggerlink": "blog.naver.com/kasakyu",
+                "postdate": "20251119"
+              },
+              {
+                "title": "<b>아이폰 15 프로</b> 내츄럴 티타늄 <b>실사용 후기</b>",
+                "link": "https://blog.naver.com/ekfrifrndl/223389621819",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 15 프로 내츄럴 티타늄 실사용 후기 2024. 3. 20. 16:04 오늘은 \"아이폰 15 프로 내츄럴 티타늄 실사용 후기\" 포스팅 입니다. 아이폰15 프로의 경우 155만원대부터의 가격으로 높은 고가의 금액을 띄고 있습니다. 그래서 저는 아이폰 15 프로 내츄럴 티탸늄 모델을 성지 매장에서 저렴하게 구매를 했습니다. 오늘은 해당 기종 실사용 후기와 성지로 불리는 저렴한 매장을 찾아 이용하는 방법까지 알려드리겠습니다. 아이폰 15 프로는 티타늄 소재로 제작되었습니다. 티타늄이라는 소재가 지문, 땀, 기름에 민감한 소재라고 합니다. 그래서 블루 티타늄의 경우 변색 이슈로 화제가 됐었습니다. 저의 경우 내츄럴 티타늄을 구매했기에 변색의 걱정은 없이 이용했습니다. 지분 혹은 유분은 어두운 색상에 더 잘 보이기에,  이러한 점이 신경 쓰이는 분들은 내츄럴이나 화이트 컬러로 추천을 드립니다. 아이폰 15 프로의 장점은 액션 버튼입니다. 해당 버",
+                "bloggername": "전국 휴대폰맛집",
+                "bloggerlink": "blog.naver.com/ekfrifrndl",
+                "postdate": "20240320"
+              },
+              {
+                "title": "<b>아이폰15프로</b>맥스 화이트 개봉 및 여자의 <b>실사용 후기</b> 설명!",
+                "link": "https://blog.naver.com/negative250/223389381879",
+                "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 2024. 3. 20. 12:43 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 기록으로 추억을 남기는 배부른소리입니다 :) 이번에 새로 나온 아이폰 때문에 정말 많이 고민한 끝에 3주를 기다린 끝에 받아서 사용해본 '아이폰15 프로맥스 언박싱 및 실사용 후기' 오늘도 함께 해볼까요? =33 아이폰15 프로맥스 화이트 티타늄, 256GB 이전 사용 휴대폰 - 갤럭시 Z 플립 3 크림, 256GB 아이폰15 프로맥스 언박싱 및 구성품 근처 지역 매장 좌표를 확인 후 찾아가 선택했습니다. 확실히 저렴했고 너무너무 설레였어요 아이폰 상자에 그려진 그림이 검은색이어서 블랙 색상으로 오해했던... 하하하하하하하 바코드는 혹시라도 해서 지웠어요 :) 한국 출시 ",
+                "bloggername": "배부른소리",
+                "bloggerlink": "blog.naver.com/negative250",
+                "postdate": "20240320"
+              }
+            ]
+          }
+        }
+      ],
+      "final_response": "아이폰 15 프로 실사용 후기를 찾아봤어요.\n\n1. **아이폰15 프로 vs 아이폰 16 프로 실사용 후기 기변할 가치가...**\n   - 블로거: 웅이 일상\n   - 날짜: 2025년 7월 31일\n   - 링크: https://blog.naver.com/kkwrkdrk2/223954333",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "아이폰 15 프로 실사용 후기 찾아줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_6505b574c64445cabd16344e7a97",
+            "content": {
+              "lastBuildDate": "Fri, 19 Dec 2025 11:54:58 +0900",
+              "total": 67961,
+              "start": 1,
+              "display": 10,
+              "items": [
+                {
+                  "title": "<b>아이폰15 프로</b> vs <b>아이폰</b> 16 <b>프로 실사용 후기</b> 기변할 가치가... ",
+                  "link": "https://blog.naver.com/kkwrkdrk2/223954333111",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰15 프로 vs 아이폰 16 프로 실사용 후기 기변할 가치가 있을까? 2025. 7. 31. 23:05 안녕하세요! 여러분의 테크 생활을 마스터하도록 도와드리는 테크 인플루언서 강기웅입니다. 오늘은 조금 특별한 리뷰를 준비했습니다. 바로 메인 폰으로 사용해온 와 그 직전에 사용했던 를 직접 비교하며 느낀 점들을 솔직하게 풀어보려고 합니다. 아이폰16 프로가 출시되자마자 15 프로에서 기기 변경을 했는데요. 과연 이 업그레이드는 가치가 있었을까요? 아니면 15 프로에 머무르는 것이 더 현명한 선택이었을까요? 실사용 후기를 통해 그 답을 찾아보겠습니다. 더 커진 화면 묵직해진 존재감 가장 먼저 눈에 띄는 변화는 역시 디스플레이 크기입니다. 아이폰15 프로의 6.1인치 화면은 아이폰16 프로에서 6.3인치로 커졌습니다. 베젤이 눈에 띄게 얇아지면서, 폰의 전체적인 크기는 크게 늘리지 않고도 꽉 찬 화면을 자랑했습니다. 덕분에 콘텐츠를 소비할 때",
+                  "bloggername": "웅이 일상",
+                  "bloggerlink": "blog.naver.com/kkwrkdrk2",
+                  "postdate": "20250731"
+                },
+                {
+                  "title": "<b>아이폰 15 프로</b>맥스 가격 크기 무게 배터리 <b>실사용 후기</b>",
+                  "link": "https://blog.naver.com/saporo2373/223562333202",
+                  "description": "메피의 알기 쉬운 IT 꿀팁 메피의 알기 쉬운 IT 꿀팁 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 15 프로맥스 가격 크기 무게 배터리 실사용 후기 2024. 8. 27. 13:10 아이폰 16 출시를 앞두고 전 시리즈들을 구매할지 고민하시는 분들이 많은 거 같더라고요. 그래서 오늘은 아이폰 15 프로맥스 가격부터 크기, 무게, 배터리 등 100시간 동안 직접 사용해 보고 느낀 것들에 대해 알려드리고자 합니다. 아이폰 15 프로맥스 구매를 희망하시는 분들께 좋은 정보가 될 거예요. - 아이폰 15 프로맥스 실사용 후기 - 아이폰 15 프로맥스 블루 티타늄 을 구매해 사용해 봤습니다. 티타늄 자체가 지문이나 땀, 기름에 약하다 보니 변색이 된다고 하더라고요. 결론부터 말씀드리자면, 아직까진 변색되지 않았습니다. 혹여나 변색이 발생할 수도 있으니, 케이스를 끼우는 것을 추천드려요. 블루 티타늄은 색이 어둡다 보니, 지문이나 유분이 많이 묻어나긴 했습니다. 지문에 민감하니 분들은 밝",
+                  "bloggername": "메피의 알기 쉬운 IT 꿀팁",
+                  "bloggerlink": "blog.naver.com/saporo2373",
+                  "postdate": "20240827"
+                },
+                {
+                  "title": "<b>아이폰 15프로</b> 16<b>프로</b> 차이 <b>실사용</b> 변화와 구매 팁",
+                  "link": "https://blog.naver.com/newprimian/223959544616",
+                  "description": "아이진 [ This or That] 이거나저거 아이진 [ This or That] 이거나저거 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 갤럭시 S25 울트라 가격 지금 사면 좋은 이유와 구매 기준 정리 아이폰17 기기변경 최저가로 사는 법 완전 정리 갤25 울트라 스펙 성능 비교부터 성지 시세표로 싸게 사는 방법까지 갤럭시 플립7 공시지원금 통신사별 비교와 성지 개통 꿀팁 갤럭시 Z폴드7 가격 현실적인 차이 아이폰 15프로 16프로 차이 실사용 변화와 구매 팁 2025. 8. 5. 13:00 아이폰 15프로와 16프로로 겉보기엔 비슷해 보여도 실제로 써보면 조금씩 달라진 점이 느껴집니다. 그래서 이번 글에서는 단순한 스펙 비교가 아니라, 실생활에서 체감 가능한 아이폰 15프로 16프로 차이에 대해 이야기해보려고 합니다. 디자인과 색상에서 달라진 점 아이폰 15프로를 쓰다가 16프로로 바꿨을 때 가장 먼저 느낀 건 손에 잡히는 감각이 조금 부드러워졌다는 점입니다. 테두리 마감이 확실히 더",
+                  "bloggername": "아이진 [ This or That] 이거나저거",
+                  "bloggerlink": "blog.naver.com/newprimian",
+                  "postdate": "20250805"
+                },
+                {
+                  "title": "내돈내산 <b>아이폰15 프로</b> PRO <b>실사용 후기</b>",
+                  "link": "https://blog.naver.com/flythfk2/223345681563",
+                  "description": "마케팅 브랜딩 전문가 새벽리더 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 새벽리더 \"초고속 블로그 수익화 전략\" 책 출간 기념 서평 체험단 이벤트![모집마감] 내돈내산 아이폰15 프로 PRO 실사용 후기 2024. 2. 6. 16:00 갤럭시S24 시리즈가 출시되었지만, 여전히 아이폰의 인기는 고공행진 중입니다. 출시한지 어느덧 4달이 가까워지고 있는데요. 가격이 많이 다운되어 있는 상태라 지금이 구매하기 좋은 시기가 아닐까 싶습니다. 아이폰15프로 좋은 점, 아쉬운점 까지 실사용 후기 지금부터 들려드리도록 하겠습니다. 먼저 디자인은 정말 군더더기 없이 깔끔하게 제작되었는데요. 전작에서는 약간의 각진 느낌이 있었다면 이번 아이폰15프로 에서는 완벽한 둥근 프레임으로 변경되었습니다. 소재 또한 티타늄 소재를 적용하여 실질적으로 느끼는 무게감 또한 상당히 가벼워졌다고 할 수 있습니다. 실제로 10% 가까이 무게를 줄였기 때문에 전작대비 훨씬 가벼워졌다고 보시면 됩니다. 컬러는 블랙, 블루,",
+                  "bloggername": "마케팅 브랜딩 전문가 새벽리더",
+                  "bloggerlink": "blog.naver.com/flythfk2",
+                  "postdate": "20240206"
+                },
+                {
+                  "title": "<b>아이폰</b> 16 <b>프로</b> 자급제 <b>실사용 후기</b> 및 구매 꿀팁!",
+                  "link": "https://blog.naver.com/gh20002000/223991083829",
+                  "description": "en reve cake 《✅》 가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 16 프로 자급제 실사용 후기 및 구매 꿀팁! 2025. 9. 1. 16:20 아이폰 16 프로 자급제 실사용 후기 및 구매 꿀팁! 사실 지금 아이폰 16 프로 자급제를 구매하는 건 시기상 늦긴 늦었죠 ㅎㅎㅎ 저렴하게 사는 걸 좋아하는 편이라서 새로운 상품이 나오면 이전 상품을 구매하는 편 이에요. 그래서 이번에도 그렇게 사서 사용하고 있는데 너무 만족하고 있답니다. 사실 성능은 이미 이전에 나온 걸로도 충분하기 때문에 딱히 부족함을 못 느끼겠더라고요! 지금 브랜드 프로모션 기간이라서 저렴하게 구매가 가능하다고 하니 고민하셨던 분들은 기간 내에 사보셔도 좋을 것 같아요. 아이폰 16 프로 자급제 최저가 구매 >> 관심 있으신 분들은 참고하시구요! 1. 아이폰 16 프로 자급제 선택 이유 제가 아이폰 16 프로 자급제를 선택한 이유는 단순하게 3가지 정도 있는 것 같아요. 아마 다른 분들도 비슷한 이유로 선택",
+                  "bloggername": "en reve cake 《✅》",
+                  "bloggerlink": "blog.naver.com/gh20002000",
+                  "postdate": "20250901"
+                },
+                {
+                  "title": "<b>아이폰15프로 실사용 후기</b>/아이폰15프로 블랙 티타늄",
+                  "link": "https://blog.naver.com/mellifluous_0115/223358199944",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 내돈내산 갤럭시 S25 사용 후기(feat.아이폰에서 갤럭시로) 사전예약 갤럭시 S25 아이스블루 색상 언박싱(feat. 투명 맥세이프 케이스 및 그립톡 추천) 미래내일 일경험 후기(feat. 관련 정보, 신청방법, 지원금 정보 및 지급 일자, 직무 교육 후기, 실무 후기까지! ) 청년월세 한시 특별지원 신청 및 결과(feat.지급일자는?, 묵시적 갱신 서류도 가능?) 한국장학재단 국가근로장학 교외 근로 후기 및 간단한 팁(feat. 도서관 근무) 아이폰15프로 실사용 후기/아이폰15프로 블랙 티타늄 2024. 2. 19. 12:37 이번 포스팅은, 아이폰 15프로 실사용 후기입니다! 아이폰 15프로를 사용하며 느낀 이 모델로의 기기 변경을 고민하는 분들께 찐 감격이라 적어본 포스팅인데, 뮤즈무드 soft love bunny (expoxy) 케이스 구매 후기 (분위기 있는 가성비 케이스를 찾고 있다면! feat.내돈내산) 이번 글은, 최근 소비",
+                  "bloggername": "취향모음집",
+                  "bloggerlink": "blog.naver.com/mellifluous_0115",
+                  "postdate": "20240219"
+                },
+                {
+                  "title": "<b>아이폰15프로</b> 무게 <b>실사용</b> 체감은",
+                  "link": "https://blog.naver.com/socool_rin/223940468928",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 현금완납폰이라고 했는데, 할부가 남아 있었다면? 아이폰15프로 무게 실사용 체감은 2025. 7. 20. 16:19 새롭게 출시된 아이폰15프로는 다양한 개선점과 함께 무게 변화도 눈길을 끌고 있습니다. 스마트폰을 고를 때 무게는 생각보다 중요한 요소인데요. 손에 오래 쥐고 있는 기기인 만큼 무겁거나 무게 배분이 잘못된 제품은 체감 피로도가 상당히 크기 때문입니다. 이번 아이폰15프로는 무게뿐 아니라 소재와 구조까지 변화가 있었기 때문에 단순한 수치 이상의 느낌 차이가 있을 수밖에 없습니다. 그럼 실제로 어떤 무게인지, 그리고 어떤 사람들이 이 변화를 더 민감하게 느낄 수 있을지 함께 살펴보겠습니다. 😊 1. 티타늄으로 바뀌며 무게가 줄었다는 건? 2. 아이폰15프로의 실사용 체감 3. 무게 중심의 변화가 중요한 이유 4. 구매 전 확인 팁과 실속 조건 찾기 1. 티타늄으로 바뀌며 무게가 줄었다는 건? 기존 아이폰14프로가 스테인리스 프레임을 ",
+                  "bloggername": "성지의구조",
+                  "bloggerlink": "blog.naver.com/socool_rin",
+                  "postdate": "20250720"
+                },
+                {
+                  "title": "<b>아이폰15프로</b> 맥스 필름 강화유리, 개봉·부착 <b>실사용 후기</b>",
+                  "link": "https://blog.naver.com/kasakyu/224081517244",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 네고네고 아이폰15프로 맥스 필름 강화유리, 개봉·부착 실사용 후기 2025. 11. 19. 21:23 본 포스팅은 네이버 브랜드커넥트를 통해 제품을 무상으로 제공받아 작성되었습니다. 스마트폰을 바꾸면 제일 먼저 하는 게 필름 부착이죠. 특히 요즘은 강화유리 필름이 워낙 다양하다 보니 선택이 더 어려운데요, 이번에는 좋은 기회로 강화유리만 17년간 연구한 브랜드, 네고네고코리아의 필름을 체험하게 되어 제가 사용하고 있는 아이폰15프로 맥스용 강화유리 필름을 직접 사용해봤습니다. 직접 개봉해서 붙이고, 며칠간 실사용해본 결과를 바탕으로 실제 사용자의 시선에서 상세하게 정리해봅니다. 제품을 처음 받아들었을 때 가장 먼저 눈에 들어온 건 블랙 패키지에 선명한 색감으로 포인트를 준 디자인은 꽤 믿음직한 첫인상이었어요. 아이폰15프로 맥스 전용 강화유리 필름 2매 알콜 스왑 / 극세사 융 / 먼지 제거 스티커 꼼꼼한 포장으로 택배 배송 중 파손 위험도 ",
+                  "bloggername": "준&코 가족일상",
+                  "bloggerlink": "blog.naver.com/kasakyu",
+                  "postdate": "20251119"
+                },
+                {
+                  "title": "<b>아이폰 15 프로</b> 내츄럴 티타늄 <b>실사용 후기</b>",
+                  "link": "https://blog.naver.com/ekfrifrndl/223389621819",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰 15 프로 내츄럴 티타늄 실사용 후기 2024. 3. 20. 16:04 오늘은 \"아이폰 15 프로 내츄럴 티타늄 실사용 후기\" 포스팅 입니다. 아이폰15 프로의 경우 155만원대부터의 가격으로 높은 고가의 금액을 띄고 있습니다. 그래서 저는 아이폰 15 프로 내츄럴 티탸늄 모델을 성지 매장에서 저렴하게 구매를 했습니다. 오늘은 해당 기종 실사용 후기와 성지로 불리는 저렴한 매장을 찾아 이용하는 방법까지 알려드리겠습니다. 아이폰 15 프로는 티타늄 소재로 제작되었습니다. 티타늄이라는 소재가 지문, 땀, 기름에 민감한 소재라고 합니다. 그래서 블루 티타늄의 경우 변색 이슈로 화제가 됐었습니다. 저의 경우 내츄럴 티타늄을 구매했기에 변색의 걱정은 없이 이용했습니다. 지분 혹은 유분은 어두운 색상에 더 잘 보이기에,  이러한 점이 신경 쓰이는 분들은 내츄럴이나 화이트 컬러로 추천을 드립니다. 아이폰 15 프로의 장점은 액션 버튼입니다. 해당 버",
+                  "bloggername": "전국 휴대폰맛집",
+                  "bloggerlink": "blog.naver.com/ekfrifrndl",
+                  "postdate": "20240320"
+                },
+                {
+                  "title": "<b>아이폰15프로</b>맥스 화이트 개봉 및 여자의 <b>실사용 후기</b> 설명!",
+                  "link": "https://blog.naver.com/negative250/223389381879",
+                  "description": "가벼운 글쓰기툴 퀵에디터가 오픈했어요! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 2024. 3. 20. 12:43 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 아이폰15프로맥스 화이트 개봉 및 여자의 실사용 후기 설명! 기록으로 추억을 남기는 배부른소리입니다 :) 이번에 새로 나온 아이폰 때문에 정말 많이 고민한 끝에 3주를 기다린 끝에 받아서 사용해본 '아이폰15 프로맥스 언박싱 및 실사용 후기' 오늘도 함께 해볼까요? =33 아이폰15 프로맥스 화이트 티타늄, 256GB 이전 사용 휴대폰 - 갤럭시 Z 플립 3 크림, 256GB 아이폰15 프로맥스 언박싱 및 구성품 근처 지역 매장 좌표를 확인 후 찾아가 선택했습니다. 확실히 저렴했고 너무너무 설레였어요 아이폰 상자에 그려진 그림이 검은색이어서 블랙 색상으로 오해했던... 하하하하하하하 바코드는 혹시라도 해서 지웠어요 :) 한국 출시 ",
+                  "bloggername": "배부른소리",
+                  "bloggerlink": "blog.naver.com/negative250",
+                  "postdate": "20240320"
+                }
+              ]
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "아이폰 15 프로 실사용 후기를 찾아봤어요.\n\n1. **아이폰15 프로 vs 아이폰 16 프로 실사용 후기 기변할 가치가...**\n   - 블로거: 웅이 일상\n   - 날짜: 2025년 7월 31일\n   - 링크: https://blog.naver.com/kkwrkdrk2/223954333"
+          }
+        ]
+      }
+    },
+    {
+      "task_id": "L2-015",
+      "instruction": "2024년 개정된 부동산 세법 정보를 검색해줘",
+      "level": 2,
+      "category": "Tool Retrieval & Selection",
+      "success": true,
+      "execution_time": 18.18177080154419,
+      "steps_taken": 2,
+      "error": null,
+      "expected_tools": [
+        "WebSearch_daum"
+      ],
+      "golden_action": [
+        {
+          "tool": "WebSearch_daum",
+          "args": {
+            "query": "2024년 부동산 세법 개정"
+          }
+        }
+      ],
+      "minimum_steps": null,
+      "data_flow": [],
+      "error_injection": null,
+      "fallback_options": [],
+      "resp_schema": {},
+      "arg_schema": {},
+      "repetitions": 1,
+      "repetition_results": [
+        true
+      ],
+      "token_usage": {
+        "prompt_tokens": 14582,
+        "completion_tokens": 1180,
+        "total_tokens": 15762
+      },
+      "ttft_stats": {
+        "average": 7.2540058547165245,
+        "min": 2.4540116251446307,
+        "max": 12.054000084288418,
+        "count": 2
+      },
+      "tool_calls": [
+        {
+          "step": 1,
+          "tool_name": "WebSearch_daum",
+          "arguments": {
+            "query": "2024년 개정 부동산 세법"
+          },
+          "success": true,
+          "error": null,
+          "result": {
+            "documents": [
+              {
+                "contents": "2024년 세법개정 후속 시행령 개정안 의견서를 제출했습니다 세수 감소형 개정안, 국세 수입 기반 축소, 재정 건전성 악화 초래 소득과 자산 적은 계층 실부담 증가, 부자들에게 더 많은 이익 발생 공정과세 원칙 훼손, 개정 이유 불분명 등 17개 법령 반대 참여연대 조세재정개혁센터는 오늘(2/5) ‘ 2024년 세법개정 후속 시행령 개정안 ’ 에 대한 반대 의견서를 제출했습니다. 이를 통해 참여연대는 개정 이유가 불분명하거나, 적용할 경우 공정과세 원칙에 어긋나는 등의 문제점이 있는 17개 시행령 개정안에 의견을 제시했습니다. 상위 1%를 위한 2024년 세법 개정안의 연장선상에 있는 세수 감소형 개정안은 국세 수입 기반을 축소하여 재정 건전성을 더 악화시킬 수 있으며 개정시 소득과 자산이 적은 계층의 실질적 부담이 늘어날 수 있습니다. 특히 2년 연속 대규모 세수 결손이 발생했고, 금융투자소득세 폐지와 증권거래세 인하로 세수 감소가 예상된다며 세수 감소형 시행령 개정안의 재검토가 ",
+                "datetime": "2025-02-05T11:44:57.000+09:00",
+                "title": "<b>2024년</b> <b>세법</b><b>개정</b> 후속 시행령 개정안 의견서를 제출했습니다 - 참여연대 - 조세재정개혁센터",
+                "url": "https://www.peoplepower21.org/tax/1985584"
+              },
+              {
+                "contents": "편집 권한이 부족합니다. 로그인된 사용자(이)여야 합니다. 해당 문서의 편집 권한이 부족한 경우 아래의 '편집 요청' 버튼으로 편집 요청을 생성할 수 있습니다. [ 펼치기 · 접기 ] · 등록면허세 · 레저세 · 을 기준으로 하여 작성. 어린이 > 자료에 따라 세목별로 분류. ① 지방세는 보통세와 목적세로 한다. ② 보통세의 세목은 다음 각 호와 같다. )는 재산에 대한 취득 행위 및 등기를 담세력으로 판단하여 부과하는 지방세법 개정으로 기존의 취득세와 등록세 취득한 재산을 과세객체로 하고, 재산을 취득한 사람 또는 법인을 납세의무자로 지정한 후 취득의 정의에 대해 지방세법 제6조제1호에서는 다음과 같이.정의한다. 매매, 교환, 상속, 증여, 기부, 법인에 대한 현물출자, 건축, 개수(改修), 공유수면의 매립, 간척에 의한 토지의 조성 등과 그 밖에 이와 유사한 취득으로서 원시취득, 승계취득 또는 유상·무상의 모든 취득을 말한다. 즉 돈을 주고 사거나, 상속을 받거나, 새로 건축을 ",
+                "datetime": "2025-12-10T00:00:00.000+09:00",
+                "title": "취득세 - 나무위키",
+                "url": "https://namu.wiki/w/%EC%B7%A8%EB%93%9D%EC%84%B8"
+              },
+              {
+                "contents": "2025 세법개정안 의견서 제출 기자회견 2025. 7. 8. 2025 세법개정안 의견서 제출 기자회견 <사진=참여연대> 참여연대는 오늘(7/8) 오전 10시, 용산 대통령실 앞에서 <2025 세법개정안 의견서 제출 기자회견>을 진행했습니다. 그간 참여연대는 정부의 세법개정안 마련과 관련하여 매년 3월 초 의견서를 제출해왔는데, 지난 3월 4일에도 ▲부자감세 철회와 조세형평성 제고 위한 법인세 구간 축소 및 최고세율 상향 ▲자산불평등 완화를 위한 부동산 세제 정상화, ▲부의 대물림 완화를 위한 상속세 일괄 공제 금액 인하, ▲저성장·양극화·고령화 해결을 위한 ‘복지세’ 도입 등을 담은 를 제출한 바 있습니다. 12·3 내란사태를 넘어 출범한 이재명 정부의 첫 세법 개정안이 곧 발표될 예정인 만큼 지난 정부에 제출했던 의견서를 새정부에 다시 제출함으로써 이재명 정부가 실패한 감세 정책을 과감히 단절하고, 복지 확대 등을 위한 세수 확충에 초점을 맞춘 세법개정안을 마련할 것을 촉구하였습",
+                "datetime": "2025-07-08T14:05:04.000+09:00",
+                "title": "2025 <b>세법</b>개정안 의견서 제출 기자회견",
+                "url": "https://www.peoplepower21.org/tax/1995772"
+              },
+              {
+                "contents": "지금부터라도 꼭 알아야 할 “개정 세법” 2025년 세금, 올해부터 달라진 것들 매년 이맘때면 꼭 짚고 넘어가야 할 주제가 있다. 바로 개정되는 세법이다. 세법은 우리의 일상과 경제 활동 전반에 큰 영향을 미치기 때문이다. 직장인에게는 연말 정산, 사업자에게는 종합소득세나 부가가치세 같은 세금 신고에서, 그리고 집을 팔거나 증여할 때, 상속을 받을 때 등 대부분의 경제활동에서 세법은 떼려야 뗄 수 없다. 특히, 해가 바뀌면서 개정된 세법 중 우리 생활에 직접적으로 영향을 미칠 주요 사항을 알고 있어야 한다. 지난해부터 언론보도 되었던 결혼 세액공제 제도가 올해부터 시행된다. 결혼했을 때 연말정산에서 50만원의 세액을 공제할 수 있게 되는데, 신랑 신부 모두 각 50만원씩 적용한다. 결혼 세액공제는 소득공제가 아니라 세액공제이기 때문에 세금에서 직접 깎아주어 절감 효과가 크다. 적용 대상은 초혼 또는 재혼 여부를 가리지 않고 공제할 수 있지만, 생애 1회(2024년 혼인신고분부터 20",
+                "datetime": "2025-02-07T16:04:26.000+09:00",
+                "title": "지금부터라도 꼭 알아야 할 “<b>개정</b> <b>세법</b>” 2025년 세금, 올해부터 달라진 것들 - 콘텐츠뷰",
+                "url": "https://v.daum.net/v/Kej0JMc6zM"
+              },
+              {
+                "contents": "종합부동산세 계산기, 과세 기준 • 종합부동산세 계산기 완벽 분석: 과세 기준부터 절세 전략까지 • 종합부동산세 계산기가 왜 필요할까요? • 종합부동산세 계산기 사용법 (예시) • 2024년 종합부동산세 과세 기준 및 세율 • 종합부동산세 절세 전략 • 종합부동산세 관련 자주 묻는 질문 (FAQ) 종합부동산세 계산기 완벽 분석: 과세 기준부터 절세 전략까지 종합부동산세(종부세)는 부동산을 소유한 사람이라면 누구나 한 번쯤 들어봤을 세금이지만, 복잡한 계산 방식과 계속 바뀌는 세법 때문에 정확히 이해하기 어렵습니다. 이 글에서는 종합부동산세 계산기를 활용하여 쉽고 빠르게 세금을 계산하는 방법 과 함께 과세 기준, 절세 전략까지 자세히 안내합니다. 종합부동산세에 대한 궁금증을 해소하고, 현명하게 부동산을 관리하는 데 도움이 되기를 바랍니다. 종합부동산세는 일정 기준을 초과하는 부동산 보유자에게 부과되는 세금입니다. 주택과 토지 등의 공시가격을 합산한 금액이 과세 기준을 넘으면 종합부동산",
+                "datetime": "2025-11-02T19:50:02.000+09:00",
+                "title": "종합부동산세 계산기, 과세 기준 - 콘텐츠뷰",
+                "url": "https://v.daum.net/v/3s5F2AKpSB"
+              },
+              {
+                "contents": "24년 세법개정 후속 시행령 [24년 세법개정 후속 시행령] 기업 출산지원금 ‘최대 2회’ 비과세 적용 근로자 등의 출산과 관련해 출생일 이후 2년 이내에 사용자로부터 최대 2차례에 걸쳐 지급받은 금액이 전액 비과세된다.    기획재정부는 16일 이 같은 내용을 담은 '2024년 세법개정 후속 시행령 개정안'을 발표했다. 이 개정안은 입법예고(1월 17일~2월 5일), 국무회의 등의 절차를 거쳐 내달 말에 공포·시행될 예정이다.    기업출.. [24년 세법개정 후속 시행령] 주택 용도변경 후 양도시 1주택 판정 ’매매계약일‘로 변경 주택에서 상가 등으로 용도변경 후 양도한 건물에 대한 1주택 여부 판정 기준 시점이 기존 주택 양도일에서 '매매계약일'로 변경된다.    기획재정부는 16일 이 같은 내용을 담은 '2024년 세법개정 후속 시행령 개정안'을 발표했다. 이 개정안은 입법예고(1월 17일~2월 5일), 국무회의 등의 절차를 거쳐 내달 말에 공포·시행될.. [24년 세법개정 ",
+                "datetime": "2025-01-16T17:00:59.000+09:00",
+                "title": "24년 <b>세법</b><b>개정</b> 후속 시행령",
+                "url": "http://www.joseilbo.com/news/special/issue_view.php?ID=733"
+              },
+              {
+                "contents": "양도소득세, 절세 핵심 가이드: 계산부터 최신 개정세법까지 완벽 분석 - Kboard",
+                "datetime": "2025-11-01T11:06:43.000+09:00",
+                "title": "양도소득세, 절세 핵심 가이드: 계산부터 최신 <b>개정</b><b>세법</b>까지 완벽 분석",
+                "url": "https://kboard.kr/%ec%96%91%eb%8f%84%ec%86%8c%eb%93%9d%ec%84%b8-%ec%a0%88%ec%84%b8-%ed%95%b5%ec%8b%ac-%ea%b0%80%ec%9d%b4%eb%93%9c-%ea%b3%84%ec%82%b0%eb%b6%80%ed%84%b0-%ec%b5%9c%ec%8b%a0-%ea%b0%9c%ec%a0%95%ec%84%b8/"
+              },
+              {
+                "contents": "[ 펼치기 · 접기 ] 公認仲介士 · Licensed Real Estate Agent(LREA) . 시험과목 및 출제비율 . 시험의 일부 면제 . 현 중개 서비스의 한계 . 다른 직종과의 관계 . 상대평가 제도 전환 논란 . 전자중개 도입 논란 . 중개보수 개정안 논란 . 부동산 중개업자들의 사기 행위 \"공인중개사\"라 함은 이 법에 의한 공인중개사자격을 취득한 자를 말한다. , 그 밖의 토지의 정착물과 대통령령이 정하는 등의 중개대상물에 대하여 거래당사자간의 매매ㆍ교환ㆍ임대차 그 밖의 권리의 득실변경에 관한 행위수행하는 1. \"중개\"라 함은 제3조의 규정에 의한 중개대상물에 대하여 거래당사자간의 매매ㆍ교환ㆍ임대차 그 밖의 권리의 득실변경에 관한 행위를 알선하는 것을 말한다. 2. \"중개업\"이라 함은 다른 사람의 의뢰에 의하여 일정한 보수를 받고 중개를 업으로 행하는 것을 말한다. 3. \"개업공인중개사\"라 함은 이 법에 의하여 중개사무소의 개설등록을 한 자를 말한다. 4. \"소속공인중",
+                "datetime": "2025-12-11T00:00:00.000+09:00",
+                "title": "공인중개사 - 나무위키",
+                "url": "https://namu.wiki/w/%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC"
+              },
+              {
+                "contents": "이준호 <b>부동산</b><b>세법</b> 파이널합격서 저 자 : 이준호 출판사 : 인강드림 출판일 : 2024-08-07 페이지 : 148 정...수강 펼쳐보기 Ⅴ 25,000원 10% 할인 22,500원 <b>2024년</b> 출간된 교재 입니다. 2025년 교재는 출간예정이...",
+                "datetime": "2024-08-07T00:00:00.000+09:00",
+                "title": "<b>2024년</b> 공인중개사 이준호 <b>부동산</b><b>세법</b> 파이널합격서",
+                "url": "https://land.ingangdream.com/gongin/prdlist.php?ptype=view&prdcode=2407250001&catcode=100000&page=&"
+              },
+              {
+                "contents": "부동산 취득세: 절세 전략과 2024년 최신 개정 사항 완벽 분석 - Kboard",
+                "datetime": "2025-09-28T00:57:40.000+09:00",
+                "title": "<b>부동산</b> 취득세: 절세 전략과 <b>2024년</b> 최신 <b>개정</b> 사항 완벽 분석",
+                "url": "https://kboard.kr/%eb%b6%80%eb%8f%99%ec%82%b0-%ec%b7%a8%eb%93%9d%ec%84%b8-%ec%a0%88%ec%84%b8-%ec%a0%84%eb%9e%b5%ea%b3%bc-2024%eb%85%84-%ec%b5%9c%ec%8b%a0-%ea%b0%9c%ec%a0%95-%ec%82%ac%ed%95%ad-%ec%99%84%eb%b2%bd/"
+              }
+            ],
+            "meta": {
+              "is_end": false,
+              "pageable_count": 983,
+              "total_count": 4047
+            }
+          }
+        }
+      ],
+      "final_response": "2024년 개정된 부동산 세법의 주요 내용은 다음과 같습니다.\n\n**1. 주택 용도변경 시 1세대 1주택자 판정 기준 변경**\n\n",
+      "conversation_log": {
+        "total_messages": 4,
+        "messages": [
+          {
+            "role": "user",
+            "content": "2024년 개정된 부동산 세법 정보를 검색해줘"
+          },
+          {
+            "role": "assistant",
+            "content": ""
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_556bc375e5ad4f2095c0da739f62",
+            "content": {
+              "documents": [
+                {
+                  "contents": "2024년 세법개정 후속 시행령 개정안 의견서를 제출했습니다 세수 감소형 개정안, 국세 수입 기반 축소, 재정 건전성 악화 초래 소득과 자산 적은 계층 실부담 증가, 부자들에게 더 많은 이익 발생 공정과세 원칙 훼손, 개정 이유 불분명 등 17개 법령 반대 참여연대 조세재정개혁센터는 오늘(2/5) ‘ 2024년 세법개정 후속 시행령 개정안 ’ 에 대한 반대 의견서를 제출했습니다. 이를 통해 참여연대는 개정 이유가 불분명하거나, 적용할 경우 공정과세 원칙에 어긋나는 등의 문제점이 있는 17개 시행령 개정안에 의견을 제시했습니다. 상위 1%를 위한 2024년 세법 개정안의 연장선상에 있는 세수 감소형 개정안은 국세 수입 기반을 축소하여 재정 건전성을 더 악화시킬 수 있으며 개정시 소득과 자산이 적은 계층의 실질적 부담이 늘어날 수 있습니다. 특히 2년 연속 대규모 세수 결손이 발생했고, 금융투자소득세 폐지와 증권거래세 인하로 세수 감소가 예상된다며 세수 감소형 시행령 개정안의 재검토가 ",
+                  "datetime": "2025-02-05T11:44:57.000+09:00",
+                  "title": "<b>2024년</b> <b>세법</b><b>개정</b> 후속 시행령 개정안 의견서를 제출했습니다 - 참여연대 - 조세재정개혁센터",
+                  "url": "https://www.peoplepower21.org/tax/1985584"
+                },
+                {
+                  "contents": "편집 권한이 부족합니다. 로그인된 사용자(이)여야 합니다. 해당 문서의 편집 권한이 부족한 경우 아래의 '편집 요청' 버튼으로 편집 요청을 생성할 수 있습니다. [ 펼치기 · 접기 ] · 등록면허세 · 레저세 · 을 기준으로 하여 작성. 어린이 > 자료에 따라 세목별로 분류. ① 지방세는 보통세와 목적세로 한다. ② 보통세의 세목은 다음 각 호와 같다. )는 재산에 대한 취득 행위 및 등기를 담세력으로 판단하여 부과하는 지방세법 개정으로 기존의 취득세와 등록세 취득한 재산을 과세객체로 하고, 재산을 취득한 사람 또는 법인을 납세의무자로 지정한 후 취득의 정의에 대해 지방세법 제6조제1호에서는 다음과 같이.정의한다. 매매, 교환, 상속, 증여, 기부, 법인에 대한 현물출자, 건축, 개수(改修), 공유수면의 매립, 간척에 의한 토지의 조성 등과 그 밖에 이와 유사한 취득으로서 원시취득, 승계취득 또는 유상·무상의 모든 취득을 말한다. 즉 돈을 주고 사거나, 상속을 받거나, 새로 건축을 ",
+                  "datetime": "2025-12-10T00:00:00.000+09:00",
+                  "title": "취득세 - 나무위키",
+                  "url": "https://namu.wiki/w/%EC%B7%A8%EB%93%9D%EC%84%B8"
+                },
+                {
+                  "contents": "2025 세법개정안 의견서 제출 기자회견 2025. 7. 8. 2025 세법개정안 의견서 제출 기자회견 <사진=참여연대> 참여연대는 오늘(7/8) 오전 10시, 용산 대통령실 앞에서 <2025 세법개정안 의견서 제출 기자회견>을 진행했습니다. 그간 참여연대는 정부의 세법개정안 마련과 관련하여 매년 3월 초 의견서를 제출해왔는데, 지난 3월 4일에도 ▲부자감세 철회와 조세형평성 제고 위한 법인세 구간 축소 및 최고세율 상향 ▲자산불평등 완화를 위한 부동산 세제 정상화, ▲부의 대물림 완화를 위한 상속세 일괄 공제 금액 인하, ▲저성장·양극화·고령화 해결을 위한 ‘복지세’ 도입 등을 담은 를 제출한 바 있습니다. 12·3 내란사태를 넘어 출범한 이재명 정부의 첫 세법 개정안이 곧 발표될 예정인 만큼 지난 정부에 제출했던 의견서를 새정부에 다시 제출함으로써 이재명 정부가 실패한 감세 정책을 과감히 단절하고, 복지 확대 등을 위한 세수 확충에 초점을 맞춘 세법개정안을 마련할 것을 촉구하였습",
+                  "datetime": "2025-07-08T14:05:04.000+09:00",
+                  "title": "2025 <b>세법</b>개정안 의견서 제출 기자회견",
+                  "url": "https://www.peoplepower21.org/tax/1995772"
+                },
+                {
+                  "contents": "지금부터라도 꼭 알아야 할 “개정 세법” 2025년 세금, 올해부터 달라진 것들 매년 이맘때면 꼭 짚고 넘어가야 할 주제가 있다. 바로 개정되는 세법이다. 세법은 우리의 일상과 경제 활동 전반에 큰 영향을 미치기 때문이다. 직장인에게는 연말 정산, 사업자에게는 종합소득세나 부가가치세 같은 세금 신고에서, 그리고 집을 팔거나 증여할 때, 상속을 받을 때 등 대부분의 경제활동에서 세법은 떼려야 뗄 수 없다. 특히, 해가 바뀌면서 개정된 세법 중 우리 생활에 직접적으로 영향을 미칠 주요 사항을 알고 있어야 한다. 지난해부터 언론보도 되었던 결혼 세액공제 제도가 올해부터 시행된다. 결혼했을 때 연말정산에서 50만원의 세액을 공제할 수 있게 되는데, 신랑 신부 모두 각 50만원씩 적용한다. 결혼 세액공제는 소득공제가 아니라 세액공제이기 때문에 세금에서 직접 깎아주어 절감 효과가 크다. 적용 대상은 초혼 또는 재혼 여부를 가리지 않고 공제할 수 있지만, 생애 1회(2024년 혼인신고분부터 20",
+                  "datetime": "2025-02-07T16:04:26.000+09:00",
+                  "title": "지금부터라도 꼭 알아야 할 “<b>개정</b> <b>세법</b>” 2025년 세금, 올해부터 달라진 것들 - 콘텐츠뷰",
+                  "url": "https://v.daum.net/v/Kej0JMc6zM"
+                },
+                {
+                  "contents": "종합부동산세 계산기, 과세 기준 • 종합부동산세 계산기 완벽 분석: 과세 기준부터 절세 전략까지 • 종합부동산세 계산기가 왜 필요할까요? • 종합부동산세 계산기 사용법 (예시) • 2024년 종합부동산세 과세 기준 및 세율 • 종합부동산세 절세 전략 • 종합부동산세 관련 자주 묻는 질문 (FAQ) 종합부동산세 계산기 완벽 분석: 과세 기준부터 절세 전략까지 종합부동산세(종부세)는 부동산을 소유한 사람이라면 누구나 한 번쯤 들어봤을 세금이지만, 복잡한 계산 방식과 계속 바뀌는 세법 때문에 정확히 이해하기 어렵습니다. 이 글에서는 종합부동산세 계산기를 활용하여 쉽고 빠르게 세금을 계산하는 방법 과 함께 과세 기준, 절세 전략까지 자세히 안내합니다. 종합부동산세에 대한 궁금증을 해소하고, 현명하게 부동산을 관리하는 데 도움이 되기를 바랍니다. 종합부동산세는 일정 기준을 초과하는 부동산 보유자에게 부과되는 세금입니다. 주택과 토지 등의 공시가격을 합산한 금액이 과세 기준을 넘으면 종합부동산",
+                  "datetime": "2025-11-02T19:50:02.000+09:00",
+                  "title": "종합부동산세 계산기, 과세 기준 - 콘텐츠뷰",
+                  "url": "https://v.daum.net/v/3s5F2AKpSB"
+                },
+                {
+                  "contents": "24년 세법개정 후속 시행령 [24년 세법개정 후속 시행령] 기업 출산지원금 ‘최대 2회’ 비과세 적용 근로자 등의 출산과 관련해 출생일 이후 2년 이내에 사용자로부터 최대 2차례에 걸쳐 지급받은 금액이 전액 비과세된다.    기획재정부는 16일 이 같은 내용을 담은 '2024년 세법개정 후속 시행령 개정안'을 발표했다. 이 개정안은 입법예고(1월 17일~2월 5일), 국무회의 등의 절차를 거쳐 내달 말에 공포·시행될 예정이다.    기업출.. [24년 세법개정 후속 시행령] 주택 용도변경 후 양도시 1주택 판정 ’매매계약일‘로 변경 주택에서 상가 등으로 용도변경 후 양도한 건물에 대한 1주택 여부 판정 기준 시점이 기존 주택 양도일에서 '매매계약일'로 변경된다.    기획재정부는 16일 이 같은 내용을 담은 '2024년 세법개정 후속 시행령 개정안'을 발표했다. 이 개정안은 입법예고(1월 17일~2월 5일), 국무회의 등의 절차를 거쳐 내달 말에 공포·시행될.. [24년 세법개정 ",
+                  "datetime": "2025-01-16T17:00:59.000+09:00",
+                  "title": "24년 <b>세법</b><b>개정</b> 후속 시행령",
+                  "url": "http://www.joseilbo.com/news/special/issue_view.php?ID=733"
+                },
+                {
+                  "contents": "양도소득세, 절세 핵심 가이드: 계산부터 최신 개정세법까지 완벽 분석 - Kboard",
+                  "datetime": "2025-11-01T11:06:43.000+09:00",
+                  "title": "양도소득세, 절세 핵심 가이드: 계산부터 최신 <b>개정</b><b>세법</b>까지 완벽 분석",
+                  "url": "https://kboard.kr/%ec%96%91%eb%8f%84%ec%86%8c%eb%93%9d%ec%84%b8-%ec%a0%88%ec%84%b8-%ed%95%b5%ec%8b%ac-%ea%b0%80%ec%9d%b4%eb%93%9c-%ea%b3%84%ec%82%b0%eb%b6%80%ed%84%b0-%ec%b5%9c%ec%8b%a0-%ea%b0%9c%ec%a0%95%ec%84%b8/"
+                },
+                {
+                  "contents": "[ 펼치기 · 접기 ] 公認仲介士 · Licensed Real Estate Agent(LREA) . 시험과목 및 출제비율 . 시험의 일부 면제 . 현 중개 서비스의 한계 . 다른 직종과의 관계 . 상대평가 제도 전환 논란 . 전자중개 도입 논란 . 중개보수 개정안 논란 . 부동산 중개업자들의 사기 행위 \"공인중개사\"라 함은 이 법에 의한 공인중개사자격을 취득한 자를 말한다. , 그 밖의 토지의 정착물과 대통령령이 정하는 등의 중개대상물에 대하여 거래당사자간의 매매ㆍ교환ㆍ임대차 그 밖의 권리의 득실변경에 관한 행위수행하는 1. \"중개\"라 함은 제3조의 규정에 의한 중개대상물에 대하여 거래당사자간의 매매ㆍ교환ㆍ임대차 그 밖의 권리의 득실변경에 관한 행위를 알선하는 것을 말한다. 2. \"중개업\"이라 함은 다른 사람의 의뢰에 의하여 일정한 보수를 받고 중개를 업으로 행하는 것을 말한다. 3. \"개업공인중개사\"라 함은 이 법에 의하여 중개사무소의 개설등록을 한 자를 말한다. 4. \"소속공인중",
+                  "datetime": "2025-12-11T00:00:00.000+09:00",
+                  "title": "공인중개사 - 나무위키",
+                  "url": "https://namu.wiki/w/%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC"
+                },
+                {
+                  "contents": "이준호 <b>부동산</b><b>세법</b> 파이널합격서 저 자 : 이준호 출판사 : 인강드림 출판일 : 2024-08-07 페이지 : 148 정...수강 펼쳐보기 Ⅴ 25,000원 10% 할인 22,500원 <b>2024년</b> 출간된 교재 입니다. 2025년 교재는 출간예정이...",
+                  "datetime": "2024-08-07T00:00:00.000+09:00",
+                  "title": "<b>2024년</b> 공인중개사 이준호 <b>부동산</b><b>세법</b> 파이널합격서",
+                  "url": "https://land.ingangdream.com/gongin/prdlist.php?ptype=view&prdcode=2407250001&catcode=100000&page=&"
+                },
+                {
+                  "contents": "부동산 취득세: 절세 전략과 2024년 최신 개정 사항 완벽 분석 - Kboard",
+                  "datetime": "2025-09-28T00:57:40.000+09:00",
+                  "title": "<b>부동산</b> 취득세: 절세 전략과 <b>2024년</b> 최신 <b>개정</b> 사항 완벽 분석",
+                  "url": "https://kboard.kr/%eb%b6%80%eb%8f%99%ec%82%b0-%ec%b7%a8%eb%93%9d%ec%84%b8-%ec%a0%88%ec%84%b8-%ec%a0%84%eb%9e%b5%ea%b3%bc-2024%eb%85%84-%ec%b5%9c%ec%8b%a0-%ea%b0%9c%ec%a0%95-%ec%82%ac%ed%95%ad-%ec%99%84%eb%b2%bd/"
+                }
+              ],
+              "meta": {
+                "is_end": false,
+                "pageable_count": 983,
+                "total_count": 4047
+              }
+            }
+          },
+          {
+            "role": "assistant",
+            "content": "2024년 개정된 부동산 세법의 주요 내용은 다음과 같습니다.\n\n**1. 주택 용도변경 시 1세대 1주택자 판정 기준 변경**\n\n"
+          }
+        ]
+      }
+    }
+  ]
+}

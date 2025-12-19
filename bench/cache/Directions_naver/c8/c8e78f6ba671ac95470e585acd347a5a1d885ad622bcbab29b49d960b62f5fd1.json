@@ -1,0 +1,159 @@
+{
+  "key": "c8e78f6ba671ac95470e585acd347a5a1d885ad622bcbab29b49d960b62f5fd1",
+  "tool": "Directions_naver",
+  "created_at": "2025-12-19T05:02:38.077885",
+  "input_params": {
+    "goal": "126.977022,37.566536",
+    "option": "trafast",
+    "start": "127.027621,37.497942",
+    "waypoints": ""
+  },
+  "raw_args": {
+    "start": "127.027621,37.497942",
+    "goal": "126.977022,37.566536",
+    "waypoints": "",
+    "option": "trafast"
+  },
+  "data": {
+    "code": 0,
+    "message": "길찾기를 성공하였습니다.",
+    "currentDateTime": "2025-12-19T14:02:38",
+    "route": {
+      "traoptimal": [
+        {
+          "guide": [
+            {
+              "distance": 195,
+              "duration": 35608,
+              "instructions": "'강남대로55길' 방면으로 우회전",
+              "pointIndex": 7,
+              "type": 3
+            },
+            {
+              "distance": 155,
+              "duration": 37306,
+              "instructions": "'서초대로74길' 방면으로 우회전",
+              "pointIndex": 18,
+              "type": 3
+            },
+            {
+              "distance": 179,
+              "duration": 77846,
+              "instructions": "우회전",
+              "pointIndex": 32,
+              "type": 3
+            },
+            {
+              "distance": 153,
+              "duration": 211839,
+              "instructions": "강남역에서 '한남대교' 방면으로 좌회전",
+              "pointIndex": 42,
+              "type": 2
+            },
+            {
+              "distance": 2311,
+              "duration": 766609,
+              "instructions": "'남산1호터널, 한남대교' 방면으로 직진",
+              "pointIndex": 126,
+              "type": 1
+            },
+            {
+              "distance": 1769,
+              "duration": 133002,
+              "instructions": "한남2고가도로에서 '남산1호터널, 장충체육관' 방면으로 왼쪽 고가차도 진입",
+              "pointIndex": 162,
+              "type": 62
+            },
+            {
+              "distance": 850,
+              "duration": 72057,
+              "instructions": "'이태원역, 약수역' 방면으로 고가차도 오른쪽 옆길",
+              "pointIndex": 177,
+              "type": 72
+            },
+            {
+              "distance": 411,
+              "duration": 55548,
+              "instructions": "'장충체육관, 약수역' 방면으로 오른쪽 방향",
+              "pointIndex": 192,
+              "type": 5
+            },
+            {
+              "distance": 667,
+              "duration": 73588,
+              "instructions": "'한남대교, 숭례문' 방면으로 유턴",
+              "pointIndex": 220,
+              "type": 6
+            },
+            {
+              "distance": 306,
+              "duration": 45534,
+              "instructions": "'숭례문, 남산공원' 방면으로 오른쪽 방향",
+              "pointIndex": 237,
+              "type": 5
+            },
+            {
+              "distance": 3278,
+              "duration": 402384,
+              "instructions": "'숭례문, 시청' 방면으로 좌회전",
+              "pointIndex": 389,
+              "type": 2
+            },
+            {
+              "distance": 436,
+              "duration": 70519,
+              "instructions": "도동삼거리에서 '시청, 숭례문' 방면으로 우회전",
+              "pointIndex": 409,
+              "type": 3
+            },
+            {
+              "distance": 1589,
+              "duration": 334918,
+              "instructions": "세종대로사거리에서 유턴",
+              "pointIndex": 467,
+              "type": 6
+            },
+            {
+              "distance": 384,
+              "duration": 75791,
+              "instructions": "목적지",
+              "pointIndex": 479,
+              "type": 88
+            }
+          ],
+          "summary": {
+            "bbox": [
+              [
+                126.9757035,
+                37.4958032
+              ],
+              [
+                127.0283598,
+                37.5699612
+              ]
+            ],
+            "departureTime": "2025-12-19T14:02:37",
+            "distance": 12683,
+            "duration": 2392549,
+            "fuelPrice": 1575,
+            "goal": {
+              "dir": 2,
+              "location": [
+                126.9770218,
+                37.5665355
+              ]
+            },
+            "start": {
+              "location": [
+                127.0276208,
+                37.4979413
+              ]
+            },
+            "taxiFare": 15200,
+            "tollFare": 0
+          }
+        }
+      ]
+    }
+  }
+}

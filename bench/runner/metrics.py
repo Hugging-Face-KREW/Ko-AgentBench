@@ -560,6 +560,51 @@ class SRMetric(LLMJudgeMetric):
         elif not isinstance(final_response, str):
             final_response = str(final_response)
 
+        # L5 예외 처리: fallback 옵션이 있는데 한 번도 호출하지 않았다면 LLM Judge를 건너뛰고 0점 처리
+        def _is_level5(level_value: Any) -> bool:
+            if level_value is None:
+                return False
+            if isinstance(level_value, int):
+                return level_value == 5
+            if isinstance(level_value, str):
+                normalized = level_value.strip().upper()
+                return normalized == "L5" or normalized == "5"
+            return False
+
+        task_level = ctx.task_schema.get("task_level")
+        if task_level is None:
+            task_level = ctx.task_schema.get("level")
+
+        fallback_options = ctx.task_schema.get("fallback_options") or []
+        fallback_tools = {
+            opt.get("tool") for opt in fallback_options
+            if isinstance(opt, dict) and opt.get("tool")
+        }
+
+        if _is_level5(task_level) and fallback_tools:
+            tool_calls = ctx.logs.get("tool_calls") or ctx.action_trace or []
+            used_fallback = False
+            for call in tool_calls:
+                tool_name = None
+                if isinstance(call, dict):
+                    tool_name = call.get("tool_name") or call.get("tool")
+                if tool_name in fallback_tools:
+                    used_fallback = True
+                    break
+
+            if not used_fallback:
+                return EvaluationResult(
+                    self.name,
+                    0.0,
+                    {
+                        "success": False,
+                        "votes": [],
+                        "vote_count": {"success": 0, "fail": 0},
+                        "reasons": ["L5 task with fallback options but none were invoked"],
+                        "final_reason": "L5 task with fallback options but none were invoked"
+                    }
+                )
+
         # 빈 응답 체크
         if not final_response or len(final_response.strip()) < 3:
             return EvaluationResult(

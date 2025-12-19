@@ -1,7 +1,7 @@
 {
   "key": "d2fa6f0a2101ff760919c195970895b98abe71d2c553d95579d3ac9dcdbf608f",
   "tool": "PlaceSearch_kakao",
-  "created_at": "2025-10-26T12:08:09.982827",
+  "created_at": "2025-12-19T05:23:40.009003",
   "input_params": {
     "keyword": "맛집",
     "radius": 1000,
@@ -12,15 +12,15 @@
   },
   "raw_args": {
     "keyword": "맛집",
+    "radius": 1000,
+    "size": 15,
     "x": 127.216475764948,
     "y": 37.6360236390492,
-    "radius": 1000,
-    "sort": "distance",
-    "size": 15
+    "sort": "distance"
   },
   "data": {
     "keyword": "맛집",
-    "total_count": 114,
+    "total_count": 118,
     "places": [
       {
         "name": "뜨란",
@@ -61,6 +61,16 @@
         "phone": "070-7543-3894",
         "category": "음식점 > 카페",
         "distance": "88"
+      },
+      {
+        "name": "집뜰",
+        "latitude": 37.6361908849748,
+        "longitude": 127.215182415487,
+        "address": "경기 남양주시 금곡동 185-15",
+        "road_address": "경기 남양주시 경춘로양골1길 6",
+        "phone": "",
+        "category": "음식점 > 한식 > 한정식",
+        "distance": "115"
       },
       {
         "name": "달리는커피 남양주금곡점",
@@ -161,16 +171,6 @@
         "phone": "",
         "category": "음식점 > 한식",
         "distance": "265"
-      },
-      {
-        "name": "디디커피 금곡점",
-        "latitude": 37.6361359002028,
-        "longitude": 127.213210916526,
-        "address": "경기 남양주시 금곡동 158-28",
-        "road_address": "경기 남양주시 사릉로34번길 44",
-        "phone": "1588-7473",
-        "category": "음식점 > 카페 > 테마카페 > 무인카페",
-        "distance": "288"
       }
     ]
   }
