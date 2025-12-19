@@ -76,9 +76,8 @@ class ModelRunEvaluator:
         'SourceEPR': '소스별 유효 호출 비율. 병렬적으로 호출한 각 도구가 유효했는지 개별적으로 평가',
         'AdaptiveRoutingScore': '적응형 라우팅 점수. 주입된 도구 실패 이후 얼마나 신속하게 대체 경로로 전환하는지 평가',
         'FallbackSR': '대체 경로 성공률. 특정 도구 실패 시 다른 도구를 활용해 성공하는 비율',
-        'EffScore': '효율 점수. 이론적 최소 호출 수와 재사용률을 종합하여 효율성을 점수화',
+        'EffScore': '효율 점수. 이론적 최소 호출 수 대비 실제 호출 수로 계산한 효율성',
         'RedundantCallRate': '불필요 호출 비율. 정보를 이미 알고 있음에도 불필요하게 도구를 다시 호출하는 비율',
-        'ReuseRate': '재사용 비율. 이전에 호출했던 결과를 재호출 없이 효율적으로 재사용하는 비율',
         'ContextRetention': '맥락 유지율. 여러 턴에 걸친 대화의 핵심 맥락을 답변에 올바르게 유지하는지 평가',
         'RefRecall': '장기 회상 비율. 대화 초반의 정보를 마지막 턴에서 다시 질문했을 때 정확히 기억해내는지 평가'
     }
@@ -482,7 +481,7 @@ class ModelRunEvaluator:
                 'L3': ['FSM', 'PSM'],
                 'L4': ['Coverage'],
                 'L5': ['AdaptiveRoutingScore', 'FallbackSR'],
-                'L6': ['EffScore', 'ReuseRate'],
+                'L6': ['EffScore', 'RedundantCallRate'],
                 'L7': ['ContextRetention']
             }
 

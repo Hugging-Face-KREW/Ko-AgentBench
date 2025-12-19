@@ -51,7 +51,6 @@ SPECIAL_MAP = {
     "L4_SourceEPR": ("L4", "SourceEPR"),
     "L5_AdaptiveRoutingScore": ("L5", "AdaptiveRoutingScore"),
     "L5_FallbackSR": ("L5", "FallbackSR"),
-    "L6_ReuseRage": ("L6", "ReuseRate"),
     "L6_RedundantCallRate": ("L6", "RedundantCallRate"),
     "L6_EffScore": ("L6", "EffScore"),
     "L7_ContextRetention": ("L7", "ContextRetention"),
