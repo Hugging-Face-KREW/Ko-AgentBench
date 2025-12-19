@@ -261,10 +261,10 @@ Seven levels assess the agent’s tool-calling capabilities.
 |-------|------|---------|-------------|
 | **L1** | Single tool call | “How many minutes by car from Pangyo Station to Jamsil Baseball Stadium?” | ToolAcc, ArgAcc, CallEM, RespOK |
 | **L2** | Tool selection | “I want to check the current order book for POSCO Holdings” | SelectAcc |
-| **L3** | Sequential reasoning | “Find universities near Cheongnyangni Station, then count nearby hospitals” | FSM, PSM, ΔSteps_norm, ProvAcc |
+| **L3** | Sequential reasoning | “Find universities near Cheongnyangni Station, then count nearby hospitals” | FSM, PSM, ΔSteps_norm |
 | **L4** | Parallel reasoning | “Fetch BTC prices from multiple exchanges and compare” | Coverage, SourceEPR |
 | **L5** | Error handling & robustness | “Search the iPhone 17 release date” (fallback when API fails) | AdaptiveRoutingScore, FallbackSR |
-| **L6** | Efficient tool use | “Find books on Python algorithmic trading” (avoid duplicate calls) | ReuseRate, RedundantCallRate, EffScore |
+| **L6** | Efficient tool use | “Find books on Python algorithmic trading” (avoid duplicate calls) | RedundantCallRate, EffScore |
 | **L7** | Long-context memory | “I’ve been into Bitcoin lately…” (multi-turn dialogue) | ContextRetention, RefRecall |
 
 ---
@@ -299,7 +299,6 @@ Seven levels assess the agent’s tool-calling capabilities.
 | **FSM** (Full Sequence Match) | Exact call order match | 0 or 1 |
 | **PSM** (Partial Sequence Match) | Required tools coverage | required included / total required |
 | **ΔSteps_norm** | Efficiency vs. shortest path | min(1, min steps / actual steps) |
-| **ProvAcc** | Provenance (argument passing) accuracy | correct data flows / total flows |
 
 **L4: Parallel reasoning**
 | Metric | Description | Calculation |
@@ -316,7 +315,6 @@ Seven levels assess the agent’s tool-calling capabilities.
 **L6: Efficient tool use**
 | Metric | Description | Calculation |
 |---|---|---|
-| **ReuseRate** | Reuse ratio | reuse / (reuse + redundant) |
 | **RedundantCallRate** | Redundant call avoidance | 1 - (redundant / reuse opportunities) |
 | **EffScore** | Efficiency when successful | min(1, min steps / actual steps) |
 

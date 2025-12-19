@@ -266,10 +266,10 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 |-------|----------|------|-----------|
 | **L1** | 단일 도구 호출 | "판교역에서 잠실야구장까지 자차로 몇 분 걸릴까?" | ToolAcc, ArgAcc, CallEM, RespOK |
 | **L2** | 도구 선택 | "POSCO홀딩스 주식의 현재 호가창을 확인하고 싶어" | SelectAcc |
-| **L3** | 도구 순차 추론 | "청량리역 근처 대학교 찾아보고, 그 학교 근처에 병원 몇 개 있는지 조사해줘" | FSM, PSM, ΔSteps_norm, ProvAcc |
+| **L3** | 도구 순차 추론 | "청량리역 근처 대학교 찾아보고, 그 학교 근처에 병원 몇 개 있는지 조사해줘" | FSM, PSM, ΔSteps_norm |
 | **L4** | 도구 병렬 추론 | "여러 거래소에서 비트코인 시세 동시 조회 후 비교" | Coverage, SourceEPR |
 | **L5** | 오류 처리와 강건성 | "아이폰 17 출시일 검색해줘" (API 실패 시 대체 경로) | AdaptiveRoutingScore, FallbackSR |
-| **L6** | 효율적인 도구 활용 | "파이썬 알고리즘 트레이딩 책 찾아줘" (중복 호출 방지) | ReuseRate, RedundantCallRate, EffScore |
+| **L6** | 효율적인 도구 활용 | "파이썬 알고리즘 트레이딩 책 찾아줘" (중복 호출 방지) | RedundantCallRate, EffScore |
 | **L7** | 장기 컨텍스트 기억 | "요즘 비트코인에 관심이 생겼는데..." (멀티턴 대화) | ContextRetention, RefRecall |
 
 ---
@@ -304,7 +304,6 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 | **FSM** (Full Sequence Match) | 호출 순서 완전 일치 | 0 또는 1 |
 | **PSM** (Partial Sequence Match) | 필수 도구 포함률 | 포함된 필수 도구 / 전체 필수 도구 |
 | **ΔSteps_norm** | 효율성 (최소 경로 대비) | min(1, 최소 단계 / 실제 단계) |
-| **ProvAcc** | 인자 전달 정확도 | 올바른 데이터 흐름 / 전체 흐름 |
 
 **L4: 병렬적 추론**
 | 지표 | 설명 | 계산 방식 |
@@ -321,7 +320,6 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 **L6: 효율적인 도구 활용**
 | 지표 | 설명 | 계산 방식 |
 |---|---|---|
-| **ReuseRate** | 재사용률 | 재사용 / (재사용+중복) |
 | **RedundantCallRate** | 중복 호출 방지율 | 1 - (중복 호출 / 재사용 기회) |
 | **EffScore** | 성공 시 효율 점수 | min(1, 최소 단계 / 실제 단계) |
 
