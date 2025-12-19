@@ -29,7 +29,7 @@ class AladinAPI(BaseAPI):
     def _search_item(self, query: str, query_type: str = "Keyword", search_target: str = "Book", 
                     start: int = 1, max_results: int = 10, sort: str = "Accuracy", 
                     cover: str = "Mid", category_id: int = 0, output: str = "js", 
-                    out_of_stock_filter: int = 0, opt_result: str = "") -> dict:
+                    out_of_stock_filter: int | str = 0, opt_result: str = "") -> dict:
         """알라딘 상품 검색 API 호출 (내부 구현)
         
         Args:
@@ -48,6 +48,11 @@ class AladinAPI(BaseAPI):
         Returns:
             검색 결과를 포함한 딕셔너리
         """
+        try:
+            out_of_stock_filter = int(out_of_stock_filter)
+        except (TypeError, ValueError):
+            out_of_stock_filter = 0
+
         url = f"{self.base_url}/ItemSearch.aspx"
         params = {
             "ttbkey": self.api_key,
@@ -75,7 +80,7 @@ class AladinAPI(BaseAPI):
                       sub_search_target: str = "", start: int = 1, max_results: int = 10,
                       cover: str = "Mid", category_id: int = 0, year: int = None,
                       month: int = None, week: int = None, output: str = "js",
-                      out_of_stock_filter: int = 0) -> dict:
+                      out_of_stock_filter: int | str = 0) -> dict:
         """알라딘 상품 리스트 조회 API 호출 (내부 구현)
         
         Args:
@@ -95,6 +100,11 @@ class AladinAPI(BaseAPI):
         Returns:
             상품 리스트를 포함한 딕셔너리
         """
+        try:
+            out_of_stock_filter = int(out_of_stock_filter)
+        except (TypeError, ValueError):
+            out_of_stock_filter = 0
+
         url = f"{self.base_url}/ItemList.aspx"
         params = {
             "ttbkey": self.api_key,
@@ -222,10 +232,10 @@ class AladinAPI(BaseAPI):
                             "default": "js"
                         },
                         "out_of_stock_filter": {
-                            "type": "integer",
-                            "enum": [0, 1],
+                            "type": "string",
+                            "enum": ["0", "1"],
                             "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
-                            "default": 0
+                            "default": "0"
                         },
                         "opt_result": {
                             "type": "string",
@@ -312,10 +322,10 @@ class AladinAPI(BaseAPI):
                             "default": "js"
                         },
                         "out_of_stock_filter": {
-                            "type": "integer",
-                            "enum": [0, 1],
+                            "type": "string",
+                            "enum": ["0", "1"],
                             "description": "품절/절판 상품 필터링 여부 (1: 제외), 기본값: 0",
-                            "default": 0
+                            "default": "0"
                         }
                     },
                     "required": ["query_type"]
@@ -477,4 +487,3 @@ if __name__ == "__main__":
         print("알라딘 API 연결 성공")
     else:
         print("알라딘 API 연결 실패")
-
