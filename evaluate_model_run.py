@@ -5,20 +5,33 @@
 
 import argparse
 import json
-import csv
 import os
+import random
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dotenv import load_dotenv
 
 from bench.runner.metrics import (
-    get_metrics_for_level,
     EvalContext,
-    METRICS
+    METRICS,
+    LLMJudgeMetric,
 )
 from bench.adapters.litellm_adapter import LiteLLMAdapter
 from bench.adapters.openrouter_adapter import OpenRouterAdapter
+from bench.evaluation.metric_selector import select_metrics_for_task
+from bench.evaluation.v2_export import export_v2_jsonl_from_report
+from bench.evaluation.report_export import (
+    export_csv_summary,
+    export_json_report,
+    export_markdown_report,
+)
+from bench.evaluation.scoring import (
+    DEFAULT_JUDGE_METRICS,
+    DEFAULT_TRACK_CONFIG,
+    calculate_v2_scores,
+    level_sort_key as sort_level_name,
+)
 
 # Import API keys from secrets (환경변수 설정은 main()에서)
 try:
@@ -67,7 +80,8 @@ class ModelRunEvaluator:
         'RespOK': '응답 파싱 성공. 도구 실행 결과를 성공적으로 파싱했는지 평가',
         'SR': '성공률. 주어진 태스크를 최종적으로 성공했는지 여부',
         'ToolAcc': '도구 선택 정확도. 정답 도구를 정확하게 선택했는지 평가',
-        'pass@k': '반복 안정성. 태스크를 k번 반복 수행했을 때 최소 한 번 이상 성공하는 비율',
+        'pass@k': '태스크별 pass@k. k회 시도 중 최소 1회 성공했는지(0/1) 평균',
+        'stability@k': '반복 안정성. 태스크를 k번 반복 수행했을 때 성공 비율 평균',
         'SelectAcc': '최종 선택 도구 정확도. 여러 후보군 중에서 최종적으로 올바른 도구를 선택했는지 평가',
         'FSM': '정답 경로 완전 일치. 정해진 도구 호출 순서와 완벽하게 일치하는지 평가',
         'PSM': '정답 경로 부분 일치. 정답 경로의 일부를 얼마나 포함하고 있는지 평가',
@@ -79,8 +93,19 @@ class ModelRunEvaluator:
         'EffScore': '효율 점수. 이론적 최소 호출 수 대비 실제 호출 수로 계산한 효율성',
         'RedundantCallRate': '불필요 호출 비율. 정보를 이미 알고 있음에도 불필요하게 도구를 다시 호출하는 비율',
         'ContextRetention': '맥락 유지율. 여러 턴에 걸친 대화의 핵심 맥락을 답변에 올바르게 유지하는지 평가',
-        'RefRecall': '장기 회상 비율. 대화 초반의 정보를 마지막 턴에서 다시 질문했을 때 정확히 기억해내는지 평가'
+        'RefRecall': '장기 회상 비율. 대화 초반의 정보를 마지막 턴에서 다시 질문했을 때 정확히 기억해내는지 평가',
+        'TRF1': '필수 도구 집합 탐지 F1 (Tool Retrieval F1)',
+        'ArgF1': '필수 도구 인자 키/값 정합성 F1 (Argument Grounding F1)',
+        'ExecSR': '유효 실행 성공 비율 (Execution Success Rate)',
+        'RecoverSR': '실패 주입 후 대체 경로로 회복 성공했는지 비율',
+        'StepEff': '최소 스텝 대비 실제 스텝 효율 (min(1, min_steps/actual_steps))',
+        'GroundAns': '도구 결과 필드 커버리지 기반 근거 응답 점수',
+        'CtxRecall': '대화 맥락 테스트(기억해야 할 제약/선호) 충족 비율',
+        'PolicySafe': '안전/정책 위반 없는 응답/도구 사용 준수 점수'
     }
+
+    TRACK_CONFIG = DEFAULT_TRACK_CONFIG
+    JUDGE_METRICS = DEFAULT_JUDGE_METRICS
 
     def __init__(
             self,
@@ -89,7 +114,14 @@ class ModelRunEvaluator:
             judge_models: List[str],
             sample_size: Optional[int] = None,
             levels: Optional[List[str]] = None,
-            verbose: bool = False
+            verbose: bool = False,
+            release_scope: str = "AB",
+            bootstrap_samples: int = 1000,
+            enable_bootstrap_ci: bool = True,
+            judge_max_retries: int = 5,
+            judge_backoff_base: float = 2.0,
+            judge_backoff_cap: float = 120.0,
+            strict_v2_eval_schema: bool = False,
     ):
         self.date = date
         self.model = model
@@ -97,6 +129,13 @@ class ModelRunEvaluator:
         self.sample_size = sample_size
         self.levels = levels  # 평가할 레벨 목록
         self.verbose = verbose
+        self.release_scope = (release_scope or "AB").upper()
+        self.bootstrap_samples = max(1, int(bootstrap_samples))
+        self.enable_bootstrap_ci = enable_bootstrap_ci
+        self.judge_max_retries = max(1, int(judge_max_retries))
+        self.judge_backoff_base = max(0.0, float(judge_backoff_base))
+        self.judge_backoff_cap = max(self.judge_backoff_base, float(judge_backoff_cap))
+        self.strict_v2_eval_schema = strict_v2_eval_schema
         self.judge_adapters = []
 
         # LLM Judge adapter 초기화
@@ -117,6 +156,7 @@ class ModelRunEvaluator:
             print(f"[경고] Judge 모델 초기화 실패")
         else:
             self._inject_judge_to_metrics()
+            self._configure_judge_retry_policies()
             print(f"[OK] {len(self.judge_adapters)}개 Judge 모델 초기화 완료")
 
     def _inject_judge_to_metrics(self):
@@ -138,10 +178,22 @@ class ModelRunEvaluator:
                     METRICS[metric_name].llm_adapters = self.judge_adapters
                     METRICS[metric_name].llm_adapter = self.judge_adapters[0]
 
+    def _configure_judge_retry_policies(self):
+        """Apply judge retry/backoff policy to all LLM-judge metrics."""
+        for metric in METRICS.values():
+            if isinstance(metric, LLMJudgeMetric):
+                metric.judge_max_retries = self.judge_max_retries
+                metric.judge_backoff_base = self.judge_backoff_base
+                metric.judge_backoff_cap = self.judge_backoff_cap
+
+    @staticmethod
+    def _level_sort_key(level_name: str) -> int:
+        return sort_level_name(level_name)
+
 
 
     def find_result_files(self) -> Dict[str, Path]:
-        """날짜와 모델로 L1~L7 파일 찾기"""
+        """날짜와 모델로 레벨 결과 파일(L1, L2, ..., L10)을 찾기"""
         results_dir = Path('logs/benchmark_results')
 
         # 모델명을 파일명 패턴으로 변환 (azure/gpt-4.1 -> azure_gpt-4.1)
@@ -163,21 +215,27 @@ class ModelRunEvaluator:
             by_model_dir = results_dir / 'by_model' / model_pattern
 
             if by_model_dir.exists():
-                date_dirs = [d for d in by_model_dir.iterdir()
-                             if d.is_dir() and d.name.startswith(self.date)]
+                date_dirs = sorted(
+                    [d for d in by_model_dir.iterdir() if d.is_dir() and d.name.startswith(self.date)],
+                    key=lambda p: p.name,
+                    reverse=True,
+                )
 
-                for level_name in ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'L7']:
-                    for date_dir in date_dirs:
-                        level_file = date_dir / f"{level_name}.json"
-                        if level_file.exists() and level_name not in level_files:
+                for date_dir in date_dirs:
+                    level_candidates = sorted(
+                        [p for p in date_dir.glob("L*.json") if p.stem.startswith("L") and p.stem[1:].isdigit()],
+                        key=lambda p: self._level_sort_key(p.stem),
+                    )
+                    for level_file in level_candidates:
+                        level_name = level_file.stem
+                        if level_name not in level_files:
                             level_files[level_name] = level_file
-                            break
 
         return level_files
 
     def evaluate_level(self, file_path: Path, level: str) -> Dict[str, Any]:
         """특정 레벨의 결과 파일 평가"""
-        level_num = int(level[1])  # "L1" -> 1
+        level_num = int(level[1:])  # "L10" -> 10
 
         # 결과 파일 로드
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -210,11 +268,9 @@ class ModelRunEvaluator:
         else:
             tasks_to_evaluate = tasks
 
-        # 해당 레벨의 메트릭 가져오기
-        metrics = get_metrics_for_level(level_num)
-
         # 각 태스크 평가
         all_evaluations = []
+        metric_name_union = set()
 
         for idx, task_result in enumerate(tasks_to_evaluate, 1):
             task_id = task_result.get("task_id", f"unknown_{idx}")
@@ -237,6 +293,13 @@ class ModelRunEvaluator:
                 "resp_schema": task_result.get("resp_schema"),
                 "arg_schema": task_result.get("arg_schema"),
                 "repetitions": task_result.get("repetitions", 1),  # pass@k용
+                "schema_version": task_result.get("schema_version"),
+                "track": task_result.get("track"),
+                "metadata": task_result.get("metadata", {}),
+                "golden": task_result.get("golden", {}),
+                "evaluation": task_result.get("evaluation", {}),
+                "context_tests": task_result.get("context_tests", []),
+                "conversation_tracking": task_result.get("conversation_tracking"),
             }
 
             # logs 구성
@@ -253,10 +316,15 @@ class ModelRunEvaluator:
             # EvalContext 생성 및 메트릭 평가
             try:
                 ctx = EvalContext(task_schema=task_schema, logs=logs)
+                metrics = select_metrics_for_task(level_num, task_schema)
 
                 task_evaluation = {
                     "task_id": task_id,
                     "success": task_result.get("success", False),
+                    "level": level_num,
+                    "track": task_schema.get("track"),
+                    "evaluation": task_schema.get("evaluation", {}),
+                    "repetitions": task_schema.get("repetitions", 1),
                     "metrics": {}
                 }
 
@@ -275,6 +343,7 @@ class ModelRunEvaluator:
                             "error": str(e)
                         }
 
+                metric_name_union.update(task_evaluation["metrics"].keys())
                 all_evaluations.append(task_evaluation)
 
             except Exception as e:
@@ -288,7 +357,8 @@ class ModelRunEvaluator:
 
         # 메트릭별 평균 계산
         metric_averages = {}
-        for metric_name in metrics.keys():
+        metric_confidence_intervals = {}
+        for metric_name in sorted(metric_name_union):
             scores = [
                 task["metrics"].get(metric_name, {}).get("score", 0.0)
                 for task in all_evaluations
@@ -298,9 +368,19 @@ class ModelRunEvaluator:
             valid_scores = [score for score in scores if score is not None]
             if valid_scores:
                 metric_averages[metric_name] = sum(valid_scores) / len(valid_scores)
+                if self.enable_bootstrap_ci:
+                    ci = self._bootstrap_mean_ci(valid_scores, self.bootstrap_samples)
+                    if ci:
+                        metric_confidence_intervals[metric_name] = ci
             else:
-                metric_averages[metric_name] = 0.0
+                # Not applicable metrics should stay None and be excluded from aggregation.
+                metric_averages[metric_name] = None
         metric_averages["RRR"] = rrr_score
+        if self.enable_bootstrap_ci:
+            rrr_scores = [1.0 if task.get("success", False) else 0.0 for task in all_evaluations]
+            rrr_ci = self._bootstrap_mean_ci(rrr_scores, self.bootstrap_samples)
+            if rrr_ci:
+                metric_confidence_intervals["RRR"] = rrr_ci
 
         return {
             "level": level_num,
@@ -309,6 +389,7 @@ class ModelRunEvaluator:
             "total_tasks": len(tasks),
             "evaluated_tasks": len(all_evaluations),
             "metric_averages": metric_averages,
+            "metric_confidence_intervals": metric_confidence_intervals,
             "task_evaluations": all_evaluations
         }
 
@@ -342,7 +423,7 @@ class ModelRunEvaluator:
             filtered_files = {k: v for k, v in level_files.items() if k in requested_levels}
             
             if not filtered_files:
-                available = ', '.join(sorted(level_files.keys()))
+                available = ', '.join(sorted(level_files.keys(), key=self._level_sort_key))
                 requested = ', '.join(requested_levels)
                 raise ValueError(
                     f"요청한 레벨({requested})을 찾을 수 없습니다.\n"
@@ -351,7 +432,7 @@ class ModelRunEvaluator:
             level_files = filtered_files
 
         print(f"발견된 파일:")
-        for level, path in sorted(level_files.items()):
+        for level, path in sorted(level_files.items(), key=lambda x: self._level_sort_key(x[0])):
             print(f"  {level}: {path.name}")
         print()
 
@@ -360,7 +441,7 @@ class ModelRunEvaluator:
         total_tasks = 0
         evaluated_tasks = 0
 
-        for level in sorted(level_files.keys()):
+        for level in sorted(level_files.keys(), key=self._level_sort_key):
             print(f"[{level}] 평가 중...")
             level_result = self.evaluate_level(level_files[level], level)
 
@@ -369,6 +450,7 @@ class ModelRunEvaluator:
                 "total_tasks": level_result["total_tasks"],
                 "evaluated_tasks": level_result["evaluated_tasks"],
                 "metrics": level_result["metric_averages"],
+                "metric_confidence_intervals": level_result["metric_confidence_intervals"],
                 "metadata": level_result["metadata"],
                 "task_evaluations": level_result["task_evaluations"]
             }
@@ -377,6 +459,12 @@ class ModelRunEvaluator:
             evaluated_tasks += level_result["evaluated_tasks"]
 
             print(f"  완료: {level_result['evaluated_tasks']}개 태스크 평가\n")
+
+        v2_scoring = calculate_v2_scores(
+            by_level,
+            track_config=self.TRACK_CONFIG,
+            judge_metrics=set(self.JUDGE_METRICS),
+        )
 
         # 종합 리포트
         report = {
@@ -388,7 +476,11 @@ class ModelRunEvaluator:
                 "total_tasks": total_tasks,
                 "evaluated_tasks": evaluated_tasks,
                 "sample_size": self.sample_size,
-                "levels_evaluated": len(by_level)
+                "levels_evaluated": len(by_level),
+                "release_scope": self.release_scope,
+                "bootstrap_ci_enabled": self.enable_bootstrap_ci,
+                "bootstrap_samples": self.bootstrap_samples,
+                "v2_scoring": v2_scoring,
             },
             "by_level": by_level
         }
@@ -402,216 +494,106 @@ class ModelRunEvaluator:
 
         return report
 
+    @staticmethod
+    def _bootstrap_mean_ci(
+        scores: List[float],
+        bootstrap_samples: int,
+        alpha: float = 0.05,
+    ) -> Optional[Dict[str, Any]]:
+        """Bootstrap mean CI for per-task metric scores."""
+        if not scores:
+            return None
+        n = len(scores)
+        mean_score = sum(scores) / n
+        if n == 1 or bootstrap_samples <= 1:
+            return {
+                "mean": mean_score,
+                "lower": mean_score,
+                "upper": mean_score,
+                "alpha": alpha,
+                "n": n,
+                "bootstrap_samples": bootstrap_samples,
+            }
+
+        rng = random.Random(42)
+        means: List[float] = []
+        for _ in range(bootstrap_samples):
+            sample_sum = 0.0
+            for _ in range(n):
+                sample_sum += scores[rng.randrange(n)]
+            means.append(sample_sum / n)
+
+        means.sort()
+        lower_idx = max(0, min(bootstrap_samples - 1, int((alpha / 2) * bootstrap_samples)))
+        upper_idx = max(0, min(bootstrap_samples - 1, int((1 - alpha / 2) * bootstrap_samples) - 1))
+        lower = means[lower_idx]
+        upper = means[upper_idx]
+        return {
+            "mean": mean_score,
+            "lower": lower,
+            "upper": upper,
+            "alpha": alpha,
+            "n": n,
+            "bootstrap_samples": bootstrap_samples,
+        }
+
     def export_json(self, report: Dict[str, Any], output_dir: Path):
         """JSON 리포트 생성"""
         output_file = output_dir / "evaluation_report.json"
-
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(report, f, ensure_ascii=False, indent=2)
-
+        export_json_report(report, output_file)
         print(f"[저장] JSON: {output_file}")
 
     def export_csv(self, report: Dict[str, Any], output_dir: Path):
         """CSV 리포트 생성"""
         output_file = output_dir / "evaluation_summary.csv"
-
-        # 모든 메트릭 이름 수집
-        all_metrics = set()
-        for level_data in report['by_level'].values():
-            all_metrics.update(level_data['metrics'].keys())
-
-        # CSV 작성
-        with open(output_file, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-
-            # 헤더
-            header = ['Level', 'Total_Tasks', 'Evaluated_Tasks', 'Avg_Exec_Time', 'Avg_Tokens', 'Avg_TPS', 'Avg_TTFT'] + sorted(all_metrics)
-            writer.writerow(header)
-
-            # 각 레벨 데이터
-            for level in sorted(report['by_level'].keys()):
-                level_data = report['by_level'][level]
-                metadata = level_data.get('metadata', {})
-                
-                row = [
-                    level,
-                    level_data['total_tasks'],
-                    level_data['evaluated_tasks'],
-                    f"{metadata.get('average_execution_time', 0):.2f}",
-                    f"{metadata.get('average_tokens_per_task', 0):.2f}",
-                    f"{metadata.get('average_tps', 0):.2f}",
-                    f"{metadata.get('ttft', {}).get('average', 0):.4f}",
-                ]
-                for metric in sorted(all_metrics):
-                    score = level_data['metrics'].get(metric, 0.0)
-                    row.append(f"{score:.4f}")
-                writer.writerow(row)
-
+        export_csv_summary(report, output_file, level_sort_key=self._level_sort_key)
         print(f"[저장] CSV: {output_file}")
 
     def export_markdown(self, report: Dict[str, Any], output_dir: Path):
         """Markdown 리포트 생성"""
         output_file = output_dir / "evaluation_report.md"
-
-        with open(output_file, 'w', encoding='utf-8') as f:
-            # 헤더
-            f.write("# Ko-AgentBench 평가 보고서\n\n")
-
-            # 실행 정보
-            summary = report['summary']
-            f.write("## 실행 정보\n\n")
-            f.write(f"- **평가 대상 모델**: {summary['model']}\n")
-            f.write(f"- **Judge 모델**: {summary['judge_model']}\n")
-            f.write(f"- **실행 날짜**: {summary['execution_date']}\n")
-            f.write(f"- **평가 날짜**: {summary['evaluation_date'][:10]}\n")
-            f.write(f"- **총 태스크**: {summary['evaluated_tasks']}/{summary['total_tasks']}\n")
-            if summary['sample_size']:
-                f.write(f"- **샘플링**: 레벨당 {summary['sample_size']}개\n")
-            f.write("\n")
-
-            # 📊 성능 요약 테이블 추가
-            f.write("## 📊 성능 요약\n\n")
-            f.write("| Level | 태스크 수 | 평균 실행시간 | 평균 TPS | 평균 TTFT | 주요 지표 |\n")
-            f.write("| --- | --- | --- | --- | --- | --- |\n")
-
-            # 각 레벨의 핵심 메트릭 매핑
-            key_metrics = {
-                'L1': ['ToolAcc', 'ArgAcc'],
-                'L2': ['SelectAcc'],
-                'L3': ['FSM', 'PSM'],
-                'L4': ['Coverage'],
-                'L5': ['AdaptiveRoutingScore', 'FallbackSR'],
-                'L6': ['EffScore', 'RedundantCallRate'],
-                'L7': ['ContextRetention']
-            }
-
-            for level in sorted(report['by_level'].keys()):
-                level_data = report['by_level'][level]
-                metadata = level_data.get('metadata', {})
-                metrics = level_data['metrics']
-
-                task_count = f"{level_data['evaluated_tasks']}/{level_data['total_tasks']}"
-                
-                exec_time = f"{metadata.get('average_execution_time', 0):.1f}초" if 'average_execution_time' in metadata else "N/A"
-                tps = f"{metadata.get('average_tps', 0):.0f}" if 'average_tps' in metadata else "N/A"
-                ttft = f"{metadata.get('ttft', {}).get('average', 0):.3f}초" if 'ttft' in metadata else "N/A"
-
-                # 핵심 메트릭 표시
-                key_metric_strs = []
-                for km in key_metrics.get(level, []):
-                    if km in metrics:
-                        key_metric_strs.append(f"{km}: {metrics[km]:.3f}")
-                key_metric_str = ", ".join(key_metric_strs) if key_metric_strs else "N/A"
-
-                f.write(f"| **{level}** | {task_count} | {exec_time} | {tps} | {ttft} | {key_metric_str} |\n")
-            f.write("\n")
-
-            # 레벨별 상세 성능
-            f.write("## 레벨별 성능\n\n")
-
-            for level in sorted(report['by_level'].keys()):
-                level_data = report['by_level'][level]
-                level_num = level[1]
-
-                level_names = {
-                    '1': 'Level 1: 단일 도구 호출',
-                    '2': 'Level 2: 도구 선택',
-                    '3': 'Level 3: 멀티스텝 추론',
-                    '4': 'Level 4: 멀티소스 통합',
-                    '5': 'Level 5: 오류 처리',
-                    '6': 'Level 6: 컨텍스트 재사용',
-                    '7': 'Level 7: 멀티턴 대화',
-                }
-
-                f.write(f"### {level_names.get(level_num, level)}\n\n")
-
-                # 태스크 의도 설명 추가
-                if level_num in self.LEVEL_DESCRIPTIONS:
-                    f.write(f"> 태스크 의도: {self.LEVEL_DESCRIPTIONS[level_num]}\n>\n")
-
-                f.write(f"- 태스크 수: {level_data['evaluated_tasks']}/{level_data['total_tasks']}\n")
-
-                metadata = level_data.get('metadata', {})
-                if 'average_execution_time' in metadata:
-                    f.write(f"- 평균 실행시간: {metadata['average_execution_time']:.2f}초\n")
-
-                f.write("\n**메트릭 점수:**\n\n")
-
-                metrics = level_data['metrics']
-                if metrics:
-                    # RRR과 SR을 먼저 출력
-                    priority_metrics = ['RRR', 'SR']
-                    for metric_name in priority_metrics:
-                        if metric_name in metrics:
-                            score = metrics[metric_name]
-                            description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
-                            f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
-                    
-                    # 나머지 메트릭 출력
-                    for metric_name in sorted(metrics.keys()):
-                        if metric_name not in priority_metrics:
-                            score = metrics[metric_name]
-                            description = self.METRIC_DESCRIPTIONS.get(metric_name, "설명 없음")
-                            f.write(f"- **{metric_name}**: {score:.3f} - {description}\n")
-                else:
-                    f.write("- (메트릭 없음)\n")
-
-                f.write("\n")
-
-            # 토큰 사용량 및 성능 지표 섹션
-            f.write("## 토큰 사용량 및 성능 지표\n\n")
-            
-            total_tokens = 0
-            total_time = 0
-            total_tasks = 0
-            all_ttft_values = []
-            
-            for level_data in report['by_level'].values():
-                metadata = level_data.get('metadata', {})
-                tasks = level_data.get('evaluated_tasks', 0)
-                total_tasks += tasks
-                total_tokens += metadata.get('total_tokens', 0)
-                total_time += metadata.get('total_execution_time', 0)
-                
-                ttft_avg = metadata.get('ttft', {}).get('average', 0)
-                if ttft_avg > 0:
-                    all_ttft_values.extend([ttft_avg] * tasks)
-            
-            # 전체 평균 계산
-            overall_tps = total_tokens / total_time if total_time > 0 else 0
-            overall_avg_ttft = sum(all_ttft_values) / len(all_ttft_values) if all_ttft_values else 0
-            
-            f.write("### 전체 요약\n\n")
-            f.write(f"- **총 처리 토큰**: {total_tokens:,}개\n")
-            f.write(f"- **총 실행 시간**: {total_time:.2f}초\n")
-            f.write(f"- **전체 평균 TPS**: {overall_tps:.2f} tokens/sec\n")
-            f.write(f"- **전체 평균 TTFT**: {overall_avg_ttft:.4f}초\n\n")
-            
-            f.write("### 레벨별 상세\n\n")
-            f.write("| Level | 평균 토큰 수 | 입력 토큰 | 출력 토큰 | TPS | TTFT (평균) | TTFT (최소/최대) |\n")
-            f.write("| --- | --- | --- | --- | --- | --- | --- |\n")
-            
-            for level in sorted(report['by_level'].keys()):
-                level_data = report['by_level'][level]
-                metadata = level_data.get('metadata', {})
-                
-                avg_tokens = metadata.get('average_tokens_per_task', 0)
-                avg_prompt = metadata.get('average_prompt_tokens', 0)
-                avg_completion = metadata.get('average_completion_tokens', 0)
-                tps = metadata.get('average_tps', 0)
-                
-                ttft_data = metadata.get('ttft', {})
-                ttft_avg = ttft_data.get('average', 0)
-                ttft_min = ttft_data.get('min', 0)
-                ttft_max = ttft_data.get('max', 0)
-                ttft_range = f"{ttft_min:.4f} / {ttft_max:.4f}" if ttft_min > 0 else "N/A"
-                
-                f.write(f"| **{level}** | {avg_tokens:.0f} | {avg_prompt:.0f} | {avg_completion:.0f} | "
-                    f"{tps:.0f} | {ttft_avg:.4f}초 | {ttft_range} |\n")
-            
-            f.write("\n")
-            
+        export_markdown_report(
+            report,
+            output_file,
+            level_sort_key=self._level_sort_key,
+            level_descriptions=self.LEVEL_DESCRIPTIONS,
+            metric_descriptions=self.METRIC_DESCRIPTIONS,
+        )
         print(f"[저장] Markdown: {output_file}")
+
+    def export_v2_jsonl(self, report: Dict[str, Any], output_dir: Path):
+        """v2 evaluation.schema 호환 JSONL 내보내기."""
+        output_file = output_dir / "evaluation_v2.jsonl"
+        export_result = export_v2_jsonl_from_report(
+            report,
+            output_file=output_file,
+            model_id=self.model,
+            date=self.date,
+            track_config=self.TRACK_CONFIG,
+            judge_metrics=set(self.JUDGE_METRICS),
+        )
+
+        records = export_result.get("records", [])
+        validation = export_result.get("validation", {})
+        print(f"[저장] v2 JSONL: {output_file} ({len(records)} records)")
+
+        if validation.get("validator_available"):
+            error_count = len(validation.get("errors", []))
+            if error_count == 0:
+                print("[검증] v2 evaluation schema 검증 통과")
+            else:
+                first = validation["errors"][0]
+                first_message = "; ".join(first.get("messages", [])[:3])
+                print(
+                    f"[경고] v2 evaluation schema 검증 실패: errors={error_count} "
+                    f"(first={first.get('evaluation_id')} - {first_message})"
+                )
+                if self.strict_v2_eval_schema:
+                    raise ValueError(
+                        "strict_v2_eval_schema=True and v2 evaluation schema validation failed."
+                    )
+        else:
+            print("[경고] v2 evaluation schema validator를 사용할 수 없어 검증을 건너뜁니다.")
 
     def export(self, report: Dict[str, Any], output_dir: str, formats: List[str]):
         """결과 내보내기"""
@@ -628,7 +610,7 @@ class ModelRunEvaluator:
 
         # 형식별 저장
         if 'all' in formats:
-            formats = ['json', 'csv', 'markdown']
+            formats = ['json', 'csv', 'markdown', 'v2-jsonl']
 
         if 'json' in formats:
             self.export_json(report, final_output_dir)
@@ -638,6 +620,9 @@ class ModelRunEvaluator:
 
         if 'markdown' in formats:
             self.export_markdown(report, final_output_dir)
+
+        if 'v2-jsonl' in formats:
+            self.export_v2_jsonl(report, final_output_dir)
 
         print(f"{'='*80}\n")
 
@@ -669,7 +654,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 예시:
-  # 기본 사용 (모든 레벨, 단일 Judge )
+  # 기본 사용 (AB scope: L1-L7, 기본 Judge 앙상블)
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1
   
   # 특정 레벨만 평가
@@ -677,7 +662,7 @@ def main():
   python evaluate_model_run.py --date 20251021 --model anthropic/claude-sonnet-4-5 --levels L1,L3,L5
   
   # Judge 모델 지정
-  python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --judge-models azure/gpt-4o gemini/gemini-2.5-pro-preview-03-25
+  python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --judge-models openai/gpt-5.1 anthropic/claude-sonnet-4-5 gemini/gemini-2.5-pro
   
   # 빠른 테스트 (각 레벨당 1개)
   python evaluate_model_run.py --date 20251016 --model azure/gpt-4.1 --quick
@@ -695,13 +680,27 @@ def main():
 
     # 평가 설정
     parser.add_argument('--levels', type=str, default=None,
-                        help='평가할 레벨 지정 (예: L1, L1,L3,L5). 기본: 모든 레벨')
+                        help='평가할 레벨 지정 (예: L1, L1,L3,L5). 미지정 시 --release-scope 적용')
+    parser.add_argument('--release-scope', choices=['AB', 'ALL'], default='AB',
+                        help='평가 릴리스 범위. AB=Track A+B(L1-L7, 기본), ALL=가능한 전체 레벨')
     parser.add_argument('--judge-models', nargs='+', default=None,
-                        help='LLM Judge 모델(들). 기본: gpt-4o 단일 모델. 앙상블 원하면 여러 개 지정 (예: gpt-4o claude-sonnet-4-5 gemini-2.5)')
+                        help='LLM Judge 모델(들). 기본: 3-model 앙상블. 필요 시 단일 모델로 지정 가능')
     parser.add_argument('--sample', type=int, default=None,
                         help='레벨당 평가할 태스크 수 (기본: 전체)')
     parser.add_argument('--quick', action='store_true',
                         help='빠른 테스트 (각 레벨당 1개)')
+    parser.add_argument('--bootstrap-samples', type=int, default=1000,
+                        help='부트스트랩 샘플 수 (95%% CI 계산용, 기본: 1000)')
+    parser.add_argument('--no-bootstrap-ci', action='store_true',
+                        help='부트스트랩 CI 계산 비활성화')
+    parser.add_argument('--judge-max-retries', type=int, default=5,
+                        help='Judge API 호출 최대 재시도 횟수 (429 대응, 기본: 5)')
+    parser.add_argument('--judge-backoff-base', type=float, default=2.0,
+                        help='Judge 재시도 백오프 시작 초(기본: 2.0)')
+    parser.add_argument('--judge-backoff-cap', type=float, default=120.0,
+                        help='Judge 재시도 백오프 최대 초(기본: 120.0)')
+    parser.add_argument('--strict-v2-eval-schema', action='store_true',
+                        help='v2 evaluation.schema 검증 실패 시 즉시 에러로 종료')
     parser.add_argument('--log-file', help='특정 로그 파일 경로 (선택사항)')
 
     # 출력 설정
@@ -709,7 +708,7 @@ def main():
                         help='출력 디렉토리 (기본: reports)')
     parser.add_argument('--format', nargs='+',
                         default=['json', 'csv', 'markdown'],
-                        choices=['json', 'csv', 'markdown', 'all'],
+                        choices=['json', 'csv', 'markdown', 'v2-jsonl', 'all'],
                         help='출력 형식 (기본: json csv markdown)')
     parser.add_argument('--verbose', action='store_true',
                         help='상세 로그 출력')
@@ -720,8 +719,12 @@ def main():
     if args.judge_models:
         judge_models = args.judge_models
     else:
-        # 기본값: 단일 Judge
-        judge_models = ["openai/gpt-4.1-mini"]
+        # 기본값: provider 다양성을 갖춘 Judge 앙상블
+        judge_models = [
+            "openai/gpt-5.1",
+            "anthropic/claude-sonnet-4-5",
+            "gemini/gemini-2.5-pro",
+        ]
 
     # 레벨 파싱
     levels = None
@@ -729,6 +732,9 @@ def main():
         # 쉼표로 구분된 레벨 파싱 (예: "L1,L3,L5" 또는 "1,3,5")
         levels = [lvl.strip() for lvl in args.levels.split(',')]
         print(f"[설정] 평가 대상 레벨: {', '.join(levels)}")
+    elif args.release_scope.upper() == "AB":
+        levels = [f"L{i}" for i in range(1, 8)]
+        print(f"[설정] 평가 대상 레벨(AB scope): {', '.join(levels)}")
 
     # 평가 실행
     try:
@@ -738,7 +744,14 @@ def main():
             judge_models=judge_models,
             sample_size=1 if args.quick else args.sample,
             levels=levels,
-            verbose=args.verbose
+            verbose=args.verbose,
+            release_scope=args.release_scope,
+            bootstrap_samples=args.bootstrap_samples,
+            enable_bootstrap_ci=(not args.no_bootstrap_ci),
+            judge_max_retries=args.judge_max_retries,
+            judge_backoff_base=args.judge_backoff_base,
+            judge_backoff_cap=args.judge_backoff_cap,
+            strict_v2_eval_schema=args.strict_v2_eval_schema,
         )
 
         report = evaluator.evaluate()

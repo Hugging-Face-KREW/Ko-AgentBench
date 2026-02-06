@@ -1,0 +1,207 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L5-001-V2",
+    "track": "B",
+    "level": 5,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "아이폰 17 출시일 검색해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_daum",
+        "description": "Tool schema for WebSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_daum",
+            "args": {
+              "query": "아이폰 17 출시일",
+              "sort": "recency",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].contents",
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L5-001"
+      ]
+    },
+    "error_injection": {
+      "enabled": true,
+      "policy": "single_failure",
+      "targets": [
+        "WebSearch_daum"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L5-002-V2",
+    "track": "B",
+    "level": 5,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'아이유 콘서트 직캠' 최신 동영상 찾아서 제목만 하나 알려줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "아이유 콘서트 직캠",
+              "sort": "recency",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "items[0].title",
+          "items[0].description",
+          "documents[0].contents"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L5-002"
+      ]
+    },
+    "error_injection": {
+      "enabled": true,
+      "policy": "single_failure",
+      "targets": [
+        "VideoSearch_daum"
+      ]
+    }
+  }
+]

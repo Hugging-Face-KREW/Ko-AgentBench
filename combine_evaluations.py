@@ -7,7 +7,8 @@ BASE_DIR = Path("reports")
 CSV_NAME = "evaluation_summary.csv"
 OUTPUT = Path("reports/combined_evaluation_summary.csv")
 
-LEVELS = [f"L{i}" for i in range(1, 8)]
+# Include v2 Track C levels as well.
+LEVELS = [f"L{i}" for i in range(1, 11)]
 LEVEL_METRICS = [
     "Total_Tasks",
     "Evaluated_Tasks",
@@ -21,6 +22,7 @@ RRR_COLS = [f"{lvl}_RRR" for lvl in LEVELS]
 SR_COLS = [f"{lvl}_SR" for lvl in LEVELS]
 EPR_COLS = [f"{lvl}_EPR_CVR" for lvl in LEVELS]
 PASSK_COLS = [f"{lvl}_pass@k" for lvl in LEVELS]
+STABILITYK_COLS = [f"{lvl}_stability@k" for lvl in LEVELS]
 
 MODEL_VENDOR_MAP = {
     "kakaocorp_kanana-1.5-8b-instruct-2505": ("Kakao", "OSS"),
@@ -68,6 +70,7 @@ COLUMN_ORDER = (
     + SR_COLS
     + EPR_COLS
     + PASSK_COLS
+    + STABILITYK_COLS
     + list(SPECIAL_MAP.keys())
 )
 
@@ -103,6 +106,8 @@ for csv_path in BASE_DIR.glob(f"*/{CSV_NAME}"):
         row[f"{lvl}_SR"] = level_df.at[lvl, "SR"]
         row[f"{lvl}_EPR_CVR"] = level_df.at[lvl, "EPR_CVR"]
         row[f"{lvl}_pass@k"] = level_df.at[lvl, "pass@k"]
+        if "stability@k" in level_df.columns:
+            row[f"{lvl}_stability@k"] = level_df.at[lvl, "stability@k"]
 
     for new_name, (lvl, original) in SPECIAL_MAP.items():
         row[new_name] = (

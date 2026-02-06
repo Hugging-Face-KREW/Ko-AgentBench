@@ -1,0 +1,2514 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-001-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_upbit",
+        "description": "Tool schema for CryptoPrice_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "current_price",
+          "change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-001"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 현재 비트코인(BTC/KRW)의 시세는 98,530,000원입니다. 전일 대비 0.5% 상승했네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "이더리움은 어때?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "이더리움(ETH/KRW)은 현재 4,850,000원으로, 전일 대비 1.2% 하락했습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "아, 그렇구나. 아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 다시 알려드릴게요. 비트코인은 현재 98,550,000원으로, 조금 전보다 약간 올랐습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "사용자가 처음에 질문했던 암호화폐가 '비트코인(BTC)'이며 선호 마켓이 '원화(KRW)'임을 기억하고 API 호출의 인자로 사용해야 한다.",
+          "trigger": "아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘.",
+          "expected_action": {
+            "tool": "CryptoPrice_upbit",
+            "args": {
+              "symbol": "BTC",
+              "quote": "KRW"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-002-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-002"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 좋은 생각이네요! 매트 헤이그 작가는 재미있는 책이 많죠. 특별히 찾으시는 장르가 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "아니요, 일단은 '어린이 베스트셀러'로만 검색해주세요."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "현재 어린이 도서 베스트셀러로는 '흔한남매 15', '추리 텐텐 1' 등이 있습니다. 이 책들로 보여드릴까요?"
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "흠... 역시 제가 아까 말했던 작가의 책으로 찾아봐야겠어요."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 이전에 말씀하신 매트 헤이그 작가의 도서에는 '크리스마스를 구한 소녀'가 있습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "turn 1에서 언급된 선호 작가 '매트 헤이그'를 API 파라미터에 반영해야 한다.",
+          "trigger": "아까 말했던 작가의 책으로 찾아봐야겠어요.",
+          "expected_action": {
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "매트 헤이그",
+              "query_type": "Author"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-003-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'IT 인공지능 국내 뉴스'로 검색해줄 수 있어?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-003"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'IT 인공지능 국내 뉴스'로 검색해줄 수 있어?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 인공지능 관련 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "알았어. 그럼 이번엔 스포츠 야구도 좀 찾아줘."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 스포츠 뉴스입니다. 'A팀, 9회말 역전 끝내기 안타로 5연승 질주' 등의 야구 소식이 올라와 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "처음에 말했던 뉴스 주제 관련해서 새로 올라온 거 있나? 이번엔 최신순으로 정렬해서 보여줘."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 처음에 문의하셨던 인공지능 분야 뉴스를 최신순으로 다시 검색해 보니, 'AI 기반 신약 개발 플랫폼, 임상 성공률 획기적으로 높여'라는 제목의 기사가 새로 확인되네요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 6,
+          "should_remember": "사용자가 'IT 인공지능 국내 뉴스'를 검색했다",
+          "trigger": "처음에 그 주제 관련해서 새로 올라온 거 있나?",
+          "expected_action": {
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "IT 인공지능 국내 뉴스",
+              "sort": "date"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-004-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 볼만한 캠핑 브이로그 영상 찾아줄래? 너무 긴 건 싫고, 한 10분 내외였으면 좋겠어.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-004"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 볼만한 캠핑 브이로그 영상 찾아줄래? 너무 긴 건 싫고, 한 10분 내외였으면 좋겠어."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 캠핑 브이로그를 찾아봤어요. '[캠핑로그] 감성 가득했던 10분 순삭 동계캠핑'이라는 영상이 있는데, 어떠세요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "오, 좋다. 그럼 이번엔 최신 영상으로 같은 검색어로 다시 검색해줘. 처음에 말한 영상길이 조건 지켜서 결과 알려줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "최신순으로 캠핑 브이로그를 다시 검색해봤어요. '[신상 캠핑장비] 솔로캠핑 브이로그'가 새로 올라왔네요. 확인해 보시겠어요?"
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 찾고 있는 동영상의 주제는 '캠핑 브이로그'이다.",
+          "trigger": "이번엔 최신 영상으로 다시 찾아줘.",
+          "expected_action": {
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "캠핑 브이로그",
+              "sort": "recency"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-005-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "업비트 원화 마켓에 요즘 어떤 코인들이 있는지 궁금해요.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketList_upbit",
+        "description": "Tool schema for MarketList_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketList_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "markets[0].market",
+          "markets[0].korean_name",
+          "count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-005"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "업비트 원화 마켓에 요즘 어떤 코인들이 있는지 궁금해요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 현재 업비트 원화 마켓에는 KRW-WAXP, KRW-CARV 등의 마켓이 있습니다. 특별히 찾으시는 정보가 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "알겠습니다. 그럼 USDT 마켓 목록도 보여주세요."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, USDT 마켓에서는 USDT-PEPE, USDT-WCT 등 다양한 마켓을 확인하실 수 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "처음에 말했던 마켓 기준으로, 이벤트 마켓 제외하고 다시 알려주세요."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 처음에 문의하셨던 원화(KRW) 마켓에서 이벤트 마켓을 제외한 목록입니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "사용자가 선호하는 화폐 종류는 KRW입니다.",
+          "trigger": "처음 말했던 마켓 기준으로",
+          "expected_action": {
+            "tool": "MarketList_upbit",
+            "args": {
+              "quote": "KRW",
+              "include_event": false
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-006-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "안녕! 나 강남역 근처에서 약속 있는데, 강남역 근처 조용한 카페 찾아줄래?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-006"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "안녕! 나 강남역 근처에서 약속 있는데, 강남역 근처 조용한 카페 찾아줄래?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강남역 근처에 조용한 카페 몇 군데를 찾아봤어요. '스타벅스 강남R점'이 대표적이네요. 다른 곳도 알려드릴까요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "좋아. 내가 처음에 가기로 한 장소에서 디저트 카페도 찾아줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 강남역 근처 디저트 맛집으로는 '빌리엔젤 강남역점'이 유명해요. 케이크 종류가 다양해서 좋아하실 것 같아요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자는 강남역 근처에서 찾고 있습니다.",
+          "trigger": "좋아. 그럼 디저트 맛있는 카페도 찾아줘",
+          "expected_action": {
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "강남역 근처 디저트 맛있는 카페"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-007-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-007"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "2025년 10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 10월 부산에서는 '정관생태하천학습문화축제'가 2025년 10월 23일부터 10월 25일까지 열릴 예정입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "그렇구나. 다른 지역도 좀 볼까? 서울 쪽으로."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "서울에서는 '구리 코스모스 축제'가 10월초에 한강시민공원에서 열립니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "좋아. 대화 처음에 알려준 축제 중에서 우리 가족 인원 수를 생각하면 어디가 좋을까?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "정관생태하천학습문화축제는 4인 가족이 함께 참여하기 좋습니다. 축제 정보를 미리 확인해보시는 걸 추천드려요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 3,
+          "should_remember": "2025년 10월에 가족 여행을 간다.",
+          "trigger": "다른 지역도 좀 볼까? 서울 쪽으로.",
+          "expected_action": {
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025년 10월 서울 축제"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-008-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 후기 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-008"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 후기 찾아줘. "
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 제주도 애월 근처 맛집에 대한 실제 방문 후기 몇 개를 찾아봤어요. '애월은지금'이라는 식당이 방문객 평이 좋네요. 다른 곳도 더 찾아드릴까요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "좋아. 그럼 같은 지역으로 이번엔 '분위기 좋은 카페 후기' 찾아줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "물론이죠. 아까 말씀하신 애월 근처에 분위기 좋은 카페를 찾아봤어요. '오션뷰카페' 후기가 괜찮아 보이네요. 확인해보시겠어요?"
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 이전에 언급했던 여행지 '제주도 애월'을 기억하고 새로운 검색어에 반영해야 한다.",
+          "trigger": "좋아요. 그럼 같은 지역으로 이번엔 '분위기 좋은 카페 후기'알려줘",
+          "expected_action": {
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제주도 애월 분위기 좋은 카페 후기"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-009-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'강원도 직접 키운 나물 한정식 식당'을 찾고 싶어.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_daum",
+        "description": "Tool schema for WebSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-009"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'강원도 직접 키운 나물 한정식 식당'으로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강원도 직접 재배한 나물을 사용하는 '산채향'이라는 한정식집이 있네요. 정갈한 상차림으로 방문객들의 평이 좋습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "음... 그럼 이번에는 최신 정보로 다시 알아봐 줄 수 있을까"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 다시 찾아보니 '강원나물밥'이라는 식당이 검색됩니다. 현대적인 인테리어와 깔끔한 맛으로 인기를 얻고 있다고 합니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 이전에 요청했던 '강원도', '직접 키운 나물', '한정식'이라는 검색 조건을 유지한 채, 정렬 순서만 '최신순'으로 변경하여 검색을 수행해야 한다.",
+          "trigger": "최신 정보로 다시 알아봐 줄 수 있을까",
+          "expected_action": {
+            "tool": "WebSearch_daum",
+            "args": {
+              "query": "강원도 직접 키운 나물로 요리하는 한정식 식당",
+              "sort": "recency"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-010-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. '10살 된 시츄 관절 영양제'로 검색해주세요.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-010"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. '10살 시츄 관절 영양제'로 검색해주세요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "나이가 있는 강아지는 관절 관리가 중요하죠. 10살 시츄 아이들이 먹기 좋은 관절 영양제를 찾아봤어요. '사이노퀸'이나 '안티놀' 같은 제품들이 인기가 많네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "감사합니다. 혹시 아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 10살이면 활동량이 예전 같지 않으니 너무 딱딱하지 않은 장난감이 좋겠어요. 노령견을 위한 부드러운 바스락 봉제인형 삑삑이 장난감이나, 후각 활동을 돕는 노즈워크 담요 장난감을 추천해 드려요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자의 강아지가 10살 노령견 시츄 강아지라는 사실",
+          "trigger": "아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?",
+          "expected_action": {
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "10살 시츄 장난감"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-001-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_upbit",
+        "description": "Tool schema for CryptoPrice_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "current_price",
+          "change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-001",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 현재 비트코인(BTC/KRW)의 시세는 98,530,000원입니다. 전일 대비 0.5% 상승했네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "이더리움은 어때?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "이더리움(ETH/KRW)은 현재 4,850,000원으로, 전일 대비 1.2% 하락했습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "아, 그렇구나. 아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 다시 알려드릴게요. 비트코인은 현재 98,550,000원으로, 조금 전보다 약간 올랐습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "사용자가 처음에 질문했던 암호화폐가 '비트코인(BTC)'이며 선호 마켓이 '원화(KRW)'임을 기억하고 API 호출의 인자로 사용해야 한다.",
+          "trigger": "아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘.",
+          "expected_action": {
+            "tool": "CryptoPrice_upbit",
+            "args": {
+              "symbol": "BTC",
+              "quote": "KRW"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-002-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-002",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 좋은 생각이네요! 매트 헤이그 작가는 재미있는 책이 많죠. 특별히 찾으시는 장르가 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "아니요, 일단은 '어린이 베스트셀러'로만 검색해주세요."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "현재 어린이 도서 베스트셀러로는 '흔한남매 15', '추리 텐텐 1' 등이 있습니다. 이 책들로 보여드릴까요?"
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "흠... 역시 제가 아까 말했던 작가의 책으로 찾아봐야겠어요."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 이전에 말씀하신 매트 헤이그 작가의 도서에는 '크리스마스를 구한 소녀'가 있습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "turn 1에서 언급된 선호 작가 '매트 헤이그'를 API 파라미터에 반영해야 한다.",
+          "trigger": "아까 말했던 작가의 책으로 찾아봐야겠어요.",
+          "expected_action": {
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "매트 헤이그",
+              "query_type": "Author"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-003-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'IT 인공지능 국내 뉴스'로 검색해줄 수 있어? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-003",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'IT 인공지능 국내 뉴스'로 검색해줄 수 있어?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 인공지능 관련 국내 뉴스 몇 가지를 찾았습니다. '차세대 AI 모델, 인간 수준의 추론 능력 선보여'와 같은 기사들이 있네요. 더 궁금한 점이 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "알았어. 그럼 이번엔 스포츠 야구도 좀 찾아줘."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 스포츠 뉴스입니다. 'A팀, 9회말 역전 끝내기 안타로 5연승 질주' 등의 야구 소식이 올라와 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "처음에 말했던 뉴스 주제 관련해서 새로 올라온 거 있나? 이번엔 최신순으로 정렬해서 보여줘."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 처음에 문의하셨던 인공지능 분야 뉴스를 최신순으로 다시 검색해 보니, 'AI 기반 신약 개발 플랫폼, 임상 성공률 획기적으로 높여'라는 제목의 기사가 새로 확인되네요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 6,
+          "should_remember": "사용자가 'IT 인공지능 국내 뉴스'를 검색했다",
+          "trigger": "처음에 그 주제 관련해서 새로 올라온 거 있나?",
+          "expected_action": {
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "IT 인공지능 국내 뉴스",
+              "sort": "date"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-004-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 볼만한 캠핑 브이로그 영상 찾아줄래? 너무 긴 건 싫고, 한 10분 내외였으면 좋겠어. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-004",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 볼만한 캠핑 브이로그 영상 찾아줄래? 너무 긴 건 싫고, 한 10분 내외였으면 좋겠어."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 캠핑 브이로그를 찾아봤어요. '[캠핑로그] 감성 가득했던 10분 순삭 동계캠핑'이라는 영상이 있는데, 어떠세요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "오, 좋다. 그럼 이번엔 최신 영상으로 같은 검색어로 다시 검색해줘. 처음에 말한 영상길이 조건 지켜서 결과 알려줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "최신순으로 캠핑 브이로그를 다시 검색해봤어요. '[신상 캠핑장비] 솔로캠핑 브이로그'가 새로 올라왔네요. 확인해 보시겠어요?"
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 찾고 있는 동영상의 주제는 '캠핑 브이로그'이다.",
+          "trigger": "이번엔 최신 영상으로 다시 찾아줘.",
+          "expected_action": {
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "캠핑 브이로그",
+              "sort": "recency"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-005-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "업비트 원화 마켓에 요즘 어떤 코인들이 있는지 궁금해요. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketList_upbit",
+        "description": "Tool schema for MarketList_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketList_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "markets[0].market",
+          "markets[0].korean_name",
+          "count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-005",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "업비트 원화 마켓에 요즘 어떤 코인들이 있는지 궁금해요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 현재 업비트 원화 마켓에는 KRW-WAXP, KRW-CARV 등의 마켓이 있습니다. 특별히 찾으시는 정보가 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "알겠습니다. 그럼 USDT 마켓 목록도 보여주세요."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, USDT 마켓에서는 USDT-PEPE, USDT-WCT 등 다양한 마켓을 확인하실 수 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "처음에 말했던 마켓 기준으로, 이벤트 마켓 제외하고 다시 알려주세요."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 처음에 문의하셨던 원화(KRW) 마켓에서 이벤트 마켓을 제외한 목록입니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "사용자가 선호하는 화폐 종류는 KRW입니다.",
+          "trigger": "처음 말했던 마켓 기준으로",
+          "expected_action": {
+            "tool": "MarketList_upbit",
+            "args": {
+              "quote": "KRW",
+              "include_event": false
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-006-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "안녕! 나 강남역 근처에서 약속 있는데, 강남역 근처 조용한 카페 찾아줄래? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-006",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "안녕! 나 강남역 근처에서 약속 있는데, 강남역 근처 조용한 카페 찾아줄래?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강남역 근처에 조용한 카페 몇 군데를 찾아봤어요. '스타벅스 강남R점'이 대표적이네요. 다른 곳도 알려드릴까요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "좋아. 내가 처음에 가기로 한 장소에서 디저트 카페도 찾아줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 강남역 근처 디저트 맛집으로는 '빌리엔젤 강남역점'이 유명해요. 케이크 종류가 다양해서 좋아하실 것 같아요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자는 강남역 근처에서 찾고 있습니다.",
+          "trigger": "좋아. 그럼 디저트 맛있는 카페도 찾아줘",
+          "expected_action": {
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "강남역 근처 디저트 맛있는 카페"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-007-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-007",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "2025년 10월에 부산으로 가족 여행 가는데, 4명이서 갈만한 축제 있으면 추천해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 10월 부산에서는 '정관생태하천학습문화축제'가 2025년 10월 23일부터 10월 25일까지 열릴 예정입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "그렇구나. 다른 지역도 좀 볼까? 서울 쪽으로."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "서울에서는 '구리 코스모스 축제'가 10월초에 한강시민공원에서 열립니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "좋아. 대화 처음에 알려준 축제 중에서 우리 가족 인원 수를 생각하면 어디가 좋을까?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "정관생태하천학습문화축제는 4인 가족이 함께 참여하기 좋습니다. 축제 정보를 미리 확인해보시는 걸 추천드려요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 3,
+          "should_remember": "2025년 10월에 가족 여행을 간다.",
+          "trigger": "다른 지역도 좀 볼까? 서울 쪽으로.",
+          "expected_action": {
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025년 10월 서울 축제"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-008-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 후기 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-008",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "제주도 애월 쪽으로 여행 가려고 하는데, 제주도 애월 맛집 후기 찾아줘. "
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 제주도 애월 근처 맛집에 대한 실제 방문 후기 몇 개를 찾아봤어요. '애월은지금'이라는 식당이 방문객 평이 좋네요. 다른 곳도 더 찾아드릴까요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "좋아. 그럼 같은 지역으로 이번엔 '분위기 좋은 카페 후기' 찾아줘"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "물론이죠. 아까 말씀하신 애월 근처에 분위기 좋은 카페를 찾아봤어요. '오션뷰카페' 후기가 괜찮아 보이네요. 확인해보시겠어요?"
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 이전에 언급했던 여행지 '제주도 애월'을 기억하고 새로운 검색어에 반영해야 한다.",
+          "trigger": "좋아요. 그럼 같은 지역으로 이번엔 '분위기 좋은 카페 후기'알려줘",
+          "expected_action": {
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제주도 애월 분위기 좋은 카페 후기"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-009-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'강원도 직접 키운 나물 한정식 식당'을 찾고 싶어. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_daum",
+        "description": "Tool schema for WebSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-009",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'강원도 직접 키운 나물 한정식 식당'으로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강원도 직접 재배한 나물을 사용하는 '산채향'이라는 한정식집이 있네요. 정갈한 상차림으로 방문객들의 평이 좋습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "음... 그럼 이번에는 최신 정보로 다시 알아봐 줄 수 있을까"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 다시 찾아보니 '강원나물밥'이라는 식당이 검색됩니다. 현대적인 인테리어와 깔끔한 맛으로 인기를 얻고 있다고 합니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자가 이전에 요청했던 '강원도', '직접 키운 나물', '한정식'이라는 검색 조건을 유지한 채, 정렬 순서만 '최신순'으로 변경하여 검색을 수행해야 한다.",
+          "trigger": "최신 정보로 다시 알아봐 줄 수 있을까",
+          "expected_action": {
+            "tool": "WebSearch_daum",
+            "args": {
+              "query": "강원도 직접 키운 나물로 요리하는 한정식 식당",
+              "sort": "recency"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-010-V2-VAR1",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. '10살 된 시츄 관절 영양제'로 검색해주세요. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-010",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 저희 집 강아지가 부쩍 나이가 들어서 걱정이에요. '10살 시츄 관절 영양제'로 검색해주세요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "나이가 있는 강아지는 관절 관리가 중요하죠. 10살 시츄 아이들이 먹기 좋은 관절 영양제를 찾아봤어요. '사이노퀸'이나 '안티놀' 같은 제품들이 인기가 많네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "감사합니다. 혹시 아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 10살이면 활동량이 예전 같지 않으니 너무 딱딱하지 않은 장난감이 좋겠어요. 노령견을 위한 부드러운 바스락 봉제인형 삑삑이 장난감이나, 후각 활동을 돕는 노즈워크 담요 장난감을 추천해 드려요."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 4,
+          "should_remember": "사용자의 강아지가 10살 노령견 시츄 강아지라는 사실",
+          "trigger": "아까 말했던 우리 강아지 장난감도 하나 사주고 싶은데, 뭐가 좋을까요?",
+          "expected_action": {
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "10살 시츄 장난감"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

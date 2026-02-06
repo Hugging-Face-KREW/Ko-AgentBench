@@ -2,8 +2,11 @@
 
 import json
 import logging
+import re
 import yaml
 import os
+import time
+import random
 from typing import Any, Dict, List, Optional
 from dataclasses import dataclass
 from pydantic import BaseModel, Field, validator
@@ -298,80 +301,330 @@ class LLMJudgeMetric(Metric):
         self.llm_adapter = llm_adapter
         self.llm_adapters = []  # 복수 judge용
         self.prompt_loader = PromptLoader()
+        # Judge API 안정성 파라미터
+        self.judge_max_retries = 5
+        self.judge_backoff_base = 2.0
+        self.judge_backoff_cap = 120.0
+
+    @staticmethod
+    def _is_rate_limit_error(err: Exception) -> bool:
+        """Best-effort detector for provider-agnostic 429/rate-limit errors."""
+        name = type(err).__name__.lower()
+        text = str(err).lower()
+        tokens = [
+            "ratelimit",
+            "rate_limit",
+            "rate limit",
+            "too many requests",
+            "429",
+            "too_many_requests",
+        ]
+        return any(tok in name for tok in tokens) or any(tok in text for tok in tokens)
+
+    @staticmethod
+    def _extract_retry_after_seconds(err: Exception) -> Optional[float]:
+        """Extract retry-after seconds from exception/response headers if available."""
+        candidates = []
+        for attr in ("response", "httpx_response"):
+            resp = getattr(err, attr, None)
+            if resp is not None:
+                candidates.append(resp)
+
+        headers = getattr(err, "headers", None)
+        if headers is None:
+            for resp in candidates:
+                headers = getattr(resp, "headers", None)
+                if headers is not None:
+                    break
+
+        if not headers:
+            return None
+
+        try:
+            def _get(key: str) -> Optional[str]:
+                if not hasattr(headers, "get"):
+                    return None
+                val = headers.get(key)
+                if val is None:
+                    val = headers.get(key.lower())
+                return str(val) if val is not None else None
+
+            retry_after = _get("retry-after")
+            if retry_after:
+                try:
+                    return float(retry_after)
+                except Exception:
+                    return None
+
+            # Some providers expose reset timestamps
+            reset = _get("x-ratelimit-reset") or _get("ratelimit-reset")
+            if reset:
+                try:
+                    reset_ts = float(reset)
+                    now = time.time()
+                    if reset_ts > now:
+                        return max(0.0, reset_ts - now)
+                except Exception:
+                    return None
+        except Exception:
+            return None
+
+        return None
+
+    def _sleep_with_backoff(self, err: Exception, attempt: int):
+        """Sleep using Retry-After if present, otherwise exponential backoff."""
+        retry_after = self._extract_retry_after_seconds(err)
+        if retry_after is not None:
+            wait_s = max(1.0, float(retry_after))
+        else:
+            wait_s = self.judge_backoff_base * (2 ** attempt)
+        wait_s = min(wait_s, self.judge_backoff_cap)
+        wait_s += random.uniform(0.0, 1.0)
+        logging.warning(
+            f"Judge rate-limited; retrying in {wait_s:.1f}s "
+            f"(attempt {attempt + 1}/{self.judge_max_retries})"
+        )
+        time.sleep(wait_s)
+
+    @staticmethod
+    def _extract_success_from_text(raw_content: str) -> Optional[bool]:
+        if not raw_content:
+            return None
+
+        upper = raw_content.upper()
+
+        verdict_match = re.search(
+            r"(?:최종\s*판정|FINAL\s*VERDICT)\s*[:：]\s*(SUCCESS|FAIL|TRUE|FALSE)",
+            upper
+        )
+        if verdict_match:
+            token = verdict_match.group(1)
+            return token in {"SUCCESS", "TRUE"}
+
+        success_match = re.search(
+            r"(?:SUCCESS|성공)\s*[:：]?\s*(TRUE|FALSE|SUCCESS|FAIL)?",
+            upper
+        )
+        if success_match:
+            token = success_match.group(1)
+            if token in {"TRUE", "SUCCESS", None}:
+                if "FAIL" not in upper:
+                    return True
+            if token in {"FALSE", "FAIL"}:
+                return False
+
+        if "SUCCESS" in upper and "FAIL" not in upper:
+            return True
+        if "FAIL" in upper and "SUCCESS" not in upper:
+            return False
+
+        return None
+
+    @staticmethod
+    def _extract_score_from_text(raw_content: str) -> Optional[float]:
+        if not raw_content:
+            return None
+
+        text = raw_content
+        patterns = [
+            r"(?:score|점수|평가점수|총점)\s*[:：]?\s*([0-9]+(?:\.[0-9]+)?)",
+            r"([0-9]+(?:\.[0-9]+)?)\s*/\s*5",
+            r"([1-5])\s*점",
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, text, flags=re.IGNORECASE)
+            if not match:
+                continue
+            try:
+                return float(match.group(1))
+            except Exception:
+                continue
+        return None
+
+    @staticmethod
+    def _extract_confidence_from_text(raw_content: str) -> Optional[float]:
+        if not raw_content:
+            return None
+
+        text = raw_content
+        patterns = [
+            r"(?:confidence|신뢰도)\s*[:：]?\s*([0-9]+(?:\.[0-9]+)?)\s*%",
+            r"(?:confidence|신뢰도)\s*[:：]?\s*([0-9]+(?:\.[0-9]+)?)",
+        ]
+        for idx, pattern in enumerate(patterns):
+            match = re.search(pattern, text, flags=re.IGNORECASE)
+            if not match:
+                continue
+            try:
+                value = float(match.group(1))
+                if idx == 0:
+                    value = value / 100.0
+                if value > 1.0 and value <= 100.0:
+                    value = value / 100.0
+                return max(0.0, min(1.0, value))
+            except Exception:
+                continue
+        return None
+
+    def _build_text_fallback_response(
+        self,
+        raw_content: str,
+        response_model: BaseModel,
+    ) -> Optional[Dict[str, Any]]:
+        """Best-effort parser for judge models that ignore structured JSON mode."""
+        if not raw_content or not hasattr(response_model, "model_fields"):
+            return None
+
+        fields = response_model.model_fields
+        parsed: Dict[str, Any] = {}
+        parsed_any = False
+
+        if "success" in fields:
+            success = self._extract_success_from_text(raw_content)
+            if success is not None:
+                parsed["success"] = bool(success)
+                parsed_any = True
+
+        if "score" in fields:
+            score = self._extract_score_from_text(raw_content)
+            if score is not None:
+                # Current judge score models in this codebase are 1~5 scale.
+                score = max(1.0, min(5.0, score))
+                annotation = fields["score"].annotation
+                if annotation is int:
+                    parsed["score"] = int(round(score))
+                else:
+                    parsed["score"] = score
+                parsed_any = True
+
+        if "confidence" in fields:
+            confidence = self._extract_confidence_from_text(raw_content)
+            if confidence is not None:
+                parsed["confidence"] = confidence
+                parsed_any = True
+
+        if not parsed_any:
+            return None
+
+        # Fill required shape with conservative defaults.
+        for field_name in fields:
+            if field_name in parsed:
+                continue
+            if field_name == "reason":
+                parsed[field_name] = raw_content[:3000]
+            elif field_name == "score":
+                parsed[field_name] = 1
+            elif field_name == "confidence":
+                parsed[field_name] = 0.0
+            elif field_name in {"success", "error_reported"}:
+                parsed[field_name] = False
+            elif field_name == "reported_error_type":
+                parsed[field_name] = "none"
+            else:
+                parsed[field_name] = raw_content[:3000] if raw_content else ""
+
+        return parsed
     
     def _call_structured_judge(self, adapter: BaseAdapter, system_prompt: str, user_prompt: str,
                               response_model: BaseModel) -> Dict[str, Any]:
         """구조화된 출력을 사용하는 단일 judge 호출"""
-        try:
-            messages = [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ]
-            
-            # Gemini 모델 감지
-            model_name = getattr(adapter, 'model_name', '').lower()
-            is_gemini = 'gemini' in model_name
-            
-            # Gemini 모델에 최적화된 response_format 사용
-            if is_gemini:
-                response = adapter.chat_completion(
-                    messages, 
-                    temperature=0.0,
-                    max_tokens=2048,  # Judge 평가는 더 많은 토큰 필요 (특히 한국어)
-                    response_format={
-                        "type": "json_object",
-                        "response_schema": response_model.model_json_schema(),
-                        "enforce_validation": True  # Gemini JSON 검증 강화
-                    }
-                )
-            else:
-                # OpenAI 스타일 모델용
-                response = adapter.chat_completion(
-                    messages, 
-                    temperature=0.0,
-                    max_tokens=2048,
-                    response_format={
-                        "type": "json_schema",
-                        "json_schema": {
-                            "name": response_model.__name__,
-                            "schema": response_model.model_json_schema(),
-                            "strict": False
-                        }
-                    }
-                )
-            
-            content = response.get("message", {}).get("content", "{}")
-            
-            # Pydantic 모델로 파싱
-            parsed_response = response_model.model_validate_json(content)
-            return parsed_response.model_dump()
-            
-        except Exception as e:
-            logging.error(f"Structured judge call failed for {getattr(adapter, 'model_name', 'unknown')}: {str(e)}")
-            logging.error(f"Raw response content: {content if 'content' in locals() else 'N/A'}")
-            
-            # 기본값 반환
+        content = "{}"
+        last_error: Optional[Exception] = None
+
+        for attempt in range(self.judge_max_retries):
             try:
-                # Pydantic v2에서 model_fields 사용
-                if hasattr(response_model, 'model_fields'):
-                    defaults = {}
-                    for field_name, field_info in response_model.model_fields.items():
-                        if field_name == 'score':
-                            defaults[field_name] = 1
-                        elif field_name == 'confidence':
-                            defaults[field_name] = 0.0
-                        elif field_name == 'error_reported' or field_name == 'success':
-                            defaults[field_name] = False
-                        elif field_name == 'reported_error_type':
-                            defaults[field_name] = "none"
-                        else:
-                            defaults[field_name] = f"Error: {str(e)}"
-                    return defaults
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt}
+                ]
+
+                # Gemini 모델 감지
+                model_name = getattr(adapter, 'model_name', '').lower()
+                is_gemini = 'gemini' in model_name
+
+                # Gemini 모델에 최적화된 response_format 사용
+                if is_gemini:
+                    response = adapter.chat_completion(
+                        messages,
+                        temperature=0.0,
+                        max_tokens=2048,  # Judge 평가는 더 많은 토큰 필요 (특히 한국어)
+                        response_format={
+                            "type": "json_object",
+                            "response_schema": response_model.model_json_schema(),
+                            "enforce_validation": True  # Gemini JSON 검증 강화
+                        }
+                    )
                 else:
-                    # 기본 실패 응답
-                    return {"error": str(e)}
-            except Exception:
-                return {"error": str(e)}
+                    # OpenAI 스타일 모델용
+                    response = adapter.chat_completion(
+                        messages,
+                        temperature=0.0,
+                        max_tokens=2048,
+                        response_format={
+                            "type": "json_schema",
+                            "json_schema": {
+                                "name": response_model.__name__,
+                                "schema": response_model.model_json_schema(),
+                                "strict": False
+                            }
+                        }
+                    )
+
+                content = response.get("message", {}).get("content", "{}")
+
+                # Pydantic 모델로 파싱
+                parsed_response = response_model.model_validate_json(content)
+                return parsed_response.model_dump()
+
+            except Exception as e:
+                last_error = e
+                if self._is_rate_limit_error(e) and attempt < self.judge_max_retries - 1:
+                    self._sleep_with_backoff(e, attempt)
+                    continue
+                break
+
+        raw_content = content if isinstance(content, str) else ""
+
+        # Heuristic fallback for non-JSON judge outputs.
+        try:
+            parsed_fallback = self._build_text_fallback_response(raw_content, response_model)
+            if parsed_fallback is not None:
+                logging.warning(
+                    f"Structured judge parsing failed for {getattr(adapter, 'model_name', 'unknown')}; "
+                    "used text fallback parser."
+                )
+                return parsed_fallback
+        except Exception:
+            pass
+
+        logging.error(
+            f"Structured judge call failed for {getattr(adapter, 'model_name', 'unknown')}: "
+            f"{str(last_error) if last_error is not None else 'unknown error'}"
+        )
+        logging.error(f"Raw response content: {raw_content if raw_content else 'N/A'}")
+
+        # 기본값 반환
+        try:
+            # Pydantic v2에서 model_fields 사용
+            if hasattr(response_model, 'model_fields'):
+                defaults = {}
+                for field_name, field_info in response_model.model_fields.items():
+                    if field_name == 'score':
+                        defaults[field_name] = 1
+                    elif field_name == 'confidence':
+                        defaults[field_name] = 0.0
+                    elif field_name == 'error_reported' or field_name == 'success':
+                        defaults[field_name] = False
+                    elif field_name == 'reported_error_type':
+                        defaults[field_name] = "none"
+                    else:
+                        defaults[field_name] = f"Error: {str(last_error)}"
+                return defaults
+            else:
+                # 기본 실패 응답
+                return {"error": str(last_error)}
+        except Exception:
+            return {"error": str(last_error)}
     
     def _call_multi_judge_binary(self, prompt: str, metric_key: str, 
                                  response_model: BaseModel,
@@ -703,7 +956,7 @@ class EPRCVRMetric(Metric):
         })
 
 class PassAtKMetric(Metric):
-    """pass@k(반복 안정성): k번 반복 시 성공 비율"""
+    """pass@k: k번 반복 중 최소 한 번 이상 성공했는지 (task-level binary)."""
     name = "pass@k"
     level = "common"
     
@@ -718,14 +971,711 @@ class PassAtKMetric(Metric):
         
         success_count = sum(1 for result in repetition_results if result)
         actual_reps = len(repetition_results)
-        score = success_count / actual_reps if actual_reps > 0 else 0.0
+        score = 1.0 if success_count > 0 else 0.0
         
+        return EvaluationResult(self.name, score, {
+            "repetitions": repetitions,
+            "actual_repetitions": actual_reps,
+            "success_count": success_count,
+            "pass": success_count > 0
+        })
+
+
+class StabilityAtKMetric(Metric):
+    """stability@k: k번 반복 중 성공 비율."""
+    name = "stability@k"
+    level = "common"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        repetitions = ctx.task_schema.get("repetitions", 1)
+        repetition_results = ctx.logs.get("repetition_results", [])
+
+        if not repetition_results:
+            current_success = ctx.logs.get("success", False)
+            repetition_results = [current_success]
+
+        success_count = sum(1 for result in repetition_results if result)
+        actual_reps = len(repetition_results)
+        score = success_count / actual_reps if actual_reps > 0 else 0.0
+
         return EvaluationResult(self.name, score, {
             "repetitions": repetitions,
             "actual_repetitions": actual_reps,
             "success_count": success_count
         })
-        
+
+
+def _normalize_value(value: Any) -> Any:
+    """Normalize nested values for robust deterministic comparisons."""
+    if isinstance(value, str):
+        return value.strip().lower()
+    if isinstance(value, dict):
+        return {str(k): _normalize_value(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_normalize_value(v) for v in value]
+    return value
+
+
+def _canonical_arg_value(value: Any) -> Any:
+    normalized = _normalize_value(value)
+    if isinstance(normalized, (dict, list)):
+        return json.dumps(normalized, ensure_ascii=False, sort_keys=True)
+    return normalized
+
+
+def _collect_golden_action_nodes(task_schema: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Collect expected tool/action nodes from v2 golden graph or v1 golden_action."""
+    golden = task_schema.get("golden")
+    if isinstance(golden, dict):
+        action_graph = golden.get("action_graph")
+        if isinstance(action_graph, dict):
+            nodes = action_graph.get("nodes", [])
+            collected = []
+            for node in nodes:
+                if not isinstance(node, dict):
+                    continue
+                tool = node.get("tool")
+                if not tool:
+                    continue
+                collected.append(
+                    {
+                        "tool": tool,
+                        "args": node.get("args", {}) or {},
+                        "id": node.get("id"),
+                    }
+                )
+            if collected:
+                return collected
+
+    golden_action = task_schema.get("golden_action", [])
+    if isinstance(golden_action, dict):
+        golden_action = [golden_action]
+    return [a for a in golden_action if isinstance(a, dict) and a.get("tool")]
+
+
+def _collect_required_tools(task_schema: Dict[str, Any]) -> List[str]:
+    golden = task_schema.get("golden")
+    if isinstance(golden, dict):
+        required = golden.get("required_tools", [])
+        if isinstance(required, list):
+            out = []
+            for tool in required:
+                if isinstance(tool, str) and tool not in out:
+                    out.append(tool)
+            if out:
+                return out
+
+    tools = []
+    for action in _collect_golden_action_nodes(task_schema):
+        tool = action.get("tool")
+        if isinstance(tool, str) and tool not in tools:
+            tools.append(tool)
+    return tools
+
+
+class TRF1Metric(Metric):
+    """TRF1 (Tool Retrieval F1): required tool set identification quality."""
+    name = "TRF1"
+    level = "v2"
+
+    @staticmethod
+    def _prf1(tp: int, fp: int, fn: int) -> Dict[str, float]:
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
+        return {"precision": precision, "recall": recall, "f1": f1}
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        required_tools = set(_collect_required_tools(ctx.task_schema))
+
+        optional_tools = set()
+        golden = ctx.task_schema.get("golden")
+        if isinstance(golden, dict):
+            opt = golden.get("optional_tools", [])
+            if isinstance(opt, list):
+                optional_tools = {t for t in opt if isinstance(t, str)}
+
+        predicted_tools = []
+        for action in ctx.action_trace:
+            tool = action.get("tool")
+            if isinstance(tool, str):
+                predicted_tools.append(tool)
+        predicted_set = set(predicted_tools)
+
+        if not required_tools and not predicted_set:
+            return EvaluationResult(self.name, 1.0, {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "required_tools": [],
+                "predicted_tools": [],
+            })
+
+        tp_set = predicted_set & required_tools
+        fp_set = predicted_set - required_tools - optional_tools
+        fn_set = required_tools - predicted_set
+
+        prf = self._prf1(len(tp_set), len(fp_set), len(fn_set))
+        return EvaluationResult(self.name, prf["f1"], {
+            "precision": prf["precision"],
+            "recall": prf["recall"],
+            "f1": prf["f1"],
+            "required_tools": sorted(required_tools),
+            "optional_tools": sorted(optional_tools),
+            "predicted_tools": sorted(predicted_set),
+            "matched_tools": sorted(tp_set),
+            "extra_tools": sorted(fp_set),
+            "missing_tools": sorted(fn_set),
+        })
+
+
+class ArgF1Metric(Metric):
+    """ArgF1 (Argument Grounding F1): key-value argument matching quality."""
+    name = "ArgF1"
+    level = "v2"
+
+    @staticmethod
+    def _prf1(tp: int, fp: int, fn: int) -> Dict[str, float]:
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
+        return {"precision": precision, "recall": recall, "f1": f1}
+
+    @staticmethod
+    def _match_args(expected_args: Dict[str, Any], actual_args: Dict[str, Any]) -> Dict[str, int]:
+        tp = fp = fn = 0
+
+        for key, pred_val in actual_args.items():
+            if key in expected_args and _canonical_arg_value(pred_val) == _canonical_arg_value(expected_args[key]):
+                tp += 1
+            else:
+                fp += 1
+
+        for key, gold_val in expected_args.items():
+            if key not in actual_args:
+                fn += 1
+            elif _canonical_arg_value(actual_args[key]) != _canonical_arg_value(gold_val):
+                fn += 1
+
+        return {"tp": tp, "fp": fp, "fn": fn}
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        expected_nodes = _collect_golden_action_nodes(ctx.task_schema)
+        actual_calls = [a for a in ctx.action_trace if isinstance(a.get("tool"), str)]
+
+        if not expected_nodes and not actual_calls:
+            return EvaluationResult(self.name, 1.0, {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "tp": 0,
+                "fp": 0,
+                "fn": 0,
+                "reason": "No expected/actual tool arguments",
+            })
+
+        used_actual_indices = set()
+        tp = fp = fn = 0
+        per_tool = []
+
+        for node in expected_nodes:
+            tool = node.get("tool")
+            expected_args = node.get("args", {}) if isinstance(node.get("args"), dict) else {}
+
+            matched_idx = None
+            for idx, call in enumerate(actual_calls):
+                if idx in used_actual_indices:
+                    continue
+                if call.get("tool") == tool:
+                    matched_idx = idx
+                    break
+
+            if matched_idx is None:
+                missed = len(expected_args) if expected_args else 1
+                fn += missed
+                per_tool.append({
+                    "tool": tool,
+                    "matched": False,
+                    "tp": 0,
+                    "fp": 0,
+                    "fn": missed,
+                })
+                continue
+
+            used_actual_indices.add(matched_idx)
+            actual_args = actual_calls[matched_idx].get("args", {})
+            if not isinstance(actual_args, dict):
+                actual_args = {}
+
+            counts = self._match_args(expected_args, actual_args)
+            tp += counts["tp"]
+            fp += counts["fp"]
+            fn += counts["fn"]
+
+            per_tool.append({
+                "tool": tool,
+                "matched": True,
+                "tp": counts["tp"],
+                "fp": counts["fp"],
+                "fn": counts["fn"],
+            })
+
+        # Unmatched predicted calls contribute FP via their arguments.
+        for idx, call in enumerate(actual_calls):
+            if idx in used_actual_indices:
+                continue
+            args = call.get("args", {})
+            if isinstance(args, dict) and args:
+                fp += len(args)
+            else:
+                fp += 1
+
+        prf = self._prf1(tp, fp, fn)
+        return EvaluationResult(self.name, prf["f1"], {
+            "precision": prf["precision"],
+            "recall": prf["recall"],
+            "f1": prf["f1"],
+            "tp": tp,
+            "fp": fp,
+            "fn": fn,
+            "per_tool": per_tool,
+            "expected_nodes": len(expected_nodes),
+            "actual_calls": len(actual_calls),
+        })
+
+
+class ExecSRMetric(Metric):
+    """ExecSR (Execution Success Rate): successful executable call ratio."""
+    name = "ExecSR"
+    level = "v2"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        calls = ctx.action_trace or []
+        total_calls = len(calls)
+        if total_calls == 0:
+            return EvaluationResult(self.name, 0.0, {
+                "total_calls": 0,
+                "successful_calls": 0,
+                "valid_calls": 0,
+            })
+
+        valid_calls = 0
+        successful_calls = 0
+        for call in calls:
+            tool = call.get("tool")
+            args = call.get("args", {})
+            is_valid = bool(tool) and isinstance(args, dict)
+            if is_valid:
+                valid_calls += 1
+            if is_valid and call.get("success") is True and not call.get("error"):
+                successful_calls += 1
+
+        score = successful_calls / total_calls if total_calls > 0 else 0.0
+        return EvaluationResult(self.name, score, {
+            "total_calls": total_calls,
+            "valid_calls": valid_calls,
+            "successful_calls": successful_calls,
+        })
+
+
+class RecoverSRMetric(Metric):
+    """RecoverSR: success recovery after an injected failure."""
+    name = "RecoverSR"
+    level = "v2"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        error_injection = ctx.task_schema.get("error_injection") or {}
+        fallback_opts = ctx.task_schema.get("fallback_options") or []
+        calls = ctx.logs.get("tool_calls") or ctx.logs.get("tool_invocations") or []
+
+        targets = set()
+        if isinstance(error_injection, dict):
+            t = error_injection.get("targets")
+            if isinstance(t, list):
+                for item in t:
+                    if isinstance(item, str):
+                        targets.add(item)
+            injected_tool = error_injection.get("tool")
+            if isinstance(injected_tool, str):
+                targets.add(injected_tool)
+
+        fallback_tools = {
+            opt.get("tool")
+            for opt in fallback_opts
+            if isinstance(opt, dict) and isinstance(opt.get("tool"), str)
+        }
+
+        if not calls:
+            return EvaluationResult(self.name, None, {"reason": "No tool calls"})
+
+        failure_index = None
+        failed_tool = None
+        for idx, call in enumerate(calls):
+            if not isinstance(call, dict):
+                continue
+            tool = call.get("tool") or call.get("tool_name")
+            failed = call.get("success") is False or bool(call.get("error"))
+            if not failed:
+                continue
+            if targets and tool not in targets:
+                continue
+            failure_index = idx
+            failed_tool = tool
+            break
+
+        if failure_index is None:
+            return EvaluationResult(self.name, None, {"reason": "No injected/target failure observed"})
+
+        used_fallback = False
+        fallback_success = False
+        fallback_tool = None
+        for call in calls[failure_index + 1:]:
+            if not isinstance(call, dict):
+                continue
+            tool = call.get("tool") or call.get("tool_name")
+            if not tool:
+                continue
+
+            if fallback_tools:
+                is_fallback = tool in fallback_tools
+            elif targets:
+                is_fallback = tool not in targets
+            else:
+                is_fallback = tool != failed_tool
+
+            if not is_fallback:
+                continue
+
+            used_fallback = True
+            fallback_tool = tool
+            if call.get("success") is True and not call.get("error"):
+                fallback_success = True
+                break
+
+        final_success = bool(ctx.logs.get("success", False))
+        recovered = used_fallback and fallback_success and final_success
+        score = 1.0 if recovered else 0.0
+
+        return EvaluationResult(self.name, score, {
+            "failed_tool": failed_tool,
+            "targets": sorted(targets),
+            "fallback_tools": sorted([t for t in fallback_tools if isinstance(t, str)]),
+            "used_fallback": used_fallback,
+            "fallback_tool": fallback_tool,
+            "fallback_success": fallback_success,
+            "final_task_success": final_success,
+            "recovered": recovered,
+        })
+
+
+class StepEffMetric(Metric):
+    """StepEff: min(1.0, minimum_steps / actual_steps)."""
+    name = "StepEff"
+    level = "v2"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        minimum_steps = ctx.task_schema.get("minimum_steps")
+        if minimum_steps is None:
+            golden = ctx.task_schema.get("golden")
+            if isinstance(golden, dict):
+                action_graph = golden.get("action_graph")
+                if isinstance(action_graph, dict):
+                    minimum_steps = action_graph.get("min_steps")
+
+        if minimum_steps is None:
+            minimum_steps = max(1, len(_collect_golden_action_nodes(ctx.task_schema)))
+
+        try:
+            minimum_steps = int(minimum_steps)
+        except Exception:
+            minimum_steps = 1
+        minimum_steps = max(1, minimum_steps)
+
+        actual_steps = len(ctx.action_trace)
+        if actual_steps <= 0:
+            return EvaluationResult(self.name, 0.0, {
+                "minimum_steps": minimum_steps,
+                "actual_steps": actual_steps,
+                "reason": "No executed steps",
+            })
+
+        score = min(1.0, minimum_steps / actual_steps)
+        return EvaluationResult(self.name, score, {
+            "minimum_steps": minimum_steps,
+            "actual_steps": actual_steps,
+            "extra_steps": max(0, actual_steps - minimum_steps),
+        })
+
+
+class GroundAnsMetric(Metric):
+    """GroundAns: required-field coverage + contradiction penalty."""
+    name = "GroundAns"
+    level = "v2"
+
+    @staticmethod
+    def _collect_required_fields(task_schema: Dict[str, Any]) -> List[str]:
+        fields: List[str] = []
+
+        golden = task_schema.get("golden")
+        if isinstance(golden, dict):
+            expected_answer = golden.get("expected_answer")
+            if isinstance(expected_answer, dict):
+                req = expected_answer.get("required_fields", [])
+                if isinstance(req, list):
+                    for item in req:
+                        if isinstance(item, str):
+                            fields.append(item)
+
+        resp_schema = task_schema.get("resp_schema")
+        if isinstance(resp_schema, dict):
+            req = resp_schema.get("required_fields", [])
+            if isinstance(req, list):
+                for item in req:
+                    if isinstance(item, str):
+                        fields.append(item)
+
+        # v1 fallback
+        for gf in task_schema.get("golden_fields", []):
+            if isinstance(gf, dict):
+                for item in gf.get("fields", []):
+                    if isinstance(item, str):
+                        fields.append(item)
+
+        unique = []
+        for field in fields:
+            if field not in unique:
+                unique.append(field)
+        return unique
+
+    @staticmethod
+    def _collect_forbidden_claims(task_schema: Dict[str, Any]) -> List[str]:
+        claims: List[str] = []
+        golden = task_schema.get("golden")
+        if isinstance(golden, dict):
+            expected_answer = golden.get("expected_answer")
+            if isinstance(expected_answer, dict):
+                forbidden = expected_answer.get("forbidden_claims", [])
+                if isinstance(forbidden, list):
+                    for item in forbidden:
+                        if isinstance(item, str):
+                            claims.append(item)
+        return claims
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        required_fields = self._collect_required_fields(ctx.task_schema)
+        forbidden_claims = self._collect_forbidden_claims(ctx.task_schema)
+        final_response = str(ctx.logs.get("final_response") or "")
+        final_response_lc = final_response.lower()
+
+        successful_results = [
+            action.get("result")
+            for action in ctx.action_trace
+            if action.get("success") is True and action.get("result") is not None
+        ]
+
+        if not required_fields:
+            forbidden_hits = [c for c in forbidden_claims if c.lower() in final_response_lc]
+            score = 1.0 if not forbidden_hits else 0.0
+            return EvaluationResult(self.name, score, {
+                "required_fields": [],
+                "covered_fields": [],
+                "missing_fields": [],
+                "forbidden_hits": forbidden_hits,
+            })
+
+        covered_fields = []
+        missing_fields = []
+        extracted_values = []
+
+        for field in required_fields:
+            found = False
+            found_value = None
+            for result in successful_results:
+                value = extract_value_by_path(result, field)
+                if value is not None:
+                    found = True
+                    found_value = value
+                    break
+            if found:
+                covered_fields.append(field)
+                extracted_values.append(found_value)
+            else:
+                missing_fields.append(field)
+
+        coverage = len(covered_fields) / len(required_fields) if required_fields else 0.0
+
+        mention_hits = 0
+        for value in extracted_values:
+            value_text = str(value).strip()
+            if value_text and value_text in final_response:
+                mention_hits += 1
+        mention_ratio = mention_hits / len(covered_fields) if covered_fields else 0.0
+
+        forbidden_hits = [c for c in forbidden_claims if c.lower() in final_response_lc]
+        contradiction_penalty = 0.0 if forbidden_hits else 1.0
+
+        # Coverage 중심 + response grounding 보조
+        score = (0.7 * coverage + 0.3 * mention_ratio) * contradiction_penalty
+
+        return EvaluationResult(self.name, score, {
+            "required_fields": required_fields,
+            "covered_fields": covered_fields,
+            "missing_fields": missing_fields,
+            "coverage": coverage,
+            "mention_ratio": mention_ratio,
+            "forbidden_hits": forbidden_hits,
+            "contradiction_penalty": contradiction_penalty,
+        })
+
+
+class CtxRecallMetric(Metric):
+    """CtxRecall: deterministic context memory recall via context tests."""
+    name = "CtxRecall"
+    level = "v2"
+
+    @staticmethod
+    def _collect_context_tests(task_schema: Dict[str, Any]) -> List[Dict[str, Any]]:
+        # v1 path
+        conversation_tracking = task_schema.get("conversation_tracking")
+        if isinstance(conversation_tracking, dict):
+            eval_ctx = conversation_tracking.get("evaluation_context", {})
+            if isinstance(eval_ctx, dict):
+                tests = eval_ctx.get("context_tests", [])
+                if isinstance(tests, list) and tests:
+                    return [t for t in tests if isinstance(t, dict)]
+
+        # v2 path (optional extension)
+        tests = task_schema.get("context_tests")
+        if isinstance(tests, list):
+            return [t for t in tests if isinstance(t, dict)]
+
+        return []
+
+    @staticmethod
+    def _action_matches_expected(actual_action: Dict[str, Any], expected_action: Dict[str, Any]) -> bool:
+        expected_tool = expected_action.get("tool")
+        if expected_tool and actual_action.get("tool") != expected_tool:
+            return False
+
+        expected_args = expected_action.get("args", {})
+        if not isinstance(expected_args, dict):
+            expected_args = {}
+
+        actual_args = actual_action.get("args", {})
+        if not isinstance(actual_args, dict):
+            actual_args = {}
+
+        for key, expected_val in expected_args.items():
+            if key not in actual_args:
+                return False
+            if _canonical_arg_value(actual_args[key]) != _canonical_arg_value(expected_val):
+                return False
+        return True
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        context_tests = self._collect_context_tests(ctx.task_schema)
+        if not context_tests:
+            return EvaluationResult(self.name, None, {"reason": "No context tests"})
+
+        action_trace = ctx.action_trace or []
+        matched = 0
+        unmatched_tests = []
+
+        for test in context_tests:
+            expected_action = test.get("expected_action", {})
+            if not isinstance(expected_action, dict) or not expected_action:
+                unmatched_tests.append({
+                    "reason": "Missing expected_action",
+                    "test": test,
+                })
+                continue
+
+            found = False
+            for action in action_trace:
+                if self._action_matches_expected(action, expected_action):
+                    found = True
+                    break
+
+            if found:
+                matched += 1
+            else:
+                unmatched_tests.append({
+                    "reason": "No matching action found",
+                    "expected_action": expected_action,
+                })
+
+        total = len(context_tests)
+        score = matched / total if total > 0 else 0.0
+        return EvaluationResult(self.name, score, {
+            "matched_tests": matched,
+            "total_tests": total,
+            "unmatched_tests": unmatched_tests,
+        })
+
+
+class PolicySafeMetric(Metric):
+    """PolicySafe: lightweight policy/safety compliance deterministic check."""
+    name = "PolicySafe"
+    level = "v2"
+
+    def evaluate(self, ctx: EvalContext) -> EvaluationResult:
+        policy = ctx.task_schema.get("policy")
+        track = ctx.task_schema.get("track")
+        metadata = ctx.task_schema.get("metadata") if isinstance(ctx.task_schema.get("metadata"), dict) else {}
+        tags = metadata.get("tags", []) if isinstance(metadata, dict) else []
+        is_safety_task = (
+            track == "SAFETY"
+            or any(isinstance(tag, str) and "safety" in tag.lower() for tag in tags)
+            or isinstance(policy, dict)
+        )
+
+        if not is_safety_task:
+            return EvaluationResult(self.name, None, {"reason": "Not a safety-scoped task"})
+
+        forbidden_tools = []
+        forbidden_phrases = []
+        if isinstance(policy, dict):
+            ft = policy.get("forbidden_tools", [])
+            if isinstance(ft, list):
+                forbidden_tools = [t for t in ft if isinstance(t, str)]
+            fp = policy.get("forbidden_phrases", [])
+            if isinstance(fp, list):
+                forbidden_phrases = [p for p in fp if isinstance(p, str)]
+
+        # Also use expected_answer.forbidden_claims as phrase-level policy hints.
+        golden = ctx.task_schema.get("golden")
+        if isinstance(golden, dict):
+            expected_answer = golden.get("expected_answer")
+            if isinstance(expected_answer, dict):
+                claims = expected_answer.get("forbidden_claims", [])
+                if isinstance(claims, list):
+                    for claim in claims:
+                        if isinstance(claim, str):
+                            forbidden_phrases.append(claim)
+
+        tool_violations = []
+        for action in ctx.action_trace:
+            tool = action.get("tool")
+            if isinstance(tool, str) and tool in forbidden_tools:
+                tool_violations.append(tool)
+
+        final_response = str(ctx.logs.get("final_response") or "").lower()
+        phrase_violations = []
+        for phrase in forbidden_phrases:
+            if phrase.lower() in final_response:
+                phrase_violations.append(phrase)
+
+        has_violation = bool(tool_violations or phrase_violations)
+        score = 0.0 if has_violation else 1.0
+        return EvaluationResult(self.name, score, {
+            "forbidden_tools": forbidden_tools,
+            "forbidden_phrases": forbidden_phrases,
+            "tool_violations": tool_violations,
+            "phrase_violations": phrase_violations,
+            "compliant": not has_violation,
+        })
+
+
 #레벨1 메트릭
 class ToolAccMetric(Metric):
     """ToolAcc: 첫번째 예측 툴이 golden_action.tool과 일치하는지"""
@@ -876,13 +1826,17 @@ class ArgAccMetric(LLMJudgeMetric):
             # 1-5 점수를 0.0-1.0 범위로 변환 
             score = result.get("score", 1)
             normalized_score = max(0.0, (score - 1) / 4.0)  # 1->0.0, 5->1.0, 음수 방지
-            
-            print(f"DEBUG ArgAcc: score={score}, normalized_score={normalized_score}, result={result}")
+            logging.debug(
+                "ArgAcc judge parsed score=%s normalized=%s model_votes=%s",
+                score,
+                normalized_score,
+                result.get("vote_count"),
+            )
             
             return normalized_score
             
         except Exception as e:
-            print(f"LLM Judge 평가 중 오류: {e}")
+            logging.warning(f"ArgAcc LLM Judge 평가 중 오류: {e}")
             return 0.0
 
 
@@ -1661,6 +2615,16 @@ METRICS = {
     "SR": SRMetric(),
     "EPR_CVR": EPRCVRMetric(),
     "pass@k": PassAtKMetric(),
+    "stability@k": StabilityAtKMetric(),
+    # v2 deterministic core metrics
+    "TRF1": TRF1Metric(),
+    "ArgF1": ArgF1Metric(),
+    "ExecSR": ExecSRMetric(),
+    "RecoverSR": RecoverSRMetric(),
+    "StepEff": StepEffMetric(),
+    "GroundAns": GroundAnsMetric(),
+    "CtxRecall": CtxRecallMetric(),
+    "PolicySafe": PolicySafeMetric(),
     #레벨1 메트릭
     "ToolAcc": ToolAccMetric(),
     "ArgAcc": ArgAccMetric(),

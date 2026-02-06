@@ -3,6 +3,7 @@
 import json
 import time
 import logging
+import random
 from typing import Any, Dict, List, Optional
 
 from ..adapters.base_adapter import BaseAdapter
@@ -20,7 +21,7 @@ class BenchmarkRunner:
                  max_steps: int = 10,
                  timeout: int = 300,
                  max_retries: int = 3,
-                 multiturn_mode: str = "seed_replay"):
+                 multiturn_mode: str = "full_rollout"):
         """Initialize benchmark runner.
         
         Args:
@@ -356,8 +357,8 @@ class BenchmarkRunner:
         # Allow per-task override, otherwise use runner default.
         mode = task.get('multiturn_mode') or self.multiturn_mode
         if mode not in {"seed_replay", "full_rollout"}:
-            self.logger.warning(f"[MULTI-TURN] Unknown mode={mode!r}; falling back to 'seed_replay'")
-            mode = "seed_replay"
+            self.logger.warning(f"[MULTI-TURN] Unknown mode={mode!r}; falling back to 'full_rollout'")
+            mode = "full_rollout"
 
         # Initialize conversation (no system prompt as per requirement)
         messages: List[Dict[str, Any]] = []
@@ -823,20 +824,19 @@ class BenchmarkRunner:
         """Call LLM with retry logic."""
         self.logger.debug(f"Calling LLM with {len(tools)} tools")
 
-        def _is_anthropic_rate_limit(err: Exception) -> bool:
+        def _is_rate_limit_error(err: Exception) -> bool:
             name = type(err).__name__
             text = str(err).lower()
-            model = (getattr(self.adapter, "model_name", "") or "").lower()
-
-            if name == "RateLimitError":
-                # LiteLLM raises this for multiple providers; restrict by hints.
-                return "anthropic" in text or "claude" in text or "anthropic" in model or "claude" in model
-
-            # Fallback heuristic: Anthropic error payload uses 'rate_limit_error'
-            if "rate_limit_error" in text:
-                return "anthropic" in text or "claude" in text or "anthropic" in model or "claude" in model
-
-            return False
+            tokens = [
+                "ratelimit",
+                "rate_limit",
+                "rate limit",
+                "too many requests",
+                "429",
+                "too_many_requests",
+            ]
+            name_l = name.lower()
+            return any(tok in name_l for tok in tokens) or any(tok in text for tok in tokens)
 
         def _extract_retry_after_seconds(err: Exception) -> Optional[float]:
             """Best-effort extraction of Retry-After from exception/response headers."""
@@ -925,17 +925,29 @@ class BenchmarkRunner:
                 last_error = e
                 self.logger.warning(f"LLM call attempt {attempt + 1} failed: {str(e)}")
                 if attempt < self.max_retries - 1:
-                    # Anthropic TPM rate limits are per-minute; short retries amplify failures.
-                    if _is_anthropic_rate_limit(e):
+                    if _is_rate_limit_error(e):
+                        model_name = (getattr(self.adapter, "model_name", "") or "").lower()
+                        if "anthropic" in model_name or "claude" in model_name:
+                            min_wait = 60.0
+                        elif "azure" in model_name or "gpt-" in model_name or "openai" in model_name:
+                            min_wait = 8.0
+                        else:
+                            min_wait = 5.0
+
                         retry_after = _extract_retry_after_seconds(e)
-                        wait_s = max(60.0, float(retry_after)) if retry_after is not None else 60.0
+                        if retry_after is not None:
+                            wait_s = max(min_wait, float(retry_after))
+                        else:
+                            wait_s = max(min_wait, min_wait * (2 ** attempt))
+                        wait_s = min(wait_s, 300.0)
+                        wait_s += random.uniform(0.0, 1.0)
                         self.logger.warning(
-                            f"[RATE_LIMIT] Detected Anthropic rate limit; sleeping {wait_s:.1f}s before retry "
+                            f"[RATE_LIMIT] sleeping {wait_s:.1f}s before retry "
                             f"(attempt {attempt + 2}/{self.max_retries})"
                         )
                         time.sleep(wait_s)
                     else:
-                        time.sleep(2 ** attempt)  # Exponential backoff
+                        time.sleep(min(2 ** attempt, 30))  # Exponential backoff
         
         raise Exception(f"LLM call failed after {self.max_retries} attempts: {str(last_error)}")
     

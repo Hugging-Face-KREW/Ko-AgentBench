@@ -134,6 +134,13 @@ uv run run_benchmark_with_logging.py --levels L1 --model openrouter/anthropic/cl
 
 # Evaluate (enter execution date as YYYYMMDD)
 uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
+
+# (Optional) Validate v2 task schemas
+uv run python scripts/validate_task_schemas.py
+
+# Build and validate v2 A+B sample tasks (20)
+uv run python scripts/build_v2_sample_tasks.py
+uv run python scripts/validate_task_schemas.py --tasks-dir bench/tasks_v2 --strict
 ```
 
 ---
@@ -194,12 +201,17 @@ uv run run_benchmark_with_logging.py --use-local --model Qwen/Qwen2.5-7B-Instruc
 uv run run_benchmark_with_logging.py --cache-mode write
 
 # Repeat each task 3 times
-uv run run_benchmark_with_logging.py --repetition 3
+uv run run_benchmark_with_logging.py --repetitions 3
+
+# (L6/L7) Run in seed replay mode (default is full_rollout)
+uv run run_benchmark_with_logging.py --seed-replay
 ```
 
 ### Key options
 **Dataset selection**
 - `--levels`: Levels to run (e.g., `L1,L2,L6,L7`) — default: all
+- `--release-scope`: `AB` (default, L1-L7) or `ALL` (all detected levels)
+- `--data-dir`: Task dataset directory (default: `bench/tasks`, v2 sample: `bench/tasks_v2`)
 
 **Model settings**
 - `--model`: Model ID (e.g., `openai/gpt-4`, `anthropic/claude-3-5-sonnet-20241022`)
@@ -211,7 +223,12 @@ uv run run_benchmark_with_logging.py --repetition 3
 **Execution control**
 - `--max-steps`: Max steps per task (default: 10)
 - `--timeout`: Timeout per task in seconds (default: 60)
-- `--repetitions`: Repeated runs for Pass@k
+- `--max-retries`: Retry attempts for failed LLM calls (default: 3, increase for 429 mitigation)
+- `--repetitions`: Repeated runs (default: 3, for Pass@k/stability@k)
+- `--seed-replay`: Use seed replay for L6/L7 (default is `full_rollout`)
+- `--skip-task-schema-validation`: Disable v2 task schema validation
+- `--strict-task-schema`: Fail fast when v2 schema validation fails
+- `--schema-mode`: Task schema selection (`auto`/`v2`/`v1`, default: `auto`)
 - `--no-save-logs`: Disable log saving
 
 **Cache mode**
@@ -240,16 +257,24 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ### Key options
 - `--date`: Benchmark execution date (YYYYMMDD)
 - `--model`: Model ID to evaluate
-- `--judge-models`: Judge model(s) (Default: `gpt-4o` single model, Specify multiple for ensemble)
+- `--release-scope`: `AB` (default, L1-L7) or `ALL`
+- `--judge-models`: Judge model(s) (Default: 3-model ensemble)
 - `--sample N`: Evaluate N samples per level
 - `--quick`: 1 sample per level (sampling)
-- `--format`: Output format (`json`/`csv`/`markdown`/`all`)
+- `--bootstrap-samples`: Number of bootstrap samples for CI (default: 1000)
+- `--no-bootstrap-ci`: Disable bootstrap CI calculation
+- `--judge-max-retries`: Judge API retry attempts (default: 5, for 429 mitigation)
+- `--judge-backoff-base`: Initial backoff seconds for Judge retries (default: 2.0)
+- `--judge-backoff-cap`: Maximum backoff seconds for Judge retries (default: 120.0)
+- `--strict-v2-eval-schema`: Treat v2 schema validation failures as errors when exporting `v2-jsonl`
+- `--format`: Output format (`json`/`csv`/`markdown`/`v2-jsonl`/`all`)
 
 ### Output location
 - Output: `reports/{model}_{date}/`
     - `evaluation_report.json`
     - `evaluation_summary.csv`
     - `evaluation_report.md`
+    - `evaluation_v2.jsonl` (when `--format v2-jsonl` or `--format all`)
 
 ---
 
@@ -276,7 +301,8 @@ Seven levels assess the agent’s tool-calling capabilities.
 |---|---|---|
 | **SR** (Success Rate) | Task completion score | LLM Judge 1–5 → (score-1)/4 |
 | **EPR/CVR** | Effective call ratio | Valid calls / total calls |
-| **Pass@k** | Success within k tries | Successful attempts / k |
+| **Pass@k** | At least one success in k tries | Mean of task-level any-success (0/1) |
+| **Stability@k** | Repetition stability | Successful attempts / k |
 
 ### Level-specific metrics
 
@@ -325,7 +351,7 @@ Seven levels assess the agent’s tool-calling capabilities.
 | **RefRecall** | Recall of prior info | LLM Judge 1–5 → 0–1 |
 
 ### Judge evaluation
-- Judge ensemble: GPT-4o, Claude, Gemini
+- Judge ensemble (default): GPT-5.1, Claude Sonnet 4.5, Gemini 2.5 Pro
 - Aggregation: mean or median
 - Blind evaluation without model names for fairness
 

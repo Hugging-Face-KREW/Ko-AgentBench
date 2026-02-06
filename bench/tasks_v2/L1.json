@@ -1,0 +1,345 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-001-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "127.108882,37.394274",
+              "goal": "127.07190,37.51130",
+              "option": "traoptimal"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-001"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-002-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "126.97070,37.55360",
+              "goal": "126.45123,37.46349",
+              "waypoints": "126.97688,37.57594|126.92490,37.52190",
+              "option": "traavoidtoll"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-002"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-003-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "빗썸에서 비트코인 원화 현재가 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "[0].trade_price",
+          "[0].opening_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-003"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-004-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketIndex_ls",
+        "description": "Tool schema for MarketIndex_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketIndex_ls"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketIndex_ls",
+            "args": {
+              "jisu": "KOSDAQ"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-004"
+      ]
+    }
+  }
+]

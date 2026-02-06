@@ -133,6 +133,13 @@ uv run run_benchmark_with_logging.py --levels L1 --model openrouter/anthropic/cl
 
 # 평가 (실행 날짜를 YYYYMMDD 형식으로 입력)
 uv run evaluate_model_run.py --date 20251022 --model openai/gpt-4 --format all
+
+# (선택) v2 태스크 스키마 검증
+uv run python scripts/validate_task_schemas.py
+
+# v2 샘플 A+B 20개 생성 후 검증
+uv run python scripts/build_v2_sample_tasks.py
+uv run python scripts/validate_task_schemas.py --tasks-dir bench/tasks_v2 --strict
 ```
 
 ---
@@ -196,12 +203,17 @@ uv run run_benchmark_with_logging.py --use-local --model vllm/Qwen/Qwen2.5-7B-In
 uv run run_benchmark_with_logging.py --cache-mode write
 
 # 태스크 3회 반복 수행
-uv run run_benchmark_with_logging.py --repetition 3
+uv run run_benchmark_with_logging.py --repetitions 3
+
+# (L6/L7) seed_replay 모드로 실행 (기본은 full_rollout)
+uv run run_benchmark_with_logging.py --seed-replay
 ```
 
 ### 주요 옵션
 **데이터셋 선택**
 - `--levels`: 실행할 레벨 (예: `L1,L2,L6,L7`) — 기본값: 전체
+- `--release-scope`: `AB`(기본, L1-L7) 또는 `ALL`(탐지된 전체 레벨)
+- `--data-dir`: 태스크 디렉토리 (기본: `bench/tasks`, v2 샘플은 `bench/tasks_v2`)
 
 **모델 설정**
 - `--model`: 모델 ID (예: `openai/gpt-4`, `anthropic/claude-3-5-sonnet-20241022`)
@@ -216,7 +228,12 @@ uv run run_benchmark_with_logging.py --repetition 3
 **실행 제어**
 - `--max-steps`: 태스크당 최대 단계 (기본: 10)
 - `--timeout`: 태스크당 시간 제한(초) (기본: 60)
-- `--repetitions`: 반복 실행 횟수 (Pass@k 계산용)
+- `--max-retries`: LLM 호출 실패 시 재시도 횟수 (기본: 3, 429 완화 시 증가 권장)
+- `--repetitions`: 반복 실행 횟수 (기본: 3, Pass@k/stability@k 계산용)
+- `--seed-replay`: L6/L7에서 seed replay 모드 사용 (기본은 `full_rollout`)
+- `--skip-task-schema-validation`: v2 태스크 스키마 검증 비활성화
+- `--strict-task-schema`: v2 스키마 오류 발견 시 즉시 실패
+- `--schema-mode`: 태스크 스키마 선택 (`auto`/`v2`/`v1`, 기본 `auto`)
 - `--no-save-logs`: 로그 저장 비활성화
 
 **캐시 모드**
@@ -245,16 +262,24 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 ### 주요 옵션
 - `--date`: 벤치마크 실행 날짜 (YYYYMMDD 형식)
 - `--model`: 평가할 모델 ID
-- `--judge-models`: 평가 모델(들) (기본: `gpt-4o` 단일 모델, 앙상블 원하면 여러 개 모델 지정) 
+- `--release-scope`: `AB`(기본, L1-L7) 또는 `ALL`
+- `--judge-models`: 평가 모델(들) (기본: 3개 앙상블. 필요 시 단일 모델 지정 가능)
 - `--sample N`: 레벨당 N개만 평가
 - `--quick`: 레벨당 1개만 평가 (샘플링)
-- `--format`: 출력 형식 (`json`/`csv`/`markdown`/`all`)
+- `--bootstrap-samples`: 부트스트랩 샘플 수 (기본 1000)
+- `--no-bootstrap-ci`: 부트스트랩 CI 계산 비활성화
+- `--judge-max-retries`: Judge API 재시도 횟수 (기본 5, 429 대응)
+- `--judge-backoff-base`: Judge 재시도 백오프 시작 초 (기본 2.0)
+- `--judge-backoff-cap`: Judge 재시도 최대 대기 초 (기본 120.0)
+- `--strict-v2-eval-schema`: `v2-jsonl` 출력 시 스키마 검증 실패를 에러로 처리
+- `--format`: 출력 형식 (`json`/`csv`/`markdown`/`v2-jsonl`/`all`)
 
 ### 결과 위치
 - 출력: `reports/{model}_{date}/`
     - `evaluation_report.json`
     - `evaluation_summary.csv`
     - `evaluation_report.md`
+    - `evaluation_v2.jsonl` (`--format v2-jsonl` 또는 `--format all`일 때)
 
 ---
 
@@ -281,7 +306,8 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 |---|---|---|
 | **SR** (Success Rate) | 태스크 완수 점수 | LLM Judge 평가 1-5점 → (점수-1)/4 |
 | **EPR/CVR** | 유효 도구 호출 비율 | 유효 호출 수 / 전체 호출 수 |
-| **Pass@k** | k회 시도 성공률 | 성공 시도 수 / k |
+| **Pass@k** | k회 시도 중 최소 1회 성공률 | 태스크별 any-success(0/1) 평균 |
+| **Stability@k** | 반복 안정성 | 성공 시도 수 / k |
 
 ### 레벨별 전용 지표
 
@@ -330,7 +356,7 @@ uv run evaluate_model_run.py --date 20251022 --model azure/gpt-4o --quick
 | **RefRecall** | 정보 회상 정확도 | LLM Judge 평가 1-5 → 0-1 |
 
 ### Judge 평가
-- 평가 모델: GPT-4o, Claude, Gemini 앙상블
+- 평가 모델(기본): GPT-5.1, Claude Sonnet 4.5, Gemini 2.5 Pro 앙상블
 - 점수 집계: 평균 또는 중앙값
 - 모델명을 제거한 블라인드 평가로 공정성 확보
 

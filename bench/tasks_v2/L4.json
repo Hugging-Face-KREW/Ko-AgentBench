@@ -1,0 +1,317 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-001-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 겨울 헤어 트렌드를 다양한 소스에서 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-001"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-002-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025 여의도 불꽃축제 몇시부터 몇시까지야?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-002"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-003-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "카카오(035720)와 비트코인 두 가격 어떻게 돼?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "035720",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-003"
+      ]
+    }
+  }
+]

@@ -8,7 +8,6 @@ data 폴더의 L1~L7 데이터셋을 로드하여 각 질문(instruction)을 실
 import os
 import argparse
 import json
-import glob
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -29,6 +28,8 @@ from bench.tools.base_api import BaseTool
 from bench.models import MODEL_IDS
 from bench.tools.tool_catalog import resolve_tool_classes, TOOL_CATALOG
 from bench.config import set_cache_mode
+from bench.tasks import TaskLoader
+from bench.tasks.task_normalizer import convert_tasks_for_runner
 
 # Import API keys from secrets
 from configs.secrets import (
@@ -44,7 +45,11 @@ from configs.secrets import (
 
 
 
-def load_benchmark_datasets(data_dir: str = "bench/tasks") -> Dict[str, List[Dict]]:
+def load_benchmark_datasets(
+    data_dir: str = "bench/tasks",
+    validate_task_schema: bool = True,
+    strict_task_schema: bool = False,
+) -> Dict[str, List[Dict]]:
     """Load all benchmark datasets from bench/tasks directory.
     
     Args:
@@ -53,19 +58,38 @@ def load_benchmark_datasets(data_dir: str = "bench/tasks") -> Dict[str, List[Dic
     Returns:
         Dictionary mapping level names to task lists
     """
-    datasets = {}
-    json_files = sorted(glob.glob(os.path.join(data_dir, "L*.json")))
-    
+    datasets: Dict[str, List[Dict]] = {}
+    task_loader = TaskLoader(tasks_dir=Path(data_dir))
+    json_files = sorted(Path(data_dir).glob("L*.json"))
+
     for filepath in json_files:
-        level_name = Path(filepath).stem  # L1, L2, etc.
+        level_name = filepath.stem  # L1, L2, etc.
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                datasets[level_name] = data
-                print(f"[OK] Loaded {level_name}: {len(data)} tasks")
+            data = task_loader.load_tasks(filepath.name)
+            if validate_task_schema:
+                validation = task_loader.validate_tasks(
+                    data,
+                    file_label=filepath.name,
+                    strict=strict_task_schema,
+                )
+                v2_tasks = validation.get("v2_tasks", 0)
+                if v2_tasks:
+                    errs = len(validation.get("errors", []))
+                    print(
+                        f"[SCHEMA] {level_name}: v2 tasks={v2_tasks}, "
+                        f"errors={errs}, validator={validation.get('validator_available')}"
+                    )
+                    if errs and not strict_task_schema:
+                        print(
+                            f"[WARNING] {level_name}: schema errors detected. "
+                            "Run with --strict-task-schema to fail fast."
+                        )
+
+            datasets[level_name] = data
+            print(f"[OK] Loaded {level_name}: {len(data)} tasks")
         except Exception as e:
             print(f"[ERROR] Failed to load {filepath}: {e}")
-    
+
     return datasets
 
 
@@ -78,7 +102,7 @@ def create_tool_registry(tool_classes: Optional[List[Type[BaseTool]]] = None) ->
     return registry
 
 
-def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
+def convert_dataset_to_tasks(dataset_tasks: List[Dict], schema_mode: str = "auto") -> List[Dict]:
     """Convert benchmark dataset format to runner-compatible task format.
     
     Args:
@@ -87,83 +111,38 @@ def convert_dataset_to_tasks(dataset_tasks: List[Dict]) -> List[Dict]:
     Returns:
         List of tasks in runner format
     """
-    converted_tasks = []
-    
-    # Handle case where dataset_tasks might be wrapped in an extra list
-    if isinstance(dataset_tasks, list) and len(dataset_tasks) > 0 and isinstance(dataset_tasks[0], list):
-        dataset_tasks = dataset_tasks[0]
-    
-    for task in dataset_tasks:
-        # Skip if task is not a dict
-        if not isinstance(task, dict):
-            print(f"[WARNING] Skipping non-dict task: {type(task)}")
-            continue
-            
-        # Extract required tools from golden_action OR conversation_tracking
-        tools_needed = []
-        
-        # First, try golden_action (L1-L6)
-        if "golden_action" in task:
-            for action in task["golden_action"]:
-                tool_name = action.get("tool", "")
-                if tool_name and tool_name not in tools_needed:
-                    tools_needed.append(tool_name)
-        
-        # Also check conversation_tracking for additional tools (L6/L7)
-        if "conversation_tracking" in task:
-            print(f"[DEBUG] Processing conversation_tracking for task: {task.get('task_id')}")
-            conversation = task["conversation_tracking"]
-            for turn in conversation.get("turns", []):
-                # L7 format: turn.actions (list)
-                if "actions" in turn:
-                    for action in turn.get("actions", []):
-                        tool_name = action.get("tool", "")
-                        if tool_name and tool_name not in tools_needed:
-                            tools_needed.append(tool_name)
-                            print(f"  [OK] Found tool in turn.actions: {tool_name}")
-                
-                # L6 format: turn.action (single object)
-                if "action" in turn:
-                    action = turn.get("action", {})
-                    tool_name = action.get("tool", "")
-                    if tool_name and tool_name not in tools_needed:
-                        tools_needed.append(tool_name)
-                        print(f"  [OK] Found tool in turn.action: {tool_name}")
-        
-        # 선언된 도구 이름을 그대로 사용
-        print(f"  [INFO] Task {task.get('task_id')}: tools_needed = {tools_needed}")
-        
-        converted_task = {
-            "id": task.get("task_id", "unknown"),
-            "description": task.get("instruction", ""),
-            "expected_output": task.get("resp_schema", {}),
-            "available_tools": tools_needed,
-            # keep backward-compat with runner that expects 'tools'
-            "tools": tools_needed,
-            "level": task.get("task_level", 0),
-            "category": task.get("task_category", "unknown"),
-            "golden_action": task.get("golden_action", []),
-            "conversation_tracking": task.get("conversation_tracking"),
-            "arg_schema": task.get("arg_schema", {}),
-            # Pass through evaluation helpers if present
-            "minimum_steps": task.get("minimum_steps"),
-            "data_flow": task.get("data_flow", []),
-            "error_injection": task.get("error_injection"),
-            "fallback_options": task.get("fallback_options", [])
-        }
-        converted_tasks.append(converted_task)
-    
-    return converted_tasks
+    return convert_tasks_for_runner(dataset_tasks, schema_mode=schema_mode)
 
 
 def _resolve_multiturn_mode(args: argparse.Namespace) -> str:
     """Resolve multi-turn execution mode.
 
-    Default: seed replay (reuse dataset-provided assistant/tool results and only call
+    Default: full rollout (call the model for every user turn).
+    Opt-in: seed replay (reuse dataset-provided assistant/tool results and only call
     the model on the evaluation turn).
-    Opt-in: full rollout (call the model for every user turn).
     """
-    return "full_rollout" if getattr(args, "full_rollout", False) else "seed_replay"
+    if getattr(args, "seed_replay", False):
+        return "seed_replay"
+    return "full_rollout"
+
+
+def _filter_levels_by_release_scope(levels: List[str], release_scope: str) -> List[str]:
+    """Filter level names by release scope policy."""
+    scope = (release_scope or "AB").upper()
+    if scope == "ALL":
+        return levels
+    # AB scope: Track A(L1-3) + Track B(L4-7)
+    filtered = []
+    for lvl in levels:
+        if not isinstance(lvl, str) or not lvl.startswith("L"):
+            continue
+        try:
+            n = int(lvl[1:])
+        except Exception:
+            continue
+        if 1 <= n <= 7:
+            filtered.append(lvl)
+    return filtered
 
 
 def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
@@ -180,12 +159,19 @@ def simplify_result(result: Dict[str, Any]) -> Dict[str, Any]:
         "instruction": result.get("instruction", ""),
         "level": result.get("level", 0),
         "category": result.get("category", "unknown"),
+        "track": result.get("track"),
+        "schema_version": result.get("schema_version"),
+        "metadata": result.get("metadata", {}),
         "success": result.get("success", False),
         "execution_time": result.get("execution_time", 0),
         "steps_taken": result.get("steps_taken", 0),
         "error": result.get("error"),
         "expected_tools": result.get("expected_tools", []),
         "golden_action": result.get("golden_action", []),
+        "golden": result.get("golden", {}),
+        "evaluation": result.get("evaluation", {}),
+        "context_tests": result.get("context_tests", []),
+        "conversation_tracking": result.get("conversation_tracking"),
         "minimum_steps": result.get("minimum_steps"),
         "data_flow": result.get("data_flow", []),
         "error_injection": result.get("error_injection"),
@@ -406,11 +392,13 @@ def run_benchmark_on_dataset(
     use_local: bool = False,
     max_steps: int = 10,  
     timeout: int = 60,
+    max_retries: int = 3,
     save_logs: bool = True,
     log_dir: str = "logs/benchmark_results",
     run_timestamp: str = None,
-    repetitions: int = 1,
-    multiturn_mode: str = "seed_replay",
+    repetitions: int = 3,
+    multiturn_mode: str = "full_rollout",
+    schema_mode: str = "auto",
     **adapter_config: Any
 ) -> List[Dict[str, Any]]:
     """Run benchmark on a specific dataset level.
@@ -422,11 +410,13 @@ def run_benchmark_on_dataset(
         use_local: If True, use TransformersAdapter for local inference
         max_steps: Maximum steps per task
         timeout: Timeout per task in seconds
+        max_retries: Maximum retries for failed LLM API calls
         save_logs: Whether to save results to JSON
         log_dir: Directory to save logs
         run_timestamp: Timestamp for the entire run (shared across levels)
-        repetitions: Number of repetitions for each task (for pass@k metric)
-        multiturn_mode: (L6/L7) Multi-turn execution mode: 'seed_replay' (default) or 'full_rollout'
+        repetitions: Number of repetitions for each task (for pass@k/stability@k metric)
+        multiturn_mode: (L6/L7) Multi-turn execution mode: 'full_rollout' (default) or 'seed_replay'
+        schema_mode: Task schema filtering mode (auto|v2|v1)
         **adapter_config: Additional adapter configuration
         
     Returns:
@@ -443,7 +433,10 @@ def run_benchmark_on_dataset(
         print(f"DEBUG: first task type = {type(tasks[0])}")
     
     # Convert dataset format to runner format (always use full set)
-    converted_tasks = convert_dataset_to_tasks(tasks)
+    converted_tasks = convert_dataset_to_tasks(tasks, schema_mode=schema_mode)
+    if not converted_tasks:
+        print(f"[WARNING] No tasks selected after schema_mode={schema_mode!r} filtering in {level_name}")
+        return []
     
     # Collect all required tools (including fallback tools for L5)
     all_required_tools = []
@@ -515,6 +508,7 @@ def run_benchmark_on_dataset(
         registry,
         max_steps=max_steps,
         timeout=timeout,
+        max_retries=max_retries,
         multiturn_mode=multiturn_mode,
     )
     
@@ -548,7 +542,7 @@ def run_benchmark_on_dataset(
         
         # Log repetitions info
         if repetitions > 1:
-            print(f"\n[REPETITIONS] Running task {repetitions} times for pass@k metric")
+            print(f"\n[REPETITIONS] Running task {repetitions} times for pass@k and stability@k metrics")
         
         print(f"{'─'*80}")
         
@@ -578,9 +572,16 @@ def run_benchmark_on_dataset(
             result['instruction'] = task['description']
             result['level'] = task['level']
             result['category'] = task['category']
+            result['track'] = task.get('track')
+            result['schema_version'] = task.get('schema_version')
+            result['metadata'] = task.get('metadata', {})
             result['expected_tools'] = task['available_tools']
             result['golden_action'] = task['golden_action']
-            # Add repetition results for pass@k metric
+            result['golden'] = task.get('golden', {})
+            result['evaluation'] = task.get('evaluation', {})
+            result['context_tests'] = task.get('context_tests', [])
+            result['conversation_tracking'] = task.get('conversation_tracking')
+            # Add repetition results for pass@k/stability@k metrics
             result['repetitions'] = repetitions
             result['repetition_results'] = repetition_results
             # Include dataset guidance fields for analysis
@@ -604,7 +605,10 @@ def run_benchmark_on_dataset(
             print(f"\n[RESULT] Success: {result['success']}")
             if repetitions > 1:
                 success_count = sum(repetition_results)
-                print(f"  Pass@{repetitions}: {success_count}/{repetitions} ({success_count/repetitions*100:.1f}%)")
+                pass_at_k = 1 if success_count > 0 else 0
+                stability_at_k = success_count / repetitions
+                print(f"  Pass@{repetitions}: {pass_at_k} (any-success)")
+                print(f"  Stability@{repetitions}: {success_count}/{repetitions} ({stability_at_k*100:.1f}%)")
             print(f"  Execution time: {result['execution_time']:.2f}s")
             print(f"  Steps taken: {result['steps_taken']}")
             
@@ -648,8 +652,15 @@ def run_benchmark_on_dataset(
                 "instruction": task.get('description', ''),
                 "level": task.get('level', 0),
                 "category": task.get('category', 'unknown'),
+                "track": task.get('track'),
+                "schema_version": task.get('schema_version'),
+                "metadata": task.get('metadata', {}),
                 "expected_tools": task.get('available_tools', []),
                 "golden_action": task.get('golden_action', []),
+                "golden": task.get('golden', {}),
+                "evaluation": task.get('evaluation', {}),
+                "context_tests": task.get('context_tests', []),
+                "conversation_tracking": task.get('conversation_tracking'),
                 "minimum_steps": task.get('minimum_steps'),
                 "data_flow": task.get('data_flow', []),
                 "repetitions": repetitions,
@@ -678,17 +689,36 @@ def main():
     """Main execution function."""
     parser = argparse.ArgumentParser(description="Ko-AgentBench runner with tool-call logging")
     parser.add_argument("--levels", type=str, default=None,
-                        help="Comma-separated levels to run (e.g., L6,L7). Default: all detected")
+                        help="Comma-separated levels to run (e.g., L6,L7). If omitted, follows --release-scope")
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default="bench/tasks",
+        help="Task dataset directory (default: bench/tasks).",
+    )
+    parser.add_argument(
+        "--release-scope",
+        type=str,
+        choices=["AB", "ALL"],
+        default="AB",
+        help="Benchmark release scope. AB=Track A+B only (default), ALL=all detected levels.",
+    )
     # removed --limit: always run full level
     parser.add_argument("--max-steps", type=int, default=10,
                         help="Maximum steps per task")
     parser.add_argument("--timeout", type=int, default=60,
                         help="Timeout (seconds) per task")
+    parser.add_argument("--max-retries", type=int, default=3,
+                        help="Maximum retries for failed LLM API calls (default: 3)")
     parser.add_argument(
         "--full-rollout",
         action="store_true",
-        help="(L6/L7) Execute full multi-turn rollout (call the model for every user turn). "
-             "Default is seed replay (only call the model on the evaluation turn).",
+        help="(L6/L7) [Deprecated] Full multi-turn rollout is now the default.",
+    )
+    parser.add_argument(
+        "--seed-replay",
+        action="store_true",
+        help="(L6/L7) Use seed replay mode (call the model only on the evaluation turn).",
     )
     parser.add_argument("--no-save-logs", action="store_true",
                         help="Do not save JSON logs to disk")
@@ -706,8 +736,25 @@ def main():
     parser.add_argument("--cache-mode", type=str, default="read",
                         choices=['read', 'write'],
                         help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
-    parser.add_argument("--repetitions", type=int, default=1,
-                        help="Number of repetitions for each task to measure pass@k metric (default: 1)")
+    parser.add_argument("--repetitions", type=int, default=3,
+                        help="Number of repetitions for each task to measure pass@k/stability@k (default: 3)")
+    parser.add_argument(
+        "--skip-task-schema-validation",
+        action="store_true",
+        help="Skip v2 task schema validation.",
+    )
+    parser.add_argument(
+        "--strict-task-schema",
+        action="store_true",
+        help="Fail immediately when v2 task schema validation errors are found.",
+    )
+    parser.add_argument(
+        "--schema-mode",
+        type=str,
+        choices=["auto", "v2", "v1"],
+        default="auto",
+        help="Task schema selection mode: auto(all), v2-only, or v1-only.",
+    )
     
     # GPT-5 reasoning control arguments
     parser.add_argument("--effort", type=str, default="low",
@@ -729,6 +776,9 @@ def main():
     # Set cache mode from command-line argument
     set_cache_mode(args.cache_mode)
     print(f"Cache mode: {args.cache_mode}")
+    print(f"Release scope: {args.release_scope}")
+    print(f"Data dir: {args.data_dir}")
+    print(f"Schema mode: {args.schema_mode}")
 
     multiturn_mode = _resolve_multiturn_mode(args)
     print(f"Multi-turn mode: {multiturn_mode}")
@@ -785,7 +835,11 @@ def main():
     
     # Load datasets
     print("\nLoading benchmark datasets...")
-    datasets = load_benchmark_datasets("bench/tasks")
+    datasets = load_benchmark_datasets(
+        args.data_dir,
+        validate_task_schema=(not args.skip_task_schema_validation),
+        strict_task_schema=args.strict_task_schema,
+    )
     
     if not datasets:
         print("[ERROR] No datasets found in bench/tasks/ directory")
@@ -884,8 +938,13 @@ def main():
     if args.levels:
         levels_to_run = [lvl.strip() for lvl in args.levels.split(',') if lvl.strip()]
     else:
-        # Default: run all discovered levels (including multi-turn L6/L7)
-        levels_to_run = sorted(list(datasets.keys()))
+        discovered_levels = sorted(list(datasets.keys()))
+        levels_to_run = _filter_levels_by_release_scope(discovered_levels, args.release_scope)
+
+    if not levels_to_run:
+        print("[ERROR] No levels selected after applying release scope/filters.")
+        return
+    print(f"Levels to run: {levels_to_run}")
     
     for level_name in levels_to_run:
         if level_name in datasets:
@@ -896,11 +955,13 @@ def main():
                 use_local=args.use_local,
                 max_steps=args.max_steps,
                 timeout=args.timeout,
+                max_retries=args.max_retries,
                 save_logs=(not args.no_save_logs),
                 log_dir="logs/benchmark_results",
                 run_timestamp=run_timestamp,
                 repetitions=args.repetitions,
                 multiturn_mode=multiturn_mode,
+                schema_mode=args.schema_mode,
                 **adapter_config
             )
             all_level_results[level_name] = results

@@ -1,0 +1,2919 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-001-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "127.108882,37.394274",
+              "goal": "127.07190,37.51130",
+              "option": "traoptimal"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-001"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-002-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "126.97070,37.55360",
+              "goal": "126.45123,37.46349",
+              "waypoints": "126.97688,37.57594|126.92490,37.52190",
+              "option": "traavoidtoll"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-002"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-003-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "빗썸에서 비트코인 원화 현재가 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "[0].trade_price",
+          "[0].opening_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-003"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-004-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketIndex_ls",
+        "description": "Tool schema for MarketIndex_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketIndex_ls"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketIndex_ls",
+            "args": {
+              "jisu": "KOSDAQ"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-004"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-005-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "전기차 충전 요금 인상",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].link"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-005"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-006-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제주 가을 여행 코스 후기",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-006"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-007-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "반도체 수출 전망",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].originallink"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-007"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-008-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "나미야 잡화점의 기적",
+              "query_type": "Keyword",
+              "search_target": "Book",
+              "start": 1,
+              "max_results": 1,
+              "sort": "Accuracy",
+              "cover": "Mid",
+              "output": "xml",
+              "outofStockFilter": 0,
+              "opt_result": ""
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-008"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-009-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "손흥민 헤드트릭",
+              "sort": "accuracy",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-009"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-010-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "파스타",
+              "x": 127.02758,
+              "y": 37.49794,
+              "radius": 1000,
+              "sort": "distance",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].phone"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-010"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-011-V2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CategorySearch_kakao",
+        "description": "Tool schema for CategorySearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CategorySearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CategorySearch_kakao",
+            "args": {
+              "category": "CE7",
+              "x": 126.9237,
+              "y": 37.5563,
+              "radius": 500,
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "total_count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-011"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-001-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "127.108882,37.394274",
+              "goal": "127.07190,37.51130",
+              "option": "traoptimal"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-001",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-002-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "126.97070,37.55360",
+              "goal": "126.45123,37.46349",
+              "waypoints": "126.97688,37.57594|126.92490,37.52190",
+              "option": "traavoidtoll"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-002",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-003-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "빗썸에서 비트코인 원화 현재가 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "[0].trade_price",
+          "[0].opening_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-003",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-004-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketIndex_ls",
+        "description": "Tool schema for MarketIndex_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketIndex_ls"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketIndex_ls",
+            "args": {
+              "jisu": "KOSDAQ"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-004",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-005-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "전기차 충전 요금 인상",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].link"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-005",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-006-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제주 가을 여행 코스 후기",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-006",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-007-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "반도체 수출 전망",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].originallink"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-007",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-008-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "나미야 잡화점의 기적",
+              "query_type": "Keyword",
+              "search_target": "Book",
+              "start": 1,
+              "max_results": 1,
+              "sort": "Accuracy",
+              "cover": "Mid",
+              "output": "xml",
+              "outofStockFilter": 0,
+              "opt_result": ""
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-008",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-009-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "손흥민 헤드트릭",
+              "sort": "accuracy",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-009",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-010-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "파스타",
+              "x": 127.02758,
+              "y": 37.49794,
+              "radius": 1000,
+              "sort": "distance",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].phone"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-010",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-011-V2-VAR1",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CategorySearch_kakao",
+        "description": "Tool schema for CategorySearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CategorySearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CategorySearch_kakao",
+            "args": {
+              "category": "CE7",
+              "x": 126.9237,
+              "y": 37.5563,
+              "radius": 500,
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "total_count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-011",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-001-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 판교역(127.111221,37.395441)에서 잠실야구장(127.071707,37.514085)까지 자차로 몇 분 걸릴까?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "127.108882,37.394274",
+              "goal": "127.07190,37.51130",
+              "option": "traoptimal"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-001",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-002-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 서울역(126.97070,37.55360)에서 인천공항 제1터미널(126.45123,37.46349)까지 유료도로는 피하고, 광화문(126.97688,37.57594)와 여의도(126.92490,37.52190)를 경유해 이동하면 몇 분 걸리는지 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "Directions_naver",
+        "description": "Tool schema for Directions_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "Directions_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "Directions_naver",
+            "args": {
+              "start": "126.97070,37.55360",
+              "goal": "126.45123,37.46349",
+              "waypoints": "126.97688,37.57594|126.92490,37.52190",
+              "option": "traavoidtoll"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "route.traoptimal[0].summary.duration",
+          "route.traoptimal[0].summary.distance"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-002",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-003-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 빗썸에서 비트코인 원화 현재가 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "[0].trade_price",
+          "[0].opening_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-003",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-004-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. LS증권에서 KOSDAQ 지수의 등락률(%)을 소수점 2자리까지만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketIndex_ls",
+        "description": "Tool schema for MarketIndex_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketIndex_ls"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketIndex_ls",
+            "args": {
+              "jisu": "KOSDAQ"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1511OutBlock.pricejisu",
+          "t1511OutBlock.volumerate",
+          "t1511OutBlock.change"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-004",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-005-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 네이버에서 '전기차 충전 요금 인상' 검색해서 첫 번째 결과 제목만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "전기차 충전 요금 인상",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].link"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-005",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-006-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 네이버 블로그에서 '제주 가을 여행 코스 후기'로 검색해서 첫 번째 결과 글 제목만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제주 가을 여행 코스 후기",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-006",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-007-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 네이버 뉴스에서 '반도체 수출 전망'관련 기사 하나만 골라 제목을 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "반도체 수출 전망",
+              "display": 1,
+              "start": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].originallink"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-007",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-008-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 알라딘에서 히가시노 게이고 작품들 검색해서, 인기순으로 첫 번째 책 제목 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "나미야 잡화점의 기적",
+              "query_type": "Keyword",
+              "search_target": "Book",
+              "start": 1,
+              "max_results": 1,
+              "sort": "Accuracy",
+              "cover": "Mid",
+              "output": "xml",
+              "outofStockFilter": 0,
+              "opt_result": ""
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-008",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-009-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 다음 동영상에서 '손흥민 헤드트릭' 검색해서 첫 영상 제목 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "손흥민 헤드트릭",
+              "sort": "accuracy",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-009",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-010-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 카카오맵으로 강남역(127.02758, 37.4979) 근처에서 '파스타' 검색해서 첫 번째 가게 이름 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "파스타",
+              "x": 127.02758,
+              "y": 37.49794,
+              "radius": 1000,
+              "sort": "distance",
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].phone"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-010",
+        "synthetic-variant:2"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L1-011-V2-VAR2",
+    "track": "A",
+    "level": 1,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요약해서 답해줘. 홍대입구역(126.9237,37.5563) 기준 500m 안에 있는 카페 찾아서 하나만 상호명 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CategorySearch_kakao",
+        "description": "Tool schema for CategorySearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CategorySearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "CategorySearch_kakao",
+            "args": {
+              "category": "CE7",
+              "x": 126.9237,
+              "y": 37.5563,
+              "radius": 500,
+              "page": 1,
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "total_count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.2,
+        "ArgF1": 0.2,
+        "ExecSR": 0.2,
+        "GroundAns": 0.2,
+        "SR": 0.2
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "easy",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L1-011",
+        "synthetic-variant:2"
+      ]
+    }
+  }
+]

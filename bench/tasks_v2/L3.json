@@ -1,0 +1,366 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L3-001-V2",
+    "track": "A",
+    "level": 3,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "청량리역 근처에 있는 대학교 찾아보고, 그 학교 근처에 병원이 몇개 있는지 조사해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CategorySearch_tmap",
+        "description": "Tool schema for CategorySearch_tmap",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao",
+        "CategorySearch_tmap"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "청량리역 근처 대학교",
+              "size": 1
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CategorySearch_tmap",
+            "args": {
+              "categories": "병원",
+              "centerLon": "127.059028",
+              "centerLat": "37.583917",
+              "radius": 10
+            }
+          }
+        ],
+        "edges": [
+          {
+            "from": "s1",
+            "to": "s2",
+            "mapping": [
+              {
+                "from_field": "latitude",
+                "to_arg": "centerLat"
+              }
+            ]
+          },
+          {
+            "from": "s1",
+            "to": "s2",
+            "mapping": [
+              {
+                "from_field": "longtitude",
+                "to_arg": "centerLon"
+              }
+            ]
+          }
+        ],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].longitude",
+          "places[0].latitude",
+          "totalCount",
+          "pois[0].name"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L3-001"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L3-002-V2",
+    "track": "A",
+    "level": 3,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "빗썸의 KRW 마켓에 상장된 암호화폐 10개를 조사하고, 그 현재가를 조회해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketList_bithumb",
+        "description": "Tool schema for MarketList_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketList_bithumb",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketList_bithumb",
+            "args": {
+              "isDetails": false
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "{markets}"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "from": "s1",
+            "to": "s2",
+            "mapping": [
+              {
+                "from_field": "market_list",
+                "to_arg": "markets"
+              }
+            ]
+          }
+        ],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "[0].market",
+          "[1].market",
+          "[2].market",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L3-002"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L3-003-V2",
+    "track": "A",
+    "level": 3,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "‘정보처리기사 독학 책’에 대한 후기글을 블로그에서 찾아보고, 제일 먼저 나온 책의 가격을 알라딘에서 찾아줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver",
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "정보처리기사 독학 책 후기",
+              "display": 20,
+              "sort": "sim"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "{book_title}"
+            }
+          }
+        ],
+        "edges": [
+          {
+            "from": "s1",
+            "to": "s2",
+            "mapping": [
+              {
+                "from_field": "book_title",
+                "to_arg": "query"
+              }
+            ]
+          }
+        ],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "item[0].title",
+          "item[0].priceSales",
+          "item[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L3-003"
+      ]
+    }
+  }
+]

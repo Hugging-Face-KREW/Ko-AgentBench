@@ -1,0 +1,4141 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-001-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "파이썬 알고리즘 트레이딩 책 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "파이썬 알고리즘 트레이딩"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "파이썬 알고리즘 트레이딩",
+              "sort": "SalesPoint"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-001"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "파이썬 알고리즘 트레이딩 책 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "이 책 괜찮아 보이네. 알고리즘 트레이딩이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "알고리즘 트레이딩은 컴퓨터 프로그램을 이용해 미리 설정한 규칙에 따라 자동으로 주식이나 암호화폐를 매매하는 방식입니다. 사람의 감정 개입 없이 일관되게 거래할 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "초보자도 할 수 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 파이썬 기초만 알면 충분히 시작할 수 있습니다. 아까 찾아드린 책도 파이썬 기초부터 다루고 있어서 초보자에게 적합해요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "그럼 아까 찾아준 책 정보 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'은 조대표, 김형준, 이준혁 저자가 집필했고 위키북스에서 출판했습니다. 가격은 34,200원이고 평점은 9.8점입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-002-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "반도체 기술 관련 뉴스 최신순으로 3개만 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "반도체 기술",
+              "display": 3,
+              "sort": "date"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "삼성전자",
+              "display": 1,
+              "sort": "date"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title",
+          "items[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-002"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "반도체 기술 관련 뉴스 최신순으로 3개만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "3나노 공정이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "3나노 공정은 반도체 회로선폭이 3나노미터(nm) 수준인 초미세 공정 기술이에요. 회로가 작을수록 같은 면적에 더 많은 트랜지스터를 넣을 수 있어서 성능이 향상되고 전력 소비도 줄어듭니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "그럼 더 작은 공정도 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 2나노 공정도 개발 중입니다. 현재 삼성전자와 TSMC가 2나노 공정 양산을 준비하고 있어요. 앞으로는 1나노 공정까지도 연구되고 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 뉴스 목록 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 반도체 기술 관련 뉴스 3건입니다. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-003-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "뉴진스 최신 영상 2개만 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "뉴진스",
+              "sort": "recency",
+              "size": 2
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[1].title",
+          "documents[1].play_time"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-003"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "뉴진스 최신 영상 2개만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "뉴진스 최신 동영상 2개를 찾았습니다. '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "Bubble Gum이 신곡이구나. 좋아?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 'Bubble Gum'은 뉴진스의 새로운 타이틀곡입니다. 경쾌하고 상큼한 멜로디가 특징이에요. 많은 팬들이 긍정적인 반응을 보이고 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "영상 러닝타임은 어떻게 돼?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "MV는 약 4분 정도이고, 팝업스토어 VLOG는 12분 정도 되는 영상이에요. VLOG가 좀 더 길게 구성되어 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 영상들 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 뉴진스 최신 영상 2개는 '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-004-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'시흥시청 맛집'으로 검색해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "시흥시청 맛집"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category",
+          "places[1].name",
+          "places[2].name"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-004"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'시흥시청 맛집'으로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등이 검색되었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "어제 초밥을 먹었는데 한,일,중,양식 중 어떤게 좋을까?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "초밥을 드셨다면 깔끔하게 소화되는 한식이 좋을 것 같아요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "그럼 주차는 편해?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "시청 근처라 공영주차장이 있어서 주차는 괜찮은 편이에요. 다만 점심시간에는 약간 혼잡할 수 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 맛집 목록 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 시흥시청 근처 맛집으로 '오 왕서방짬뽕', '삼형제시골순대', '가마솥한식뷔페' 등이 검색되었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-005-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "25년 9월에 부산에서 하는 축제 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025년 9월 부산 축제"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-005"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "25년 9월에 부산에서 하는 축제 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "9월 부산 축제로는 '페스티월시월'가 있습니다. 매년 시민과 함께하는 보건의료 축제입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "부산국제영화제는 언제야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "부산국제영화제(BIFF)는 보통 10월 초에 개최됩니다. 정확한 일정은 매년 조금씩 다를 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "10월이 보통 축제가 많은가?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 10월은 선선한 가을날씨로 지역축제가 많이 열리는 달이예요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 알려준 9월 부산 축제 다시 말해줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 9월에 부산에서 열리는 축제는 '페스티벌시월'입니다. 시민과 함께하는 보건의료 축제로 벡스코에서 개최됩니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-006-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "겨울 제주도 여행 코스를 검색해서 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "겨울 제주도 여행 코스"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-006"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "겨울 제주도 여행 코스를 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '겨울 제주도 여행 코스'로 검색했을 때 '한라산 눈꽃 산행과 감귤 체험'을 추천하는 블로그 글이 있네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "한라산 눈꽃은 언제가 제일 예쁘게 볼 수 있어?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "한라산 눈꽃은 보통 12월 말부터 2월 초까지가 가장 아름답습니다. 특히 1월 중순이 눈이 가장 많이 쌓여서 백설공주처럼 환상적인 풍경을 볼 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "감귤 체험은 어디서 할 수 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "제주도 서귀포 지역에 감귤 체험 농장이 많습니다. 대표적으로 표선면, 남원읍 쪽 감귤 농장에서 직접 따서 맛볼 수 있고, 비닐하우스라 겨울에도 따뜻하게 체험할 수 있어요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 추천해준 여행 코스 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 따뜻한 비닐하우스에서의 감귤 체험 코스를 추천해드렸습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-007-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "AI 기술 최신 동향을 검색해서 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_daum",
+        "description": "Tool schema for WebSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_daum",
+            "args": {
+              "query": "AI 기술 최신 동향"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-007"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "AI 기술 최신 동향을 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "최근 AI 기술은 생성형 AI와 거대 언어 모델(LLM)의 발전이 주도하고 있습니다. 관련 웹문서의 제목은 '2025년 AI 기술 트렌드 전망'입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "생성형 AI가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "생성형 AI는 텍스트, 이미지, 음악 등 새로운 콘텐츠를 생성할 수 있는 인공지능입니다. ChatGPT, Midjourney 같은 서비스가 대표적인 예시죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "LLM은 또 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "LLM은 Large Language Model의 약자로, 방대한 텍스트 데이터로 학습한 거대 언어 모델입니다. GPT-4, Claude 같은 모델이 여기에 속하며, 자연어를 이해하고 생성하는 능력이 뛰어납니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 AI 기술 동향 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다. 관련 웹문서 '2025년 AI 기술 트렌드 전망'을 찾아드렸었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-008-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "기후 변화 원인을 검색해서 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "기후 변화 원인"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-008"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "기후 변화 원인을 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 대표적으로 '산업혁명 이후 화석 연료 사용 증가'가 가장 큰 원인으로 꼽힙니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "온실가스가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "온실가스는 대기 중에서 지구의 열을 가두는 역할을 하는 기체입니다. 이산화탄소(CO2), 메탄(CH4), 아산화질소(N2O) 등이 대표적이며, 지구 온난화의 주범이죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "화석 연료는 뭐가 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "화석 연료에는 석탄, 석유, 천연가스가 있습니다. 이들은 수백만 년 전 생물의 유해가 변해서 만들어진 것으로, 연소 시 많은 이산화탄소를 배출합니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 기후 변화 원인 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 특히 산업혁명 이후 화석 연료 사용 증가가 가장 큰 원인으로 꼽힙니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-009-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "업비트 원화마켓에 상장된 코인 목록 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketList_upbit",
+        "description": "Tool schema for MarketList_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketList_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketList_upbit",
+            "args": {
+              "quote": "KRW"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "markets[0].market",
+          "markets[0].korean_name",
+          "count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-009"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "업비트 원화마켓에 상장된 코인 목록 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "비트코인이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "비트코인(Bitcoin)은 2009년에 만들어진 최초의 암호화폐입니다. 블록체인 기술을 기반으로 하며, 탈중앙화된 디지털 화폐로 전 세계에서 거래됩니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "이더리움은 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "이더리움(Ethereum)은 스마트 계약을 실행할 수 있는 블록체인 플랫폼입니다. 2015년에 출시되었으며, 비트코인 다음으로 시가총액이 큰 암호화폐입니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 원화마켓 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-010-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "삼성전자 주봉 데이터 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockChart_kis",
+        "description": "Tool schema for StockChart_kis",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockChart_kis"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockChart_kis",
+            "args": {
+              "symbol": "005930",
+              "period": "W"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "data[0].date",
+          "data[0].close",
+          "data[0].volume"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-010"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "삼성전자 주봉 데이터 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "주봉이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "주봉은 한 주(일주일) 동안의 주가 변동을 하나의 봉으로 나타낸 차트입니다. 시가, 고가, 저가, 종가 정보를 포함하며, 중장기 추세 파악에 유용합니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "종가가 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "종가는 해당 기간(일, 주, 월 등)의 마지막 거래 가격을 의미합니다. 가장 중요한 주가 지표 중 하나로 여겨집니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 삼성전자 주봉 데이터 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 삼성전자(005930)의 주봉 데이터를 다시 보여드립니다. 해당 주의 종가는 81,200원이었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-011-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "클린 아키텍처 관련 도서를 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "클린 아키텍처"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[1].title",
+          "item[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-011"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "클린 아키텍처 관련 도서를 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "'클린 아키텍처' 관련 도서를 찾았습니다:\n\n* **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (로버트 C. 마틴)\n* **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (한용재)\n* **아키텍처를 알아야 앱 개발이 보인다** (옥수환)\n* **만들면서 배우는 클린 아키텍처** (톰 홈버그)"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "클린 아키텍처가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "클린 아키텍처는 소프트웨어 설계 원칙 중 하나로, 비즈니스 로직을 외부 요소(DB, UI 등)로부터 독립시켜 유지보수와 테스트를 쉽게 만드는 아키텍처 패턴입니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "로버트 C. 마틴이 누구야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "로버트 C. 마틴(Robert C. Martin)은 '클린 코드'와 '클린 아키텍처'의 저자로 유명한 소프트웨어 엔지니어입니다. '엉클 밥(Uncle Bob)'이라는 별명으로도 알려져 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 클린 아키텍처 도서 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 클린 아키텍처 관련 도서 목록입니다:\n\n* **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (로버트 C. 마틴)\n* **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (한용재)\n* **아키텍처를 알아야 앱 개발이 보인다** (옥수환)\n* **만들면서 배우는 클린 아키텍처** (톰 홈버그)"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-012-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "아이유 콘서트 최신 직캠 영상 하나만 찾아줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "아이유 콘서트 직캠",
+              "sort": "recency",
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-012"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "아이유 콘서트 최신 직캠 영상 하나만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "직캠이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "직캠(fancam)은 특정 가수나 연예인을 집중적으로 촬영한 영상을 말합니다. 주로 팬들이 콘서트나 무대에서 자신이 좋아하는 멤버만 따라 찍은 영상이죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "아이유가 누구야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "아이유는 대한민국의 싱어송라이터이자 배우입니다. 2008년 데뷔해 '좋은 날', 'Palette', 'Blueming' 등 수많은 히트곡을 발표했으며, '나의 아저씨', '호텔 델루나' 등 드라마에서도 활약했습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 아이유 콘서트 직캠 영상 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-013-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "올해 겨울 헤어 트렌드 최신순으로 5개만 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024년 겨울 헤어 트렌드",
+              "display": 5,
+              "sort": "date"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title",
+          "items[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-013"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "올해 겨울 헤어 트렌드 최신순으로 5개만 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개를 찾아봤어요.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "모카무스가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "모카무스(Mocha Mousse)는 2025년 트렌드 헤어 컬러로, 초콜릿과 커피를 연상시키는 깊고 부드러운 브라운 톤입니다. 편안하고 세련된 느낌을 주는 컬러죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "퍼스널 컬러가 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "퍼스널 컬러는 개인의 피부톤, 눈동자 색, 머리카락 색에 가장 어울리는 색상 팔레트를 의미합니다. 봄/여름/가을/겨울 4가지 시즌으로 나뉘며, 자신에게 맞는 컬러를 찾으면 더욱 빛나 보일 수 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 겨울 헤어 트렌드 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-014-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "SK하이닉스 주봉 차트 5주치 보여줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockChart_kis",
+        "description": "Tool schema for StockChart_kis",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockChart_kis"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockChart_kis",
+            "args": {
+              "symbol": "000660",
+              "period": "W",
+              "count": 5
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "data[0].date",
+          "data[0].close",
+          "data[0].volume",
+          "data[1].close",
+          "data[2].close"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-014"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "SK하이닉스 주봉 차트 5주치 보여줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "SK하이닉스의 5주간 주봉 차트 데이터입니다. 2025년 10월 13일 (종가: 415,000원) 2025년 10월 10일 (종가: 428,000원) 2025년 9월 29일 (종가: 395,500원) 2025년 9월 22일 (종가: 336,500원) 2025년 9월 15일 (종가: 353,000원)"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "거래량이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "거래량은 일정 기간 동안 거래된 주식의 총 개수를 의미합니다. 거래량이 많다는 것은 그만큼 많은 투자자들이 해당 주식을 사고팔고 있다는 뜻으로, 시장의 관심도를 나타냅니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "SK하이닉스가 어떤 회사야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "SK하이닉스는 반도체 제조 기업으로, 메모리 반도체(D램, 낸드플래시) 분야에서 세계 2위 규모를 자랑합니다. SK그룹 계열사로, AI와 데이터센터 수요 증가에 따라 주목받고 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 SK하이닉스 주봉 차트 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, SK하이닉스의 5주간 주봉 차트 데이터입니다.\n\n2025년 10월 13일 (종가: 415,000원)\n2025년 10월 10일 (종가: 428,000원)\n2025년 9월 29일 (종가: 395,500원)\n2025년 9월 22일 (종가: 336,500원)\n2025년 9월 15일 (종가: 353,000원)"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-015-V2",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'강남역 디저트 카페'로 검색해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "강남역 디저트 카페"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category",
+          "places[1].name",
+          "places[2].name"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-015"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'강남역 디저트 카페'로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강남역 근처 디저트 카페를 찾아봤어요. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "디저트 카페가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "디저트 카페는 케이크, 마카롱, 쿠키 등 다양한 디저트를 전문적으로 판매하는 카페입니다. 일반 카페보다 디저트 메뉴가 풍부하고, 감각적인 인테리어로 SNS에서 인기가 많습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "강남역이 어디야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "강남역은 서울 지하철 2호선과 신분당선이 지나는 역으로, 서울 강남구와 서초구의 경계에 위치합니다. 강남의 핵심 상권 중 하나로, 수많은 기업과 상가가 밀집해 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 강남역 디저트 카페 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 강남역 근처 디저트 카페 목록입니다. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-001-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "파이썬 알고리즘 트레이딩 책 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "파이썬 알고리즘 트레이딩"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "파이썬 알고리즘 트레이딩",
+              "sort": "SalesPoint"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[0].priceSales"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-001",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "파이썬 알고리즘 트레이딩 책 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'을 찾아드렸습니다. 저자는 조대표 외 2인이며, 위키북스에서 출판되었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "이 책 괜찮아 보이네. 알고리즘 트레이딩이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "알고리즘 트레이딩은 컴퓨터 프로그램을 이용해 미리 설정한 규칙에 따라 자동으로 주식이나 암호화폐를 매매하는 방식입니다. 사람의 감정 개입 없이 일관되게 거래할 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "초보자도 할 수 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 파이썬 기초만 알면 충분히 시작할 수 있습니다. 아까 찾아드린 책도 파이썬 기초부터 다루고 있어서 초보자에게 적합해요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "그럼 아까 찾아준 책 정보 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, '파이썬 알고리즘 트레이딩(개정판)'은 조대표, 김형준, 이준혁 저자가 집필했고 위키북스에서 출판했습니다. 가격은 34,200원이고 평점은 9.8점입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-002-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "반도체 기술 관련 뉴스 최신순으로 3개만 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "반도체 기술",
+              "display": 3,
+              "sort": "date"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "삼성전자",
+              "display": 1,
+              "sort": "date"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title",
+          "items[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-002",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "반도체 기술 관련 뉴스 최신순으로 3개만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "최신 반도체 기술 관련 뉴스 3건을 찾았어. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "3나노 공정이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "3나노 공정은 반도체 회로선폭이 3나노미터(nm) 수준인 초미세 공정 기술이에요. 회로가 작을수록 같은 면적에 더 많은 트랜지스터를 넣을 수 있어서 성능이 향상되고 전력 소비도 줄어듭니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "그럼 더 작은 공정도 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 2나노 공정도 개발 중입니다. 현재 삼성전자와 TSMC가 2나노 공정 양산을 준비하고 있어요. 앞으로는 1나노 공정까지도 연구되고 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 뉴스 목록 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 반도체 기술 관련 뉴스 3건입니다. 1. 차세대 AI 반도체 개발 동향 2. 국내 기업, 3나노 공정 수율 안정화 성공 3. 정부, 시스템 반도체 육성 전략 발표"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-003-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "뉴진스 최신 영상 2개만 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "뉴진스",
+              "sort": "recency",
+              "size": 2
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[1].title",
+          "documents[1].play_time"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-003",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "뉴진스 최신 영상 2개만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "뉴진스 최신 동영상 2개를 찾았습니다. '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "Bubble Gum이 신곡이구나. 좋아?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "네, 'Bubble Gum'은 뉴진스의 새로운 타이틀곡입니다. 경쾌하고 상큼한 멜로디가 특징이에요. 많은 팬들이 긍정적인 반응을 보이고 있습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "영상 러닝타임은 어떻게 돼?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "MV는 약 4분 정도이고, 팝업스토어 VLOG는 12분 정도 되는 영상이에요. VLOG가 좀 더 길게 구성되어 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 영상들 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 뉴진스 최신 영상 2개는 '뉴진스(NewJeans) 신곡 'Bubble Gum' MV'와 '뉴진스 팝업스토어 방문 VLOG'입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-004-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'시흥시청 맛집'으로 검색해줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "시흥시청 맛집"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category",
+          "places[1].name",
+          "places[2].name"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-004",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'시흥시청 맛집'으로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "시흥시청 근처 맛집으로 '바오스시', '오늘도, 맑음', '만수채' 등이 검색되었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "어제 초밥을 먹었는데 한,일,중,양식 중 어떤게 좋을까?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "초밥을 드셨다면 깔끔하게 소화되는 한식이 좋을 것 같아요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "그럼 주차는 편해?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "시청 근처라 공영주차장이 있어서 주차는 괜찮은 편이에요. 다만 점심시간에는 약간 혼잡할 수 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 맛집 목록 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 시흥시청 근처 맛집으로 '오 왕서방짬뽕', '삼형제시골순대', '가마솥한식뷔페' 등이 검색되었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-005-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "25년 9월에 부산에서 하는 축제 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025년 9월 부산 축제"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-005",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "25년 9월에 부산에서 하는 축제 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "9월 부산 축제로는 '페스티월시월'가 있습니다. 매년 시민과 함께하는 보건의료 축제입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "부산국제영화제는 언제야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "부산국제영화제(BIFF)는 보통 10월 초에 개최됩니다. 정확한 일정은 매년 조금씩 다를 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "10월이 보통 축제가 많은가?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 10월은 선선한 가을날씨로 지역축제가 많이 열리는 달이예요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 알려준 9월 부산 축제 다시 말해줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 9월에 부산에서 열리는 축제는 '페스티벌시월'입니다. 시민과 함께하는 보건의료 축제로 벡스코에서 개최됩니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-006-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "겨울 제주도 여행 코스를 검색해서 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "겨울 제주도 여행 코스"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[0].bloggername"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-006",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "겨울 제주도 여행 코스를 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '겨울 제주도 여행 코스'로 검색했을 때 '한라산 눈꽃 산행과 감귤 체험'을 추천하는 블로그 글이 있네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "한라산 눈꽃은 언제가 제일 예쁘게 볼 수 있어?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "한라산 눈꽃은 보통 12월 말부터 2월 초까지가 가장 아름답습니다. 특히 1월 중순이 눈이 가장 많이 쌓여서 백설공주처럼 환상적인 풍경을 볼 수 있어요."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "감귤 체험은 어디서 할 수 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "제주도 서귀포 지역에 감귤 체험 농장이 많습니다. 대표적으로 표선면, 남원읍 쪽 감귤 농장에서 직접 따서 맛볼 수 있고, 비닐하우스라 겨울에도 따뜻하게 체험할 수 있어요."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 추천해준 여행 코스 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 겨울 제주도 여행 코스로 한라산 눈꽃 산행과 따뜻한 비닐하우스에서의 감귤 체험 코스를 추천해드렸습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-007-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "AI 기술 최신 동향을 검색해서 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_daum",
+        "description": "Tool schema for WebSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_daum",
+            "args": {
+              "query": "AI 기술 최신 동향"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].contents"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-007",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "AI 기술 최신 동향을 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "최근 AI 기술은 생성형 AI와 거대 언어 모델(LLM)의 발전이 주도하고 있습니다. 관련 웹문서의 제목은 '2025년 AI 기술 트렌드 전망'입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "생성형 AI가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "생성형 AI는 텍스트, 이미지, 음악 등 새로운 콘텐츠를 생성할 수 있는 인공지능입니다. ChatGPT, Midjourney 같은 서비스가 대표적인 예시죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "LLM은 또 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "LLM은 Large Language Model의 약자로, 방대한 텍스트 데이터로 학습한 거대 언어 모델입니다. GPT-4, Claude 같은 모델이 여기에 속하며, 자연어를 이해하고 생성하는 능력이 뛰어납니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 AI 기술 동향 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 최근 AI 기술 동향은 생성형 AI와 거대 언어 모델(LLM)의 발전이 중심이 되고 있습니다. 관련 웹문서 '2025년 AI 기술 트렌드 전망'을 찾아드렸었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-008-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "기후 변화 원인을 검색해서 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "기후 변화 원인"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-008",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "기후 변화 원인을 검색해서 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 대표적으로 '산업혁명 이후 화석 연료 사용 증가'가 가장 큰 원인으로 꼽힙니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "온실가스가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "온실가스는 대기 중에서 지구의 열을 가두는 역할을 하는 기체입니다. 이산화탄소(CO2), 메탄(CH4), 아산화질소(N2O) 등이 대표적이며, 지구 온난화의 주범이죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "화석 연료는 뭐가 있어?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "화석 연료에는 석탄, 석유, 천연가스가 있습니다. 이들은 수백만 년 전 생물의 유해가 변해서 만들어진 것으로, 연소 시 많은 이산화탄소를 배출합니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 기후 변화 원인 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 기후 변화의 주된 원인은 인간 활동으로 인한 온실가스 배출 증가입니다. 특히 산업혁명 이후 화석 연료 사용 증가가 가장 큰 원인으로 꼽힙니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-009-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "업비트 원화마켓에 상장된 코인 목록 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "MarketList_upbit",
+        "description": "Tool schema for MarketList_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "MarketList_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "MarketList_upbit",
+            "args": {
+              "quote": "KRW"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "markets[0].market",
+          "markets[0].korean_name",
+          "count"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-009",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "업비트 원화마켓에 상장된 코인 목록 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "비트코인이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "비트코인(Bitcoin)은 2009년에 만들어진 최초의 암호화폐입니다. 블록체인 기술을 기반으로 하며, 탈중앙화된 디지털 화폐로 전 세계에서 거래됩니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "이더리움은 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "이더리움(Ethereum)은 스마트 계약을 실행할 수 있는 블록체인 플랫폼입니다. 2015년에 출시되었으며, 비트코인 다음으로 시가총액이 큰 암호화폐입니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 원화마켓 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 업비트 원화(KRW) 마켓에는 비트코인(BTC), 이더리움(ETH), 리플(XRP) 등 총 120개의 암호화폐가 거래되고 있습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-010-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "삼성전자 주봉 데이터 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockChart_kis",
+        "description": "Tool schema for StockChart_kis",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockChart_kis"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockChart_kis",
+            "args": {
+              "symbol": "005930",
+              "period": "W"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "data[0].date",
+          "data[0].close",
+          "data[0].volume"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-010",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "삼성전자 주봉 데이터 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 삼성전자(005930)의 주봉 데이터를 조회했습니다. 해당 주의 종가는 81,200원이었습니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "주봉이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "주봉은 한 주(일주일) 동안의 주가 변동을 하나의 봉으로 나타낸 차트입니다. 시가, 고가, 저가, 종가 정보를 포함하며, 중장기 추세 파악에 유용합니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "종가가 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "종가는 해당 기간(일, 주, 월 등)의 마지막 거래 가격을 의미합니다. 가장 중요한 주가 지표 중 하나로 여겨집니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 삼성전자 주봉 데이터 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 삼성전자(005930)의 주봉 데이터를 다시 보여드립니다. 해당 주의 종가는 81,200원이었습니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-011-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "클린 아키텍처 관련 도서를 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "클린 아키텍처"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].publisher",
+          "item[1].title",
+          "item[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-011",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "클린 아키텍처 관련 도서를 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "'클린 아키텍처' 관련 도서를 찾았습니다:\n\n* **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (로버트 C. 마틴)\n* **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (한용재)\n* **아키텍처를 알아야 앱 개발이 보인다** (옥수환)\n* **만들면서 배우는 클린 아키텍처** (톰 홈버그)"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "클린 아키텍처가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "클린 아키텍처는 소프트웨어 설계 원칙 중 하나로, 비즈니스 로직을 외부 요소(DB, UI 등)로부터 독립시켜 유지보수와 테스트를 쉽게 만드는 아키텍처 패턴입니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "로버트 C. 마틴이 누구야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "로버트 C. 마틴(Robert C. Martin)은 '클린 코드'와 '클린 아키텍처'의 저자로 유명한 소프트웨어 엔지니어입니다. '엉클 밥(Uncle Bob)'이라는 별명으로도 알려져 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 클린 아키텍처 도서 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 클린 아키텍처 관련 도서 목록입니다:\n\n* **클린 아키텍처 - 소프트웨어 구조와 설계의 원칙** (로버트 C. 마틴)\n* **FastAPI로 배우는 백엔드 프로그래밍 with 클린 아키텍처** (한용재)\n* **아키텍처를 알아야 앱 개발이 보인다** (옥수환)\n* **만들면서 배우는 클린 아키텍처** (톰 홈버그)"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-012-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "아이유 콘서트 최신 직캠 영상 하나만 찾아줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "VideoSearch_daum",
+        "description": "Tool schema for VideoSearch_daum",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "VideoSearch_daum"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "VideoSearch_daum",
+            "args": {
+              "query": "아이유 콘서트 직캠",
+              "sort": "recency",
+              "size": 1
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "documents[0].title",
+          "documents[0].play_time",
+          "documents[0].author"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-012",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "아이유 콘서트 최신 직캠 영상 하나만 찾아줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "직캠이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "직캠(fancam)은 특정 가수나 연예인을 집중적으로 촬영한 영상을 말합니다. 주로 팬들이 콘서트나 무대에서 자신이 좋아하는 멤버만 따라 찍은 영상이죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "아이유가 누구야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "아이유는 대한민국의 싱어송라이터이자 배우입니다. 2008년 데뷔해 '좋은 날', 'Palette', 'Blueming' 등 수많은 히트곡을 발표했으며, '나의 아저씨', '호텔 델루나' 등 드라마에서도 활약했습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 아이유 콘서트 직캠 영상 다시 알려줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, '아이유 콘서트 직캠' 최신 영상은 '[이카 IKA] 아이유 얘기하다 몸무게 공개해버린 나희쓰..😁' 입니다."
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-013-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "올해 겨울 헤어 트렌드 최신순으로 5개만 알려줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024년 겨울 헤어 트렌드",
+              "display": 5,
+              "sort": "date"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title",
+          "items[2].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-013",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "올해 겨울 헤어 트렌드 최신순으로 5개만 알려줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개를 찾아봤어요.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "모카무스가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "모카무스(Mocha Mousse)는 2025년 트렌드 헤어 컬러로, 초콜릿과 커피를 연상시키는 깊고 부드러운 브라운 톤입니다. 편안하고 세련된 느낌을 주는 컬러죠."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "퍼스널 컬러가 뭐야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "퍼스널 컬러는 개인의 피부톤, 눈동자 색, 머리카락 색에 가장 어울리는 색상 팔레트를 의미합니다. 봄/여름/가을/겨울 4가지 시즌으로 나뉘며, 자신에게 맞는 컬러를 찾으면 더욱 빛나 보일 수 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 겨울 헤어 트렌드 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 2024년 겨울 헤어 트렌드 관련 최신 블로그 포스트 5개입니다.\n\n1. 역북미용실 비핸썸 맨즈헤어 역북점 퍼스널 컬러 헤어스타일...\n2. 2024년 인기 헤어 스타일링 트렌드 총정리\n3. 2025 트렌드 모카무스로 변신한 배방 헤어 이야기\n4. 양재역미용실 메이봄헤어 본점 당신의 스타일에 맞는 완벽한 선택\n5. 2024년 봄 필수 트렌드 헤어스타일 추천"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-014-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "SK하이닉스 주봉 차트 5주치 보여줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockChart_kis",
+        "description": "Tool schema for StockChart_kis",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockChart_kis"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockChart_kis",
+            "args": {
+              "symbol": "000660",
+              "period": "W",
+              "count": 5
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "data[0].date",
+          "data[0].close",
+          "data[0].volume",
+          "data[1].close",
+          "data[2].close"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-014",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "SK하이닉스 주봉 차트 5주치 보여줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "SK하이닉스의 5주간 주봉 차트 데이터입니다. 2025년 10월 13일 (종가: 415,000원) 2025년 10월 10일 (종가: 428,000원) 2025년 9월 29일 (종가: 395,500원) 2025년 9월 22일 (종가: 336,500원) 2025년 9월 15일 (종가: 353,000원)"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "거래량이 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "거래량은 일정 기간 동안 거래된 주식의 총 개수를 의미합니다. 거래량이 많다는 것은 그만큼 많은 투자자들이 해당 주식을 사고팔고 있다는 뜻으로, 시장의 관심도를 나타냅니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "SK하이닉스가 어떤 회사야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "SK하이닉스는 반도체 제조 기업으로, 메모리 반도체(D램, 낸드플래시) 분야에서 세계 2위 규모를 자랑합니다. SK그룹 계열사로, AI와 데이터센터 수요 증가에 따라 주목받고 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 SK하이닉스 주봉 차트 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, SK하이닉스의 5주간 주봉 차트 데이터입니다.\n\n2025년 10월 13일 (종가: 415,000원)\n2025년 10월 10일 (종가: 428,000원)\n2025년 9월 29일 (종가: 395,500원)\n2025년 9월 22일 (종가: 336,500원)\n2025년 9월 15일 (종가: 353,000원)"
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L6-015-V2-VAR1",
+    "track": "B",
+    "level": 6,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "'강남역 디저트 카페'로 검색해줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "PlaceSearch_kakao",
+        "description": "Tool schema for PlaceSearch_kakao",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "PlaceSearch_kakao"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "PlaceSearch_kakao",
+            "args": {
+              "keyword": "강남역 디저트 카페"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "places[0].name",
+          "places[0].address",
+          "places[0].category",
+          "places[1].name",
+          "places[2].name"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "mobility",
+      "difficulty": "hard",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L6-015",
+        "synthetic-variant:1"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "'강남역 디저트 카페'로 검색해줘."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "강남역 근처 디저트 카페를 찾아봤어요. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "디저트 카페가 뭐야?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "디저트 카페는 케이크, 마카롱, 쿠키 등 다양한 디저트를 전문적으로 판매하는 카페입니다. 일반 카페보다 디저트 메뉴가 풍부하고, 감각적인 인테리어로 SNS에서 인기가 많습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "강남역이 어디야?"
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "강남역은 서울 지하철 2호선과 신분당선이 지나는 역으로, 서울 강남구와 서초구의 경계에 위치합니다. 강남의 핵심 상권 중 하나로, 수많은 기업과 상가가 밀집해 있습니다."
+        },
+        {
+          "turn": 7,
+          "role": "user",
+          "content": "아까 찾아준 강남역 디저트 카페 목록 다시 보여줘."
+        },
+        {
+          "turn": 8,
+          "role": "assistant",
+          "content": "네, 강남역 근처 디저트 카페 목록입니다. 장꼬방, 썸띵어바웃커피, 까치화방 강남역점, 크리에잇쿠키 역삼점, 소과당 등이 있습니다."
+        }
+      ]
+    }
+  }
+]

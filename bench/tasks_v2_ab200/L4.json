@@ -1,0 +1,2214 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-001-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 겨울 헤어 트렌드를 다양한 소스에서 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-001"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-002-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025 여의도 불꽃축제 몇시부터 몇시까지야?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-002"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-003-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "카카오(035720)와 비트코인 두 가격 어떻게 돼?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "035720",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-003"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-004-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 봄 메이크업 트렌드는 어떤 스타일이야?",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 봄 메이크업 트렌드",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2025 봄 메이크업 트렌드",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-004"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-005-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "LG에너지솔루션(005930) 주식의 현재가와 최근 배터리 시장 동향을 종합해서 투자 전망을 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "LG에너지솔루션 2024 투자전망",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-005"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-006-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 카카오(005930)와 네이버(000660) 주가를 동시에 확인해서 국내 IT 플랫폼 기업들의 최근 주식 성과를 비교 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "000660",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "카카오 2024 투자전망",
+              "display": 10
+            }
+          },
+          {
+            "id": "s4",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "네이버 2024 투자전망",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 4
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-006"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-007-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 정부의 민생지원금 정책에 대한 사람들의 반응을 종합해서 분석해줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 3
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-007"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-008-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 의료진 파업 이슈를 웹, 블로그, 뉴스에서 각각 검색해서 찬반 의견과 해결방안을 종합 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 3
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-008"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-009-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "제니가 사용한 스마트폰을 연도별로 정리해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "제니가 사용한 스마트폰 사용 기록",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제니가 사용한 스마트폰 사용 기록",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-009"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-010-V2",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 현대차(005930) 주가와 비트코인 시세를 비교해서 자동차 산업 투자와 암호화폐 투자 중 어느 쪽이 더 수익성이 좋은지 분석해줘",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-010"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-001-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 겨울 헤어 트렌드를 다양한 소스에서 찾아서 어떤 스타일이 가장 인기인지 비교 분석해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024 겨울 헤어 트렌드",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description",
+          "items[1].title"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-001",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-002-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025 여의도 불꽃축제 몇시부터 몇시까지야? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2025 여의도 불꽃축제 운영시간",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-002",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-003-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "카카오(035720)와 비트코인 두 가격 어떻게 돼? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "035720",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-003",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-004-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 봄 메이크업 트렌드는 어떤 스타일이야? 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 봄 메이크업 트렌드",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2025 봄 메이크업 트렌드",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-004",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-005-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "LG에너지솔루션(005930) 주식의 현재가와 최근 배터리 시장 동향을 종합해서 투자 전망을 분석해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "LG에너지솔루션 2024 투자전망",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-005",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-006-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 카카오(005930)와 네이버(000660) 주가를 동시에 확인해서 국내 IT 플랫폼 기업들의 최근 주식 성과를 비교 분석해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "WebSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "000660",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "카카오 2024 투자전망",
+              "display": 10
+            }
+          },
+          {
+            "id": "s4",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "네이버 2024 투자전망",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 4
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "finance",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-006",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-007-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2025년 정부의 민생지원금 정책에 대한 사람들의 반응을 종합해서 분석해줘. 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2025 민생지원금 정책",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 3
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-007",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-008-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 의료진 파업 이슈를 웹, 블로그, 뉴스에서 각각 검색해서 찬반 의견과 해결방안을 종합 분석해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "NewsSearch_naver",
+        "description": "Tool schema for NewsSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver",
+        "NewsSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          },
+          {
+            "id": "s3",
+            "tool": "NewsSearch_naver",
+            "args": {
+              "query": "2024 의료진 파업 이슈",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 3
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-008",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-009-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "제니가 사용한 스마트폰을 연도별로 정리해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "WebSearch_naver",
+        "description": "Tool schema for WebSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "BlogSearch_naver",
+        "description": "Tool schema for BlogSearch_naver",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "WebSearch_naver",
+        "BlogSearch_naver"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "WebSearch_naver",
+            "args": {
+              "query": "제니가 사용한 스마트폰 사용 기록",
+              "display": 10
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "BlogSearch_naver",
+            "args": {
+              "query": "제니가 사용한 스마트폰 사용 기록",
+              "display": 10
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "items[0].title",
+          "items[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "search",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-009",
+        "synthetic-variant:1"
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L4-010-V2-VAR1",
+    "track": "B",
+    "level": 4,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "2024년 현대차(005930) 주가와 비트코인 시세를 비교해서 자동차 산업 투자와 암호화폐 투자 중 어느 쪽이 더 수익성이 좋은지 분석해줘 핵심 수치만 간단히 알려줘.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "StockPrice_ls",
+        "description": "Tool schema for StockPrice_ls",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      {
+        "name": "CryptoPrice_bithumb",
+        "description": "Tool schema for CryptoPrice_bithumb",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "StockPrice_ls",
+        "CryptoPrice_bithumb"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [
+          {
+            "id": "s1",
+            "tool": "StockPrice_ls",
+            "args": {
+              "shcode": "005930",
+              "exchgubun": "K"
+            }
+          },
+          {
+            "id": "s2",
+            "tool": "CryptoPrice_bithumb",
+            "args": {
+              "markets": "KRW-BTC"
+            }
+          }
+        ],
+        "edges": [],
+        "min_steps": 2
+      },
+      "expected_answer": {
+        "required_fields": [
+          "t1102OutBlock.price",
+          "t1102OutBlock.change",
+          "t1102OutBlock.diff",
+          "[0].trade_price",
+          "[0].change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "StepEff",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.166667,
+        "ArgF1": 0.166667,
+        "ExecSR": 0.166667,
+        "StepEff": 0.166667,
+        "GroundAns": 0.166667,
+        "SR": 0.166667
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "medium",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L4-010",
+        "synthetic-variant:1"
+      ]
+    }
+  }
+]

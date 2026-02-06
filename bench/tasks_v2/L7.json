@@ -1,0 +1,263 @@
+[
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-001-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "CryptoPrice_upbit",
+        "description": "Tool schema for CryptoPrice_upbit",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "CryptoPrice_upbit"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "current_price",
+          "change_rate"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "crypto",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-001"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "요즘 비트코인에 관심이 생겼는데, 현재 시세 좀 알려줄래? 난 주로 원화 마켓에서 거래해."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 현재 비트코인(BTC/KRW)의 시세는 98,530,000원입니다. 전일 대비 0.5% 상승했네요."
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "이더리움은 어때?"
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "이더리움(ETH/KRW)은 현재 4,850,000원으로, 전일 대비 1.2% 하락했습니다."
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "아, 그렇구나. 아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 다시 알려드릴게요. 비트코인은 현재 98,550,000원으로, 조금 전보다 약간 올랐습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "사용자가 처음에 질문했던 암호화폐가 '비트코인(BTC)'이며 선호 마켓이 '원화(KRW)'임을 기억하고 API 호출의 인자로 사용해야 한다.",
+          "trigger": "아까 처음에 물어봤던 코인 지금은 어때? 다시 알려줘.",
+          "expected_action": {
+            "tool": "CryptoPrice_upbit",
+            "args": {
+              "symbol": "BTC",
+              "quote": "KRW"
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "2.0",
+    "task_id": "L7-002-V2",
+    "track": "B",
+    "level": 7,
+    "locale": {
+      "language": "ko-KR",
+      "timezone": "Asia/Seoul"
+    },
+    "instruction": {
+      "primary": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요.",
+      "variants": []
+    },
+    "available_tools": [
+      {
+        "name": "ItemSearch_aladin",
+        "description": "Tool schema for ItemSearch_aladin",
+        "input_schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    ],
+    "golden": {
+      "required_tools": [
+        "ItemSearch_aladin"
+      ],
+      "optional_tools": [],
+      "action_graph": {
+        "nodes": [],
+        "edges": [],
+        "min_steps": 1
+      },
+      "expected_answer": {
+        "required_fields": [
+          "item[0].title",
+          "item[0].author",
+          "item[0].description"
+        ],
+        "forbidden_claims": []
+      }
+    },
+    "evaluation": {
+      "deterministic_checks": [
+        "TRF1",
+        "ArgF1",
+        "ExecSR",
+        "RecoverSR",
+        "StepEff",
+        "CtxRecall",
+        "GroundAns"
+      ],
+      "judge_checks": [
+        "SR"
+      ],
+      "metric_weights": {
+        "TRF1": 0.125,
+        "ArgF1": 0.125,
+        "ExecSR": 0.125,
+        "RecoverSR": 0.125,
+        "StepEff": 0.125,
+        "CtxRecall": 0.125,
+        "GroundAns": 0.125,
+        "SR": 0.125
+      }
+    },
+    "runtime_constraints": {
+      "max_steps": 10,
+      "timeout_sec": 60,
+      "max_tool_calls": 20
+    },
+    "metadata": {
+      "domain": "commerce",
+      "difficulty": "expert",
+      "author": "ko-agentbench-v2-bootstrap",
+      "created_at": "2026-02-06T05:40:24Z",
+      "tags": [
+        "v2-sample",
+        "migrated-from-v1",
+        "source:L7-002"
+      ]
+    },
+    "conversation": {
+      "turns": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "안녕하세요. 제 조카가 초등학생인데, 선물로 책을 사주려고요. 저는 개인적으로 매트 헤이그 작가를 좋아해요."
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "네, 좋은 생각이네요! 매트 헤이그 작가는 재미있는 책이 많죠. 특별히 찾으시는 장르가 있으신가요?"
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "아니요, 일단은 '어린이 베스트셀러'로만 검색해주세요."
+        },
+        {
+          "turn": 4,
+          "role": "assistant",
+          "content": "현재 어린이 도서 베스트셀러로는 '흔한남매 15', '추리 텐텐 1' 등이 있습니다. 이 책들로 보여드릴까요?"
+        },
+        {
+          "turn": 5,
+          "role": "user",
+          "content": "흠... 역시 제가 아까 말했던 작가의 책으로 찾아봐야겠어요."
+        },
+        {
+          "turn": 6,
+          "role": "assistant",
+          "content": "네, 이전에 말씀하신 매트 헤이그 작가의 도서에는 '크리스마스를 구한 소녀'가 있습니다."
+        }
+      ],
+      "context_tests": [
+        {
+          "turn": 5,
+          "should_remember": "turn 1에서 언급된 선호 작가 '매트 헤이그'를 API 파라미터에 반영해야 한다.",
+          "trigger": "아까 말했던 작가의 책으로 찾아봐야겠어요.",
+          "expected_action": {
+            "tool": "ItemSearch_aladin",
+            "args": {
+              "query": "매트 헤이그",
+              "query_type": "Author"
+            }
+          }
+        }
+      ]
+    }
+  }
+]
