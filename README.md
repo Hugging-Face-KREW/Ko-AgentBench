@@ -125,7 +125,7 @@ export OPENROUTER_APP_TITLE="Ko-AgentBench Runner"
 
 ### 3) 실행과 평가
 ```bash
-# 벤치마크 실행 (L1 레벨, 캐시 읽기 모드)
+# 벤치마크 실행 (L1 레벨, 캐시 쓰기 모드/기본)
 uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
 
 # OpenRouter 모델 사용 예시
@@ -184,7 +184,7 @@ Ko-AgentBench/
 run_benchmark_with_logging.py로 모델을 평가합니다.
 
 ```bash
-# 전체 레벨 실행 (캐시 읽기 모드)
+# 전체 레벨 실행 (캐시 쓰기 모드/기본)
 uv run run_benchmark_with_logging.py
 
 # 특정 레벨만 실행
@@ -238,8 +238,8 @@ uv run run_benchmark_with_logging.py --seed-replay
 
 **캐시 모드**
 - `--cache-mode`:
-    - `read` (기본): 저장된 캐시만 사용
-    - `write`: 실제 API 호출 후 캐시 저장 (configs/secrets에 API 키 필요)
+    - `write` (기본): 실제 API 호출 후 캐시 저장 (configs/secrets에 API 키 필요)
+    - `read`: 저장된 캐시만 사용
 
 **결과 저장 위치**
 - 기본: `logs/benchmark_results/by_model/{모델명}/{타임스탬프}/`

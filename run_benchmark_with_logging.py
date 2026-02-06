@@ -733,9 +733,9 @@ def main():
     parser.add_argument("--dtype", type=str, default="auto",
                         choices=['auto', 'float16', 'bfloat16', 'float32', 'fp16', 'bf16', 'fp32'],
                         help="Torch dtype for local models")
-    parser.add_argument("--cache-mode", type=str, default="read",
+    parser.add_argument("--cache-mode", type=str, default="write",
                         choices=['read', 'write'],
-                        help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: read)")
+                        help="Cache mode for API calls: 'read' = use cached responses only (no real API calls), 'write' = call real APIs and cache results (default: write)")
     parser.add_argument("--repetitions", type=int, default=3,
                         help="Number of repetitions for each task to measure pass@k/stability@k (default: 3)")
     parser.add_argument(

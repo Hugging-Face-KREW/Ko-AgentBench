@@ -11,10 +11,18 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Optional
 
 
 # Global state for cache mode (set by run_benchmark_with_logging.py)
-_CACHE_MODE = "read"  # Default to read mode
+_CACHE_MODE: Optional[str] = None
+
+
+def _normalize_cache_mode(mode: Optional[str]) -> str:
+    if not isinstance(mode, str):
+        return ""
+    normalized = mode.strip().lower()
+    return normalized if normalized in {"read", "write"} else ""
 
 
 def set_cache_mode(mode: str) -> None:
@@ -24,7 +32,10 @@ def set_cache_mode(mode: str) -> None:
         mode: "read" or "write"
     """
     global _CACHE_MODE
-    _CACHE_MODE = mode.strip().lower()
+    normalized = _normalize_cache_mode(mode)
+    if not normalized:
+        raise ValueError(f"Invalid cache mode: {mode!r}. Expected 'read' or 'write'.")
+    _CACHE_MODE = normalized
 
 
 def get_pseudo_api_mode() -> str:
@@ -35,12 +46,13 @@ def get_pseudo_api_mode() -> str:
     
     Checks programmatic setting first, then falls back to environment variable (deprecated).
     """
-    # Use programmatic setting
-    if _CACHE_MODE:
+    if _CACHE_MODE in {"read", "write"}:
         return _CACHE_MODE
-    
-    # Fallback to environment variable (deprecated)
-    return os.getenv("KOAB_PSEUDO_API_MODE", "read").strip().lower()
+
+    env_mode = _normalize_cache_mode(os.getenv("KOAB_PSEUDO_API_MODE"))
+    if env_mode:
+        return env_mode
+    return "read"
 
 
 def is_read_mode() -> bool:

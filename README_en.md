@@ -126,7 +126,7 @@ export OPENROUTER_APP_TITLE="Ko-AgentBench Runner"
 
 ### 3) Run and Evaluate
 ```bash
-# Run benchmark (L1, cache read mode)
+# Run benchmark (L1, cache write mode/default)
 uv run run_benchmark_with_logging.py --levels L1 --model openai/gpt-4
 
 # OpenRouter example
@@ -185,7 +185,7 @@ Run and evaluation are decoupled for reproducibility and automation.
 Use `run_benchmark_with_logging.py` to evaluate a model.
 
 ```bash
-# Run all levels (cache read mode)
+# Run all levels (cache write mode/default)
 uv run run_benchmark_with_logging.py
 
 # Run specific levels
@@ -233,8 +233,8 @@ uv run run_benchmark_with_logging.py --seed-replay
 
 **Cache mode**
 - `--cache-mode`:
-    - `read` (default): Use saved cache only
-    - `write`: Make real API calls and save cache (requires API keys in `configs/secrets`)
+    - `write` (default): Make real API calls and save cache (requires API keys in `configs/secrets`)
+    - `read`: Use saved cache only
 
 **Result location**
 - Default: `logs/benchmark_results/by_model/{model}/{timestamp}/`

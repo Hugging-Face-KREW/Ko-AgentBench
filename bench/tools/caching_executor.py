@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 from typing import Any, Dict, Callable
 
 from ..config import is_read_mode, get_cache_dir, get_pseudo_api_mode
@@ -19,9 +20,16 @@ from .arg_normalizer import normalize_args
 # This limit reduces token usage and cache size while preserving enough data
 # for typical trading operations and market analysis
 MAX_MARKET_LIST_ITEMS = 20
+logger = logging.getLogger(__name__)
 
 
-def _tool_signature(parameters_schema: Dict[str, Any], description: str) -> str:
+def _tool_signature(parameters_schema: Dict[str, Any]) -> str:
+    payload = {"parameters": parameters_schema or {}}
+    s = json.dumps(payload, sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
+def _legacy_tool_signature(parameters_schema: Dict[str, Any], description: str) -> str:
     payload = {"description": description, "parameters": parameters_schema or {}}
     s = json.dumps(payload, sort_keys=True, ensure_ascii=False)
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
@@ -146,20 +154,42 @@ class CachingExecutor:
         api_callable: Callable[..., Any],
         raw_args: Dict[str, Any],
     ) -> Any:
-        signature = _tool_signature(parameters_schema, description)
+        signature = _tool_signature(parameters_schema)
         normalized = normalize_args(tool_name, raw_args, parameters_schema)
         key = _build_cache_key(tool_name, normalized, signature)
+        legacy_key = None
+        if description:
+            legacy_signature = _legacy_tool_signature(parameters_schema, description)
+            legacy_key = _build_cache_key(tool_name, normalized, legacy_signature)
 
         mode = get_pseudo_api_mode() or "write"
         if is_read_mode():
             cached = self._store.get(key, tool_name=tool_name)
+            key_version = "v2"
+            hit_key = key
+            if cached is None and legacy_key and legacy_key != key:
+                cached = self._store.get(legacy_key, tool_name=tool_name)
+                if cached is not None:
+                    key_version = "legacy"
+                    hit_key = legacy_key
             if cached is None:
                 # record meta before raising
-                self._last_meta = {"mode": mode, "hit": False, "key": key}
+                self._last_meta = {
+                    "mode": mode,
+                    "hit": False,
+                    "key": key,
+                    "legacy_key": legacy_key,
+                    "key_version": "v2",
+                }
                 raise RuntimeError(
                     f"Pseudo-API(read): cache miss for {tool_name} with key={key}. Seed the cache first."
                 )
-            self._last_meta = {"mode": mode, "hit": True, "key": key}
+            self._last_meta = {
+                "mode": mode,
+                "hit": True,
+                "key": hit_key,
+                "key_version": key_version,
+            }
             
             # Sanitize cached data before returning (for backward compatibility with old large caches)
             data = cached.get("data")
@@ -180,11 +210,17 @@ class CachingExecutor:
                 input_params=normalized,
                 raw_args=raw_args
             )
-        except Exception:
-            # Cache write failures should not break tool execution
-            pass
+        except Exception as e:
+            # Cache write failures should not break tool execution, but should be visible.
+            logger.warning(
+                "Cache write failed for tool=%s key=%s cache_dir=%s: %s",
+                tool_name,
+                key,
+                get_cache_dir(),
+                e,
+            )
         # meta for write path
-        self._last_meta = {"mode": mode, "hit": False, "key": key}
+        self._last_meta = {"mode": mode, "hit": False, "key": key, "key_version": "v2"}
         return result
 
     def get_last_meta(self) -> Dict[str, Any]:
